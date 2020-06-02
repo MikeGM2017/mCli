@@ -38,9 +38,6 @@ protected:
 
 public:
 
-    virtual void InputPos_ToEnd() {
-    }
-
     virtual bool Input_Init();
 
     virtual bool Input_Restore();

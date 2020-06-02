@@ -114,8 +114,6 @@ public:
         Input_Str.clear();
     };
 
-    virtual void InputPos_ToEnd() = 0;
-
     virtual bool Input_Init() = 0;
     virtual bool Input_Restore() = 0;
 
