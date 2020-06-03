@@ -54,6 +54,10 @@ public:
         printw("%s", s.c_str());
     }
 
+    virtual void Output_Return() {
+        printw("\r");
+    }
+
 };
 
 #endif /* CLI_OUTPUT_PDCURSES_H */

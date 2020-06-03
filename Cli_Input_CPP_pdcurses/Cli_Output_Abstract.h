@@ -28,6 +28,8 @@ public:
     virtual void Output_Char(char c) = 0;
     virtual void Output_Str(string s) = 0;
     
+    virtual void Output_Return() = 0;
+    
 };
 
 #endif /* CLI_OUTPUT_ABSTRACT_H */
