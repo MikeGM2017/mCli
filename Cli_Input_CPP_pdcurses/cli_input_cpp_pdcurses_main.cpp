@@ -11,10 +11,18 @@
  * Created on June 2, 2020, 1:17 PM
  */
 
+/*
+Attention 1:
+pdcurses.a - as "Add Library File..." -> ../PDCurses-3.8/sdl2/pdcurses.a
+libSDL2.a - as "Add Library..." -> SDL2
+Attention 2:
+pdcurses.a must be before SDL2
+ */
+
 #include "Cli_Input_pdcurses.h"
 
 int main(int argc, char** argv) {
-    
+
     Cli_Input_pdcurses Cli_Input;
 
     Cli_Input.Title_Set("cli demo");
@@ -24,7 +32,7 @@ int main(int argc, char** argv) {
     Cli_Input.Divider_L_Set("[");
     Cli_Input.Divider_R_Set("]");
     Cli_Input.Input_Init();
-    
+
     printw("%s\n", curses_version());
 
     bool stop = false;
