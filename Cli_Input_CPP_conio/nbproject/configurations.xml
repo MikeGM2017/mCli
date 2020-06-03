@@ -8,6 +8,8 @@
       <itemPath>Cli_Input_Item.h</itemPath>
       <itemPath>Cli_Input_Item_Type.h</itemPath>
       <itemPath>Cli_Input_conio.h</itemPath>
+      <itemPath>Cli_Output_Abstract.h</itemPath>
+      <itemPath>Cli_Output_cout.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -51,6 +53,10 @@
       </item>
       <item path="Cli_Input_conio.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_cout.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cli_input_cpp_conio_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -83,6 +89,10 @@
       <item path="Cli_Input_conio.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Cli_Input_conio.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_cout.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_input_cpp_conio_main.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -17,20 +17,20 @@
 #include <conio.h>
 #include <signal.h>
 
-#include <iostream>
-
-using namespace std;
-
 #include "Cli_Input_Abstract.h"
 
 class Cli_Input_conio : public Cli_Input_Abstract {
 protected:
 
-    static Cli_Input_Abstract *CliInput_Object; // Attention: for using in SIGINT_Handler
+    static Cli_Input_Abstract *Cli_Input_Object; // Attention: for using in SIGINT_Handler
+    static Cli_Output_Abstract *Cli_Output_Object; // Attention: for using in SIGINT_Handler
 
     static void SIGINT_Handler(int sig); // Ctrl+C
 
 public:
+    
+    Cli_Input_conio(Cli_Output_Abstract &cli_output) : Cli_Input_Abstract(cli_output) {
+    }
 
     virtual bool Input_Init();
 
