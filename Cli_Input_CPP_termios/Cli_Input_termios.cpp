@@ -6,26 +6,32 @@
 
 #include "Cli_Input_termios.h"
 
-Cli_Input_Abstract *Cli_Input_termios::CliInput_Object = NULL;
+Cli_Input_Abstract *Cli_Input_termios::Cli_Input_Object = NULL;
+Cli_Output_Abstract *Cli_Input_termios::Cli_Output_Object = NULL;
 
 void Cli_Input_termios::SIGINT_Handler(int sig) { // Ctrl+C
-    if (CliInput_Object) {
-        CliInput_Object->Input_Str_Clear();
-        cout << endl << CliInput_Object->Invitation_Full_Get();
-        cout.flush();
+    if (Cli_Input_Object) {
+        Cli_Input_Object->Input_Str_Clear();
+    }
+    if (Cli_Output_Object) {
+        Cli_Output_Object->Output_NewLine();
+        Cli_Output_Object->Output_Str(Cli_Input_Object->Invitation_Full_Get());
     }
 }
 
 void Cli_Input_termios::SIGTSTP_Handler(int sig) { // Ctrl+Z
-    if (CliInput_Object) {
-        CliInput_Object->Input_Str_Clear();
-        cout << endl << CliInput_Object->Invitation_Full_Get();
-        cout.flush();
+    if (Cli_Input_Object) {
+        Cli_Input_Object->Input_Str_Clear();
+    }
+    if (Cli_Output_Object) {
+        Cli_Output_Object->Output_NewLine();
+        Cli_Output_Object->Output_Str(Cli_Input_Object->Invitation_Full_Get());
     }
 }
 
 bool Cli_Input_termios::Input_Init() {
-    CliInput_Object = this;
+    Cli_Input_Object = this;
+    Cli_Output_Object = &Cli_Output;
 
     signal(SIGINT, SIGINT_Handler); // Ctrl+C
     signal(SIGTSTP, SIGTSTP_Handler); // Ctrl+Z
@@ -66,8 +72,7 @@ Cli_Input_Item Cli_Input_termios::Input_Item_Get() {
                 break;
             default:
                 Input_Str += c;
-                cout << (char) c;
-                cout.flush();
+                Cli_Output.Output_Char(c);
         }
     } while (!stop);
 

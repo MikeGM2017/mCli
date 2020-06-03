@@ -8,6 +8,9 @@
       <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_termios/Cli_Input_Item.h</itemPath>
       <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_termios/Cli_Input_Item_Type.h</itemPath>
       <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_termios/Cli_Input_termios.h</itemPath>
+      <itemPath>Cli_Output_Abstract.h</itemPath>
+      <itemPath>Cli_Output_cout.h</itemPath>
+      <itemPath>Cli_Output_printf.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -66,6 +69,12 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_cout.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_printf.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cli_input_cpp_termios_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -113,6 +122,12 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_cout.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_printf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_input_cpp_termios_main.cpp" ex="false" tool="1" flavor2="0">
       </item>

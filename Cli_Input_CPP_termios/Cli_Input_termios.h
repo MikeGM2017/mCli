@@ -19,10 +19,6 @@
 #include <signal.h>
 #include <termios.h>
 
-#include <iostream>
-
-using namespace std;
-
 #include "Cli_Input_Abstract.h"
 
 class Cli_Input_termios : public Cli_Input_Abstract {
@@ -31,12 +27,16 @@ protected:
     struct termios terminal_state_prev;
     struct termios terminal_state_new;
 
-    static Cli_Input_Abstract *CliInput_Object; // Attention: for using in SIGINT_Handler / SIGTSTP_Handler only
+    static Cli_Input_Abstract *Cli_Input_Object; // Attention: for using in SIGINT_Handler / SIGTSTP_Handler only
+    static Cli_Output_Abstract *Cli_Output_Object; // Attention: for using in SIGINT_Handler / SIGTSTP_Handler only
 
     static void SIGINT_Handler(int sig); // Ctrl+C
     static void SIGTSTP_Handler(int sig); // Ctrl+Z
 
 public:
+
+    Cli_Input_termios(Cli_Output_Abstract &cli_output) : Cli_Input_Abstract(cli_output) {
+    }
 
     virtual bool Input_Init();
 
