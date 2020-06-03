@@ -7,27 +7,11 @@
 #include "Cli_Input_ncurses.h"
 
 bool Cli_Input_ncurses::Input_Init() {
-
-    initscr();
-
-    noecho();
-    keypad(stdscr, TRUE);
-
-    raw();
-
-    scrollok(stdscr, TRUE);
-
-    clear();
-    refresh();
-
-    return true;
+    return Cli_Output.Output_Init();
 }
 
 bool Cli_Input_ncurses::Input_Restore() {
-
-    endwin();
-
-    return true;
+    return Cli_Output.Output_Close();
 }
 
 Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {

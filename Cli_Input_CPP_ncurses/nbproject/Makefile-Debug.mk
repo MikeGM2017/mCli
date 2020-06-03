@@ -35,7 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/211101b3/Cli_Input_ncurses.o \
+	${OBJECTDIR}/Cli_Input_ncurses.o \
 	${OBJECTDIR}/cli_input_cpp_ncurses_main.o
 
 
@@ -63,10 +63,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_input_cpp_ncurses: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_input_cpp_ncurses ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/_ext/211101b3/Cli_Input_ncurses.o: /home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/211101b3
+${OBJECTDIR}/Cli_Input_ncurses.o: Cli_Input_ncurses.cpp 
+	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/211101b3/Cli_Input_ncurses.o /home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input_ncurses.o Cli_Input_ncurses.cpp
 
 ${OBJECTDIR}/cli_input_cpp_ncurses_main.o: cli_input_cpp_ncurses_main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

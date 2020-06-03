@@ -4,10 +4,10 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Abstract.h</itemPath>
-      <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item.h</itemPath>
-      <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item_Type.h</itemPath>
-      <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.h</itemPath>
+      <itemPath>Cli_Input_Abstract.h</itemPath>
+      <itemPath>Cli_Input_Item.h</itemPath>
+      <itemPath>Cli_Input_Item_Type.h</itemPath>
+      <itemPath>Cli_Input_ncurses.h</itemPath>
       <itemPath>Cli_Output_Abstract.h</itemPath>
       <itemPath>Cli_Output_ncurses.h</itemPath>
     </logicalFolder>
@@ -18,7 +18,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.cpp</itemPath>
+      <itemPath>Cli_Input_ncurses.cpp</itemPath>
       <itemPath>cli_input_cpp_ncurses_main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -51,30 +51,15 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Abstract.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item_Type.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="Cli_Input_ncurses.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_ncurses.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -103,30 +88,15 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Abstract.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item_Type.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="Cli_Input_ncurses.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="Cli_Input_ncurses.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
