@@ -8,6 +8,8 @@
       <itemPath>Cli_Input_Item.h</itemPath>
       <itemPath>Cli_Input_Item_Type.h</itemPath>
       <itemPath>Cli_Input_pdcurses.h</itemPath>
+      <itemPath>Cli_Output_Abstract.h</itemPath>
+      <itemPath>Cli_Output_pdcurses.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -77,6 +79,10 @@
       </item>
       <item path="Cli_Input_pdcurses.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_pdcurses.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cli_input_cpp_pdcurses_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -109,6 +115,10 @@
       <item path="Cli_Input_pdcurses.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Cli_Input_pdcurses.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_pdcurses.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_input_cpp_pdcurses_main.cpp" ex="false" tool="1" flavor2="0">
       </item>

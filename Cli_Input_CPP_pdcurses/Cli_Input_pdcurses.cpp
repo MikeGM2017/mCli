@@ -7,27 +7,11 @@
 #include "Cli_Input_pdcurses.h"
 
 bool Cli_Input_pdcurses::Input_Init() {
-
-    initscr();
-
-    noecho();
-    keypad(stdscr, TRUE);
-
-    raw();
-
-    scrollok(stdscr, TRUE);
-
-    clear();
-    refresh();
-
-    return true;
+    return Cli_Output.Output_Init();
 }
 
 bool Cli_Input_pdcurses::Input_Restore() {
-
-    endwin();
-
-    return true;
+    return Cli_Output.Output_Close();
 }
 
 Cli_Input_Item Cli_Input_pdcurses::Input_Item_Get() {
@@ -48,22 +32,22 @@ Cli_Input_Item Cli_Input_pdcurses::Input_Item_Get() {
                 break;
             case 0x03: // Ctrl+C
                 Input_Str_Clear();
-                printw("\n");
-                printw("%s", Invitation_Full_Get().c_str());
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str(Invitation_Full_Get());
                 break;
             case 0x1C: // Ctrl+"\" - NCurses
             case 0x5C: // Ctrl+"\" - PDCurses
                 Input_Item.Text_Set(Input_Str);
                 Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_QUIT);
                 Input_Str_Clear();
-                printw("\n");
-                printw("Ctrl+\\");
-                printw("\n");
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("Ctrl+\\");
+                Cli_Output.Output_NewLine();
                 stop = true;
                 break;
             default:
                 Input_Str += c;
-                printw("%c", c);
+                Cli_Output.Output_Char(c);
         }
     } while (!stop);
 
