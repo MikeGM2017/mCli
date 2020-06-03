@@ -8,6 +8,8 @@
       <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item.h</itemPath>
       <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_Item_Type.h</itemPath>
       <itemPath>/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_CPP_ncurses/Cli_Input_ncurses.h</itemPath>
+      <itemPath>Cli_Output_Abstract.h</itemPath>
+      <itemPath>Cli_Output_ncurses.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -74,6 +76,10 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_ncurses.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cli_input_cpp_ncurses_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -121,6 +127,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_ncurses.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_input_cpp_ncurses_main.cpp" ex="false" tool="1" flavor2="0">
       </item>

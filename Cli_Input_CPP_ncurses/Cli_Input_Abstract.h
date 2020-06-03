@@ -20,6 +20,8 @@ using namespace std;
 
 #include "Cli_Input_Item.h"
 
+#include "Cli_Output_Abstract.h"
+
 class Cli_Input_Abstract {
 protected:
     string Title;
@@ -29,9 +31,12 @@ protected:
     string Divider_L;
     string Divider_R;
     string Input_Str;
+
+    Cli_Output_Abstract &Cli_Output;
+
 public:
 
-    Cli_Input_Abstract() : Divider_L("["), Divider_R("]") {
+    Cli_Input_Abstract(Cli_Output_Abstract &cli_output) : Divider_L("["), Divider_R("]"), Cli_Output(cli_output) {
     }
 
     virtual ~Cli_Input_Abstract() {
@@ -48,7 +53,7 @@ public:
     virtual string User_Get() {
         return User;
     }
-    
+
     virtual void User_Set(string user) {
         User = user;
     }
@@ -56,7 +61,7 @@ public:
     virtual string Level_Get() {
         return Level;
     }
-    
+
     virtual void Level_Set(string level) {
         Level = level;
     }
@@ -72,7 +77,7 @@ public:
     virtual string Divider_L_Get() {
         return Divider_L;
     }
-    
+
     virtual void Divider_L_Set(string divider_l) {
         Divider_L = divider_l;
     }
@@ -80,7 +85,7 @@ public:
     virtual string Divider_R_Get() {
         return Divider_R;
     }
-    
+
     virtual void Divider_R_Set(string divider_r) {
         Divider_R = divider_r;
     }
@@ -114,8 +119,12 @@ public:
         Input_Str.clear();
     };
 
-    virtual bool Input_Init() = 0;
-    virtual bool Input_Restore() = 0;
+    virtual bool Input_Init() {
+        Cli_Output.Output_Init();
+    }
+    virtual bool Input_Restore() {
+        Cli_Output.Output_Close();
+    }
 
     virtual Cli_Input_Item Input_Item_Get() = 0; // Attention: Main Cli Input Method - Blocked
 

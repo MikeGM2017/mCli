@@ -21,6 +21,9 @@
 class Cli_Input_ncurses : public Cli_Input_Abstract {
 public:
 
+    Cli_Input_ncurses(Cli_Output_Abstract &cli_output) : Cli_Input_Abstract(cli_output) {
+    }
+
     virtual bool Input_Init();
 
     virtual bool Input_Restore();
