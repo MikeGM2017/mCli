@@ -41,8 +41,11 @@ bool Cli_Input_termios::Input_Init() {
     terminal_state_new.c_lflag &= ~(ICANON | ECHO);
     int res_tcsetattr = tcsetattr(STDIN_FILENO, TCSANOW, &terminal_state_new);
 
-    if (res_tcgetattr == 0 && res_tcsetattr == 0)
+    bool res_cli_output_init = Cli_Output.Output_Init();
+
+    if (res_tcgetattr == 0 && res_tcsetattr == 0 && res_cli_output_init) {
         return true; // Ok
+    }
 
     return false; // Failed
 }
@@ -50,8 +53,11 @@ bool Cli_Input_termios::Input_Init() {
 bool Cli_Input_termios::Input_Restore() {
     int res_tcsetattr = tcsetattr(STDIN_FILENO, TCSANOW, &terminal_state_prev);
 
-    if (res_tcsetattr == 0)
+    bool res_cli_output_close = Cli_Output.Output_Close();
+    
+    if (res_tcsetattr == 0 && res_cli_output_close) {
         return true; // Ok
+    }
 
     return false; // Failed
 }

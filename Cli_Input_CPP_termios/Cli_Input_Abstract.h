@@ -120,10 +120,11 @@ public:
     };
 
     virtual bool Input_Init() {
-        Cli_Output.Output_Init();
+        return Cli_Output.Output_Init();
     }
+
     virtual bool Input_Restore() {
-        Cli_Output.Output_Close();
+        return Cli_Output.Output_Close();
     }
 
     virtual Cli_Input_Item Input_Item_Get() = 0; // Attention: Main Cli Input Method - Blocked
