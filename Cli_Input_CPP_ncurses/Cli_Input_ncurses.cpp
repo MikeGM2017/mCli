@@ -47,21 +47,21 @@ Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {
                 break;
             case 0x03: // Ctrl+C
                 Input_Str_Clear();
-                printw("\n");
-                printw("%s", Invitation_Full_Get().c_str());
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str(Invitation_Full_Get());
                 break;
             case 0x1C: // Ctrl+"\"
                 Input_Item.Text_Set(Input_Str);
                 Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_QUIT);
                 Input_Str_Clear();
-                printw("\n");
-                printw("Ctrl+\\");
-                printw("\n");
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("Ctrl+\\");
+                Cli_Output.Output_NewLine();
                 stop = true;
                 break;
             default:
                 Input_Str += c;
-                printw("%c", c);
+                Cli_Output.Output_Char(c);
         }
     } while (!stop);
 

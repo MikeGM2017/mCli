@@ -49,6 +49,11 @@ int main(int argc, char *argv[]) {
             } else {
                 Cli_Output.Output_NewLine();
             }
+        } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_QUIT) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Quit - Processed");
+            Cli_Output.Output_NewLine();
+            stop = true; // Quit
         }
     } while (!stop);
 
