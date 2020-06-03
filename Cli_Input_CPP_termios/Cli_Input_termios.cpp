@@ -54,7 +54,7 @@ bool Cli_Input_termios::Input_Restore() {
     int res_tcsetattr = tcsetattr(STDIN_FILENO, TCSANOW, &terminal_state_prev);
 
     bool res_cli_output_close = Cli_Output.Output_Close();
-    
+
     if (res_tcsetattr == 0 && res_cli_output_close) {
         return true; // Ok
     }
@@ -69,16 +69,175 @@ Cli_Input_Item Cli_Input_termios::Input_Item_Get() {
 
     do {
         int c = getchar();
-        switch (c) {
-            case '\n':
-                Input_Item.Text_Set(Input_Str);
-                Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_STR);
-                Input_Str_Clear();
-                stop = true;
+        switch (Input_State) {
+
+            case 0:
+                switch (c) {
+                    case 8: // Back
+                    case 127:
+                    case 247: // Back: Telnet + Special Commands
+                        Input_Back();
+                        break;
+                    case 9: // Tab
+                        Input_Item.Text_Set(Input_Str);
+                        Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_TAB);
+                        stop = true;
+                        break;
+                    case '\n':
+                        Input_Item.Text_Set(Input_Str);
+                        Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_STR);
+                        Input_Str_Clear();
+                        stop = true;
+                        break;
+                    case 27: // Начало последовательности
+                        Input_State = 1;
+                        break;
+                    default:
+                        Input_Add(c);
+                }
                 break;
+
+            case 1:
+                switch (c) {
+                    case '[':
+                        Input_State = 2;
+                        break;
+                    case 'O':
+                        Input_State = 22;
+                        break;
+                    default:
+                        Input_State = 0;
+                }
+                break;
+
+            case 2:
+            {
+                int state_new = 0;
+                switch (c) {
+                    case 'A': // Стрелка Вверх
+                        //Cli_History_Up();
+                        Input_Item.Text_Set(Input_Str);
+                        Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_UP);
+                        stop = true;
+                        break;
+                    case 'B': // Стрелка Вниз
+                        //Cli_History_Down();
+                    {
+                        Input_Item.Text_Set(Input_Str);
+                        Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_DOWN);
+                        stop = true;
+                    }
+                        break;
+                    case 'C': // Стрелка Вправо
+                        Input_Right();
+                        break;
+                    case 'D': // Стрелка Влево
+                        Input_Left();
+                        break;
+                    case '3': // Delete
+                        state_new = 3;
+                        break;
+                    case '1': // Home - Telnet
+                        state_new = 31;
+                        break;
+                    case '4': // End - Telnet
+                        state_new = 32;
+                        break;
+                    case '5': // Ubuntu: Ctrl+PgUp
+                    case '6': // Ubuntu: Ctrl+PgDown
+                        state_new = 33;
+                    case 'H':
+                        Input_Home();
+                        break;
+                    case 'F':
+                        Input_End();
+                        break;
+                }
+                Input_State = state_new;
+            }
+                break;
+
+            case 22:
+                switch (c) {
+                    case 'H':
+                        Input_Home();
+                        break;
+                    case 'F':
+                        Input_End();
+                        break;
+                }
+                Input_State = 0;
+                break;
+
+            case 3:
+                switch (c) {
+                    case '~':
+                        Input_Delete();
+                        Input_State = 0;
+                        break;
+                    case ';':
+                        Input_State = 4;
+                        break;
+                    default:
+                        Input_State = 0;
+                }
+                break;
+
+            case 31:
+                switch (c) {
+                    case '~':
+                        Input_Home();
+                        Input_State = 0;
+                        break;
+                    case ';':
+                        Input_State = 4;
+                        break;
+                    default:
+                        Input_State = 0;
+                }
+                break;
+
+            case 32:
+                switch (c) {
+                    case '~':
+                        Input_End();
+                        break;
+                }
+                Input_State = 0;
+                break;
+
+            case 33:
+                switch (c) {
+                    case ';':
+                        Input_State = 4;
+                        break;
+                    default:
+                        Input_State = 0;
+                }
+                break;
+
+            case 4:
+                switch (c) {
+                    case '3':
+                    case '5':
+                    case 'A':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                        Input_State = 5;
+                        break;
+                    default:
+                        Input_State = 0;
+                }
+                break;
+
+            case 5:
+                Input_State = 0;
+                break;
+
             default:
-                Input_Str += c;
-                Cli_Output.Output_Char(c);
+                Input_State = 0;
+
         }
     } while (!stop);
 

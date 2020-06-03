@@ -45,6 +45,10 @@ public:
         cout.flush();
     }
 
+    virtual void Output_Return() {
+        cout << '\r';
+    }
+    
 };
 
 #endif /* CLI_OUTPUT_COUT_H */

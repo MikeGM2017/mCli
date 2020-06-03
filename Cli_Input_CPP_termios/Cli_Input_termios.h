@@ -33,9 +33,12 @@ protected:
     static void SIGINT_Handler(int sig); // Ctrl+C
     static void SIGTSTP_Handler(int sig); // Ctrl+Z
 
+    int Input_State;
+
 public:
 
-    Cli_Input_termios(Cli_Output_Abstract &cli_output) : Cli_Input_Abstract(cli_output) {
+    Cli_Input_termios(Cli_Output_Abstract &cli_output) : Cli_Input_Abstract(cli_output),
+    Input_State(0) {
     }
 
     virtual bool Input_Init();
