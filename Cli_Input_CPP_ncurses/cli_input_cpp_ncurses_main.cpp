@@ -49,6 +49,21 @@ int main(int argc, char *argv[]) {
             } else {
                 Cli_Output.Output_NewLine();
             }
+        } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_TAB) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("TAB: ");
+            Cli_Output.Output_Str(input_item.Text_Get());
+            Cli_Output.Output_NewLine();
+        } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_UP) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("UP: ");
+            Cli_Output.Output_Str(input_item.Text_Get());
+            Cli_Output.Output_NewLine();
+        } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_DOWN) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("DOWN: ");
+            Cli_Output.Output_Str(input_item.Text_Get());
+            Cli_Output.Output_NewLine();
         } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_QUIT) {
             Cli_Output.Output_NewLine();
             Cli_Output.Output_Str("Quit - Processed");

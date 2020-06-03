@@ -43,9 +43,42 @@ Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {
                 Cli_Output.Output_NewLine();
                 stop = true;
                 break;
+            case 8: // BACK
+            case KEY_BACKSPACE:
+                Input_Back();
+                break;
+            case 9: // Tab
+                Input_Item.Text_Set(Input_Str);
+                Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_TAB);
+                stop = true;
+                break;
+            case KEY_DC:
+                Input_Delete();
+                break;
+            case KEY_HOME:
+                Input_Home();
+                break;
+            case KEY_END:
+                Input_End();
+                break;
+            case KEY_LEFT:
+                Input_Left();
+                break;
+            case KEY_RIGHT:
+                Input_Right();
+                break;
+            case KEY_UP:
+                Input_Item.Text_Set(Input_Str);
+                Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_UP);
+                stop = true;
+                break;
+            case KEY_DOWN:
+                Input_Item.Text_Set(Input_Str);
+                Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_DOWN);
+                stop = true;
+                break;
             default:
-                Input_Str += c;
-                Cli_Output.Output_Char(c);
+                Input_Add(c);
         }
     } while (!stop);
 

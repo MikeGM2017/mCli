@@ -53,6 +53,10 @@ public:
     virtual void Output_Str(string s) {
         printw("%s", s.c_str());
     }
+    
+    virtual void Output_Return() {
+        printw("\r");
+    }
 
 };
 
