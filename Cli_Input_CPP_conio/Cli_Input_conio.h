@@ -27,9 +27,12 @@ protected:
 
     static void SIGINT_Handler(int sig); // Ctrl+C
 
+    int Input_State;
+
 public:
-    
-    Cli_Input_conio(Cli_Output_Abstract &cli_output) : Cli_Input_Abstract(cli_output) {
+
+    Cli_Input_conio(Cli_Output_Abstract &cli_output) : Cli_Input_Abstract(cli_output),
+    Input_State(0) {
     }
 
     virtual bool Input_Init();
