@@ -185,18 +185,17 @@ public:
             Input_Str += c;
             Input_Str_Pos++;
         } else {
+            string s_prev = Input_Str;
+
             stringstream s_str;
             s_str << Input_Str.substr(0, Input_Str_Pos)
                     << c
                     << Input_Str.substr(Input_Str_Pos, Input_Str.size() - Input_Str_Pos);
 
-            if (Is_Echo_Get()) {
-                Cli_Output.Output_Char(c);
-                Cli_Output.Output_Str(Input_Str.substr(Input_Str_Pos, Input_Str.size() - Input_Str_Pos));
-            }
-
             Input_Str = s_str.str();
             Input_Str_Pos++;
+
+            Input_Str_Modified_To_Output(s_prev);
         }
     }
 
