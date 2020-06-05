@@ -25,7 +25,7 @@ Test Projects:
 
 - getting key codes + Ctrl+C / Ctrl+Z:
 
-Cli_Input_Test_Key_Codes_conio
+  - Cli_Input_Test_Key_Codes_conio
 
 Cli_Input_Test_Key_Codes_ncurses
 
