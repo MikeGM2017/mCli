@@ -13,13 +13,13 @@ Dev-C++ 5.11 - for target conio ("/Dev-Cpp/MinGW64/bin/*" used in NetBeans as To
 
 Projects:
 
-Cli_Input_CPP_conio
+  - Cli_Input_CPP_conio
 
-Cli_Input_CPP_ncurses
+  - Cli_Input_CPP_ncurses
 
-Cli_Input_CPP_pdcurses
+  - Cli_Input_CPP_pdcurses
 
-Cli_Input_CPP_termios
+  - Cli_Input_CPP_termios
 
 Test Projects:
 
@@ -27,18 +27,18 @@ Test Projects:
 
   - Cli_Input_Test_Key_Codes_conio
 
-Cli_Input_Test_Key_Codes_ncurses
+  - Cli_Input_Test_Key_Codes_ncurses
 
-Cli_Input_Test_Key_Codes_pdcurses
+  - Cli_Input_Test_Key_Codes_pdcurses
 
-Cli_Input_Test_Key_Codes_termios
+  - Cli_Input_Test_Key_Codes_termios
 
 - test output methods:
 
-Cli_Output_CPP_cout_Test
+  - Cli_Output_CPP_cout_Test
 
-Cli_Output_CPP_ncurses_Test
+  - Cli_Output_CPP_ncurses_Test
 
-Cli_Output_CPP_pdcurses_Test
+  - Cli_Output_CPP_pdcurses_Test
 
-Cli_Output_CPP_printf_Test
+  - Cli_Output_CPP_printf_Test
