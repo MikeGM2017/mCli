@@ -22,60 +22,27 @@ using namespace std;
 
 #include "Cli_Cmd.h"
 #include "Level_Description.h"
-#include "Cmd_Token_Parser.h"
-
-#include "Cli_Output_Abstract.h"
 
 class Cli_Module {
 protected:
-    string Name;
-    Cmd_Token_Parser *Token_Parser;
 
-    Cli_Output_Abstract &Cli_Output;
+    string Name;
 
 public:
 
     vector<Cli_Cmd *> Module_Cmd_List;
 
-    Cli_Module(string name, Cli_Output_Abstract &cli_output) : Name(name), Token_Parser(NULL),
-    Cli_Output(cli_output) {
+    Cli_Module(string name) : Name(name) {
     }
 
     virtual ~Cli_Module() {
         for (int i = 0; i < Module_Cmd_List.size(); i++) {
             delete Module_Cmd_List[i];
         }
-        delete Token_Parser;
     }
 
     string Name_Get() const {
         return Name;
-    }
-
-    virtual void Cli_STDIN_Init() {
-        struct termios gl_oldt, gl_newt;
-        tcgetattr(STDIN_FILENO, &gl_oldt);
-        gl_newt = gl_oldt;
-        gl_newt.c_lflag &= ~(ICANON | ECHO);
-        tcsetattr(STDIN_FILENO, TCSANOW, &gl_newt);
-    }
-
-    virtual void Cli_STDIN_Restore() {
-        struct termios gl_oldt, gl_newt;
-        tcgetattr(STDIN_FILENO, &gl_oldt);
-        gl_newt = gl_oldt;
-        gl_newt.c_lflag |= (ICANON | ECHO);
-        tcsetattr(STDIN_FILENO, TCSANOW, &gl_newt);
-    }
-
-    Cmd_Token_Parser* Token_Parser_Get() const {
-        return Token_Parser;
-    }
-
-    void Token_Parser_Set(Cmd_Token_Parser* token_parser) {
-        if (Token_Parser)
-            delete Token_Parser;
-        Token_Parser = token_parser;
     }
 
     void Cmd_Add(Cli_Cmd *cmd) {

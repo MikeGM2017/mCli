@@ -16,6 +16,7 @@
         <itemPath>Cli_Modules/Cli_Cmd_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Cmd_Privilege_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Rem.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
@@ -29,6 +30,7 @@
         <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result_Func.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f6" displayName="Cmd_Token_Parser" projectFiles="true">
         <itemPath>Cmd_Token_Parser/Cmd_Token.h</itemPath>
@@ -98,6 +100,8 @@
       </item>
       <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
@@ -118,6 +122,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -180,6 +186,8 @@
       </item>
       <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
@@ -200,6 +208,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
       </item>

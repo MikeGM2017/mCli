@@ -20,6 +20,7 @@
 #include "Cli_Modules.h"
 
 #include "Cli_Module_Base_Rem.h"
+#include "Cli_Module_Base_Quit.h"
 
 int main(int argc, char *argv[]) {
 
@@ -34,10 +35,13 @@ int main(int argc, char *argv[]) {
     Cli_Modules Modules;
 
     // Modules Add - Begin
-    
+
     const string str_rem_def = "$";
     Modules.Add(new Cli_Module_Base_Rem(str_rem_def, Cli_Output));
-    
+
+    bool Cmd_Quit = false;
+    Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
+
     // Modules Add - End
 
     Cli_Input.Title_Set("cli demo");
@@ -56,7 +60,7 @@ int main(int argc, char *argv[]) {
         switch (input_item.Type_Get()) {
             case CLI_INPUT_ITEM_TYPE_STR:
             {
-                bool res_process_input_item = Cli.Process_Input_Item(Modules, input_item, str_rem_def, stop);
+                bool res_process_input_item = Cli.Process_Input_Item(Modules, input_item, str_rem_def);
                 if (!res_process_input_item) {
                     Cli_Output.Output_Str("Quit: Error on Cli.Process_Input_Item(...)");
                     stop = true; // Quit: Error
@@ -96,6 +100,14 @@ int main(int argc, char *argv[]) {
             }
                 break;
         }
+
+        if (Cmd_Quit) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Quit - Processed");
+            Cli_Output.Output_NewLine();
+            stop = true; // Quit
+        }
+
     } while (!stop);
 
     Cli_Input.Input_Restore();

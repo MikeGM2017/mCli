@@ -16,9 +16,15 @@
 
 #include "Cli_Module.h"
 
+#include "Cli_Output_Abstract.h"
+
 #include "Cmd_Item_Rem.h"
 
 class Cli_Module_Base_Rem : public Cli_Module {
+protected:
+
+    Cli_Output_Abstract &Cli_Output;
+
 public:
 
     // Step 1: define Local_CmdID
@@ -39,7 +45,8 @@ public:
 
     // Step 3: constructor + commands
 
-    Cli_Module_Base_Rem(string str_rem, Cli_Output_Abstract &cli_output) : Cli_Module("Base Rem", cli_output) {
+    Cli_Module_Base_Rem(string str_rem, Cli_Output_Abstract &cli_output) : Cli_Module("Base Rem"),
+    Cli_Output(cli_output) {
         {
             // rem
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_rem);

@@ -51,25 +51,21 @@ public:
         return s_trim;
     }
 
-    bool Process_Input_Item(Cli_Modules &modules, Cli_Input_Item &input_item, const string str_rem, bool &stop) {
+    bool Process_Input_Item(Cli_Modules &modules, Cli_Input_Item &input_item, const string str_rem) {
         string s_trim = Str_Trim(input_item.Text_Get());
 
         if (s_trim.size() == 0) return false;
 
-        if (s_trim == "Q") {
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str("Quit - Processed");
-            Cli_Output.Output_NewLine();
-            stop = true; // Quit
-        } else if (!s_trim.empty()) {
+        if (!s_trim.empty()) {
             bool is_processed = false;
             bool is_debug = false;
+            bool stop = false;
             Cmd_Token_Parser_Result parse_res = CMD_TOKEN_PARSER_ERROR;
             vector<Cmd_Token *> tokens = Token_Parser.Parse(s_trim, str_rem, parse_res);
             for (int module = 0; module < modules.Get_Size(); module++) {
                 Cli_Module *module_ptr = modules.Get(module);
                 if (module_ptr) {
-                    for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
+                    for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size() && !stop; cmd++) {
                         Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
                         if (cmd_ptr) {
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr->Is_Valid(tokens);
@@ -77,6 +73,7 @@ public:
                                 case CMD_ITEM_OK:
                                     module_ptr->Execute(cmd_ptr->ID_Get(), cmd_ptr, Levels, is_debug);
                                     is_processed = true;
+                                    stop = true;
                                     break;
                                 case CMD_ITEM_ERROR:
                                 case CMD_ITEM_NOT_MATCH:
