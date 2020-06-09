@@ -24,6 +24,8 @@
 #include "Cli_Module_Base_Help.h"
 #include "Cli_Module_Base_Modules.h"
 
+#include "Cli_Module_Tab_Test.h"
+
 #include "Str_Filter.h"
 
 int main(int argc, char *argv[]) {
@@ -52,6 +54,8 @@ int main(int argc, char *argv[]) {
     Str_Filter str_filter('?', '*');
     Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
     Modules.Add(new Cli_Module_Base_Modules(Modules, str_filter, Cli_Output));
+    
+    Modules.Add(new Cli_Module_Tab_Test());
 
     // Modules Add - End
 
@@ -82,10 +86,12 @@ int main(int argc, char *argv[]) {
         switch (input_item.Type_Get()) {
             case CLI_INPUT_ITEM_TYPE_STR:
             {
-                bool res_process_input_item = Cli.Process_Input_Item(Modules, input_item, str_rem_def);
-                if (!res_process_input_item) {
-                    Cli_Output.Output_NewLine();
-                }
+                //bool res_process_input_item = Cli.Process_Input_Item(Modules, input_item, str_rem_def);
+                //if (!res_process_input_item) {
+                //    Cli_Output.Output_NewLine();
+                //}
+                Cli.Process_Input_Item(Modules, input_item, str_rem_def);
+                Cli_Output.Output_NewLine();
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:

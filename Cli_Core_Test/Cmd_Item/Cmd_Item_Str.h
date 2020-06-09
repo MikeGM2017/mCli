@@ -151,6 +151,14 @@ public:
         return true; // Допустимы все символы в любой позиции
     }
 
+    virtual bool Is_Space_After_Add(string s) {
+        if (s.size() >= 2) {
+            if (s[0] == '\"' && s[s.size() - 1] == '\"') return true;
+            if (s[0] == '\'' && s[s.size() - 1] == '\'') return true;
+        }
+        return false;
+    }
+
 };
 
 #endif /* CMD_ITEM_STR_H */

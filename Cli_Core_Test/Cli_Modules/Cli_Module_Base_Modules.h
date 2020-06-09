@@ -90,6 +90,7 @@ public:
 
     bool modules_by_filter_print(string module_filter, Str_Filter_Abstract &str_filter) {
         Cli_Output.Output_NewLine();
+        bool found = false;
         for (int module = 0; module < Modules.Get_Size(); module++) {
             Cli_Module *module_ptr = Modules.Get(module);
             if (module_ptr) {
@@ -97,8 +98,14 @@ public:
                 if (str_filter.Is_Match(module_filter, module_name)) {
                     Cli_Output.Output_Str(module_name);
                     Cli_Output.Output_NewLine();
+                    found = true;
                 }
             }
+        }
+        if (!found) {
+            Cli_Output.Output_Str(module_filter);
+            Cli_Output.Output_Str(" - Not Found");
+            Cli_Output.Output_NewLine();
         }
         return true;
     }

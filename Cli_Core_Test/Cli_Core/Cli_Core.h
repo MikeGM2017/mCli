@@ -16,6 +16,7 @@
 
 #include <sstream>
 #include <vector>
+#include <set>
 #include <list>
 #include <algorithm>
 
@@ -32,6 +33,21 @@ using namespace std;
 #include "Cmd_Item_Valid_Result_Func.h"
 
 #include "TAB_Cmd.h"
+
+class Cli_Cmd_Tab {
+public:
+
+    Cli_Cmd *cmd_ptr;
+    string s_log;
+    string s_add;
+    string s_full;
+    bool Is_Enter;
+    bool is_space_after_add;
+
+    Cli_Cmd_Tab() : cmd_ptr(NULL), Is_Enter(false), is_space_after_add(false) {
+    }
+
+};
 
 class Cli_Core {
 protected:
@@ -92,9 +108,7 @@ public:
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr->Is_Valid(tokens);
                             switch (res_cmd_valid) {
                                 case CMD_ITEM_OK:
-                                {
-                                    Cmd_Item_Valid_Result res_cmd_valid2 = cmd_ptr->Is_Valid(tokens);
-                                }
+                                    Cli_Output.Output_NewLine();
                                     module_ptr->Execute(cmd_ptr->ID_Get(), cmd_ptr, Levels, is_debug);
                                     is_processed = true;
                                     stop = true;
@@ -161,49 +175,88 @@ public:
         return s_str.str();
     }
 
-    void TAB_Cmd_List_Get_With_Flags(// @Magic @Commented
+    void TAB_Cmd_List_Get_With_Flags(
             // in
             const string level, Cli_Modules &modules, const string s_cmd_in, const vector<Cmd_Token *> &tokens,
             // out
             string &s_log, string &s_add,
             bool &Is_Log, bool &Is_Add, bool &Is_Space_Before, bool &Is_Space_After) {
 
-        if (tokens.size() == 1) {
+        vector<Cli_Cmd_Tab *> cmd_tab_list;
 
-            for (int module = 0; module < modules.Get_Size(); module++) {
-                Cli_Module *module_ptr = modules.Get(module);
-                if (module_ptr) {
-                    for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
-                        Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
-                        if (cmd_ptr) {
-                            if (cmd_ptr->Items.size() == 1) {
-                                string token_str = tokens[0]->Text_Get();
-                                string cmd_item_str = cmd_ptr->Items[0]->Text_Get();
-                                if (token_str == cmd_item_str) {
-                                    s_log = "<Enter>";
-                                    Is_Log = true;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        bool is_last_space = false;
+        if (!s_cmd_in.empty()) {
+            if (s_cmd_in[s_cmd_in.size() - 1] == ' ')
+                is_last_space = true;
+        }
 
-            for (int module = 0; module < modules.Get_Size(); module++) {
-                Cli_Module *module_ptr = modules.Get(module);
-                if (module_ptr) {
-                    for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
-                        Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
-                        if (cmd_ptr) {
-                            if (cmd_ptr->Items.size() == 1) {
-                                string token_str = tokens[0]->Text_Get();
-                                string cmd_item_str = cmd_ptr->Items[0]->Text_Get();
-                                if (token_str.size() < cmd_item_str.size()) {
-                                    if (cmd_item_str.substr(0, token_str.size()) == token_str) {
-                                        s_add = cmd_item_str.substr(token_str.size(), cmd_item_str.size() - token_str.size());
-                                        Is_Add = true;
-                                        return;
+        // <editor-fold defaultstate="collapsed" desc="TAB: last cmd item - full/partial -> cmd_tab_list">
+        for (int module = 0; module < modules.Get_Size(); module++) {
+            Cli_Module *module_ptr = modules.Get(module);
+            if (module_ptr) {
+                for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
+                    Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
+                    if (cmd_ptr) {
+                        if (tokens.size() <= cmd_ptr->Items.size()) {
+                            bool is_valid = true;
+                            for (int token = 0; token < tokens.size(); token++) {
+                                Cmd_Item_Base *cmd_item_ptr = cmd_ptr->Items[token];
+                                Cmd_Token *token_ptr = tokens[token];
+                                Cmd_Item_Valid_Result res_parse = cmd_item_ptr->Parse(token_ptr->Text_Get());
+                                if (token < tokens.size() - 1) {
+                                    if (res_parse != CMD_ITEM_OK) {
+                                        is_valid = false;
+                                        break;
+                                    }
+                                } else if (token == tokens.size() - 1) {
+                                    if (res_parse == CMD_ITEM_OK) {
+                                        if (token < cmd_ptr->Items.size() - 1) {
+                                            Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
+                                            cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                            cmd_tab_ptr->is_space_after_add =
+                                                    cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+
+                                            //if (cmd_tab_ptr->is_space_after)
+                                            if (is_last_space)
+                                                cmd_tab_ptr->s_log = cmd_ptr->Items[token + 1]->Text_Get();
+                                            else
+                                                cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
+
+                                            cmd_tab_list.push_back(cmd_tab_ptr);
+                                        } else if (token == cmd_ptr->Items.size() - 1) {
+                                            Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
+                                            cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                            cmd_tab_ptr->Is_Enter = true;
+                                            cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
+                                            cmd_tab_ptr->is_space_after_add =
+                                                    cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                            cmd_tab_list.push_back(cmd_tab_ptr);
+                                        }
+                                    } else if (res_parse == CMD_ITEM_INCOMPLETE) {
+                                        string token_str = tokens[token]->Text_Get();
+                                        string cmd_item_str = cmd_item_ptr->Text_Get();
+                                        if (token_str.size() < cmd_item_str.size()) {
+                                            string s_incomplete_tail = cmd_item_ptr->Incomplete_Tail_Get(token_str);
+                                            if (!s_incomplete_tail.empty()) {
+                                                Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
+                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                                cmd_tab_ptr->s_add = s_incomplete_tail;
+                                                cmd_tab_ptr->s_full = cmd_item_str;
+                                                cmd_tab_ptr->is_space_after_add =
+                                                        cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                                cmd_tab_list.push_back(cmd_tab_ptr);
+                                            } else if (s_incomplete_tail.empty()) {
+                                                Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
+                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                                cmd_tab_ptr->s_log = cmd_item_str;
+                                                cmd_tab_ptr->is_space_after_add =
+                                                        cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                                cmd_tab_list.push_back(cmd_tab_ptr);
+                                            }
+                                        }
+                                    } else {
+                                        is_valid = false;
+                                        break;
                                     }
                                 }
                             }
@@ -211,8 +264,82 @@ public:
                     }
                 }
             }
-
         }
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="TAB: cmd_tab_list -> Output: s_log,Is_Log / s_add,Is_Add">
+        bool Is_Enter = false;
+        set<string> s_log_set;
+        vector<string> s_log_vector;
+        set<string> s_add_set;
+        int add_count = 0;
+        bool is_block_space_after = false;
+
+        for (int i = 0; i < cmd_tab_list.size(); i++) {
+            Cli_Cmd_Tab *cmd_tab_ptr = cmd_tab_list[i];
+            if (!cmd_tab_ptr->s_add.empty()) {
+                if (s_add_set.find(cmd_tab_ptr->s_add) == s_add_set.end()) {
+                    s_add_set.insert(cmd_tab_ptr->s_add);
+                    add_count++;
+                }
+            }
+            if (!cmd_tab_ptr->is_space_after_add) {
+                is_block_space_after = true;
+            }
+        }
+
+        for (int i = 0; i < cmd_tab_list.size(); i++) {
+            Cli_Cmd_Tab *cmd_tab_ptr = cmd_tab_list[i];
+            if (!cmd_tab_ptr->s_log.empty()) {
+                if (cmd_tab_ptr->Is_Enter) {
+                    Is_Enter = true;
+                } else {
+                    Is_Log = true;
+                    if (s_log_set.find(cmd_tab_ptr->s_log) == s_log_set.end()) {
+                        s_log_set.insert(cmd_tab_ptr->s_log);
+                        s_log_vector.push_back(cmd_tab_ptr->s_log);
+                    }
+                }
+            }
+            if (!cmd_tab_ptr->s_add.empty()) {
+                if (add_count == 1) {
+                    s_add = cmd_tab_ptr->s_add;
+                    Is_Add = true;
+                } else if (add_count > 1) {
+                    Is_Log = true;
+                    if (s_log_set.find(cmd_tab_ptr->s_full) == s_log_set.end()) {
+                        s_log_set.insert(cmd_tab_ptr->s_full);
+                        s_log_vector.push_back(cmd_tab_ptr->s_full);
+                    }
+                }
+            }
+        }
+
+        if (!is_block_space_after) {
+            if (!is_last_space &&
+                    ((!Is_Add && Is_Log && !Is_Enter && s_log_vector.size() == 1)
+                    || (!Is_Add && Is_Log && Is_Enter && s_log_vector.size() >= 1)
+                    || (!Is_Add && add_count == 0 && Is_Log && !Is_Enter && s_log_vector.size() >= 1))) {
+                Is_Add = false;
+                Is_Log = false;
+                Is_Enter = false;
+                Is_Space_After = true;
+            }
+        }
+
+        if (Is_Log) {
+            for (int i = 0; i < s_log_vector.size(); i++) {
+                s_log += " ";
+                s_log += s_log_vector[i];
+            }
+        }
+
+        if (Is_Enter) {
+            s_log += " ";
+            s_log += "<Enter>";
+            Is_Log = true;
+        }
+        // </editor-fold>
 
     }
 
@@ -266,32 +393,46 @@ public:
             tokens.clear();
         }
 
-        for (int tab_cmd = 0; tab_cmd < tab_cmd_list.size(); tab_cmd++) {
-            TAB_Cmd *tab_cmd_ptr = tab_cmd_list[tab_cmd];
-            if (tab_cmd_ptr) {
-                switch (tab_cmd_ptr->ID) {
-                    case TAB_CMD_ID_LOG_PRINT:
-                        Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str(tab_cmd_ptr->Text);
-                        Cli_Output.Output_NewLine();
-                        is_invitation_print = true;
-                        break;
-                    case TAB_CMD_ID_INPUT_ADD:
-                    {
-                        string s_prev = Cli_Input.Input_Str_Get();
-                        Cli_Input.Input_Str_Set(s_prev + tab_cmd_ptr->Text);
-                        Cli_Input.Input_Str_Modified_To_Output(s_prev);
-                        Cli_Input.Input_End();
-                        is_invitation_print = false;
+        if (tab_cmd_list.size()) {
+            for (int tab_cmd = 0; tab_cmd < tab_cmd_list.size(); tab_cmd++) {
+                TAB_Cmd *tab_cmd_ptr = tab_cmd_list[tab_cmd];
+                if (tab_cmd_ptr) {
+                    switch (tab_cmd_ptr->ID) {
+                        case TAB_CMD_ID_LOG_PRINT:
+                            Cli_Output.Output_NewLine();
+                            Cli_Output.Output_Str(tab_cmd_ptr->Text);
+                            Cli_Output.Output_NewLine();
+                            is_invitation_print = true;
+                            break;
+                        case TAB_CMD_ID_INPUT_ADD:
+                        {
+                            string s_prev = Cli_Input.Input_Str_Get();
+                            Cli_Input.Input_Str_Set(s_prev + tab_cmd_ptr->Text);
+                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                            Cli_Input.Input_End();
+                            is_invitation_print = false;
+                        }
+                            break;
+                        case TAB_CMD_ID_INPUT_CHECK_SPACE:
+                        {
+                            string s_prev = Cli_Input.Input_Str_Get();
+                            Cli_Input.Input_Str_Set(s_prev + " ");
+                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                            Cli_Input.Input_End();
+                            is_invitation_print = false;
+                        }
+                            break;
                     }
-                        break;
                 }
             }
-        }
 
-        for (int i = 0; i < tab_cmd_list.size(); i++)
-            delete tab_cmd_list[i];
-        tab_cmd_list.clear();
+            for (int i = 0; i < tab_cmd_list.size(); i++)
+                delete tab_cmd_list[i];
+            tab_cmd_list.clear();
+
+        } else {
+            Cli_Output.Output_NewLine();
+        }
 
     }
 

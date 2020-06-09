@@ -79,6 +79,14 @@ public:
                 + ": Value_Str:\"" + Value_Str + "\" ";
         return s;
     }
+    
+    virtual string Incomplete_Tail_Get(string s) {
+        return "";
+    }
+    
+    virtual bool Is_Space_After_Add(string s) {
+        return true;
+    }
 
 };
 

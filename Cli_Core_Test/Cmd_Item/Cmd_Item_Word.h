@@ -48,14 +48,31 @@ public:
 
         if (Text == s) return CMD_ITEM_OK;
 
-//        if (s.size() < Text.size()) { @Magic: a is in abcd, but Incomplete - bad result, must be ERROR
-//            if (Text.substr(0, s.size()) == s) {
-//                Values_Incomplete.push_back(Text.substr(s.size(), Text.size()));
-//                return INPUT_INCOMPLETE;
-//            }
-//        }
+        //        if (s.size() < Text.size()) { @Magic: a is in abcd, but Incomplete - bad result, must be ERROR
+        //            if (Text.substr(0, s.size()) == s) {
+        //                Values_Incomplete.push_back(Text.substr(s.size(), Text.size()));
+        //                return INPUT_INCOMPLETE;
+        //            }
+        //        }
+
+        if (s.size() < Text.size()) {
+            // @Magic : a is in abcd, but Incomplete - bad result, must be ERROR
+            if (Text.substr(0, s.size()) == s) {
+                //Values_Incomplete.push_back(Text.substr(s.size(), Text.size()));
+                return CMD_ITEM_INCOMPLETE;
+            }
+        }
 
         return CMD_ITEM_ERROR;
+    }
+    
+    virtual string Incomplete_Tail_Get(string s) {
+        if(s.size() < Text.size()) {
+            if(Text.substr(0, s.size()) == s) {
+                return Text.substr(s.size());
+            }
+        }
+        return "";
     }
 
 };
