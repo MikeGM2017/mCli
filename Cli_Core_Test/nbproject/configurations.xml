@@ -17,6 +17,7 @@
         <itemPath>Cli_Modules/Cli_Cmd_Privilege_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Help.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Rem.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
@@ -42,6 +43,10 @@
         <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h</itemPath>
         <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h</itemPath>
         <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Result.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7" displayName="TAB_Cmd" projectFiles="true">
+        <itemPath>TAB_Cmd/TAB_Cmd.h</itemPath>
+        <itemPath>TAB_Cmd/TAB_Cmd_ID.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -91,6 +96,7 @@
             <pElem>Cli_Modules</pElem>
             <pElem>Cmd_Item</pElem>
             <pElem>Cmd_Token_Parser</pElem>
+            <pElem>TAB_Cmd</pElem>
           </incDir>
         </ccTool>
       </compileType>
@@ -111,6 +117,11 @@
       <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Modules.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -164,6 +175,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_core_test_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -223,6 +238,11 @@
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Base_Modules.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
@@ -275,6 +295,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_core_test_main.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -14,6 +14,13 @@
 #ifndef CLI_CORE_H
 #define CLI_CORE_H
 
+#include <sstream>
+#include <vector>
+#include <list>
+#include <algorithm>
+
+using namespace std;
+
 #include "Cli_Input_Item.h"
 
 #include "Cli_Modules.h"
@@ -24,6 +31,8 @@
 
 #include "Cmd_Item_Valid_Result_Func.h"
 
+#include "TAB_Cmd.h"
+
 class Cli_Core {
 protected:
 
@@ -31,17 +40,27 @@ protected:
 
     Cmd_Token_Parser &Token_Parser;
 
+    Cli_Input_Abstract &Cli_Input;
     Cli_Output_Abstract &Cli_Output;
 
     vector<Level_Description> Levels;
 
 public:
 
-    Cli_Core(Cli_Cmd_Privilege_ID user_privilege, Cmd_Token_Parser &parser, Cli_Output_Abstract &cli_output) :
-    User_Privilege(user_privilege), Token_Parser(parser), Cli_Output(cli_output) {
+    Cli_Core(Cli_Cmd_Privilege_ID user_privilege, Cmd_Token_Parser &parser,
+            Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output) :
+    User_Privilege(user_privilege), Token_Parser(parser), Cli_Input(cli_input), Cli_Output(cli_output) {
     }
 
     virtual ~Cli_Core() {
+    }
+
+    Level_Description Level_Get() {
+        if (Levels.size() > 0) {
+            return Levels[Levels.size() - 1];
+        }
+        Level_Description level_top;
+        return level_top;
     }
 
     string Str_Trim(string s) {
@@ -105,6 +124,175 @@ public:
             Cli_Output.Output_NewLine();
         }
         return true; // Ok
+    }
+
+    void Tab_Cmd_Add_By_Level(Cli_Cmd *cmd_ptr, string &level, list<string> &str_list) {
+        if (cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == level && User_Privilege <= cmd_ptr->Privilege_Get())) {
+            string s = cmd_ptr->Items[0]->Text_Get();
+            if (find(str_list.begin(), str_list.end(), s) == str_list.end()) {
+                str_list.insert(str_list.end(), s);
+            }
+        }
+    }
+
+    string TAB_Help_Get(string level, Cli_Modules &modules) {
+        list<string> str_list;
+
+        str_list.insert(str_list.end(), "H");
+        str_list.insert(str_list.end(), "Q");
+        str_list.insert(str_list.end(), "E");
+
+        for (int module = 0; module < modules.Get_Size(); module++) {
+            Cli_Module *module_ptr = modules.Get(module);
+            if (module_ptr) {
+                for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
+                    Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
+                    if (cmd_ptr) {
+                        Tab_Cmd_Add_By_Level(cmd_ptr, level, str_list);
+                    }
+                }
+            }
+        }
+
+        stringstream s_str;
+        for (list<string>::iterator iter = str_list.begin(); iter != str_list.end(); iter++)
+            s_str << " " << *iter;
+
+        return s_str.str();
+    }
+
+    void TAB_Cmd_List_Get_With_Flags(// @Magic @Commented
+            // in
+            const string level, Cli_Modules &modules, const string s_cmd_in, const vector<Cmd_Token *> &tokens,
+            // out
+            string &s_log, string &s_add,
+            bool &Is_Log, bool &Is_Add, bool &Is_Space_Before, bool &Is_Space_After) {
+
+        if (tokens.size() == 1) {
+
+            for (int module = 0; module < modules.Get_Size(); module++) {
+                Cli_Module *module_ptr = modules.Get(module);
+                if (module_ptr) {
+                    for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
+                        Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
+                        if (cmd_ptr) {
+                            if (cmd_ptr->Items.size() == 1) {
+                                string token_str = tokens[0]->Text_Get();
+                                string cmd_item_str = cmd_ptr->Items[0]->Text_Get();
+                                if (token_str == cmd_item_str) {
+                                    s_log = "<Enter>";
+                                    Is_Log = true;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int module = 0; module < modules.Get_Size(); module++) {
+                Cli_Module *module_ptr = modules.Get(module);
+                if (module_ptr) {
+                    for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
+                        Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
+                        if (cmd_ptr) {
+                            if (cmd_ptr->Items.size() == 1) {
+                                string token_str = tokens[0]->Text_Get();
+                                string cmd_item_str = cmd_ptr->Items[0]->Text_Get();
+                                if (token_str.size() < cmd_item_str.size()) {
+                                    if (cmd_item_str.substr(0, token_str.size()) == token_str) {
+                                        s_add = cmd_item_str.substr(token_str.size(), cmd_item_str.size() - token_str.size());
+                                        Is_Add = true;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    virtual vector<TAB_Cmd *> TAB_Cmd_List_Get(const string level, Cli_Modules &modules, const string s_cmd_in, const vector<Cmd_Token *> &tokens) {
+        vector<TAB_Cmd *> tab_cmd_list;
+
+        string s_log;
+        string s_add;
+
+        bool Is_Log = false;
+        bool Is_Add = false;
+        bool Is_Space_Before = false;
+        bool Is_Space_After = false;
+
+        TAB_Cmd_List_Get_With_Flags(
+                // in
+                level, modules, s_cmd_in, tokens,
+                // out
+                s_log, s_add,
+                Is_Log, Is_Add, Is_Space_Before, Is_Space_After);
+
+        if (Is_Log)
+            tab_cmd_list.push_back(new TAB_Cmd(TAB_CMD_ID_LOG_PRINT, s_log));
+        if (Is_Space_Before)
+            tab_cmd_list.push_back(new TAB_Cmd(TAB_CMD_ID_INPUT_CHECK_SPACE, ""));
+        if (Is_Add)
+            tab_cmd_list.push_back(new TAB_Cmd(TAB_CMD_ID_INPUT_ADD, s_add));
+        if (Is_Space_After)
+            tab_cmd_list.push_back(new TAB_Cmd(TAB_CMD_ID_INPUT_CHECK_SPACE, ""));
+
+        return tab_cmd_list;
+    }
+
+    void Process_Tab(Cli_Modules &modules, Cli_Input_Item &input_item, const string str_rem, bool &is_invitation_print) {
+        vector<TAB_Cmd *> tab_cmd_list;
+        string s_trim = Str_Trim(input_item.Text_Get());
+        Level_Description level_description = Level_Get();
+        string level = level_description.Level;
+        string s_help;
+        if (s_trim.size() == 0) {
+            s_help = TAB_Help_Get(level, modules);
+            tab_cmd_list.push_back(new TAB_Cmd(TAB_CMD_ID_LOG_PRINT, s_help));
+        } else {
+            Cmd_Token_Parser_Result parse_res = CMD_TOKEN_PARSER_ERROR;
+            vector<Cmd_Token *> tokens = Token_Parser.Parse(s_trim, str_rem, parse_res);
+
+            tab_cmd_list = TAB_Cmd_List_Get(level, modules, input_item.Text_Get(), tokens);
+
+            for (int i = 0; i < tokens.size(); i++)
+                delete tokens[i];
+            tokens.clear();
+        }
+
+        for (int tab_cmd = 0; tab_cmd < tab_cmd_list.size(); tab_cmd++) {
+            TAB_Cmd *tab_cmd_ptr = tab_cmd_list[tab_cmd];
+            if (tab_cmd_ptr) {
+                switch (tab_cmd_ptr->ID) {
+                    case TAB_CMD_ID_LOG_PRINT:
+                        Cli_Output.Output_NewLine();
+                        Cli_Output.Output_Str(tab_cmd_ptr->Text);
+                        Cli_Output.Output_NewLine();
+                        is_invitation_print = true;
+                        break;
+                    case TAB_CMD_ID_INPUT_ADD:
+                    {
+                        string s_prev = Cli_Input.Input_Str_Get();
+                        Cli_Input.Input_Str_Set(s_prev + tab_cmd_ptr->Text);
+                        Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                        Cli_Input.Input_End();
+                        is_invitation_print = false;
+                    }
+                        break;
+                }
+            }
+        }
+
+        for (int i = 0; i < tab_cmd_list.size(); i++)
+            delete tab_cmd_list[i];
+        tab_cmd_list.clear();
+
     }
 
 };

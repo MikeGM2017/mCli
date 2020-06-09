@@ -70,6 +70,13 @@ public:
         return Module_Cmd_List.size();
     }
 
+    Cli_Cmd *Cmd_Get(int cmd_index) {
+        if (cmd_index >= 0 && cmd_index < Module_Cmd_List.size()) {
+            return Module_Cmd_List[cmd_index];
+        }
+        return NULL;
+    }
+
     virtual void To_Map(map<string, string> &values_map) = 0;
 
 };

@@ -76,12 +76,12 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test: ${OBJECTFILES}
 ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o: Cli_Input/Cli_Input_termios.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Cli_Input
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o Cli_Input/Cli_Input_termios.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o Cli_Input/Cli_Input_termios.cpp
 
 ${OBJECTDIR}/cli_core_test_main.o: cli_core_test_main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main.o cli_core_test_main.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main.o cli_core_test_main.cpp
 
 # Subprojects
 .build-subprojects:
@@ -98,7 +98,7 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/Test_Str_Filter.o ${OBJECTFILES:%.o=%_
 ${TESTDIR}/tests/Test_Str_Filter.o: tests/Test_Str_Filter.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Str_Filter.o tests/Test_Str_Filter.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Str_Filter.o tests/Test_Str_Filter.cpp
 
 
 ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o: ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o Cli_Input/Cli_Input_termios.cpp 
@@ -109,7 +109,7 @@ ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o: ${OBJECTDIR}/Cli_Input/Cli_In
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o Cli_Input/Cli_Input_termios.cpp;\
+	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o Cli_Input/Cli_Input_termios.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o;\
 	fi
@@ -122,7 +122,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main_nomain.o cli_core_test_main.cpp;\
+	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main_nomain.o cli_core_test_main.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/cli_core_test_main.o ${OBJECTDIR}/cli_core_test_main_nomain.o;\
 	fi

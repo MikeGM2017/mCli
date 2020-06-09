@@ -22,11 +22,12 @@
 #include "Cli_Module_Base_Rem.h"
 #include "Cli_Module_Base_Quit.h"
 #include "Cli_Module_Base_Help.h"
+#include "Cli_Module_Base_Modules.h"
 
 #include "Str_Filter.h"
 
 int main(int argc, char *argv[]) {
-    
+
     const string Version = "0.01";
 
     Cli_Output_printf Cli_Output;
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
     Cmd_Token_Parser Token_Parser;
 
     Cli_Cmd_Privilege_ID User_Privilege = CMD_PRIVILEGE_ROOT_DEF;
-    Cli_Core Cli(User_Privilege, Token_Parser, Cli_Output);
+    Cli_Core Cli(User_Privilege, Token_Parser, Cli_Input, Cli_Output);
 
     Cli_Modules Modules;
 
@@ -50,6 +51,7 @@ int main(int argc, char *argv[]) {
 
     Str_Filter str_filter('?', '*');
     Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
+    Modules.Add(new Cli_Module_Base_Modules(Modules, str_filter, Cli_Output));
 
     // Modules Add - End
 
@@ -60,7 +62,7 @@ int main(int argc, char *argv[]) {
     Cli_Input.Divider_L_Set("[");
     Cli_Input.Divider_R_Set("]");
     Cli_Input.Input_Init();
-    
+
     Cli_Output.Output_NewLine();
     Cli_Output.Output_Str("mCli: Cli Core Test");
     Cli_Output.Output_Str(" V");
@@ -69,9 +71,13 @@ int main(int argc, char *argv[]) {
     Cli_Output.Output_NewLine();
 
     bool stop = false;
+    bool is_invitation_print = true;
     do {
-        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+        if (is_invitation_print) {
+            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+            Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+        }
+        is_invitation_print = true;
         Cli_Input_Item input_item = Cli_Input.Input_Item_Get();
         switch (input_item.Type_Get()) {
             case CLI_INPUT_ITEM_TYPE_STR:
@@ -84,10 +90,12 @@ int main(int argc, char *argv[]) {
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
             {
-                Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str("TAB: ");
-                Cli_Output.Output_Str(input_item.Text_Get());
-                Cli_Output.Output_NewLine();
+                //Cli_Output.Output_NewLine();
+                //Cli_Output.Output_Str("TAB: ");
+                //Cli_Output.Output_Str(input_item.Text_Get());
+                //Cli_Output.Output_NewLine();
+                Cli.Process_Tab(Modules, input_item, str_rem_def, is_invitation_print);
+                //Cli_Output.Output_NewLine();
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_UP:
