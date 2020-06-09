@@ -88,8 +88,13 @@ public:
                         pos_next = Skip(char_type, s, pos);
                         found = false;
                         break;
+                    case CMD_TOKEN_PARSER_CHAR_TYPE_COMMAS:
+                        pos_next = Get_Str(s, pos, c);
+                        found = true;
+                        break;
                     case CMD_TOKEN_PARSER_CHAR_TYPE_ALPHA:
                     case CMD_TOKEN_PARSER_CHAR_TYPE_DIGIT:
+                    default: // @Attention: default: for str filter like *elp 
                         pos_next = Get_Val(s, pos);
                         found = true;
                         break;

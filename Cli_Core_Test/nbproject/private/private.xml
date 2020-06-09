@@ -7,8 +7,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core/cli_core_main.cpp</file>
-            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core/Cli_Core/Cli_Core.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Str_Filter_Abstract.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Cli_Module_Base_Help.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cmd_Item/Cmd_Item_Str.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/cli_core_test_main.cpp</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Str_Filter.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cmd_Item/Cmd_Item_Word.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Cli_Module.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Core/Cli_Core.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Cli_Cmd.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Cli_Module_Base_Quit.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cmd_Item/Cmd_Item_Rem.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Cli_Cmd_Privilege_ID.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cli_Modules/Cli_Module_Base_Rem.h</file>
+            <file>file:/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Test/Cmd_Item/Cmd_Item_Base.h</file>
         </group>
     </open-files>
 </project-private>

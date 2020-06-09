@@ -27,6 +27,8 @@
 class Cli_Core {
 protected:
 
+    Cli_Cmd_Privilege_ID User_Privilege;
+
     Cmd_Token_Parser &Token_Parser;
 
     Cli_Output_Abstract &Cli_Output;
@@ -35,8 +37,8 @@ protected:
 
 public:
 
-    Cli_Core(Cmd_Token_Parser &parser, Cli_Output_Abstract &cli_output) :
-    Token_Parser(parser), Cli_Output(cli_output) {
+    Cli_Core(Cli_Cmd_Privilege_ID user_privilege, Cmd_Token_Parser &parser, Cli_Output_Abstract &cli_output) :
+    User_Privilege(user_privilege), Token_Parser(parser), Cli_Output(cli_output) {
     }
 
     virtual ~Cli_Core() {
@@ -71,6 +73,9 @@ public:
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr->Is_Valid(tokens);
                             switch (res_cmd_valid) {
                                 case CMD_ITEM_OK:
+                                {
+                                    Cmd_Item_Valid_Result res_cmd_valid2 = cmd_ptr->Is_Valid(tokens);
+                                }
                                     module_ptr->Execute(cmd_ptr->ID_Get(), cmd_ptr, Levels, is_debug);
                                     is_processed = true;
                                     stop = true;

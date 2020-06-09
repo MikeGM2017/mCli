@@ -19,7 +19,7 @@
 class Cmd_Item_Word : public Cmd_Item_Base {
 protected:
 
-    virtual bool IsChar_Valid(char c, int pos, int len) {
+    virtual bool Is_Char_Valid(char c, int pos, int len) {
         if (c >= 'a' && c <= 'z') return true;
         if (c >= 'A' && c <= 'Z') return true;
         if (c == '_') return true;
@@ -43,7 +43,7 @@ public:
         if (s.size() == 0) return CMD_ITEM_EMPTY;
 
         for (int pos = 0; pos < s.size(); pos++) {
-            if (!IsChar_Valid(s[pos], pos, s.size())) return CMD_ITEM_ERROR;
+            if (!Is_Char_Valid(s[pos], pos, s.size())) return CMD_ITEM_ERROR;
         }
 
         if (Text == s) return CMD_ITEM_OK;

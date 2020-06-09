@@ -21,8 +21,13 @@
 
 #include "Cli_Module_Base_Rem.h"
 #include "Cli_Module_Base_Quit.h"
+#include "Cli_Module_Base_Help.h"
+
+#include "Str_Filter.h"
 
 int main(int argc, char *argv[]) {
+    
+    const string Version = "0.01";
 
     Cli_Output_printf Cli_Output;
 
@@ -30,7 +35,8 @@ int main(int argc, char *argv[]) {
 
     Cmd_Token_Parser Token_Parser;
 
-    Cli_Core Cli(Token_Parser, Cli_Output);
+    Cli_Cmd_Privilege_ID User_Privilege = CMD_PRIVILEGE_ROOT_DEF;
+    Cli_Core Cli(User_Privilege, Token_Parser, Cli_Output);
 
     Cli_Modules Modules;
 
@@ -42,15 +48,25 @@ int main(int argc, char *argv[]) {
     bool Cmd_Quit = false;
     Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
 
+    Str_Filter str_filter('?', '*');
+    Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
+
     // Modules Add - End
 
-    Cli_Input.Title_Set("cli demo");
+    Cli_Input.Title_Set("Cli Core Test");
     Cli_Input.User_Set("root");
     Cli_Input.Level_Set("top level");
     Cli_Input.Invitation_Set("> ");
     Cli_Input.Divider_L_Set("[");
     Cli_Input.Divider_R_Set("]");
     Cli_Input.Input_Init();
+    
+    Cli_Output.Output_NewLine();
+    Cli_Output.Output_Str("mCli: Cli Core Test");
+    Cli_Output.Output_Str(" V");
+    Cli_Output.Output_Str(Version);
+    Cli_Output.Output_NewLine();
+    Cli_Output.Output_NewLine();
 
     bool stop = false;
     do {
@@ -62,8 +78,7 @@ int main(int argc, char *argv[]) {
             {
                 bool res_process_input_item = Cli.Process_Input_Item(Modules, input_item, str_rem_def);
                 if (!res_process_input_item) {
-                    Cli_Output.Output_Str("Quit: Error on Cli.Process_Input_Item(...)");
-                    stop = true; // Quit: Error
+                    Cli_Output.Output_NewLine();
                 }
             }
                 break;
