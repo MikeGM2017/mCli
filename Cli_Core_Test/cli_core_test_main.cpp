@@ -23,6 +23,7 @@
 #include "Cli_Module_Base_Quit.h"
 #include "Cli_Module_Base_Help.h"
 #include "Cli_Module_Base_Modules.h"
+#include "Cli_Module_Base_History.h"
 
 #include "Cli_Module_Tab_Test.h"
 
@@ -54,7 +55,10 @@ int main(int argc, char *argv[]) {
     Str_Filter str_filter('?', '*');
     Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
     Modules.Add(new Cli_Module_Base_Modules(Modules, str_filter, Cli_Output));
-    
+
+    Cli_History History;
+    Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
+
     Modules.Add(new Cli_Module_Tab_Test());
 
     // Modules Add - End
@@ -86,12 +90,20 @@ int main(int argc, char *argv[]) {
         switch (input_item.Type_Get()) {
             case CLI_INPUT_ITEM_TYPE_STR:
             {
+                bool is_no_history = false;
+                bool is_debug = false;
+
                 //bool res_process_input_item = Cli.Process_Input_Item(Modules, input_item, str_rem_def);
                 //if (!res_process_input_item) {
                 //    Cli_Output.Output_NewLine();
                 //}
+
+                string s_trim = Cli.Str_Trim(input_item.Text_Get());
+                History.History_Put(s_trim, is_no_history, is_debug);
+
                 Cli.Process_Input_Item(Modules, input_item, str_rem_def);
                 Cli_Output.Output_NewLine();
+
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
@@ -106,23 +118,24 @@ int main(int argc, char *argv[]) {
                 break;
             case CLI_INPUT_ITEM_TYPE_UP:
             {
-                Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str("UP: ");
-                Cli_Output.Output_Str(input_item.Text_Get());
-                Cli_Output.Output_NewLine();
+                string s_prev = Cli_Input.Input_Str_Get();
+                Cli_Input.Input_Str_Set(History.History_Up());
+                Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                Cli_Input.Input_End();
+                is_invitation_print = false;
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_DOWN:
             {
-                Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str("DOWN: ");
-                Cli_Output.Output_Str(input_item.Text_Get());
-                Cli_Output.Output_NewLine();
+                string s_prev = Cli_Input.Input_Str_Get();
+                Cli_Input.Input_Str_Set(History.History_Down());
+                Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                Cli_Input.Input_End();
+                is_invitation_print = false;
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_QUIT:
             {
-                Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str("Quit - Processed");
                 Cli_Output.Output_NewLine();
                 stop = true; // Quit
@@ -131,7 +144,6 @@ int main(int argc, char *argv[]) {
         }
 
         if (Cmd_Quit) {
-            Cli_Output.Output_NewLine();
             Cli_Output.Output_Str("Quit - Processed");
             Cli_Output.Output_NewLine();
             stop = true; // Quit
