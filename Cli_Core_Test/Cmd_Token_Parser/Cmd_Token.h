@@ -35,6 +35,9 @@ public:
         if (Text.size() >= 2 && Text[0] == '\"' && Text[Text.size() - 1] == '\"') {
             return Text.substr(1, Text.size() - 2);
         }
+        if (Text.size() >= 2 && Text[0] == '\'' && Text[Text.size() - 1] == '\'') {
+            return Text.substr(1, Text.size() - 2);
+        }
         return Text;
     }
 

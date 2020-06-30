@@ -93,27 +93,16 @@ int main(int argc, char *argv[]) {
                 bool is_no_history = false;
                 bool is_debug = false;
 
-                //bool res_process_input_item = Cli.Process_Input_Item(Modules, input_item, str_rem_def);
-                //if (!res_process_input_item) {
-                //    Cli_Output.Output_NewLine();
-                //}
-
                 string s_trim = Cli.Str_Trim(input_item.Text_Get());
                 History.History_Put(s_trim, is_no_history, is_debug);
 
                 Cli.Process_Input_Item(Modules, input_item, str_rem_def);
                 Cli_Output.Output_NewLine();
-
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
             {
-                //Cli_Output.Output_NewLine();
-                //Cli_Output.Output_Str("TAB: ");
-                //Cli_Output.Output_Str(input_item.Text_Get());
-                //Cli_Output.Output_NewLine();
                 Cli.Process_Tab(Modules, input_item, str_rem_def, is_invitation_print);
-                //Cli_Output.Output_NewLine();
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_UP:

@@ -71,7 +71,7 @@ public:
     virtual ~Cli_Core() {
     }
 
-    Level_Description Level_Get() {
+    virtual Level_Description Level_Get() {
         if (Levels.size() > 0) {
             return Levels[Levels.size() - 1];
         }
@@ -79,7 +79,7 @@ public:
         return level_top;
     }
 
-    string Str_Trim(string s) {
+    virtual string Str_Trim(string s) {
         int pos_beg = 0;
         int pos_end = s.size() - 1;
         while (pos_beg < s.size() && (s[pos_beg] == ' ' || s[pos_beg] == '\t' || s[pos_beg] == '\r' || s[pos_beg] == '\n')) pos_beg++;
@@ -88,7 +88,7 @@ public:
         return s_trim;
     }
 
-    bool Process_Input_Item(Cli_Modules &modules, Cli_Input_Item &input_item, const string str_rem) {
+    virtual bool Process_Input_Item(Cli_Modules &modules, Cli_Input_Item &input_item, const string str_rem) {
         string s_trim = Str_Trim(input_item.Text_Get());
 
         if (s_trim.size() == 0) return false;
@@ -140,7 +140,7 @@ public:
         return true; // Ok
     }
 
-    void Tab_Cmd_Add_By_Level(Cli_Cmd *cmd_ptr, string &level, list<string> &str_list) {
+    virtual void Tab_Cmd_Add_By_Level(Cli_Cmd *cmd_ptr, string &level, list<string> &str_list) {
         if (cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == level && User_Privilege <= cmd_ptr->Privilege_Get())) {
             string s = cmd_ptr->Items[0]->Text_Get();
             if (find(str_list.begin(), str_list.end(), s) == str_list.end()) {
@@ -149,7 +149,7 @@ public:
         }
     }
 
-    string TAB_Help_Get(string level, Cli_Modules &modules) {
+    virtual string TAB_Help_Get(string level, Cli_Modules &modules) {
         list<string> str_list;
 
         str_list.insert(str_list.end(), "H");
@@ -175,7 +175,7 @@ public:
         return s_str.str();
     }
 
-    void TAB_Cmd_List_Get_With_Flags(
+    virtual void TAB_Cmd_List_Get_With_Flags(
             // in
             const string level, Cli_Modules &modules, const string s_cmd_in, const vector<Cmd_Token *> &tokens,
             // out
@@ -373,7 +373,7 @@ public:
         return tab_cmd_list;
     }
 
-    void Process_Tab(Cli_Modules &modules, Cli_Input_Item &input_item, const string str_rem, bool &is_invitation_print) {
+    virtual void Process_Tab(Cli_Modules &modules, Cli_Input_Item &input_item, const string str_rem, bool &is_invitation_print) {
         vector<TAB_Cmd *> tab_cmd_list;
         string s_trim = Str_Trim(input_item.Text_Get());
         Level_Description level_description = Level_Get();
