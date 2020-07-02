@@ -38,6 +38,7 @@ public:
             default: return "???";
         }
     }
+
 };
 
 #endif /* CMD_ITEM_VALID_RESULT_FUNC_H */
