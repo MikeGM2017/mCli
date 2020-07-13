@@ -5,18 +5,18 @@
  */
 
 /* 
- * File:   Cli_Module_Tab_Test.h
+ * File:   Cli_Module_Test_Tab.h
  * Author: mike
  *
  * Created on June 9, 2020, 11:53 AM
  */
 
-#ifndef CLI_MODULE_TAB_TEST_H
-#define CLI_MODULE_TAB_TEST_H
+#ifndef CLI_MODULE_TEST_TAB_H
+#define CLI_MODULE_TEST_TAB_H
 
 #include "Cli_Module.h"
 
-class Cli_Module_Tab_Test : public Cli_Module {
+class Cli_Module_Test_Tab : public Cli_Module {
 public:
 
     enum Local_CmdID {
@@ -40,15 +40,15 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Tab_Test() : Cli_Module("Tab Test") {
+    Cli_Module_Test_Tab() : Cli_Module("Test Tab") {
         {
             // min
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_min);
             cmd->Text_Set("min");
-            cmd->Help_Set("min (tab test)");
+            cmd->Help_Set("min (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("min", "min (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min (test tab)"));
             Cmd_Add(cmd);
         }
 
@@ -56,22 +56,22 @@ public:
             // min min
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_min_min);
             cmd->Text_Set("min min");
-            cmd->Help_Set("min min (tab test)");
+            cmd->Help_Set("min min (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("min", "min (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("min", "min min (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min min (test tab)"));
             Cmd_Add(cmd);
         }
         {
             // min max
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_min_max);
             cmd->Text_Set("min max");
-            cmd->Help_Set("min max (tab test)");
+            cmd->Help_Set("min max (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("min", "min (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("max", "min max (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("max", "min max (test tab)"));
             Cmd_Add(cmd);
         }
 
@@ -79,48 +79,48 @@ public:
             // min min min
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_min_mux_min);
             cmd->Text_Set("min mux min");
-            cmd->Help_Set("min mux min (tab test)");
+            cmd->Help_Set("min mux min (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("min", "min (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("mux", "min mux (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("min", "min mux min (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("mux", "min mux (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min mux min (test tab)"));
             Cmd_Add(cmd);
         }
         {
             // min middle min
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_min_middle_min);
             cmd->Text_Set("min middle min");
-            cmd->Help_Set("min middle min (tab test)");
+            cmd->Help_Set("min middle min (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("min", "min (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("middle", "min middle (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("min", "min middle min (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("middle", "min middle (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min middle min (test tab)"));
             Cmd_Add(cmd);
         }
         {
             // min middle max
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_min_middle_max);
             cmd->Text_Set("min middle max");
-            cmd->Help_Set("min middle max (tab test)");
+            cmd->Help_Set("min middle max (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("min", "min (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("middle", "min middle (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("max", "min middle max (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("middle", "min middle (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("max", "min middle max (test tab)"));
             Cmd_Add(cmd);
         }
         {
             // min min max
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_min_mux_max);
             cmd->Text_Set("min mux max");
-            cmd->Help_Set("min mux max (tab test)");
+            cmd->Help_Set("min mux max (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("min", "min (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("mux", "min mux (tab test)"));
-            cmd->Item_Add(new Cmd_Item_Word("max", "min min max (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("min", "min (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("mux", "min mux (test tab)"));
+            cmd->Item_Add(new Cmd_Item_Word("max", "min min max (test tab)"));
             Cmd_Add(cmd);
         }
 
@@ -128,15 +128,15 @@ public:
             // max
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_max);
             cmd->Text_Set("max");
-            cmd->Help_Set("max (tab test)");
+            cmd->Help_Set("max (test tab)");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
-            cmd->Item_Add(new Cmd_Item_Word("max", "max (tab test)"));
+            cmd->Item_Add(new Cmd_Item_Word("max", "max (test tab)"));
             Cmd_Add(cmd);
         }
     }
 
-    virtual ~Cli_Module_Tab_Test() {
+    virtual ~Cli_Module_Test_Tab() {
     }
 
     virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
@@ -160,4 +160,4 @@ public:
 
 };
 
-#endif /* CLI_MODULE_TAB_TEST_H */
+#endif /* CLI_MODULE_TEST_TAB_H */

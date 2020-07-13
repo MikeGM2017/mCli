@@ -33,7 +33,7 @@ public:
         Type = "Word";
     }
 
-    virtual string DebugValue_Get() {
+    virtual string Debug_Value_Get() {
         return Text;
     }
 

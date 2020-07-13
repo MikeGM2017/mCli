@@ -235,24 +235,22 @@ public:
                                     } else if (res_parse == CMD_ITEM_INCOMPLETE) {
                                         string token_str = tokens[token]->Text_Get();
                                         string cmd_item_str = cmd_item_ptr->Text_Get();
-                                        if (token_str.size() < cmd_item_str.size()) {
-                                            string s_incomplete_tail = cmd_item_ptr->Incomplete_Tail_Get(token_str);
-                                            if (!s_incomplete_tail.empty()) {
-                                                Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
-                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
-                                                cmd_tab_ptr->s_add = s_incomplete_tail;
-                                                cmd_tab_ptr->s_full = cmd_item_str;
-                                                cmd_tab_ptr->is_space_after_add =
-                                                        cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
-                                                cmd_tab_list.push_back(cmd_tab_ptr);
-                                            } else if (s_incomplete_tail.empty()) {
-                                                Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
-                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
-                                                cmd_tab_ptr->s_log = cmd_item_str;
-                                                cmd_tab_ptr->is_space_after_add =
-                                                        cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
-                                                cmd_tab_list.push_back(cmd_tab_ptr);
-                                            }
+                                        string s_incomplete_tail = cmd_item_ptr->Incomplete_Tail_Get(token_str);
+                                        if (!s_incomplete_tail.empty()) {
+                                            Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
+                                            cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                            cmd_tab_ptr->s_add = s_incomplete_tail;
+                                            cmd_tab_ptr->s_full = cmd_item_str;
+                                            cmd_tab_ptr->is_space_after_add =
+                                                    cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                            cmd_tab_list.push_back(cmd_tab_ptr);
+                                        } else if (s_incomplete_tail.empty()) {
+                                            Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
+                                            cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                            cmd_tab_ptr->s_log = cmd_item_str + " - Incomplete";
+                                            cmd_tab_ptr->is_space_after_add =
+                                                    cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                            cmd_tab_list.push_back(cmd_tab_ptr);
                                         }
                                     } else {
                                         is_valid = false;
@@ -325,6 +323,15 @@ public:
                 Is_Enter = false;
                 Is_Space_After = true;
             }
+        }
+
+        // @Attention: No commands -> Error
+        if (cmd_tab_list.empty()) {
+            Is_Log = true;
+            s_log_vector.push_back("<Error>");
+            Is_Add = false;
+            Is_Enter = false;
+            Is_Space_After = false;
         }
 
         if (Is_Log) {

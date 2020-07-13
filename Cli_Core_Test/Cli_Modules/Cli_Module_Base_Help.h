@@ -86,6 +86,28 @@ public:
         }
 
         {
+            // help full
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_help_full);
+            cmd->Text_Set("help full");
+            cmd->Help_Set("show all commands");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("help", "show help"));
+            cmd->Item_Add(new Cmd_Item_Word("full", "show all commands"));
+            Cmd_Add(cmd);
+        }
+        {
+            // help full verbose
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_help_full_verbose);
+            cmd->Text_Set("help full verbose");
+            cmd->Help_Set("show all commands with arguments information");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("help", "show help"));
+            cmd->Item_Add(new Cmd_Item_Word("full", "show all commands"));
+            cmd->Item_Add(new Cmd_Item_Word("verbose", "show all arguments information"));
+            Cmd_Add(cmd);
+        }
+
+        {
             // help "<command>"
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_help_command);
             cmd->Text_Set("help \"<command>\"");
@@ -137,18 +159,20 @@ public:
     }
 
     static int Help_Cli_Modules_Get_Len(int user_privilege, Cli_Modules &Cli_Modules,
-            string Level, bool is_verbose, string module_filter, string command_filter, Str_Filter_Abstract &str_filter) {
+            string Level,
+            bool is_full, bool is_verbose, bool is_module_full,
+            string module_filter, string command_filter, Str_Filter_Abstract &str_filter) {
         int len_max = 0;
 
         for (int module = 0; module < Cli_Modules.Get_Size(); module++) {
             Cli_Module *climodule_ptr = Cli_Modules.Get(module);
-            if (str_filter.Is_Match(module_filter, climodule_ptr->Name_Get())) {
+            if (is_full || str_filter.Is_Match(module_filter, climodule_ptr->Name_Get())) {
                 for (int cmd = 0; cmd < climodule_ptr->Module_Cmd_List.size(); cmd++) {
                     Cli_Cmd *cmd_ptr = climodule_ptr->Module_Cmd_List[cmd];
-                    if (
-                            (cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == Level))
+                    if (is_full || is_module_full ||
+                            ((cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == Level))
                             && (user_privilege <= cmd_ptr->Privilege_Get())
-                            && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get())
+                            && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get()))
                             ) {
                         int len = 0;
                         if (Level.size() == 0) {
@@ -176,7 +200,9 @@ public:
     }
 
     static void Help_Cli_Modules_Print(int user_privilege, Cli_Modules &CliModules,
-            string Level, bool is_verbose, string module_filter, string command_filter, Str_Filter_Abstract &str_filter,
+            string Level,
+            bool is_full, bool is_verbose, bool is_module_full,
+            string module_filter, string command_filter, Str_Filter_Abstract &str_filter,
             int len_max, int &modules_count, int &commands_count,
             Cli_Output_Abstract &Cli_Output) {
 
@@ -184,7 +210,7 @@ public:
 
         for (int module = 0; module < CliModules.Get_Size(); module++) {
             Cli_Module *climodule_ptr = CliModules.Get(module);
-            if (str_filter.Is_Match(module_filter, climodule_ptr->Name_Get())) {
+            if (is_full || str_filter.Is_Match(module_filter, climodule_ptr->Name_Get())) {
                 modules_count++;
                 for (int cmd = 0; cmd < climodule_ptr->Module_Cmd_List.size(); cmd++) {
                     Cli_Cmd *cmd_ptr = climodule_ptr->Module_Cmd_List[cmd];
@@ -200,10 +226,10 @@ public:
                     }
                     s += cmd_ptr->Text_Get();
                     s_str1 << cmd_ptr->Text_Get();
-                    if (
-                            (cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == Level))
+                    if (is_full || is_module_full ||
+                            ((cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == Level))
                             && (user_privilege <= cmd_ptr->Privilege_Get())
-                            && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get())
+                            && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get()))
                             ) {
                         s_str2 << setw(len_max) << left << s_str1.str() << " - " << cmd_ptr->Help_Get();
                         Cli_Output.Output_Str(s_str2.str());
@@ -226,18 +252,22 @@ public:
         }
     }
 
-    void help(string Level, bool is_verbose, string module_filter, string command_filter, Cli_Output_Abstract &Cli_Output) {
+    void help(string Level, bool is_full, bool is_verbose, bool is_module_full,
+            string module_filter, string command_filter, Cli_Output_Abstract &Cli_Output) {
         int modules_count = 0;
         int commands_count = 0;
         int len_max = 0;
         int len;
 
-        len = Help_Cli_Modules_Get_Len(User_Privilege, Modules, Level, is_verbose, module_filter, command_filter, Help_Str_Filter);
+        len = Help_Cli_Modules_Get_Len(User_Privilege, Modules, Level,
+                is_full, is_verbose, is_module_full,
+                module_filter, command_filter, Help_Str_Filter);
         if (len_max < len)
             len_max = len;
 
         Help_Cli_Modules_Print(User_Privilege, Modules, Level,
-                is_verbose, module_filter, command_filter, Help_Str_Filter,
+                is_full, is_verbose, is_module_full,
+                module_filter, command_filter, Help_Str_Filter,
                 len_max, modules_count, commands_count,
                 Cli_Output);
 
@@ -267,47 +297,81 @@ public:
             case CMD_ID_help:
                 if (is_debug) return true;
             {
+                bool is_full = false;
                 bool is_verbose = false;
+                bool is_module_full = false;
                 string module_filter = "*";
                 string command_filter = "*";
-                help(level.Level, is_verbose, module_filter, command_filter, Cli_Output);
+                help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
             }
                 return true;
+
+            case CMD_ID_help_full:
+                if (is_debug) return true;
+            {
+                bool is_full = true;
+                bool is_verbose = false;
+                bool is_module_full = false;
+                string module_filter = "*";
+                string command_filter = "*";
+                help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
+            }
+                return true;
+            case CMD_ID_help_full_verbose:
+                if (is_debug) return true;
+            {
+                bool is_full = true;
+                bool is_verbose = true;
+                bool is_module_full = false;
+                string module_filter = "*";
+                string command_filter = "*";
+                help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
+            }
+                return true;
+
             case CMD_ID_help_command:
                 if (is_debug) return true;
             {
+                bool is_full = false;
                 bool is_verbose = false;
+                bool is_module_full = false;
                 string module_filter = "*";
                 string command_filter = cmd->Items[1]->Value_Str;
-                help(level.Level, is_verbose, module_filter, command_filter, Cli_Output);
+                help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
             }
                 return true;
             case CMD_ID_help_command_verbose:
                 if (is_debug) return true;
             {
+                bool is_full = false;
                 bool is_verbose = true;
+                bool is_module_full = false;
                 string module_filter = "*";
                 string command_filter = cmd->Items[1]->Value_Str;
-                help(level.Level, is_verbose, module_filter, command_filter, Cli_Output);
+                help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
             }
                 return true;
 
             case CMD_ID_help_module_module_name:
                 if (is_debug) return true;
             {
+                bool is_full = false;
                 bool is_verbose = false;
+                bool is_module_full = true;
                 string module_filter = cmd->Items[2]->Value_Str;
                 string command_filter = "*";
-                help(level.Level, is_verbose, module_filter, command_filter, Cli_Output);
+                help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
             }
                 return true;
             case CMD_ID_help_module_module_name_verbose:
                 if (is_debug) return true;
             {
+                bool is_full = false;
                 bool is_verbose = true;
+                bool is_module_full = true;
                 string module_filter = cmd->Items[2]->Value_Str;
                 string command_filter = "*";
-                help(level.Level, is_verbose, module_filter, command_filter, Cli_Output);
+                help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
             }
                 return true;
 

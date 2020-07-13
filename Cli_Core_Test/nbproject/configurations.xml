@@ -24,7 +24,8 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Rem.h</itemPath>
-        <itemPath>Cli_Modules/Cli_Module_Tab_Test.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Test_Tab.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Test_Terminal.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter.h</itemPath>
@@ -36,6 +37,7 @@
       </logicalFolder>
       <logicalFolder name="f5" displayName="Cmd_Item" projectFiles="true">
         <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_IP4.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Str.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
@@ -70,6 +72,18 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f3"
+                     displayName="Test_Cmd_Item_IP4"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_IP4.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="Test_Cmd_Item_Str"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Str.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1"
                      displayName="Test_Str_Filter"
                      projectFiles="true"
@@ -140,7 +154,12 @@
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Cli_Modules/Cli_Module_Tab_Test.h" ex="false" tool="3" flavor2="0">
+      <item path="Cli_Modules/Cli_Module_Test_Tab.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Terminal.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -155,6 +174,8 @@
       <item path="Cli_Output/Cli_Output_printf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -212,6 +233,40 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+        </linkerTool>
+      </folder>
+      <item path="tests/Test_Cmd_Item_IP4.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/Test_Str_Filter.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -269,7 +324,12 @@
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Cli_Modules/Cli_Module_Tab_Test.h" ex="false" tool="3" flavor2="0">
+      <item path="Cli_Modules/Cli_Module_Test_Tab.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Terminal.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -284,6 +344,8 @@
       <item path="Cli_Output/Cli_Output_printf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -341,6 +403,40 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+        </linkerTool>
+      </folder>
+      <item path="tests/Test_Cmd_Item_IP4.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/Test_Str_Filter.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
