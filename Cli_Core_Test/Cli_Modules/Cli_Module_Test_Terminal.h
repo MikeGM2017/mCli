@@ -19,6 +19,7 @@
 #include "Cmd_Item_Word.h"
 #include "Cmd_Item_Str.h"
 #include "Cmd_Item_IP4.h"
+#include "Cmd_Item_IP6.h"
 
 class Cli_Module_Test_Terminal : public Cli_Module {
 protected:
@@ -32,6 +33,7 @@ protected:
     string Value_Str;
     string Value_IP4;
     string Value_Mask;
+    string Value_IP6;
 
 public:
 
@@ -160,6 +162,19 @@ public:
             Cmd_Add(cmd);
         }
 
+        {
+            // test set ip6
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_ip6);
+            cmd->Text_Set("set ip6 <ip6-address>");
+            cmd->Help_Set("test: set ip6");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("ip6", "test: set ip6"));
+            cmd->Item_Add(new Cmd_Item_IP6("<ip6-address>", "test: set ip6 <ip6-address>"));
+            Cmd_Add(cmd);
+        }
+
     }
 
     ~Cli_Module_Test_Terminal() {
@@ -172,6 +187,7 @@ public:
         s_str << setw(w) << "Str: " << setw(0) << Value_Str << endl;
         s_str << setw(w) << "IP4: " << setw(0) << Value_IP4 << endl;
         s_str << setw(w) << "Mask: " << setw(0) << Value_Mask << endl;
+        s_str << setw(w) << "IP6: " << setw(0) << Value_IP6 << endl;
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_str.str());
@@ -199,6 +215,14 @@ public:
         Value_Mask = value;
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str("Mask=" + Value_Mask);
+        Cli_Output.Output_NewLine();
+        return true;
+    }
+    
+    bool test_set_ip6(string value) {
+        Value_IP6 = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("IP6=" + Value_IP6);
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -236,6 +260,13 @@ public:
             {
                 string value = cmd->Items[2]->Value_Str;
                 return test_set_mask(value);
+            }
+
+            case CMD_ID_test_set_ip6:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[2]->Value_Str;
+                return test_set_ip6(value);
             }
 
         }

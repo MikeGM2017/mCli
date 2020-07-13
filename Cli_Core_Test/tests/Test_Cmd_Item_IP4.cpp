@@ -23,48 +23,48 @@
 
 #include "Cmd_Item_IP4.h"
 
-typedef std::pair< std::string, Cmd_Item_Valid_Result > Cmd_Item_IP4_Test_Pair;
+typedef std::pair< std::string, Cmd_Item_Valid_Result > Cmd_Item_Test_Pair;
 
-static const Cmd_Item_IP4_Test_Pair TestVector[] = {
-    Cmd_Item_IP4_Test_Pair("", CMD_ITEM_EMPTY),
-    Cmd_Item_IP4_Test_Pair("0.0.0.0", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("1.1.1.1", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("255.255.255.255", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("256.255.255.255", CMD_ITEM_OUT_OF_RANGE),
-    Cmd_Item_IP4_Test_Pair("255.256.255.255", CMD_ITEM_OUT_OF_RANGE),
-    Cmd_Item_IP4_Test_Pair("255.255.256.255", CMD_ITEM_OUT_OF_RANGE),
-    Cmd_Item_IP4_Test_Pair("255.255.255.256", CMD_ITEM_OUT_OF_RANGE),
-    Cmd_Item_IP4_Test_Pair("255.255.255", CMD_ITEM_INCOMPLETE),
-    Cmd_Item_IP4_Test_Pair("255.255.255.", CMD_ITEM_INCOMPLETE),
-    Cmd_Item_IP4_Test_Pair(".255.255.", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("255.255.255.25", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("255.255.255.2", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("255.255.255.0", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("255.255.255.00", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("255.255.255.000", CMD_ITEM_OK),
+static const Cmd_Item_Test_Pair TestVector[] = {
+    Cmd_Item_Test_Pair("", CMD_ITEM_EMPTY),
+    Cmd_Item_Test_Pair("0.0.0.0", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("1.1.1.1", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("255.255.255.255", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("256.255.255.255", CMD_ITEM_OUT_OF_RANGE),
+    Cmd_Item_Test_Pair("255.256.255.255", CMD_ITEM_OUT_OF_RANGE),
+    Cmd_Item_Test_Pair("255.255.256.255", CMD_ITEM_OUT_OF_RANGE),
+    Cmd_Item_Test_Pair("255.255.255.256", CMD_ITEM_OUT_OF_RANGE),
+    Cmd_Item_Test_Pair("255.255.255", CMD_ITEM_INCOMPLETE),
+    Cmd_Item_Test_Pair("255.255.255.", CMD_ITEM_INCOMPLETE),
+    Cmd_Item_Test_Pair(".255.255.", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("255.255.255.25", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("255.255.255.2", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("255.255.255.0", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("255.255.255.00", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("255.255.255.000", CMD_ITEM_OK),
 
-    Cmd_Item_IP4_Test_Pair("255.255.255.0000", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("0255.255.255.255", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("255.0255.255.255", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("255.255.0255.255", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("255.255.255.0255", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("255.255.255.0000", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("0255.255.255.255", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("255.0255.255.255", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("255.255.0255.255", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("255.255.255.0255", CMD_ITEM_ERROR),
 
-    Cmd_Item_IP4_Test_Pair("001.001.001.001", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("0001.001.001.001", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("001.0001.001.001", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("001.001.0001.001", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("001.001.001.0001", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("001.001.001.001", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("0001.001.001.001", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("001.0001.001.001", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("001.001.0001.001", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("001.001.001.0001", CMD_ITEM_ERROR),
 
-    Cmd_Item_IP4_Test_Pair("000.000.000.000", CMD_ITEM_OK),
-    Cmd_Item_IP4_Test_Pair("0000.000.000.000", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("000.0000.000.000", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("000.000.0000.000", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("000.000.000.0000", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("000.000.000.000", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("0000.000.000.000", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("000.0000.000.000", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("000.000.0000.000", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("000.000.000.0000", CMD_ITEM_ERROR),
 
-    Cmd_Item_IP4_Test_Pair("1.1..1", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("1..1.1.1", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("1.1..1.1", CMD_ITEM_ERROR),
-    Cmd_Item_IP4_Test_Pair("1.1.1..1", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("1.1..1", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("1..1.1.1", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("1.1..1.1", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("1.1.1..1", CMD_ITEM_ERROR),
 };
 
 void test1() {
@@ -72,7 +72,7 @@ void test1() {
 
     Cmd_Item_IP4 v("", "");
 
-    int test_vector_size = sizeof (TestVector) / sizeof (Cmd_Item_IP4_Test_Pair);
+    int test_vector_size = sizeof (TestVector) / sizeof (Cmd_Item_Test_Pair);
 
     for (int i = 0; i < test_vector_size; i++) {
         Cmd_Item_Valid_Result res = v.Parse(TestVector[i].first);

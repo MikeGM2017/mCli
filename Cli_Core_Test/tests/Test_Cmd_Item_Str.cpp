@@ -23,30 +23,30 @@
 
 #include "Cmd_Item_Str.h"
 
-typedef std::pair< std::string, Cmd_Item_Valid_Result > Cmd_Item_Str_Test_Pair;
+typedef std::pair< std::string, Cmd_Item_Valid_Result > Cmd_Item_Test_Pair;
 
-static const Cmd_Item_Str_Test_Pair TestVector[] = {
-    Cmd_Item_Str_Test_Pair("", CMD_ITEM_EMPTY),
-    Cmd_Item_Str_Test_Pair("\"<str>\"", CMD_ITEM_OK),
-    Cmd_Item_Str_Test_Pair("\"  <str1>   <str2>    \"", CMD_ITEM_OK),
-    Cmd_Item_Str_Test_Pair("\"\"", CMD_ITEM_OK),
-    Cmd_Item_Str_Test_Pair("\"", CMD_ITEM_INCOMPLETE),
-    Cmd_Item_Str_Test_Pair("\"<str>", CMD_ITEM_INCOMPLETE),
-    Cmd_Item_Str_Test_Pair("<str>\"", CMD_ITEM_ERROR),
-    Cmd_Item_Str_Test_Pair("FF:FF:FF:FF:FF:FF", CMD_ITEM_OK),
+static const Cmd_Item_Test_Pair TestVector[] = {
+    Cmd_Item_Test_Pair("", CMD_ITEM_EMPTY),
+    Cmd_Item_Test_Pair("\"<str>\"", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("\"  <str1>   <str2>    \"", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("\"\"", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("\"", CMD_ITEM_INCOMPLETE),
+    Cmd_Item_Test_Pair("\"<str>", CMD_ITEM_INCOMPLETE),
+    Cmd_Item_Test_Pair("<str>\"", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("FF:FF:FF:FF:FF:FF", CMD_ITEM_OK),
 
-    Cmd_Item_Str_Test_Pair("<str>'", CMD_ITEM_ERROR),
+    Cmd_Item_Test_Pair("<str>'", CMD_ITEM_ERROR),
 
     // Escaped:
-    Cmd_Item_Str_Test_Pair("\\\"Str\\\"", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("\\\"Str\\\"", CMD_ITEM_OK),
 };
 
 void test1() {
     std::cout << "Test_Cmd_Item_Str test 1" << std::endl;
+
     Cmd_Item_Str v("", "");
-    //InputTest::TestInputBase(v, TestVector, sizeof (TestVector) / sizeof (InputTestPair));
-    
-    int test_vector_size = sizeof (TestVector) / sizeof (Cmd_Item_Str_Test_Pair);
+
+    int test_vector_size = sizeof (TestVector) / sizeof (Cmd_Item_Test_Pair);
 
     for (int i = 0; i < test_vector_size; i++) {
         Cmd_Item_Valid_Result res = v.Parse(TestVector[i].first);
