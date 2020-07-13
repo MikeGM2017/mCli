@@ -175,23 +175,31 @@ public:
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_str.str());
-        Cli_Output.Output_NewLine();
 
         return true;
     }
 
     bool test_set_str(string value) {
         Value_Str = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+        Cli_Output.Output_NewLine();
         return true;
     }
 
     bool test_set_ip4(string value) {
         Value_IP4 = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("IP4=" + Value_IP4);
+        Cli_Output.Output_NewLine();
         return true;
     }
 
     bool test_set_mask(string value) {
         Value_Mask = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Mask=" + Value_Mask);
+        Cli_Output.Output_NewLine();
         return true;
     }
 
