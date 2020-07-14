@@ -66,13 +66,14 @@ public:
         return CMD_ITEM_ERROR;
     }
     
-    virtual string Incomplete_Tail_Get(string s) {
+    virtual vector<string> Incomplete_Tail_List_Get(string s) {
+        vector<string> tail_list;
         if(s.size() < Text.size()) {
             if(Text.substr(0, s.size()) == s) {
-                return Text.substr(s.size());
+                tail_list.push_back(Text.substr(s.size()));
             }
         }
-        return "";
+        return tail_list;
     }
 
 };

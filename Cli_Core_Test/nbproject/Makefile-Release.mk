@@ -50,6 +50,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f7 \
+	${TESTDIR}/TestFiles/f9 \
 	${TESTDIR}/TestFiles/f1
 
 # Test Object Files
@@ -61,6 +62,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/Test_Cmd_Item_MAC.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Str.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Time.o \
+	${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o \
 	${TESTDIR}/tests/Test_Str_Filter.o
 
 # C Compiler Flags
@@ -132,6 +134,10 @@ ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/Test_Cmd_Item_Time.o ${OBJECTFILES:%.o
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/Test_Str_Filter.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
@@ -179,6 +185,12 @@ ${TESTDIR}/tests/Test_Cmd_Item_Time.o: tests/Test_Cmd_Item_Time.cpp
 	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Time.o tests/Test_Cmd_Item_Time.cpp
 
 
+${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o: tests/Test_Cmd_Item_Word_Range.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o tests/Test_Cmd_Item_Word_Range.cpp
+
+
 ${TESTDIR}/tests/Test_Str_Filter.o: tests/Test_Str_Filter.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
@@ -222,6 +234,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
+	    ${TESTDIR}/TestFiles/f9 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	else  \
 	    ./${TEST} || true; \

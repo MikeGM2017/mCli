@@ -17,6 +17,7 @@
 #include <limits.h>
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -80,8 +81,9 @@ public:
         return s;
     }
     
-    virtual string Incomplete_Tail_Get(string s) {
-        return "";
+    virtual vector<string> Incomplete_Tail_List_Get(string s) {
+        vector<string> tail_list;
+        return tail_list;
     }
     
     virtual bool Is_Space_After_Add(string s) {

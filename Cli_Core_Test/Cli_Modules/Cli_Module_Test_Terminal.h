@@ -17,6 +17,7 @@
 #include "Cli_Module.h"
 
 #include "Cmd_Item_Word.h"
+#include "Cmd_Item_Word_Range.h"
 #include "Cmd_Item_Str.h"
 #include "Cmd_Item_Date.h"
 #include "Cmd_Item_Time.h"
@@ -42,6 +43,7 @@ protected:
     string Value_Mask;
     string Value_IP6;
     string Value_MAC;
+    string Value_Enable;
 
 public:
 
@@ -233,6 +235,22 @@ public:
             Cmd_Add(cmd);
         }
 
+        {
+            // test set enable
+            vector<string> words;
+            words.push_back("enable");
+            words.push_back("disable");
+            words.push_back("else");
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_enable);
+            cmd->Text_Set("set <enable|disable|else>");
+            cmd->Help_Set("test: set <enable|disable|else>");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word_Range("<enable|disable|else>", "test: set <enable|disable|else>", words));
+            Cmd_Add(cmd);
+        }
+
     }
 
     ~Cli_Module_Test_Terminal() {
@@ -250,6 +268,7 @@ public:
         s_str << setw(w) << "Mask: " << setw(0) << Value_Mask << endl;
         s_str << setw(w) << "IP6: " << setw(0) << Value_IP6 << endl;
         s_str << setw(w) << "MAC: " << setw(0) << Value_MAC << endl;
+        s_str << setw(w) << "Enable: " << setw(0) << Value_Enable << endl;
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_str.str());
@@ -320,6 +339,14 @@ public:
         Cli_Output.Output_NewLine();
         return true;
     }
+    
+    bool test_set_enable(string value) {
+        Value_Enable = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Enable=" + Value_Enable);
+        Cli_Output.Output_NewLine();
+        return true;
+    }
 
     virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
         switch (cmd_id) {
@@ -387,6 +414,13 @@ public:
             {
                 string value = cmd->Items[2]->Value_Str;
                 return test_set_mac(value);
+            }
+
+            case CMD_ID_test_set_enable:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[1]->Value_Str;
+                return test_set_enable(value);
             }
 
         }

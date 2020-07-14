@@ -48,6 +48,7 @@
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result_Func.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Word.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word_Range.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f6" displayName="Cmd_Token_Parser" projectFiles="true">
         <itemPath>Cmd_Token_Parser/Cmd_Token.h</itemPath>
@@ -118,6 +119,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/Test_Cmd_Item_Time.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f9"
+                     displayName="Test_Cmd_Item_Word_Range"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Word_Range.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f1"
                      displayName="Test_Str_Filter"
@@ -235,6 +242,8 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Word_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Token_Parser/Cmd_Token_Parser.h"
@@ -383,6 +392,21 @@
           <output>${TESTDIR}/TestFiles/f8</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+        </linkerTool>
+      </folder>
       <item path="tests/Test_Cmd_Item_Date.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_DateTime.cpp" ex="false" tool="1" flavor2="0">
@@ -396,6 +420,8 @@
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Word_Range.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Str_Filter.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -500,6 +526,8 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Word_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Token_Parser/Cmd_Token_Parser.h"
@@ -648,6 +676,21 @@
           <output>${TESTDIR}/TestFiles/f8</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+        </linkerTool>
+      </folder>
       <item path="tests/Test_Cmd_Item_Date.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_DateTime.cpp" ex="false" tool="1" flavor2="0">
@@ -661,6 +704,8 @@
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Word_Range.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Str_Filter.cpp" ex="false" tool="1" flavor2="0">
       </item>

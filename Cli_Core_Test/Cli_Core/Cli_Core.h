@@ -39,8 +39,8 @@ public:
 
     Cli_Cmd *cmd_ptr;
     string s_log;
-    string s_add;
-    string s_full;
+    vector<string> s_add_list;
+    vector<string> s_full_list;
     bool Is_Enter;
     bool is_space_after_add;
 
@@ -216,7 +216,6 @@ public:
                                             cmd_tab_ptr->is_space_after_add =
                                                     cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
 
-                                            //if (cmd_tab_ptr->is_space_after)
                                             if (is_last_space)
                                                 cmd_tab_ptr->s_log = cmd_ptr->Items[token + 1]->Text_Get();
                                             else
@@ -235,16 +234,19 @@ public:
                                     } else if (res_parse == CMD_ITEM_INCOMPLETE) {
                                         string token_str = tokens[token]->Text_Get();
                                         string cmd_item_str = cmd_item_ptr->Text_Get();
-                                        string s_incomplete_tail = cmd_item_ptr->Incomplete_Tail_Get(token_str);
-                                        if (!s_incomplete_tail.empty()) {
+                                        vector<string> s_incomplete_tail_list = cmd_item_ptr->Incomplete_Tail_List_Get(token_str);
+                                        if (!s_incomplete_tail_list.empty()) {
                                             Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
                                             cmd_tab_ptr->cmd_ptr = cmd_ptr;
-                                            cmd_tab_ptr->s_add = s_incomplete_tail;
-                                            cmd_tab_ptr->s_full = cmd_item_str;
+                                            cmd_tab_ptr->s_add_list = s_incomplete_tail_list;
+                                            for (int s_add_index = 0; s_add_index < cmd_tab_ptr->s_add_list.size(); s_add_index++) {
+                                                string s_add_item = cmd_tab_ptr->s_add_list[s_add_index];
+                                                cmd_tab_ptr->s_full_list.push_back(token_str + s_add_item);
+                                            }
                                             cmd_tab_ptr->is_space_after_add =
                                                     cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
                                             cmd_tab_list.push_back(cmd_tab_ptr);
-                                        } else if (s_incomplete_tail.empty()) {
+                                        } else if (s_incomplete_tail_list.empty()) {
                                             Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
                                             cmd_tab_ptr->cmd_ptr = cmd_ptr;
                                             cmd_tab_ptr->s_log = cmd_item_str + " - Incomplete";
@@ -275,10 +277,13 @@ public:
 
         for (int i = 0; i < cmd_tab_list.size(); i++) {
             Cli_Cmd_Tab *cmd_tab_ptr = cmd_tab_list[i];
-            if (!cmd_tab_ptr->s_add.empty()) {
-                if (s_add_set.find(cmd_tab_ptr->s_add) == s_add_set.end()) {
-                    s_add_set.insert(cmd_tab_ptr->s_add);
-                    add_count++;
+            if (!cmd_tab_ptr->s_add_list.empty()) {
+                for (int s_add_index = 0; s_add_index < cmd_tab_ptr->s_add_list.size(); s_add_index++) {
+                    string s_add_item = cmd_tab_ptr->s_add_list[s_add_index];
+                    if (s_add_set.find(s_add_item) == s_add_set.end()) {
+                        s_add_set.insert(s_add_item);
+                        add_count++;
+                    }
                 }
             }
             if (!cmd_tab_ptr->is_space_after_add) {
@@ -299,15 +304,18 @@ public:
                     }
                 }
             }
-            if (!cmd_tab_ptr->s_add.empty()) {
+            if (!cmd_tab_ptr->s_add_list.empty()) {
                 if (add_count == 1) {
-                    s_add = cmd_tab_ptr->s_add;
+                    s_add = cmd_tab_ptr->s_add_list[0];
                     Is_Add = true;
                 } else if (add_count > 1) {
                     Is_Log = true;
-                    if (s_log_set.find(cmd_tab_ptr->s_full) == s_log_set.end()) {
-                        s_log_set.insert(cmd_tab_ptr->s_full);
-                        s_log_vector.push_back(cmd_tab_ptr->s_full);
+                    for (int s_full_index = 0; s_full_index < cmd_tab_ptr->s_full_list.size(); s_full_index++) {
+                        string s_full_item = cmd_tab_ptr->s_full_list[s_full_index];
+                        if (s_log_set.find(s_full_item) == s_log_set.end()) {
+                            s_log_set.insert(s_full_item);
+                            s_log_vector.push_back(s_full_item);
+                        }
                     }
                 }
             }

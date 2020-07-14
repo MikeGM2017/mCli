@@ -84,10 +84,6 @@ public:
         return false;
     }
 
-    virtual string Incomplete_Tail_Get(string s) {
-        return "";
-    }
-
     virtual bool Is_Space_After_Add(string s) {
         if (s.size() >= 7) {
             Cmd_Item_Valid_Result res = Parse(s);
