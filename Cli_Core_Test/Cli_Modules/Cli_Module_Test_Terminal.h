@@ -18,6 +18,9 @@
 
 #include "Cmd_Item_Word.h"
 #include "Cmd_Item_Str.h"
+#include "Cmd_Item_Date.h"
+#include "Cmd_Item_Time.h"
+#include "Cmd_Item_DateTime.h"
 #include "Cmd_Item_IP4.h"
 #include "Cmd_Item_IP6.h"
 #include "Cmd_Item_MAC.h"
@@ -32,6 +35,9 @@ protected:
     string New_Level;
 
     string Value_Str;
+    string Value_Date;
+    string Value_Time;
+    string Value_DateTime;
     string Value_IP4;
     string Value_Mask;
     string Value_IP6;
@@ -139,6 +145,43 @@ public:
         }
 
         {
+            // test set date
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_date);
+            cmd->Text_Set("set date \"yyyy-mm-dd\"");
+            cmd->Help_Set("test: set date");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("date", "test: set date"));
+            cmd->Item_Add(new Cmd_Item_Date("\"yyyy-mm-dd\"", "test: set date \"yyyy-mm-dd\""));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set time
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_time);
+            cmd->Text_Set("set time \"HH-MM-SS\"");
+            cmd->Help_Set("test: set time");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("time", "test: time"));
+            cmd->Item_Add(new Cmd_Item_Time("\"HH-MM-SS\"", "test: set date \"HH-MM-SS\""));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set datetime
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_datetime);
+            cmd->Text_Set("set datetime \"yyyy-mm-dd HH-MM-SS\"");
+            cmd->Help_Set("test: set datetime");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("datetime", "test: set datetime"));
+            cmd->Item_Add(new Cmd_Item_DateTime("\"yyyy-mm-dd HH-MM-SS\"", "test: set datetime \"yyyy-mm-dd HH-MM-SS\""));
+            Cmd_Add(cmd);
+        }
+
+        {
             // test set ip4
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_ip4);
             cmd->Text_Set("set ip4 <ip4-address>");
@@ -200,6 +243,9 @@ public:
         int w = 12;
 
         s_str << setw(w) << "Str: " << setw(0) << Value_Str << endl;
+        s_str << setw(w) << "Date: " << setw(0) << Value_Date << endl;
+        s_str << setw(w) << "Time: " << setw(0) << Value_Time << endl;
+        s_str << setw(w) << "DateTime: " << setw(0) << Value_DateTime << endl;
         s_str << setw(w) << "IP4: " << setw(0) << Value_IP4 << endl;
         s_str << setw(w) << "Mask: " << setw(0) << Value_Mask << endl;
         s_str << setw(w) << "IP6: " << setw(0) << Value_IP6 << endl;
@@ -215,6 +261,30 @@ public:
         Value_Str = value;
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+        Cli_Output.Output_NewLine();
+        return true;
+    }
+
+    bool test_set_date(string value) {
+        Value_Date = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Str=" + Value_Date);
+        Cli_Output.Output_NewLine();
+        return true;
+    }
+
+    bool test_set_time(string value) {
+        Value_Time = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Str" + Value_Time);
+        Cli_Output.Output_NewLine();
+        return true;
+    }
+
+    bool test_set_datetime(string value) {
+        Value_DateTime = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Str" + Value_DateTime);
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -242,7 +312,7 @@ public:
         Cli_Output.Output_NewLine();
         return true;
     }
-    
+
     bool test_set_mac(string value) {
         Value_MAC = value;
         Cli_Output.Output_NewLine();
@@ -270,6 +340,25 @@ public:
             {
                 string value = cmd->Items[2]->Value_Str;
                 return test_set_str(value);
+            }
+
+            case CMD_ID_test_set_date:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[2]->Value_Str;
+                return test_set_date(value);
+            }
+            case CMD_ID_test_set_time:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[2]->Value_Str;
+                return test_set_time(value);
+            }
+            case CMD_ID_test_set_datetime:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[2]->Value_Str;
+                return test_set_datetime(value);
             }
 
             case CMD_ID_test_set_ip4:

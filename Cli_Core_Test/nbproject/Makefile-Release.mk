@@ -43,18 +43,24 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
+	${TESTDIR}/TestFiles/f6 \
+	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f2 \
+	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f1
 
 # Test Object Files
 TESTOBJECTFILES= \
+	${TESTDIR}/tests/Test_Cmd_Item_Date.o \
+	${TESTDIR}/tests/Test_Cmd_Item_DateTime.o \
 	${TESTDIR}/tests/Test_Cmd_Item_IP4.o \
 	${TESTDIR}/tests/Test_Cmd_Item_IP6.o \
 	${TESTDIR}/tests/Test_Cmd_Item_MAC.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Str.o \
+	${TESTDIR}/tests/Test_Cmd_Item_Time.o \
 	${TESTDIR}/tests/Test_Str_Filter.o
 
 # C Compiler Flags
@@ -98,6 +104,14 @@ ${OBJECTDIR}/cli_core_test_main.o: cli_core_test_main.cpp
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
 .build-tests-subprojects:
 
+${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/Test_Cmd_Item_Date.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} 
+
+${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/Test_Cmd_Item_DateTime.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/Test_Cmd_Item_IP4.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} 
@@ -114,9 +128,25 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/Test_Cmd_Item_Str.o ${OBJECTFILES:%.o=
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/Test_Cmd_Item_Time.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/Test_Str_Filter.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
+
+
+${TESTDIR}/tests/Test_Cmd_Item_Date.o: tests/Test_Cmd_Item_Date.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Date.o tests/Test_Cmd_Item_Date.cpp
+
+
+${TESTDIR}/tests/Test_Cmd_Item_DateTime.o: tests/Test_Cmd_Item_DateTime.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_DateTime.o tests/Test_Cmd_Item_DateTime.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_IP4.o: tests/Test_Cmd_Item_IP4.cpp 
@@ -141,6 +171,12 @@ ${TESTDIR}/tests/Test_Cmd_Item_Str.o: tests/Test_Cmd_Item_Str.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Str.o tests/Test_Cmd_Item_Str.cpp
+
+
+${TESTDIR}/tests/Test_Cmd_Item_Time.o: tests/Test_Cmd_Item_Time.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Time.o tests/Test_Cmd_Item_Time.cpp
 
 
 ${TESTDIR}/tests/Test_Str_Filter.o: tests/Test_Str_Filter.cpp 
@@ -179,10 +215,13 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
+	    ${TESTDIR}/TestFiles/f6 || true; \
+	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
+	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	else  \
 	    ./${TEST} || true; \

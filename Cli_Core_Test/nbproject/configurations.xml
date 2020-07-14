@@ -37,11 +37,14 @@
       </logicalFolder>
       <logicalFolder name="f5" displayName="Cmd_Item" projectFiles="true">
         <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Date.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_DateTime.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_IP4.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_IP6.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_MAC.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Str.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Time.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result_Func.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Word.h</itemPath>
@@ -74,6 +77,18 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f6"
+                     displayName="Test_Cmd_Item_Date"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Date.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f8"
+                     displayName="Test_Cmd_Item_DateTime"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_DateTime.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3"
                      displayName="Test_Cmd_Item_IP4"
                      projectFiles="true"
@@ -97,6 +112,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/Test_Cmd_Item_Str.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7"
+                     displayName="Test_Cmd_Item_Time"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Time.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f1"
                      displayName="Test_Str_Filter"
@@ -189,6 +210,10 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_IP6.h" ex="false" tool="3" flavor2="0">
@@ -198,6 +223,8 @@
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -311,6 +338,55 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
+      <item path="tests/Test_Cmd_Item_Date.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_DateTime.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/Test_Cmd_Item_IP4.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_IP6.cpp" ex="false" tool="1" flavor2="0">
@@ -318,6 +394,8 @@
       <item path="tests/Test_Cmd_Item_MAC.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Str_Filter.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -397,6 +475,10 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_IP6.h" ex="false" tool="3" flavor2="0">
@@ -406,6 +488,8 @@
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -519,6 +603,55 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
+      <item path="tests/Test_Cmd_Item_Date.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_DateTime.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="tests/Test_Cmd_Item_IP4.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_IP6.cpp" ex="false" tool="1" flavor2="0">
@@ -526,6 +659,8 @@
       <item path="tests/Test_Cmd_Item_MAC.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Str_Filter.cpp" ex="false" tool="1" flavor2="0">
       </item>
