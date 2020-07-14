@@ -48,28 +48,19 @@ public:
 
         if (Text == s) return CMD_ITEM_OK;
 
-        //        if (s.size() < Text.size()) { @Magic: a is in abcd, but Incomplete - bad result, must be ERROR
-        //            if (Text.substr(0, s.size()) == s) {
-        //                Values_Incomplete.push_back(Text.substr(s.size(), Text.size()));
-        //                return INPUT_INCOMPLETE;
-        //            }
-        //        }
-
         if (s.size() < Text.size()) {
-            // @Magic : a is in abcd, but Incomplete - bad result, must be ERROR
             if (Text.substr(0, s.size()) == s) {
-                //Values_Incomplete.push_back(Text.substr(s.size(), Text.size()));
                 return CMD_ITEM_INCOMPLETE;
             }
         }
 
         return CMD_ITEM_ERROR;
     }
-    
+
     virtual vector<string> Incomplete_Tail_List_Get(string s) {
         vector<string> tail_list;
-        if(s.size() < Text.size()) {
-            if(Text.substr(0, s.size()) == s) {
+        if (s.size() < Text.size()) {
+            if (Text.substr(0, s.size()) == s) {
                 tail_list.push_back(Text.substr(s.size()));
             }
         }

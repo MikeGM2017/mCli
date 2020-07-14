@@ -120,6 +120,12 @@
                      kind="TEST">
         <itemPath>tests/Test_Cmd_Item_Time.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f10"
+                     displayName="Test_Cmd_Item_Word"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Word.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f9"
                      displayName="Test_Cmd_Item_Word_Range"
                      projectFiles="true"
@@ -287,6 +293,21 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f10">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f10</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -420,6 +441,8 @@
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Word.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Word_Range.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -571,6 +594,21 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f10">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f10</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -704,6 +742,8 @@
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Word.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Word_Range.cpp" ex="false" tool="1" flavor2="0">
       </item>
