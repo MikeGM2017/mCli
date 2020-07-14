@@ -239,10 +239,22 @@ public:
                                             Cli_Cmd_Tab *cmd_tab_ptr = new Cli_Cmd_Tab;
                                             cmd_tab_ptr->cmd_ptr = cmd_ptr;
                                             cmd_tab_ptr->s_add_list = s_incomplete_tail_list;
+
+                                            string s_beg;
+                                            if (!token_str.empty()) {
+                                                size_t pos = token_str.find_last_of(','); // @Magic: for Cmd_Item_Word_List
+                                                if (pos == token_str.npos) {
+                                                    s_beg = token_str;
+                                                } else {
+                                                    s_beg = token_str.substr(pos + 1); // @Magic: for Cmd_Item_Word_List
+                                                }
+                                            }
+
                                             for (int s_add_index = 0; s_add_index < cmd_tab_ptr->s_add_list.size(); s_add_index++) {
                                                 string s_add_item = cmd_tab_ptr->s_add_list[s_add_index];
-                                                cmd_tab_ptr->s_full_list.push_back(token_str + s_add_item);
+                                                cmd_tab_ptr->s_full_list.push_back(s_beg + s_add_item);
                                             }
+
                                             cmd_tab_ptr->is_space_after_add =
                                                     cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
                                             cmd_tab_list.push_back(cmd_tab_ptr);

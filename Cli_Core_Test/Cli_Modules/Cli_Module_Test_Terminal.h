@@ -18,6 +18,7 @@
 
 #include "Cmd_Item_Word.h"
 #include "Cmd_Item_Word_Range.h"
+#include "Cmd_Item_Word_List.h"
 #include "Cmd_Item_Str.h"
 #include "Cmd_Item_Date.h"
 #include "Cmd_Item_Time.h"
@@ -44,6 +45,8 @@ protected:
     string Value_IP6;
     string Value_MAC;
     string Value_Enable;
+    string Value_Loopback;
+    string Value_Loopback_Repeating;
 
 public:
 
@@ -66,6 +69,7 @@ public:
         CMD_ID_test_set_datetime,
         CMD_ID_test_set_enable,
         CMD_ID_test_set_loopback,
+        CMD_ID_test_set_loopback_repeating,
         CMD_ID_test_set_loopback_disable,
         CMD_ID_LAST
     };
@@ -251,6 +255,46 @@ public:
             Cmd_Add(cmd);
         }
 
+        {
+            // test set loopback [raw,net,local,remote]
+            vector<string> words;
+            words.push_back("raw");
+            words.push_back("net");
+            words.push_back("local");
+            words.push_back("remote");
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback);
+            cmd->Text_Set("set loopback [raw,net,local,remote]");
+            cmd->Help_Set("test: set loopback [raw,net,local,remote]");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
+            cmd->Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback [raw,net,local,remote]", words));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set loopback repeating [raw,net,local,remote]
+            vector<string> words;
+            words.push_back("raw");
+            words.push_back("net");
+            words.push_back("local");
+            words.push_back("remote");
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback_repeating);
+            cmd->Text_Set("set loopback repeating [raw,net,local,remote]");
+            cmd->Help_Set("test: set loopback repeating [raw,net,local,remote]");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
+            cmd->Item_Add(new Cmd_Item_Word("repeating", "test: set loopback repeating"));
+
+            bool is_repeating = true;
+            cmd->Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback repeating [raw,net,local,remote]", words,
+                    is_repeating));
+
+            Cmd_Add(cmd);
+        }
+
     }
 
     ~Cli_Module_Test_Terminal() {
@@ -258,7 +302,7 @@ public:
 
     bool test_get_all() {
         stringstream s_str;
-        int w = 12;
+        int w = 20;
 
         s_str << setw(w) << "Str: " << setw(0) << Value_Str << endl;
         s_str << setw(w) << "Date: " << setw(0) << Value_Date << endl;
@@ -269,6 +313,8 @@ public:
         s_str << setw(w) << "IP6: " << setw(0) << Value_IP6 << endl;
         s_str << setw(w) << "MAC: " << setw(0) << Value_MAC << endl;
         s_str << setw(w) << "Enable: " << setw(0) << Value_Enable << endl;
+        s_str << setw(w) << "Loopback: " << setw(0) << Value_Loopback << endl;
+        s_str << setw(w) << "Loopback Repeating: " << setw(0) << Value_Loopback_Repeating << endl;
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_str.str());
@@ -339,12 +385,48 @@ public:
         Cli_Output.Output_NewLine();
         return true;
     }
-    
+
     bool test_set_enable(string value) {
         Value_Enable = value;
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str("Enable=" + Value_Enable);
         Cli_Output.Output_NewLine();
+        return true;
+    }
+
+    bool test_set_loopback(Cli_Cmd *cmd) {
+
+        Cmd_Item_Word_List *word_list = (Cmd_Item_Word_List *) cmd->Items[2];
+        Value_Loopback = "";
+        for (int i = 0; i < word_list->Values_Str.size(); i++) {
+            if (i == 0)
+                Value_Loopback += word_list->Values_Str[i];
+            else
+                Value_Loopback += " " + word_list->Values_Str[i];
+        }
+
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Loopback=" + Value_Loopback);
+        Cli_Output.Output_NewLine();
+
+        return true;
+    }
+    
+    bool test_set_loopback_repeating(Cli_Cmd *cmd) {
+
+        Cmd_Item_Word_List *word_list = (Cmd_Item_Word_List *) cmd->Items[3];
+        Value_Loopback_Repeating = "";
+        for (int i = 0; i < word_list->Values_Str.size(); i++) {
+            if (i == 0)
+                Value_Loopback_Repeating += word_list->Values_Str[i];
+            else
+                Value_Loopback_Repeating += " " + word_list->Values_Str[i];
+        }
+
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Loopback Repeating=" + Value_Loopback_Repeating);
+        Cli_Output.Output_NewLine();
+
         return true;
     }
 
@@ -422,6 +504,14 @@ public:
                 string value = cmd->Items[1]->Value_Str;
                 return test_set_enable(value);
             }
+
+            case CMD_ID_test_set_loopback:
+                if (is_debug) return true;
+                return test_set_loopback(cmd);
+
+            case CMD_ID_test_set_loopback_repeating:
+                if (is_debug) return true;
+                return test_set_loopback_repeating(cmd);
 
         }
         return false; // Not Implemented

@@ -19,7 +19,7 @@
 class Cmd_Item_MAC : public Cmd_Item_Base {
 protected:
 
-    bool Is_Char_Valid(char c, int pos, int len) {
+    virtual bool Is_Char_Valid(char c, int pos, int len) {
         switch (pos) {
             case 2:
             case 5:
