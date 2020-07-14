@@ -295,6 +295,19 @@ public:
             Cmd_Add(cmd);
         }
 
+        {
+            // test set loopback disable
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback_disable);
+            cmd->Text_Set("set loopback disable");
+            cmd->Help_Set("test: set loopback disable");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
+            cmd->Item_Add(new Cmd_Item_Word("disable", "test: set loopback disable"));
+            Cmd_Add(cmd);
+        }
+
     }
 
     ~Cli_Module_Test_Terminal() {
@@ -411,7 +424,7 @@ public:
 
         return true;
     }
-    
+
     bool test_set_loopback_repeating(Cli_Cmd *cmd) {
 
         Cmd_Item_Word_List *word_list = (Cmd_Item_Word_List *) cmd->Items[3];
@@ -427,6 +440,14 @@ public:
         Cli_Output.Output_Str("Loopback Repeating=" + Value_Loopback_Repeating);
         Cli_Output.Output_NewLine();
 
+        return true;
+    }
+    
+    bool test_set_loopback_disable() {
+        Value_Loopback = "disable";
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Value_Loopback=" + Value_Loopback);
+        Cli_Output.Output_NewLine();
         return true;
     }
 
@@ -512,6 +533,10 @@ public:
             case CMD_ID_test_set_loopback_repeating:
                 if (is_debug) return true;
                 return test_set_loopback_repeating(cmd);
+
+            case CMD_ID_test_set_loopback_disable:
+                if (is_debug) return true;
+                return test_set_loopback_disable();
 
         }
         return false; // Not Implemented
