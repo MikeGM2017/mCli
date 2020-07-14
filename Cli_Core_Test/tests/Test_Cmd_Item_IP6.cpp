@@ -65,11 +65,6 @@ void test1() {
     }
 }
 
-void test2() {
-    std::cout << "Test_Cmd_Item_IP6 test 2" << std::endl;
-    std::cout << "%TEST_FAILED% time=0 testname=test2 (Test_Cmd_Item_IP6) message=error message sample" << std::endl;
-}
-
 int main(int argc, char** argv) {
     std::cout << "%SUITE_STARTING% Test_Cmd_Item_IP6" << std::endl;
     std::cout << "%SUITE_STARTED%" << std::endl;

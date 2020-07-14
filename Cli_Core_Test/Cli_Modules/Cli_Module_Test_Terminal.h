@@ -20,6 +20,7 @@
 #include "Cmd_Item_Str.h"
 #include "Cmd_Item_IP4.h"
 #include "Cmd_Item_IP6.h"
+#include "Cmd_Item_MAC.h"
 
 class Cli_Module_Test_Terminal : public Cli_Module {
 protected:
@@ -34,6 +35,7 @@ protected:
     string Value_IP4;
     string Value_Mask;
     string Value_IP6;
+    string Value_MAC;
 
 public:
 
@@ -175,6 +177,19 @@ public:
             Cmd_Add(cmd);
         }
 
+        {
+            // test set mac
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_mac);
+            cmd->Text_Set("set mac <mac-address>");
+            cmd->Help_Set("test: set mac");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("mac", "test: set mac"));
+            cmd->Item_Add(new Cmd_Item_MAC("<mac-address>", "test: set mac <mac-address>"));
+            Cmd_Add(cmd);
+        }
+
     }
 
     ~Cli_Module_Test_Terminal() {
@@ -188,6 +203,7 @@ public:
         s_str << setw(w) << "IP4: " << setw(0) << Value_IP4 << endl;
         s_str << setw(w) << "Mask: " << setw(0) << Value_Mask << endl;
         s_str << setw(w) << "IP6: " << setw(0) << Value_IP6 << endl;
+        s_str << setw(w) << "MAC: " << setw(0) << Value_MAC << endl;
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_str.str());
@@ -218,11 +234,19 @@ public:
         Cli_Output.Output_NewLine();
         return true;
     }
-    
+
     bool test_set_ip6(string value) {
         Value_IP6 = value;
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str("IP6=" + Value_IP6);
+        Cli_Output.Output_NewLine();
+        return true;
+    }
+    
+    bool test_set_mac(string value) {
+        Value_MAC = value;
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("MAC=" + Value_MAC);
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -267,6 +291,13 @@ public:
             {
                 string value = cmd->Items[2]->Value_Str;
                 return test_set_ip6(value);
+            }
+
+            case CMD_ID_test_set_mac:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[2]->Value_Str;
+                return test_set_mac(value);
             }
 
         }

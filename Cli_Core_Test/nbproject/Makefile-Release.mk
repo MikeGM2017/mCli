@@ -45,6 +45,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 TESTFILES= \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
+	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f1
 
@@ -52,6 +53,7 @@ TESTFILES= \
 TESTOBJECTFILES= \
 	${TESTDIR}/tests/Test_Cmd_Item_IP4.o \
 	${TESTDIR}/tests/Test_Cmd_Item_IP6.o \
+	${TESTDIR}/tests/Test_Cmd_Item_MAC.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Str.o \
 	${TESTDIR}/tests/Test_Str_Filter.o
 
@@ -104,6 +106,10 @@ ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/Test_Cmd_Item_IP6.o ${OBJECTFILES:%.o=
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/Test_Cmd_Item_MAC.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/Test_Cmd_Item_Str.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} 
@@ -123,6 +129,12 @@ ${TESTDIR}/tests/Test_Cmd_Item_IP6.o: tests/Test_Cmd_Item_IP6.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_IP6.o tests/Test_Cmd_Item_IP6.cpp
+
+
+${TESTDIR}/tests/Test_Cmd_Item_MAC.o: tests/Test_Cmd_Item_MAC.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_MAC.o tests/Test_Cmd_Item_MAC.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Str.o: tests/Test_Cmd_Item_Str.cpp 
@@ -169,6 +181,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 	then  \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
+	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	else  \
