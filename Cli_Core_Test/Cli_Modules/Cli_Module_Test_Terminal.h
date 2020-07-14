@@ -446,7 +446,7 @@ public:
     bool test_set_loopback_disable() {
         Value_Loopback = "disable";
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Value_Loopback=" + Value_Loopback);
+        Cli_Output.Output_Str("Loopback=" + Value_Loopback);
         Cli_Output.Output_NewLine();
         return true;
     }
