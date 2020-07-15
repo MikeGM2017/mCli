@@ -22,7 +22,8 @@ Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {
     do {
         unsigned int c = getch();
         switch (c) {
-            case '\n':
+            case '\n': // Enter - NCurses
+            case '\r': // Enter - PDCurses
             case KEY_ENTER:
                 Input_Item.Text_Set(Input_Str);
                 Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_STR);
