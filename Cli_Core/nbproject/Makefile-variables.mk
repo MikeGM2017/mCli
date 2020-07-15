@@ -9,8 +9,8 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
-CND_ARTIFACT_NAME_Debug=cli_core
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/cli_core
+CND_ARTIFACT_NAME_Debug=cli_core_test
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/cli_core_test
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
 CND_PACKAGE_NAME_Debug=clicore.tar
 CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/clicore.tar

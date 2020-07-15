@@ -93,11 +93,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o: Cli_Input/Cli_Input_termios.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Cli_Input
@@ -308,7 +308,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test
 
 # Subprojects
 .clean-subprojects:

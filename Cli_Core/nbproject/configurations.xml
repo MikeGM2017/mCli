@@ -196,6 +196,9 @@
             <pElem>Cli_History</pElem>
           </incDir>
         </ccTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test</output>
+        </linkerTool>
       </compileType>
       <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
       </item>
