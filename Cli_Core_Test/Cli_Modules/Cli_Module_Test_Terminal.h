@@ -16,6 +16,8 @@
 
 #include "Cli_Module.h"
 
+#include "Cmd_Item_Int.h"
+#include "Cmd_Item_Int_Range.h"
 #include "Cmd_Item_Word.h"
 #include "Cmd_Item_Word_Range.h"
 #include "Cmd_Item_Word_List.h"
@@ -36,6 +38,8 @@ protected:
     string Parent_Level;
     string New_Level;
 
+    int Value_Int;
+    int Value_Int_Range;
     string Value_Str;
     string Value_Date;
     string Value_Time;
@@ -57,6 +61,7 @@ public:
         CMD_ID_test,
         CMD_ID_test_get,
         CMD_ID_test_get_all,
+        CMD_ID_test_set_int,
         CMD_ID_test_set_range,
         CMD_ID_test_set_list,
         CMD_ID_test_set_ip4,
@@ -134,6 +139,31 @@ public:
             cmd->Level_Set(New_Level);
             cmd->Item_Add(new Cmd_Item_Word("get", "test: get"));
             cmd->Item_Add(new Cmd_Item_Word("all", "test: get all"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set int
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_int);
+            cmd->Text_Set("set int <int_value>");
+            cmd->Help_Set("test: set int");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("int", "test: set int"));
+            cmd->Item_Add(new Cmd_Item_Int("<int_value>", "test: set int <int_value>"));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set range
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_range);
+            cmd->Text_Set("set range <1..4095>");
+            cmd->Help_Set("test: set range");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("range", "test: set range"));
+            cmd->Item_Add(new Cmd_Item_Int_Range(1, 4095, "<1..4095>", "test: set range <1..4095>"));
             Cmd_Add(cmd);
         }
 
@@ -317,6 +347,8 @@ public:
         stringstream s_str;
         int w = 20;
 
+        s_str << setw(w) << "Int: " << setw(0) << Value_Int << endl;
+        s_str << setw(w) << "Int Range: " << setw(0) << Value_Int_Range << endl;
         s_str << setw(w) << "Str: " << setw(0) << Value_Str << endl;
         s_str << setw(w) << "Date: " << setw(0) << Value_Date << endl;
         s_str << setw(w) << "Time: " << setw(0) << Value_Time << endl;
@@ -334,6 +366,26 @@ public:
 
         return true;
     }
+    
+    bool test_set_int(string value) {
+        Value_Int = atoi(value.c_str());
+        Cli_Output.Output_NewLine();
+        stringstream s_str;
+        s_str << "Int=" << Value_Int;
+        Cli_Output.Output_Str(s_str.str());
+        Cli_Output.Output_NewLine();
+        return true;
+    }
+
+    bool test_set_range(string value) {
+        Value_Int_Range = atoi(value.c_str());
+        Cli_Output.Output_NewLine();
+        stringstream s_str;
+        s_str << "Int Range=" << Value_Int_Range;
+        Cli_Output.Output_Str(s_str.str());
+        Cli_Output.Output_NewLine();
+        return true;
+    }
 
     bool test_set_str(string value) {
         Value_Str = value;
@@ -346,7 +398,7 @@ public:
     bool test_set_date(string value) {
         Value_Date = value;
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Str=" + Value_Date);
+        Cli_Output.Output_Str("Date=" + Value_Date);
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -354,7 +406,7 @@ public:
     bool test_set_time(string value) {
         Value_Time = value;
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Str" + Value_Time);
+        Cli_Output.Output_Str("Time=" + Value_Time);
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -362,7 +414,7 @@ public:
     bool test_set_datetime(string value) {
         Value_DateTime = value;
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Str" + Value_DateTime);
+        Cli_Output.Output_Str("DateTime=" + Value_DateTime);
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -442,7 +494,7 @@ public:
 
         return true;
     }
-    
+
     bool test_set_loopback_disable() {
         Value_Loopback = "disable";
         Cli_Output.Output_NewLine();
@@ -464,6 +516,19 @@ public:
             case CMD_ID_test_get_all:
                 if (is_debug) return true;
                 return test_get_all();
+
+            case CMD_ID_test_set_int:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[2]->Value_Str;
+                return test_set_int(value);
+            }
+            case CMD_ID_test_set_range:
+                if (is_debug) return true;
+            {
+                string value = cmd->Items[2]->Value_Str;
+                return test_set_range(value);
+            }
 
             case CMD_ID_test_set_str:
                 if (is_debug) return true;
