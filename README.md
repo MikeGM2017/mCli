@@ -50,3 +50,9 @@ Test Projects:
   - Cli_Output_CPP_pdcurses_Test
 
   - Cli_Output_CPP_printf_Test
+  
+  - Cli_Output_C_ncurses_Test
+
+  - Cli_Output_C_pdcurses_Test
+
+  - Cli_Output_C_printf_Test
