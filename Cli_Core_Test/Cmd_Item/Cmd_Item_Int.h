@@ -27,7 +27,7 @@ protected:
         return (c >= '0' && c <= '9');
     }
 
-    int Char_To_N(char c) {
+    virtual int Char_To_N(char c) {
         if (c >= '0' && c <= '9')
             return c - '0';
         return 0;

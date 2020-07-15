@@ -46,6 +46,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f13 \
+	${TESTDIR}/TestFiles/f14 \
 	${TESTDIR}/TestFiles/f12 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
@@ -64,6 +65,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/Test_Cmd_Item_IP4.o \
 	${TESTDIR}/tests/Test_Cmd_Item_IP6.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Int.o \
+	${TESTDIR}/tests/Test_Cmd_Item_Int_List.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Int_Range.o \
 	${TESTDIR}/tests/Test_Cmd_Item_MAC.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Str.o \
@@ -126,6 +128,10 @@ ${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/Test_Cmd_Item_Int.o ${OBJECTFILES:%.o
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f14: ${TESTDIR}/tests/Test_Cmd_Item_Int_List.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f14 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/Test_Cmd_Item_Int_Range.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} 
@@ -183,6 +189,12 @@ ${TESTDIR}/tests/Test_Cmd_Item_Int.o: tests/Test_Cmd_Item_Int.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int.o tests/Test_Cmd_Item_Int.cpp
+
+
+${TESTDIR}/tests/Test_Cmd_Item_Int_List.o: tests/Test_Cmd_Item_Int_List.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int_List.o tests/Test_Cmd_Item_Int_List.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Int_Range.o: tests/Test_Cmd_Item_Int_Range.cpp 
@@ -278,6 +290,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f13 || true; \
+	    ${TESTDIR}/TestFiles/f14 || true; \
 	    ${TESTDIR}/TestFiles/f12 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \

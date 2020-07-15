@@ -42,6 +42,8 @@
         <itemPath>Cmd_Item/Cmd_Item_IP4.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_IP6.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Int.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_List.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_List_Item.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Int_Range.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_MAC.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
@@ -98,6 +100,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/Test_Cmd_Item_Int.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f14"
+                     displayName="Test_Cmd_Item_Int_List"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Int_List.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f12"
                      displayName="Test_Cmd_Item_Int_Range"
@@ -254,6 +262,10 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Int.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
@@ -378,6 +390,21 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f13</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f14">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f14</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f2">
@@ -509,6 +536,8 @@
       <item path="tests/Test_Cmd_Item_IP6.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Int.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Int_List.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Int_Range.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -612,6 +641,10 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Int.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
@@ -736,6 +769,21 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f13</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f14">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f14</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f2">
@@ -867,6 +915,8 @@
       <item path="tests/Test_Cmd_Item_IP6.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Int.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Int_List.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Int_Range.cpp" ex="false" tool="1" flavor2="0">
       </item>

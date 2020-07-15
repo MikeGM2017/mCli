@@ -18,6 +18,7 @@
 
 #include "Cmd_Item_Int.h"
 #include "Cmd_Item_Int_Range.h"
+#include "Cmd_Item_Int_List.h"
 #include "Cmd_Item_Word.h"
 #include "Cmd_Item_Word_Range.h"
 #include "Cmd_Item_Word_List.h"
@@ -28,6 +29,8 @@
 #include "Cmd_Item_IP4.h"
 #include "Cmd_Item_IP6.h"
 #include "Cmd_Item_MAC.h"
+
+#include "Cmd_Item_Int_List_Item.h"
 
 class Cli_Module_Test_Terminal : public Cli_Module {
 protected:
@@ -40,6 +43,7 @@ protected:
 
     int Value_Int;
     int Value_Int_Range;
+    vector<Cmd_Item_Int_List_Item> Values_Int_List_Items;
     string Value_Str;
     string Value_Date;
     string Value_Time;
@@ -164,6 +168,18 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
             cmd->Item_Add(new Cmd_Item_Word("range", "test: set range"));
             cmd->Item_Add(new Cmd_Item_Int_Range(1, 4095, "<1..4095>", "test: set range <1..4095>"));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set list
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_list);
+            cmd->Text_Set("set list <1-4095>");
+            cmd->Help_Set("test: set list");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("list", "test: set list"));
+            cmd->Item_Add(new Cmd_Item_Int_List(1, 4095, "<1-4095>", "test: set list <1-4095>"));
             Cmd_Add(cmd);
         }
 
@@ -349,6 +365,21 @@ public:
 
         s_str << setw(w) << "Int: " << setw(0) << Value_Int << endl;
         s_str << setw(w) << "Int Range: " << setw(0) << Value_Int_Range << endl;
+
+        s_str << setw(w) << "Int List: " << setw(0);
+        for (int i = 0; i < Values_Int_List_Items.size(); i++) {
+            Cmd_Item_Int_List_Item &item = Values_Int_List_Items[i];
+            if (i > 0) {
+                s_str << ",";
+            }
+            if (item.Min == item.Max) {
+                s_str << item.Min;
+            } else {
+                s_str << item.Min << "-" << item.Max;
+            }
+        }
+        s_str << endl;
+
         s_str << setw(w) << "Str: " << setw(0) << Value_Str << endl;
         s_str << setw(w) << "Date: " << setw(0) << Value_Date << endl;
         s_str << setw(w) << "Time: " << setw(0) << Value_Time << endl;
@@ -366,7 +397,7 @@ public:
 
         return true;
     }
-    
+
     bool test_set_int(string value) {
         Value_Int = atoi(value.c_str());
         Cli_Output.Output_NewLine();
@@ -385,6 +416,30 @@ public:
         Cli_Output.Output_Str(s_str.str());
         Cli_Output.Output_NewLine();
         return true;
+    }
+
+    bool test_set_list(Cli_Cmd *cmd) {
+        Cmd_Item_Int_List *int_list = (Cmd_Item_Int_List *) cmd->Items[2];
+        Values_Int_List_Items.clear();
+        for (int i = 0; i < int_list->Values_Int_List_Items.size(); i++) {
+            Values_Int_List_Items.push_back(int_list->Values_Int_List_Items[i]);
+        }
+        Cli_Output.Output_NewLine();
+        stringstream s_str;
+        s_str << "Int List=";
+        for (int i = 0; i < Values_Int_List_Items.size(); i++) {
+            Cmd_Item_Int_List_Item &item = Values_Int_List_Items[i];
+            if (i > 0) {
+                s_str << ",";
+            }
+            if (item.Min == item.Max) {
+                s_str << item.Min;
+            } else {
+                s_str << item.Min << "-" << item.Max;
+            }
+        }
+        Cli_Output.Output_Str(s_str.str());
+        Cli_Output.Output_NewLine();
     }
 
     bool test_set_str(string value) {
@@ -529,6 +584,9 @@ public:
                 string value = cmd->Items[2]->Value_Str;
                 return test_set_range(value);
             }
+            case CMD_ID_test_set_list:
+                if (is_debug) return true;
+                return test_set_list(cmd);
 
             case CMD_ID_test_set_str:
                 if (is_debug) return true;
