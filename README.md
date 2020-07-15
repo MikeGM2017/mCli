@@ -20,6 +20,14 @@ Projects:
   - Cli_Input_CPP_pdcurses
 
   - Cli_Input_CPP_termios
+  
+  - Cli_Input_C_conio
+
+  - Cli_Input_C_ncurses
+
+  - Cli_Input_C_pdcurses
+
+  - Cli_Input_C_termios
 
 Test Projects:
 
