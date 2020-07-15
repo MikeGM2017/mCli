@@ -113,4 +113,4 @@ Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
     } while (!stop);
 
     return Input_Item;
-};
+}
