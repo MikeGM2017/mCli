@@ -60,9 +60,4 @@
 /Cli_Input_C_pdurses/dist/
 /Cli_Input_C_conio/build/
 /Cli_Input_C_conio/dist/
-/Cli_Output_CPP_printf_Test/nbproject/private/
-/Cli_Output_CPP_printf_Test/nbproject/private/
-/Cli_Output_CPP_cout_Test/nbproject/private/
-/Cli_Output_CPP_ncurses_Test/nbproject/private/
-/Cli_Output_CPP_pdcurses_Test/nbproject/private/
-nbproject/private/
+/**/nbproject/private/
