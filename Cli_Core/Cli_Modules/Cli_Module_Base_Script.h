@@ -14,19 +14,18 @@
 #ifndef CLI_MODULE_BASE_SCRIPT_H
 #define CLI_MODULE_BASE_SCRIPT_H
 
+#include <stdio.h>
+
 #include "Cli_Module.h"
 
-#include "Cli_Command_Processor_Abstract.h"
+#include "Cli_CMD_Processor_Abstract.h"
 
 #include "Cli_History.h"
 
 class Cli_Module_Base_Script : public Cli_Module {
 protected:
 
-    Cli_Modules &Modules;
     Cli_History &History;
-
-    string User_Name;
 
     bool &Cmd_Script_Stop;
     bool &Cmd_Quit;
@@ -34,7 +33,7 @@ protected:
     char *Script_Buf;
     int Script_Buf_Size;
 
-    Cli_Command_Processor_Abstract &Cli_Command_Processor;
+    Cli_CMD_Processor_Abstract &Cli_Command_Processor;
 
     string Str_Rem;
 
@@ -55,15 +54,13 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Script(Cli_Modules &modules, Cli_History &history,
-            string user_name,
+    Cli_Module_Base_Script(Cli_History &history,
             string str_rem, bool &cmd_script_stop, bool &cmd_quit, int script_buf_size,
-            Cli_Command_Processor_Abstract &command_processor) : Cli_Module("Base Script"),
-    Modules(modules), History(history),
-    User_Name(user_name),
+            Cli_CMD_Processor_Abstract &cli_command_processor) : Cli_Module("Base Script"),
+    History(history),
     Str_Rem(str_rem),
     Cmd_Script_Stop(cmd_script_stop), Cmd_Quit(cmd_quit), Script_Buf_Size(script_buf_size),
-    Cli_Command_Processor(command_processor) {
+    Cli_Command_Processor(cli_command_processor) {
 
         Script_Buf = new char[Script_Buf_Size];
 
@@ -160,7 +157,9 @@ public:
                     if (!is_no_history && !is_debug) {
                         History.History_Put(s_trim);
                     }
-                    Cli_Command_Processor.Do(s_trim, is_debug, debug_res);
+                    //Cli_Command_Processor.Do(s_trim, is_debug, debug_res);
+                    Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
+                    Cli_Command_Processor.Process_Input_Item(input_item);
                 }
             } while (s && !Cmd_Script_Stop && !Cmd_Quit);
             printf("%s Do script %s - %s\n", Str_Rem.c_str(), filename.c_str(), (Cmd_Script_Stop ? "Stopped" : "End"));

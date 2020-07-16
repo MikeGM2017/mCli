@@ -19,6 +19,7 @@
 #include "Cmd_Item_Word.h"
 #include "Cmd_Item_Str.h"
 
+#include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Modules.h"
 
 #include "Str_Filter_Abstract.h"
@@ -26,8 +27,7 @@
 class Cli_Module_Base_Help : public Cli_Module {
 protected:
 
-    int User_Privilege;
-
+    Cli_Cmd_Privilege_ID User_Privilege;
     Cli_Modules &Modules;
 
     Str_Filter_Abstract &Help_Str_Filter;
@@ -58,12 +58,10 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Help(int user_privilege,
-            Cli_Modules &cli_modules,
+    Cli_Module_Base_Help(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
             Str_Filter_Abstract &help_str_filter,
             Cli_Output_Abstract &cli_output) : Cli_Module("Base Help"),
-    User_Privilege(user_privilege),
-    Modules(cli_modules),
+    User_Privilege(user_privilege), Modules(modules),
     Help_Str_Filter(help_str_filter),
     Cli_Output(cli_output) {
         {

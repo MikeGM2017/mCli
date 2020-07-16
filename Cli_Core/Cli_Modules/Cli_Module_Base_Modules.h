@@ -19,6 +19,7 @@
 #include "Cmd_Item_Word.h"
 #include "Cmd_Item_Str.h"
 
+#include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Modules.h"
 
 #include "Str_Filter_Abstract.h"
@@ -26,6 +27,7 @@
 class Cli_Module_Base_Modules : public Cli_Module {
 protected:
 
+    Cli_Cmd_Privilege_ID User_Privilege;
     Cli_Modules &Modules;
 
     Str_Filter_Abstract &Str_Filter;
@@ -48,8 +50,10 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Modules(Cli_Modules &modules, Str_Filter_Abstract &str_filter, Cli_Output_Abstract &cli_output) :
-    Cli_Module("Base Modules"), Modules(modules), Str_Filter(str_filter), Cli_Output(cli_output) {
+    Cli_Module_Base_Modules(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
+            Str_Filter_Abstract &str_filter, Cli_Output_Abstract &cli_output) : Cli_Module("Base Modules"),
+    User_Privilege(user_privilege), Modules(modules),
+    Str_Filter(str_filter), Cli_Output(cli_output) {
         {
             // modules
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_modules);

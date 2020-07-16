@@ -102,12 +102,12 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test: ${OBJECTFILES}
 ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o: Cli_Input/Cli_Input_termios.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Cli_Input
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o Cli_Input/Cli_Input_termios.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o Cli_Input/Cli_Input_termios.cpp
 
 ${OBJECTDIR}/cli_core_test_main.o: cli_core_test_main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main.o cli_core_test_main.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main.o cli_core_test_main.cpp
 
 # Subprojects
 .build-subprojects:
@@ -176,85 +176,85 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/Test_Str_Filter.o ${OBJECTFILES:%.o=%_
 ${TESTDIR}/tests/Test_Cmd_Item_Date.o: tests/Test_Cmd_Item_Date.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Date.o tests/Test_Cmd_Item_Date.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Date.o tests/Test_Cmd_Item_Date.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_DateTime.o: tests/Test_Cmd_Item_DateTime.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_DateTime.o tests/Test_Cmd_Item_DateTime.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_DateTime.o tests/Test_Cmd_Item_DateTime.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Int.o: tests/Test_Cmd_Item_Int.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int.o tests/Test_Cmd_Item_Int.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int.o tests/Test_Cmd_Item_Int.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Int_List.o: tests/Test_Cmd_Item_Int_List.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int_List.o tests/Test_Cmd_Item_Int_List.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int_List.o tests/Test_Cmd_Item_Int_List.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Int_Range.o: tests/Test_Cmd_Item_Int_Range.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int_Range.o tests/Test_Cmd_Item_Int_Range.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Int_Range.o tests/Test_Cmd_Item_Int_Range.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_IP4.o: tests/Test_Cmd_Item_IP4.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_IP4.o tests/Test_Cmd_Item_IP4.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_IP4.o tests/Test_Cmd_Item_IP4.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_IP6.o: tests/Test_Cmd_Item_IP6.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_IP6.o tests/Test_Cmd_Item_IP6.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_IP6.o tests/Test_Cmd_Item_IP6.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_MAC.o: tests/Test_Cmd_Item_MAC.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_MAC.o tests/Test_Cmd_Item_MAC.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_MAC.o tests/Test_Cmd_Item_MAC.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Str.o: tests/Test_Cmd_Item_Str.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Str.o tests/Test_Cmd_Item_Str.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Str.o tests/Test_Cmd_Item_Str.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Time.o: tests/Test_Cmd_Item_Time.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Time.o tests/Test_Cmd_Item_Time.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Time.o tests/Test_Cmd_Item_Time.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Word.o: tests/Test_Cmd_Item_Word.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Word.o tests/Test_Cmd_Item_Word.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Word.o tests/Test_Cmd_Item_Word.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Word_List.o: tests/Test_Cmd_Item_Word_List.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Word_List.o tests/Test_Cmd_Item_Word_List.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Word_List.o tests/Test_Cmd_Item_Word_List.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o: tests/Test_Cmd_Item_Word_Range.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o tests/Test_Cmd_Item_Word_Range.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o tests/Test_Cmd_Item_Word_Range.cpp
 
 
 ${TESTDIR}/tests/Test_Str_Filter.o: tests/Test_Str_Filter.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Str_Filter.o tests/Test_Str_Filter.cpp
+	$(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Str_Filter.o tests/Test_Str_Filter.cpp
 
 
 ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o: ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o Cli_Input/Cli_Input_termios.cpp 
@@ -265,7 +265,7 @@ ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o: ${OBJECTDIR}/Cli_Input/Cli_In
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o Cli_Input/Cli_Input_termios.cpp;\
+	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o Cli_Input/Cli_Input_termios.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o;\
 	fi
@@ -278,7 +278,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_Command_Processor -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main_nomain.o cli_core_test_main.cpp;\
+	    $(COMPILE.cc) -g -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_test_main_nomain.o cli_core_test_main.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/cli_core_test_main.o ${OBJECTDIR}/cli_core_test_main_nomain.o;\
 	fi

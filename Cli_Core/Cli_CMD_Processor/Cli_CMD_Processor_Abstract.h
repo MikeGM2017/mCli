@@ -5,30 +5,34 @@
  */
 
 /* 
- * File:   Cli_Command_Processor_Abstract.h
+ * File:   Cli_CMD_Processor_Abstract.h
  * Author: mike
  *
  * Created on July 16, 2020, 11:53 AM
  */
 
-#ifndef CLI_COMMAND_PROCESSOR_ABSTRACT_H
-#define CLI_COMMAND_PROCESSOR_ABSTRACT_H
+#ifndef CLI_CMD_PROCESSOR_ABSTRACT_H
+#define CLI_CMD_PROCESSOR_ABSTRACT_H
 
 #include <string>
 
 using namespace std;
 
-class Cli_Command_Processor_Abstract {
+#include "Cli_Input_Item.h"
+
+class Cli_CMD_Processor_Abstract {
 public:
 
-    Cli_Command_Processor_Abstract() {
+    Cli_CMD_Processor_Abstract() {
     }
 
-    virtual ~Cli_Command_Processor_Abstract() {
+    virtual ~Cli_CMD_Processor_Abstract() {
     }
 
     virtual bool Do(string s_trim, bool is_debug, bool &debug_res) = 0;
+    
+    virtual bool Process_Input_Item(Cli_Input_Item &input_item) = 0;
 
 };
 
-#endif /* CLI_COMMAND_PROCESSOR_ABSTRACT_H */
+#endif /* CLI_CMD_PROCESSOR_ABSTRACT_H */

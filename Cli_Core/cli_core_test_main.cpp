@@ -17,6 +17,7 @@
 
 #include "Cli_Core.h"
 
+#include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Modules.h"
 
 #include "Cli_Module_Base_Rem.h"
@@ -32,7 +33,9 @@
 
 #include "Str_Filter.h"
 
-#include "Cli_Command_Processor.h"
+#include "Cli_CMD_Processor.h"
+
+#include "Cli_TAB_Processor.h"
 
 #include "Cli_Module_Test_Terminal.h"
 
@@ -44,38 +47,43 @@ int main(int argc, char *argv[]) {
 
     Cli_Input_termios Cli_Input(Cli_Output);
 
+    vector<Level_Description> Levels;
+
     Cmd_Token_Parser Token_Parser;
 
-    Cli_Cmd_Privilege_ID User_Privilege = CMD_PRIVILEGE_ROOT_DEF;
-    Cli_Core Cli(User_Privilege, Token_Parser, Cli_Input, Cli_Output);
+    const string Str_Rem_DEF = "$";
 
+    Cli_Cmd_Privilege_ID User_Privilege = CMD_PRIVILEGE_ROOT_DEF;
     Cli_Modules Modules;
+
+    Cli_CMD_Processor CMD_Processor
+            (User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
+    Cli_TAB_Processor TAB_Processor
+            (User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
+    Cli_Core Cli
+            (User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
 
     // Modules Add - Begin
 
-    const string str_rem_def = "$";
-    Modules.Add(new Cli_Module_Base_Rem(str_rem_def, Cli_Output));
+    Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
     bool Cmd_Quit = false;
     Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
 
     Str_Filter str_filter('?', '*');
     Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
-    Modules.Add(new Cli_Module_Base_Modules(Modules, str_filter, Cli_Output));
+    Modules.Add(new Cli_Module_Base_Modules(User_Privilege, Modules, str_filter, Cli_Output));
 
     Cli_History History;
     Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
 
     Modules.Add(new Cli_Module_Base_Log(Cli_Input));
 
-    string User_Name = "root";
     bool Cmd_Script_Stop = false;
     int Script_Buf_Size = 1024;
-    Cli_Command_Processor Command_Processor;
-    Modules.Add(new Cli_Module_Base_Script(Modules, History,
-            User_Name,
-            str_rem_def, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
-            Command_Processor));
+    Modules.Add(new Cli_Module_Base_Script(History,
+            Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
+            CMD_Processor));
 
     Modules.Add(new Cli_Module_Test_Tab());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
@@ -118,13 +126,14 @@ int main(int argc, char *argv[]) {
                     History.History_Put(s_trim);
                 }
 
-                Cli.Process_Input_Item(Modules, input_item, str_rem_def);
+                CMD_Processor.Process_Input_Item(input_item);
                 Cli_Output.Output_NewLine();
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
             {
-                Cli.Process_Tab(Modules, input_item, str_rem_def, is_invitation_print);
+                //Cli.Process_Tab(input_item, is_invitation_print);
+                TAB_Processor.Process_Input_Item(input_item, is_invitation_print);
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_UP:
