@@ -32,6 +32,12 @@ bool Cli_Input_conio::Input_Restore() {
     return Cli_Output.Output_Close();
 }
 
+bool Cli_Input_conio::Input_Clear() {
+    if (!Cli_Output.Output_Clear())
+        system("cls");
+    return true;
+}
+
 Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
     bool stop = false;
 
@@ -68,7 +74,7 @@ Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
                 break;
 
             case 1:
-                switch(c) {
+                switch (c) {
                     case 0x47: // Home
                         Input_Home();
                         Input_State = 0;

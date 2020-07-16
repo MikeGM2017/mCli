@@ -16,6 +16,7 @@
 
 #include <conio.h>
 #include <signal.h>
+#include <stdlib.h>
 
 #include "Cli_Input_Abstract.h"
 
@@ -38,6 +39,8 @@ public:
     virtual bool Input_Init();
 
     virtual bool Input_Restore();
+
+    virtual bool Input_Clear();
 
     virtual Cli_Input_Item Input_Item_Get();
 
