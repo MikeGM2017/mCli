@@ -41,6 +41,11 @@ int main(int argc, char *argv[]) {
                 Cli_Output.Output_Str("Quit - Processed");
                 Cli_Output.Output_NewLine();
                 stop = true; // Quit
+            } else if (input_str == "C") {
+                Cli_Input.Input_Clear();
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("Clear - Processed");
+                Cli_Output.Output_NewLine();
             } else if (!input_str.empty()) {
                 Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str(input_item.Text_Get());

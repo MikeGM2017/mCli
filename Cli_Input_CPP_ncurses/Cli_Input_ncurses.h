@@ -28,6 +28,8 @@ public:
 
     virtual bool Input_Restore();
 
+    virtual bool Input_Clear();
+
     virtual Cli_Input_Item Input_Item_Get();
 
 };
