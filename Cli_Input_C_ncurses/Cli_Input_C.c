@@ -101,6 +101,10 @@ static int Input_Restore(struct Cli_Input_C *obj) {
     return obj->Cli_Output->Output_Close();
 }
 
+static int Input_Clear(struct Cli_Input_C *obj) {
+    return obj->Cli_Output->Output_Clear();
+}
+
 static int Is_Echo_Get(struct Cli_Input_C *obj) {
     return obj->Is_Echo;
 }
@@ -274,6 +278,7 @@ struct Cli_Input_C Cli_Input_C_base(void) {
     Cli_Input_Base.Input_Str_Clear = Input_Str_Clear;
     Cli_Input_Base.Input_Init = Input_Init;
     Cli_Input_Base.Input_Restore = Input_Restore;
+    Cli_Input_Base.Input_Clear = Input_Clear;
     Cli_Input_Base.Is_Echo_Get = Is_Echo_Get;
     Cli_Input_Base.Is_Echo_On = Is_Echo_On;
     Cli_Input_Base.Is_Echo_Off = Is_Echo_Off;
