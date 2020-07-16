@@ -42,6 +42,11 @@ public:
         return true;
     }
 
+    virtual bool Output_Clear() {
+        clear();
+        return true;
+    }
+
     virtual void Output_NewLine() {
         printw("\n");
     }
