@@ -134,6 +134,10 @@ public:
         return Cli_Output.Output_Close();
     }
 
+    virtual bool Input_Clear() {
+        return Cli_Output.Output_Clear();
+    }
+
     virtual bool Is_Echo_Get() {
         return Is_Echo;
     }
