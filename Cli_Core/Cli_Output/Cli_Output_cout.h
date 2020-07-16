@@ -31,6 +31,11 @@ public:
         return true;
     }
 
+    virtual bool Output_Clear() {
+        system("cls");
+        return true;
+    }
+
     virtual void Output_NewLine() {
         cout << endl;
     }
@@ -48,7 +53,7 @@ public:
     virtual void Output_Return() {
         cout << '\r';
     }
-    
+
 };
 
 #endif /* CLI_OUTPUT_COUT_H */

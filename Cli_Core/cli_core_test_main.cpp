@@ -25,6 +25,8 @@
 #include "Cli_Module_Base_Modules.h"
 #include "Cli_Module_Base_History.h"
 
+#include "Cli_Module_Base_Log.h"
+
 #include "Cli_Module_Test_Tab.h"
 
 #include "Str_Filter.h"
@@ -60,6 +62,8 @@ int main(int argc, char *argv[]) {
 
     Cli_History History;
     Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
+    
+    Modules.Add(new Cli_Module_Base_Log(Cli_Input));
 
     Modules.Add(new Cli_Module_Test_Tab());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));

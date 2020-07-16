@@ -42,6 +42,11 @@ public:
         return true;
     }
 
+    virtual bool Output_Clear() {
+        clear();
+        return true;
+    }
+
     virtual void Output_NewLine() {
         printw("\n");
     }
@@ -53,7 +58,7 @@ public:
     virtual void Output_Str(string s) {
         printw("%s", s.c_str());
     }
-    
+
     virtual void Output_Return() {
         printw("\r");
     }

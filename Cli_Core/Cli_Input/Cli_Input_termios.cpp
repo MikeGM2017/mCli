@@ -62,6 +62,12 @@ bool Cli_Input_termios::Input_Restore() {
     return false; // Failed
 }
 
+bool Cli_Input_termios::Input_Clear() {
+    if (!Cli_Output.Output_Clear())
+        Cli_Output.Output_Str("\033[H\033[J");
+    return true;
+}
+
 Cli_Input_Item Cli_Input_termios::Input_Item_Get() {
     bool stop = false;
 

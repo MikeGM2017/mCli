@@ -32,6 +32,12 @@ bool Cli_Input_conio::Input_Restore() {
     return Cli_Output.Output_Close();
 }
 
+bool Cli_Input_conio::Input_Clear() {
+    if (!Cli_Output.Output_Clear())
+        system("cls");
+    return true;
+}
+
 Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
     bool stop = false;
 
@@ -54,6 +60,7 @@ Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
                         Input_Back();
                         break;
                     case 9: // TAB
+                        Input_Str_Pos = Input_Str.size();
                         Input_Item.Text_Set(Input_Str);
                         Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_TAB);
                         stop = true;
@@ -67,7 +74,7 @@ Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
                 break;
 
             case 1:
-                switch(c) {
+                switch (c) {
                     case 0x47: // Home
                         Input_Home();
                         Input_State = 0;
@@ -112,4 +119,4 @@ Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
     } while (!stop);
 
     return Input_Item;
-};
+}

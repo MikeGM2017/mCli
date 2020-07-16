@@ -14,6 +14,12 @@ bool Cli_Input_ncurses::Input_Restore() {
     return Cli_Output.Output_Close();
 }
 
+bool Cli_Input_ncurses::Input_Clear() {
+    if (!Cli_Output.Output_Clear())
+        clear();
+    return true;
+}
+
 Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {
     bool stop = false;
 
@@ -22,7 +28,8 @@ Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {
     do {
         unsigned int c = getch();
         switch (c) {
-            case '\n':
+            case '\n': // Enter - NCurses
+            case '\r': // Enter - PDCurses
             case KEY_ENTER:
                 Input_Item.Text_Set(Input_Str);
                 Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_STR);
@@ -48,6 +55,7 @@ Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {
                 Input_Back();
                 break;
             case 9: // Tab
+                Input_Str_Pos = Input_Str.size();
                 Input_Item.Text_Set(Input_Str);
                 Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_TAB);
                 stop = true;
