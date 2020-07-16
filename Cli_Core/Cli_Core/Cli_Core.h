@@ -368,6 +368,11 @@ public:
         }
         // </editor-fold>
 
+        for (int i = 0; i < cmd_tab_list.size(); i++) {
+            delete cmd_tab_list[i];
+        }
+        cmd_tab_list.clear();
+
     }
 
     virtual vector<TAB_Cmd *> TAB_Cmd_List_Get(const string level, Cli_Modules &modules, const string s_cmd_in, const vector<Cmd_Token *> &tokens) {
