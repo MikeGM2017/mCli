@@ -32,8 +32,7 @@ public:
     }
 
     virtual bool Output_Clear() {
-        system("cls");
-        return true;
+        return false; // can not clear
     }
 
     virtual void Output_NewLine() {

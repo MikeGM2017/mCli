@@ -24,9 +24,7 @@ public:
     virtual bool Output_Init() = 0;
     virtual bool Output_Close() = 0;
 
-    virtual bool Output_Clear() {
-        return false; // can not clear
-    };
+    virtual bool Output_Clear() = 0;
 
     virtual void Output_NewLine() = 0;
     virtual void Output_Char(char c) = 0;
