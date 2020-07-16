@@ -4,6 +4,12 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f9"
+                     displayName="Cli_Command_Processor"
+                     projectFiles="true">
+        <itemPath>Cli_Command_Processor/Cli_Command_Processor.h</itemPath>
+        <itemPath>Cli_Command_Processor/Cli_Command_Processor_Abstract.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3" displayName="Cli_Core" projectFiles="true">
         <itemPath>Cli_Core/Cli_Core.h</itemPath>
       </logicalFolder>
@@ -25,6 +31,7 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Rem.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Script.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Tab.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Terminal.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
@@ -195,12 +202,23 @@
             <pElem>Cmd_Token_Parser</pElem>
             <pElem>TAB_Cmd</pElem>
             <pElem>Cli_History</pElem>
+            <pElem>Cli_Command_Processor</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test</output>
         </linkerTool>
       </compileType>
+      <item path="Cli_Command_Processor/Cli_Command_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Command_Processor/Cli_Command_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_History/Cli_History.h" ex="false" tool="3" flavor2="0">
@@ -236,6 +254,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Script.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -582,6 +605,16 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Cli_Command_Processor/Cli_Command_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Command_Processor/Cli_Command_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_History/Cli_History.h" ex="false" tool="3" flavor2="0">
@@ -617,6 +650,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Script.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab.h" ex="false" tool="3" flavor2="0">
       </item>

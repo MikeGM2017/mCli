@@ -26,10 +26,13 @@
 #include "Cli_Module_Base_History.h"
 
 #include "Cli_Module_Base_Log.h"
+#include "Cli_Module_Base_Script.h"
 
 #include "Cli_Module_Test_Tab.h"
 
 #include "Str_Filter.h"
+
+#include "Cli_Command_Processor.h"
 
 #include "Cli_Module_Test_Terminal.h"
 
@@ -62,8 +65,17 @@ int main(int argc, char *argv[]) {
 
     Cli_History History;
     Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
-    
+
     Modules.Add(new Cli_Module_Base_Log(Cli_Input));
+
+    //string User_Name = "root";
+    //bool Cmd_Script_Stop = false;
+    //int Script_Buf_Size = 1024;
+    //Cli_Command_Processor Command_Processor;
+    //Modules.Add(new Cli_Module_Base_Script(Modules, History,
+    //        User_Name,
+    //        str_rem_def, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
+    //        Command_Processor));
 
     Modules.Add(new Cli_Module_Test_Tab());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
@@ -101,7 +113,10 @@ int main(int argc, char *argv[]) {
                 bool is_debug = false;
 
                 string s_trim = Cli.Str_Trim(input_item.Text_Get());
-                History.History_Put(s_trim, is_no_history, is_debug);
+
+                if (!is_no_history && !is_debug) {
+                    History.History_Put(s_trim);
+                }
 
                 Cli.Process_Input_Item(Modules, input_item, str_rem_def);
                 Cli_Output.Output_NewLine();

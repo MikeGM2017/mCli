@@ -45,11 +45,9 @@ public:
         return "";
     }
 
-    virtual void History_Put(string s_trim, bool is_no_history, bool is_debug) {
-        if (!is_no_history && !is_debug) {
-            if (History.size() == 0 || s_trim != History.back())
-                History.push_back(s_trim);
-        }
+    virtual void History_Put(string s_trim) {
+        if (History.size() == 0 || s_trim != History.back())
+            History.push_back(s_trim);
         History_Pos = History.size();
     }
 
