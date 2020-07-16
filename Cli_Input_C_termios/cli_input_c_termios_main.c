@@ -20,8 +20,8 @@ int main(int argc, char** argv) {
     struct Cli_Output_C Cli_Output = Cli_Output_C_printf();
 
     struct Cli_Input_C_Termios Cli_Input_Termios = Cli_Input_C_termios();
-    struct Cli_Input_C *Cli_Input = (struct Cli_Input_C *)&Cli_Input_Termios;
-    
+    struct Cli_Input_C *Cli_Input = (struct Cli_Input_C *) &Cli_Input_Termios;
+
     Cli_Input->Cli_Output = &Cli_Output;
 
     Cli_Input->Title_Set(Cli_Input, "cli demo");
@@ -45,6 +45,11 @@ int main(int argc, char** argv) {
                 Cli_Output.Output_Str("Quit - Processed");
                 Cli_Output.Output_NewLine();
                 stop = 1; // Quit
+            } else if (input_str[0] == 'C') {
+                Cli_Input->Input_Clear(Cli_Input);
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("Clear - Processed");
+                Cli_Output.Output_NewLine();
             } else if (input_str[0]) {
                 Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str(Cli_Input_C_Item_Text_Get(&input_item));

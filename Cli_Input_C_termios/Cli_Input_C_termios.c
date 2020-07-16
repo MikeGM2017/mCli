@@ -66,6 +66,12 @@ static int Input_Restore(struct Cli_Input_C *obj) {
     return 0; // Failed
 }
 
+static int Input_Clear(struct Cli_Input_C *obj) {
+    if (!obj->Cli_Output->Output_Clear())
+        obj->Cli_Output->Output_Str("\033[H\033[J");
+    return 1; // Ok
+}
+
 static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
     struct Cli_Input_C_Termios *obj_termios = (struct Cli_Input_C_Termios *) obj;
 
@@ -257,6 +263,7 @@ struct Cli_Input_C_Termios Cli_Input_C_termios(void) {
 
     Cli_Input_Base.Input_Init = Input_Init;
     Cli_Input_Base.Input_Restore = Input_Restore;
+    Cli_Input_Base.Input_Clear = Input_Clear;
     Cli_Input_Base.Input_Item_Get = Input_Item_Get;
 
     Cli_Input_Base.Is_Echo_On(&Cli_Input_Base);

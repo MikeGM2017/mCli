@@ -20,6 +20,7 @@ extern "C" {
 
 typedef int ftOutput_Init(void);
 typedef int ftOutput_Close(void);
+typedef int ftOutput_Clear(void);
 typedef void ftOutput_NewLine(void);
 typedef void ftOutput_Char(char c);
 typedef void ftOutput_Str(char *s);
@@ -28,6 +29,7 @@ typedef void ftOutput_Return(void);
 struct Cli_Output_C {
     ftOutput_Init *Output_Init;
     ftOutput_Close *Output_Close;
+    ftOutput_Clear *Output_Clear;
     ftOutput_NewLine *Output_NewLine;
     ftOutput_Char *Output_Char;
     ftOutput_Str *Output_Str;
