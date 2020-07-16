@@ -68,14 +68,14 @@ int main(int argc, char *argv[]) {
 
     Modules.Add(new Cli_Module_Base_Log(Cli_Input));
 
-    //string User_Name = "root";
-    //bool Cmd_Script_Stop = false;
-    //int Script_Buf_Size = 1024;
-    //Cli_Command_Processor Command_Processor;
-    //Modules.Add(new Cli_Module_Base_Script(Modules, History,
-    //        User_Name,
-    //        str_rem_def, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
-    //        Command_Processor));
+    string User_Name = "root";
+    bool Cmd_Script_Stop = false;
+    int Script_Buf_Size = 1024;
+    Cli_Command_Processor Command_Processor;
+    Modules.Add(new Cli_Module_Base_Script(Modules, History,
+            User_Name,
+            str_rem_def, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
+            Command_Processor));
 
     Modules.Add(new Cli_Module_Test_Tab());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
