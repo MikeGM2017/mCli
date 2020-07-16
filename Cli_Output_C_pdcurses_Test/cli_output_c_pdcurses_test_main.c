@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
     getch();
 
-    int res_clear = Cli_Output.Output_Clear();
+    bool res_clear = Cli_Output.Output_Clear();
     Cli_Output.Output_NewLine();
     if (res_clear)
         Cli_Output.Output_Str("Cleared");
