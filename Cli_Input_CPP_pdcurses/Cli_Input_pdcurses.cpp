@@ -14,6 +14,12 @@ bool Cli_Input_pdcurses::Input_Restore() {
     return Cli_Output.Output_Close();
 }
 
+bool Cli_Input_pdcurses::Input_Clear() {
+    if (!Cli_Output.Output_Clear())
+        clear();
+    return true;
+}
+
 Cli_Input_Item Cli_Input_pdcurses::Input_Item_Get() {
     bool stop = false;
 
