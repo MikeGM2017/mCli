@@ -16,16 +16,25 @@
 #include "Cli_Output_printf.h"
 
 int main(int argc, char** argv) {
-    
+
     Cli_Output_printf Cli_Output;
-    
+
     Cli_Output.Output_Char('X');
     Cli_Output.Output_NewLine();
     Cli_Output.Output_Str(" - Ok");
     Cli_Output.Output_NewLine();
     Cli_Output.Output_Str("End");
     Cli_Output.Output_Return();
-    
+
+    getchar();
+
+    bool res_clear = Cli_Output.Output_Clear();
+    Cli_Output.Output_NewLine();
+    if (res_clear)
+        Cli_Output.Output_Str("Cleared");
+    else
+        Cli_Output.Output_Str("Not Cleared");
+
     getchar();
 
     return 0;

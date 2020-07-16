@@ -28,7 +28,11 @@ public:
     virtual bool Output_Close() {
         return true;
     }
-
+    
+    virtual bool Output_Clear() {
+        return false; // Can not clear
+    }
+    
     virtual void Output_NewLine() {
         printf("\n");
     }
