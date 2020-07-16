@@ -21,7 +21,7 @@ static void SIGINT_Handler(int sig) { // Ctrl+C
 
 static int Input_Init(struct Cli_Input_C *obj) {
     struct Cli_Input_C_Conio *obj_conio = (struct Cli_Input_C_Conio *) obj;
-    
+
     Cli_Input_Object = obj;
     Cli_Output_Object = obj->Cli_Output;
 
@@ -34,9 +34,15 @@ static int Input_Restore(struct Cli_Input_C *obj) {
     return obj->Cli_Output->Output_Close();
 }
 
+static int Input_Clear(struct Cli_Input_C *obj) {
+    if (!obj->Cli_Output->Output_Clear())
+        system("cls");
+    return 1;
+}
+
 static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
     struct Cli_Input_C_Conio *obj_conio = (struct Cli_Input_C_Conio *) obj;
-    
+
     int stop = 0;
 
     struct Cli_Input_C_Item Input_Item;
@@ -73,7 +79,7 @@ static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
                 break;
 
             case 1:
-                switch(c) {
+                switch (c) {
                     case 0x47: // Home
                         obj->Input_Home(obj);
                         obj_conio->Input_State = 0;
@@ -122,9 +128,10 @@ static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
 
 struct Cli_Input_C_Conio Cli_Input_C_conio(void) {
     struct Cli_Input_C Cli_Input_Base = Cli_Input_C_base();
-    
+
     Cli_Input_Base.Input_Init = Input_Init;
     Cli_Input_Base.Input_Restore = Input_Restore;
+    Cli_Input_Base.Input_Clear = Input_Clear;
     Cli_Input_Base.Input_Item_Get = Input_Item_Get;
 
     Cli_Input_Base.Is_Echo_On(&Cli_Input_Base);

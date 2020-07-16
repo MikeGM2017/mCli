@@ -16,6 +16,7 @@
 
 #include <conio.h>
 #include <signal.h>
+#include <stdlib.h>
 
 #include "Cli_Input_C.h"
 
@@ -25,7 +26,7 @@ extern "C" {
 
     struct Cli_Input_C_Conio {
         struct Cli_Input_C Cli_Input_Base;
-        
+
         int Input_State; // @Attention: conio specific
     };
 

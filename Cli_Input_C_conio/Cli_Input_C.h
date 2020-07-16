@@ -53,6 +53,7 @@ extern "C" {
     typedef void ftCli_Input_C_Input_Str_Clear(struct Cli_Input_C *obj);
     typedef int ftCli_Input_C_Input_Init(struct Cli_Input_C *obj);
     typedef int ftCli_Input_C_Input_Restore(struct Cli_Input_C *obj);
+    typedef int ftCli_Input_C_Input_Clear(struct Cli_Input_C *obj);
     typedef int ftCli_Input_C_Is_Echo_Get(struct Cli_Input_C *obj);
     typedef void ftCli_Input_C_Is_Echo_On(struct Cli_Input_C *obj);
     typedef void ftCli_Input_C_Is_Echo_Off(struct Cli_Input_C *obj);
@@ -100,6 +101,7 @@ extern "C" {
         ftCli_Input_C_Input_Str_Clear *Input_Str_Clear;
         ftCli_Input_C_Input_Init *Input_Init;
         ftCli_Input_C_Input_Restore *Input_Restore;
+        ftCli_Input_C_Input_Clear *Input_Clear;
         ftCli_Input_C_Is_Echo_Get *Is_Echo_Get;
         ftCli_Input_C_Is_Echo_On *Is_Echo_On;
         ftCli_Input_C_Is_Echo_Off *Is_Echo_Off;
