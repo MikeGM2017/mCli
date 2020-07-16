@@ -30,6 +30,15 @@ int main(int argc, char** argv) {
 
     getchar();
 
+    int res_clear = Cli_Output.Output_Clear();
+    Cli_Output.Output_NewLine();
+    if (res_clear)
+        Cli_Output.Output_Str("Cleared");
+    else
+        Cli_Output.Output_Str("Not Cleared");
+
+    getchar();
+
     Cli_Output.Output_Close();
 
     return 0;
