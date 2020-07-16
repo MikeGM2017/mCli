@@ -4,8 +4,6 @@
 /Cli_Input_CPP_ncurses/build/
 /Cli_Input_CPP_pdcurses/dist/
 /Cli_Input_CPP_pdcurses/build/
-/PDCurses_lib/build/
-/PDCurses_lib/dist/
 /Cli_Input_conio/dist/
 /Cli_Input_conio/build/
 /Cli_Input_CPP_conio/build/
@@ -44,8 +42,6 @@
 /Cli_Core/build/
 /mCli/build/
 /mCli/dist/
-/Cli_Core_Test/build/
-/Cli_Core_Test/dist/
 /Cli_Output_C_printf_Test/build/
 /Cli_Output_C_printf_Test/dist/
 /Cli_Output_C_ncurses_Test/build/
@@ -61,3 +57,7 @@
 /Cli_Input_C_conio/build/
 /Cli_Input_C_conio/dist/
 /**/nbproject/private/
+/Cli_Core_Test/
+/PDCurses-3.8/
+/SDL2-2.0.10/
+/mCli/
