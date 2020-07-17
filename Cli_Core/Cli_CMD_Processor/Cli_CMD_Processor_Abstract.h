@@ -28,8 +28,6 @@ public:
 
     virtual ~Cli_CMD_Processor_Abstract() {
     }
-
-    virtual bool Do(string s_trim, bool is_debug, bool &debug_res) = 0;
     
     virtual bool Process_Input_Item(Cli_Input_Item &input_item) = 0;
 

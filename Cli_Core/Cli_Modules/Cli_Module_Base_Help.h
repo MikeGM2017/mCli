@@ -156,24 +156,32 @@ public:
     virtual ~Cli_Module_Base_Help() {
     }
 
-    static int Help_Cli_Modules_Get_Len(int user_privilege, Cli_Modules &Cli_Modules,
-            string Level,
+    virtual bool HELP_Cmd_Ptr_Check_By_Level(Cli_Cmd *cmd_ptr, Cli_Cmd_Privilege_ID user_privilege, string level,
+            bool is_full, bool is_module_full) {
+        if (cmd_ptr && user_privilege <= cmd_ptr->Privilege_Get()) {
+            if (is_full) return true;
+            if (is_module_full) return true;
+            if (cmd_ptr->Is_Global_Get()) return true;
+            if (cmd_ptr->Level_Get() == level) return true;
+        }
+        return false;
+    }
+
+    virtual int Help_Cli_Modules_Get_Len(int user_privilege, Cli_Modules &modules,
+            string level,
             bool is_full, bool is_verbose, bool is_module_full,
             string module_filter, string command_filter, Str_Filter_Abstract &str_filter) {
         int len_max = 0;
 
-        for (int module = 0; module < Cli_Modules.Get_Size(); module++) {
-            Cli_Module *climodule_ptr = Cli_Modules.Get(module);
-            if (is_full || str_filter.Is_Match(module_filter, climodule_ptr->Name_Get())) {
-                for (int cmd = 0; cmd < climodule_ptr->Module_Cmd_List.size(); cmd++) {
-                    Cli_Cmd *cmd_ptr = climodule_ptr->Module_Cmd_List[cmd];
-                    if (is_full || is_module_full ||
-                            ((cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == Level))
-                            && (user_privilege <= cmd_ptr->Privilege_Get())
-                            && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get()))
-                            ) {
+        for (int module = 0; module < modules.Get_Size(); module++) {
+            Cli_Module *module_ptr = modules.Get(module);
+            if (is_full || str_filter.Is_Match(module_filter, module_ptr->Name_Get())) {
+                for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
+                    Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
+                    bool is_cmd_prt_valid = HELP_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level, is_full, is_module_full);
+                    if (is_cmd_prt_valid && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get())) {
                         int len = 0;
-                        if (Level.size() == 0) {
+                        if (level.size() == 0) {
                             int len_level = cmd_ptr->Level_Get().size();
                             if (len_level > 0)
                                 len += len_level + 3; // "[" + ... + "] " - OnHelp_CliModules(...)
@@ -197,8 +205,8 @@ public:
         return len_max;
     }
 
-    static void Help_Cli_Modules_Print(int user_privilege, Cli_Modules &CliModules,
-            string Level,
+    virtual void Help_Cli_Modules_Print(int user_privilege, Cli_Modules &modules,
+            string level,
             bool is_full, bool is_verbose, bool is_module_full,
             string module_filter, string command_filter, Str_Filter_Abstract &str_filter,
             int len_max, int &modules_count, int &commands_count,
@@ -206,16 +214,16 @@ public:
 
         Cli_Output.Output_NewLine();
 
-        for (int module = 0; module < CliModules.Get_Size(); module++) {
-            Cli_Module *climodule_ptr = CliModules.Get(module);
-            if (is_full || str_filter.Is_Match(module_filter, climodule_ptr->Name_Get())) {
+        for (int module = 0; module < modules.Get_Size(); module++) {
+            Cli_Module *module_ptr = modules.Get(module);
+            if (is_full || str_filter.Is_Match(module_filter, module_ptr->Name_Get())) {
                 modules_count++;
-                for (int cmd = 0; cmd < climodule_ptr->Module_Cmd_List.size(); cmd++) {
-                    Cli_Cmd *cmd_ptr = climodule_ptr->Module_Cmd_List[cmd];
+                for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
+                    Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
                     string s;
                     stringstream s_str1;
                     stringstream s_str2;
-                    if (Level.size() == 0) {
+                    if (level.size() == 0) {
                         string s_level = cmd_ptr->Level_Get();
                         if (s_level.size() > 0) {
                             s += "[" + s_level + "] ";
@@ -224,11 +232,8 @@ public:
                     }
                     s += cmd_ptr->Text_Get();
                     s_str1 << cmd_ptr->Text_Get();
-                    if (is_full || is_module_full ||
-                            ((cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == Level))
-                            && (user_privilege <= cmd_ptr->Privilege_Get())
-                            && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get()))
-                            ) {
+                    bool is_cmd_prt_valid = HELP_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level, is_full, is_module_full);
+                    if (is_cmd_prt_valid && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get())) {
                         s_str2 << setw(len_max) << left << s_str1.str() << " - " << cmd_ptr->Help_Get();
                         Cli_Output.Output_Str(s_str2.str());
                         Cli_Output.Output_NewLine();
@@ -250,20 +255,20 @@ public:
         }
     }
 
-    void help(string Level, bool is_full, bool is_verbose, bool is_module_full,
+    void help(string level, bool is_full, bool is_verbose, bool is_module_full,
             string module_filter, string command_filter, Cli_Output_Abstract &Cli_Output) {
         int modules_count = 0;
         int commands_count = 0;
         int len_max = 0;
         int len;
 
-        len = Help_Cli_Modules_Get_Len(User_Privilege, Modules, Level,
+        len = Help_Cli_Modules_Get_Len(User_Privilege, Modules, level,
                 is_full, is_verbose, is_module_full,
                 module_filter, command_filter, Help_Str_Filter);
         if (len_max < len)
             len_max = len;
 
-        Help_Cli_Modules_Print(User_Privilege, Modules, Level,
+        Help_Cli_Modules_Print(User_Privilege, Modules, level,
                 is_full, is_verbose, is_module_full,
                 module_filter, command_filter, Help_Str_Filter,
                 len_max, modules_count, commands_count,

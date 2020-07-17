@@ -61,8 +61,17 @@ public:
         return s_trim;
     }
 
+    virtual bool TAB_Cmd_Ptr_Check_By_Level(Cli_Cmd *cmd_ptr, Cli_Cmd_Privilege_ID user_privilege, string level) {
+        if (cmd_ptr && user_privilege <= cmd_ptr->Privilege_Get()) {
+            if (cmd_ptr->Is_Global_Get()) return true;
+            if (cmd_ptr->Level_Get() == level) return true;
+        }
+        return false;
+    }
+
     virtual void TAB_Cmd_Add_By_Level(Cli_Cmd *cmd_ptr, string &level, list<string> &str_list) {
-        if (cmd_ptr->Is_Global_Get() || (cmd_ptr->Level_Get() == level && User_Privilege <= cmd_ptr->Privilege_Get())) {
+        bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+        if (is_cmd_prt_valid) {
             string s = cmd_ptr->Items[0]->Text_Get();
             if (find(str_list.begin(), str_list.end(), s) == str_list.end()) {
                 str_list.insert(str_list.end(), s);
@@ -82,7 +91,8 @@ public:
             if (module_ptr) {
                 for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
                     Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
-                    if (cmd_ptr) {
+                    bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+                    if (is_cmd_prt_valid) {
                         TAB_Cmd_Add_By_Level(cmd_ptr, level, str_list);
                     }
                 }
@@ -118,7 +128,8 @@ public:
             if (module_ptr) {
                 for (int cmd = 0; cmd < module_ptr->Cmd_Count_Get(); cmd++) {
                     Cli_Cmd *cmd_ptr = module_ptr->Cmd_Get(cmd);
-                    if (cmd_ptr) {
+                    bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+                    if (is_cmd_prt_valid) {
                         if (tokens.size() <= cmd_ptr->Items.size()) {
                             bool is_valid = true;
                             for (int token = 0; token < tokens.size(); token++) {

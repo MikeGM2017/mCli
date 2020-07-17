@@ -53,8 +53,12 @@ public:
     virtual ~Cli_CMD_Processor() {
     }
 
-    virtual bool Do(string s_trim, bool is_debug, bool &debug_res) {
-        return false;
+    virtual Level_Description Level_Get() {
+        if (Levels.size() > 0) {
+            return Levels[Levels.size() - 1];
+        }
+        Level_Description level_top;
+        return level_top;
     }
 
     virtual string Str_Trim(string s) {
@@ -66,12 +70,24 @@ public:
         return s_trim;
     }
 
+    virtual bool TAB_Cmd_Ptr_Check_By_Level(Cli_Cmd *cmd_ptr, Cli_Cmd_Privilege_ID user_privilege, string level) {
+        if (cmd_ptr && user_privilege <= cmd_ptr->Privilege_Get()) {
+            if (cmd_ptr->Is_Global_Get()) return true;
+            if (cmd_ptr->Level_Get() == level) return true;
+        }
+        return false;
+    }
+
     virtual bool Process_Input_Item(Cli_Input_Item &input_item) {
         string s_trim = Str_Trim(input_item.Text_Get());
 
         if (s_trim.size() == 0) return false;
 
         if (!s_trim.empty()) {
+
+            Level_Description level_description = Level_Get();
+            string level = level_description.Level;
+
             bool is_processed = false;
             bool is_debug = false;
             bool stop = false;
@@ -82,7 +98,8 @@ public:
                 if (module_ptr) {
                     for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size() && !stop; cmd++) {
                         Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
-                        if (cmd_ptr) {
+                        bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+                        if (is_cmd_prt_valid) {
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr->Is_Valid(tokens);
                             switch (res_cmd_valid) {
                                 case CMD_ITEM_OK:
