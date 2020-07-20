@@ -253,6 +253,10 @@ public:
 
     virtual Cli_Input_Item Input_Item_Get() = 0; // Attention: Main Cli Input Method - Blocked
 
+    virtual bool Input_sleep(int sleep_sec) = 0;
+
+    virtual bool Input_kbhit() = 0; // Attention: Not Blocked
+
 };
 
 #endif /* CLI_INPUT_ABSTRACT_H */
