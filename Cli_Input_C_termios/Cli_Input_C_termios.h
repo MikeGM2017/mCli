@@ -18,6 +18,15 @@
 #include <unistd.h>
 #include <signal.h>
 #include <termios.h> // @Attention: termios specific
+#include <fcntl.h>
+
+#ifdef _WIN32
+#include <conio.h>
+#include <Windows.h>
+#else
+#include <unistd.h>
+#include <fcntl.h>
+#endif
 
 #include "Cli_Input_C.h"
 

@@ -256,7 +256,26 @@ static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
     } while (!stop);
 
     return Input_Item;
-};
+}
+
+static int Input_sleep(struct Cli_Input_C *obj, int sleep_sec) {
+#ifdef _WIN32
+    Sleep(sleep_sec * 1000);
+#else
+    sleep(sleep_sec);
+#endif
+    return 1;
+}
+
+static int Input_kbhit(struct Cli_Input_C *obj) {
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    int c = getchar();
+    fcntl(STDIN_FILENO, F_SETFL, flags);
+    if (c > 0)
+        return 1;
+    return 0;
+}
 
 struct Cli_Input_C_Termios Cli_Input_C_termios(void) {
     struct Cli_Input_C Cli_Input_Base = Cli_Input_C_base();
@@ -265,6 +284,8 @@ struct Cli_Input_C_Termios Cli_Input_C_termios(void) {
     Cli_Input_Base.Input_Restore = Input_Restore;
     Cli_Input_Base.Input_Clear = Input_Clear;
     Cli_Input_Base.Input_Item_Get = Input_Item_Get;
+    Cli_Input_Base.Input_sleep = Input_sleep;
+    Cli_Input_Base.Input_kbhit = Input_kbhit;
 
     Cli_Input_Base.Is_Echo_On(&Cli_Input_Base);
 
