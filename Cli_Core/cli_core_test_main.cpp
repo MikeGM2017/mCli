@@ -28,6 +28,7 @@
 
 #include "Cli_Module_Base_Log.h"
 #include "Cli_Module_Base_Script.h"
+#include "Cli_Module_Base_Wait.h"
 
 #include "Cli_Module_Test_Tab.h"
 
@@ -84,6 +85,10 @@ int main(int argc, char *argv[]) {
     Modules.Add(new Cli_Module_Base_Script(History,
             Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
             CMD_Processor));
+
+    bool Log_Wait_Enable = true;
+    bool Cmd_Wait_Stop = false;
+    Modules.Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
     Modules.Add(new Cli_Module_Test_Tab());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));

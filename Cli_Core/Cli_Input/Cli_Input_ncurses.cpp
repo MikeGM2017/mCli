@@ -92,3 +92,22 @@ Cli_Input_Item Cli_Input_ncurses::Input_Item_Get() {
 
     return Input_Item;
 }
+
+bool Cli_Input_ncurses::Input_sleep(int sleep_sec) {
+#ifdef _WIN32
+    Sleep(sleep_sec * 1000);
+#else
+    sleep(sleep_sec);
+#endif
+    return true;
+}
+
+bool Cli_Input_ncurses::Input_kbhit() {
+    nodelay(stdscr, TRUE);
+    int c = getch();
+    nodelay(stdscr, FALSE);
+    if (c > 0) {
+        return true;
+    }
+    return false;
+}

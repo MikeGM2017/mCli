@@ -18,6 +18,15 @@
 #include <unistd.h>
 #include <signal.h>
 #include <termios.h>
+#include <fcntl.h>
+
+#ifdef _WIN32
+#include <conio.h>
+#include <Windows.h>
+#else
+#include <unistd.h>
+#include <fcntl.h>
+#endif
 
 #include "Cli_Input_Abstract.h"
 
@@ -48,6 +57,10 @@ public:
     virtual bool Input_Clear();
 
     virtual Cli_Input_Item Input_Item_Get();
+
+    virtual bool Input_sleep(int sleep_sec);
+
+    virtual bool Input_kbhit();
 
 };
 

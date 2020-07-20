@@ -249,4 +249,23 @@ Cli_Input_Item Cli_Input_termios::Input_Item_Get() {
     } while (!stop);
 
     return Input_Item;
-};
+}
+
+bool Cli_Input_termios::Input_sleep(int sleep_sec) {
+#ifdef _WIN32
+    Sleep(sleep_sec*1000);
+#else
+    sleep(sleep_sec);
+#endif
+    return true;
+}
+
+bool Cli_Input_termios::Input_kbhit() {
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    int c = getchar();
+    fcntl(STDIN_FILENO, F_SETFL, flags);
+    if (c > 0)
+        return true;
+    return false;
+}
