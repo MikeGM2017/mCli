@@ -18,6 +18,14 @@
 #include <signal.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+#include <conio.h>
+#include <Windows.h>
+#else
+#include <unistd.h>
+#include <fcntl.h>
+#endif
+
 #include "Cli_Input_C.h"
 
 #ifdef __cplusplus

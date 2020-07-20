@@ -126,6 +126,24 @@ static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
     return Input_Item;
 }
 
+int Input_sleep(struct Cli_Input_C *obj, int sleep_sec) {
+#ifdef _WIN32
+    Sleep(sleep_sec * 1000);
+#else
+    sleep(sleep_sec);
+#endif
+    return 1;
+}
+
+int Input_kbhit(struct Cli_Input_C *obj) {
+    int res = kbhit();
+    if (res > 0) {
+        int c = getch();
+        return 1;
+    }
+    return 0;
+}
+
 struct Cli_Input_C_Conio Cli_Input_C_conio(void) {
     struct Cli_Input_C Cli_Input_Base = Cli_Input_C_base();
 
@@ -133,6 +151,8 @@ struct Cli_Input_C_Conio Cli_Input_C_conio(void) {
     Cli_Input_Base.Input_Restore = Input_Restore;
     Cli_Input_Base.Input_Clear = Input_Clear;
     Cli_Input_Base.Input_Item_Get = Input_Item_Get;
+    Cli_Input_Base.Input_sleep = Input_sleep;
+    Cli_Input_Base.Input_kbhit = Input_kbhit;
 
     Cli_Input_Base.Is_Echo_On(&Cli_Input_Base);
 

@@ -67,6 +67,8 @@ extern "C" {
     typedef void ftCli_Input_C_Input_Left(struct Cli_Input_C *obj);
     typedef void ftCli_Input_C_Input_Right(struct Cli_Input_C *obj);
     typedef struct Cli_Input_C_Item ftCli_Input_C_Input_Item_Get(struct Cli_Input_C *obj);
+    typedef int ftCli_Input_C_Input_sleep(struct Cli_Input_C *obj, int sleep_sec);
+    typedef int ftCli_Input_C_Input_kbhit(struct Cli_Input_C *obj);
 
     struct Cli_Input_C {
         char Title[CLI_INPUT_C_TITLE_SIZE];
@@ -115,6 +117,8 @@ extern "C" {
         ftCli_Input_C_Input_Left *Input_Left;
         ftCli_Input_C_Input_Right *Input_Right;
         ftCli_Input_C_Input_Item_Get *Input_Item_Get;
+        ftCli_Input_C_Input_sleep *Input_sleep;
+        ftCli_Input_C_Input_kbhit *Input_kbhit;
 
     };
 

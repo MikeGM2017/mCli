@@ -254,6 +254,14 @@ static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) { // Atte
     return item;
 }
 
+static int Input_sleep(struct Cli_Input_C *obj, int sleep_sec) {
+    return 0;
+}
+
+static int Input_kbhit(struct Cli_Input_C *obj) {
+    return 0;
+}
+
 struct Cli_Input_C Cli_Input_C_base(void) {
     struct Cli_Input_C Cli_Input_Base;
     memset(&Cli_Input_Base, 0, sizeof (struct Cli_Input_C));
@@ -292,6 +300,8 @@ struct Cli_Input_C Cli_Input_C_base(void) {
     Cli_Input_Base.Input_Left = Input_Left;
     Cli_Input_Base.Input_Right = Input_Right;
     Cli_Input_Base.Input_Item_Get = Input_Item_Get;
+    Cli_Input_Base.Input_sleep = Input_sleep;
+    Cli_Input_Base.Input_kbhit = Input_kbhit;
 
     return Cli_Input_Base;
 }
