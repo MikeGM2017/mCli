@@ -29,6 +29,7 @@
 #include "Cli_Module_Base_Log.h"
 #include "Cli_Module_Base_Script.h"
 #include "Cli_Module_Base_Wait.h"
+#include "Cli_Module_Base_Debug.h"
 
 #include "Cli_Module_Test_Tab.h"
 
@@ -93,6 +94,8 @@ int main(int argc, char *argv[]) {
     Modules.Add(new Cli_Module_Test_Tab());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
 
+    Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor));
+
     // Modules Add - End
 
     Cli_Input.Title_Set("Cli Core Test");
@@ -131,7 +134,8 @@ int main(int argc, char *argv[]) {
                     History.History_Put(s_trim);
                 }
 
-                CMD_Processor.Process_Input_Item(input_item);
+                bool debug_res = false;
+                CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                 Cli_Output.Output_NewLine();
             }
                 break;

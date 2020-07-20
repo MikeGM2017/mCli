@@ -159,7 +159,7 @@ public:
                     }
                     //Cli_Command_Processor.Do(s_trim, is_debug, debug_res);
                     Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
-                    Cli_Command_Processor.Process_Input_Item(input_item);
+                    Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                 }
             } while (s && !Cmd_Script_Stop && !Cmd_Quit);
             printf("%s Do script %s - %s\n", Str_Rem.c_str(), filename.c_str(), (Cmd_Script_Stop ? "Stopped" : "End"));

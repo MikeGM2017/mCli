@@ -29,7 +29,7 @@ protected:
 
     Cli_Cmd_Privilege_ID User_Privilege;
     Cli_Modules &Modules;
-
+    
     Str_Filter_Abstract &Str_Filter;
 
     Cli_Output_Abstract &Cli_Output;

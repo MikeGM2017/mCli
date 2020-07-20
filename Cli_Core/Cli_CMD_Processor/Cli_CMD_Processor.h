@@ -78,7 +78,7 @@ public:
         return false;
     }
 
-    virtual bool Process_Input_Item(Cli_Input_Item &input_item) {
+    virtual bool Process_Input_Item(Cli_Input_Item &input_item, bool is_debug, bool &debug_res) {
         string s_trim = Str_Trim(input_item.Text_Get());
 
         if (s_trim.size() == 0) return false;
@@ -89,7 +89,6 @@ public:
             string level = level_description.Level;
 
             bool is_processed = false;
-            bool is_debug = false;
             bool stop = false;
             Cmd_Token_Parser_Result parse_res = CMD_TOKEN_PARSER_ERROR;
             vector<Cmd_Token *> tokens = Token_Parser.Parse(s_trim, Str_Rem, parse_res);
@@ -103,10 +102,19 @@ public:
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr->Is_Valid(tokens);
                             switch (res_cmd_valid) {
                                 case CMD_ITEM_OK:
-                                    Cli_Output.Output_NewLine();
-                                    module_ptr->Execute(cmd_ptr->ID_Get(), cmd_ptr, Levels, is_debug);
+                                {
+                                    if (!is_debug)
+                                        Cli_Output.Output_NewLine();
+                                    bool res_execute = module_ptr->Execute(cmd_ptr->ID_Get(), cmd_ptr, Levels, is_debug);
+                                    if (!res_execute) {
+                                        if (!is_debug)
+                                            printf("%s - Not Implemented (Module \"%s\")\n", s_trim.c_str(), module_ptr->Name_Get().c_str());
+                                    } else {
+                                        debug_res = true;
+                                    }
                                     is_processed = true;
                                     stop = true;
+                                }
                                     break;
                                 case CMD_ITEM_ERROR:
                                 case CMD_ITEM_NOT_MATCH:
