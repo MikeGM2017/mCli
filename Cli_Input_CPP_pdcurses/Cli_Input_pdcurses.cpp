@@ -93,3 +93,18 @@ Cli_Input_Item Cli_Input_pdcurses::Input_Item_Get() {
 
     return Input_Item;
 }
+
+bool Cli_Input_pdcurses::Input_sleep(int sleep_sec) {
+    napms(sleep_sec*1000);
+    return true;
+}
+
+bool Cli_Input_pdcurses::Input_kbhit() {
+    nodelay(stdscr, TRUE);
+    int c = getch();
+    nodelay(stdscr, FALSE);
+    if (c > 0) {
+        return true;
+    }
+    return false;
+}
