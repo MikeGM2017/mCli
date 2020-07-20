@@ -78,6 +78,17 @@ int main(int argc, char *argv[]) {
         }
     } while (!stop);
 
+    Cli_Output.Output_NewLine();
+    do {
+        Cli_Output.Output_Str("Press Any Key to stop");
+        Cli_Output.Output_NewLine();
+        Cli_Input.Input_sleep(1);
+    } while (!Cli_Input.Input_kbhit());
+
+    Cli_Output.Output_Str("Press Any Key to exit");
+    Cli_Output.Output_NewLine();
+    Cli_Input_Item input_item = Cli_Input.Input_Item_Get();
+
     Cli_Input.Input_Restore();
 
     return 0;

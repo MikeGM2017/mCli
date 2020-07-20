@@ -120,3 +120,21 @@ Cli_Input_Item Cli_Input_conio::Input_Item_Get() {
 
     return Input_Item;
 }
+
+bool Cli_Input_conio::Input_sleep(int sleep_sec) {
+#ifdef _WIN32
+    Sleep(sleep_sec*1000);
+#else
+    sleep(sleep_sec);
+#endif
+    return true;
+}
+
+bool Cli_Input_conio::Input_kbhit() {
+    int res = kbhit();
+    if (res > 0) {
+        int c = getch();
+        return true;
+    }
+    return false;
+}
