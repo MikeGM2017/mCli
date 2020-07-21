@@ -139,7 +139,6 @@ public:
             for (int i = 0; i < s.size(); i++) {
                 string s_substr = s.substr(i, s.size() - i);
                 bool is_match = Is_Match_Internal(filter, s_substr);
-                //cout << "[" << i << "] s=\"" << s << "\": " << is_match << endl;
                 if (is_match) return true; // Exit: Is_Match
             }
             return false;

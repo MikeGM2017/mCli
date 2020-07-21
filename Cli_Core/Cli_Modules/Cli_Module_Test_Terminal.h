@@ -14,6 +14,10 @@
 #ifndef CLI_MODULE_TEST_TERMINAL_H
 #define CLI_MODULE_TEST_TERMINAL_H
 
+#include <sstream>
+
+using namespace std;
+
 #include "Cli_Module.h"
 
 #include "Cmd_Item_Int.h"
@@ -121,6 +125,17 @@ public:
             cmd->Is_Global_Set(false);
             cmd->Level_Set(New_Level);
             cmd->Item_Add(new Cmd_Item_Word("end", "level up"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test);
+            cmd->Text_Set("test");
+            cmd->Help_Set("test: set all values");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set(New_Level);
+            cmd->Item_Add(new Cmd_Item_Word("test", "test: set all values"));
             Cmd_Add(cmd);
         }
 
@@ -359,6 +374,28 @@ public:
     ~Cli_Module_Test_Terminal() {
     }
 
+    bool test() {
+        vector<Cmd_Item_Base> cmd_items;
+
+        cmd_items.push_back(Cmd_Item_Int("7", ""));
+        cmd_items.push_back(Cmd_Item_Int_Range(1, 4095, "2000", ""));
+        cmd_items.push_back(Cmd_Item_Int_List(1, 4095, "2,7,2000,3000-4000", ""));
+        
+        return false;
+
+        for (int i = 0; i < cmd_items.size(); i++) {
+            stringstream s_str;
+            Cmd_Item_Base &cmd_item = cmd_items[i];
+            s_str << cmd_item.Type_Get() << ": " << cmd_item.Text_Get();
+            Cmd_Item_Valid_Result res_parse = cmd_item.Parse(cmd_item.Text_Get());
+            s_str << " Parse: " << Cmd_Item_Valid_Result_Func::To_String(res_parse);
+            Cli_Output.Output_Str(s_str.str());
+            Cli_Output.Output_NewLine();
+        }
+
+        return true;
+    }
+
     bool test_get_all() {
         stringstream s_str;
         int w = 20;
@@ -566,6 +603,10 @@ public:
             case CMD_ID_end:
                 if (is_debug) return true;
                 return end(Levels);
+
+            case CMD_ID_test:
+                if (is_debug) return true;
+                return test();
 
             case CMD_ID_test_get:
             case CMD_ID_test_get_all:

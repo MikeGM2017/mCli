@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 
     bool Cmd_Script_Stop = false;
     int Script_Buf_Size = 1024;
-    Modules.Add(new Cli_Module_Base_Script(History,
+    Modules.Add(new Cli_Module_Base_Script(History, Cli_Output,
             Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
             CMD_Processor));
 

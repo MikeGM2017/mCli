@@ -15,6 +15,7 @@
 #define CLI_CMD_PROCESSOR_H
 
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -107,8 +108,11 @@ public:
                                         Cli_Output.Output_NewLine();
                                     bool res_execute = module_ptr->Execute(cmd_ptr->ID_Get(), cmd_ptr, Levels, is_debug);
                                     if (!res_execute) {
-                                        if (!is_debug)
-                                            printf("%s - Not Implemented (Module \"%s\")\n", s_trim.c_str(), module_ptr->Name_Get().c_str());
+                                        if (!is_debug) {
+                                            Cli_Output.Output_NewLine();
+                                            Cli_Output.Output_Str(s_trim + " - Not Implemented (Module \"" + module_ptr->Name_Get() + "\")");
+                                            Cli_Output.Output_NewLine();
+                                        }
                                     } else {
                                         debug_res = true;
                                     }

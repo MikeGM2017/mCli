@@ -22,10 +22,14 @@
 
 #include "Cli_History.h"
 
+#include "Cli_Output_Abstract.h"
+
 class Cli_Module_Base_Script : public Cli_Module {
 protected:
 
     Cli_History &History;
+
+    Cli_Output_Abstract &Cli_Output;
 
     bool &Cmd_Script_Stop;
     bool &Cmd_Quit;
@@ -54,10 +58,10 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Script(Cli_History &history,
+    Cli_Module_Base_Script(Cli_History &history, Cli_Output_Abstract &cli_output,
             string str_rem, bool &cmd_script_stop, bool &cmd_quit, int script_buf_size,
             Cli_CMD_Processor_Abstract &cli_command_processor) : Cli_Module("Base Script"),
-    History(history),
+    History(history), Cli_Output(cli_output),
     Str_Rem(str_rem),
     Cmd_Script_Stop(cmd_script_stop), Cmd_Quit(cmd_quit), Script_Buf_Size(script_buf_size),
     Cli_Command_Processor(cli_command_processor) {
@@ -125,9 +129,13 @@ public:
             for (int i = 0; i < History.History_Size_Get() - 1; i++) // @Attention : Last cmd not saved!
                 fprintf(h, "%s\n", History.History_Item_Get(i).c_str());
             fclose(h);
-            printf("Script saved from history as %s\n", filename.c_str());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Script saved from history as " + filename);
+            Cli_Output.Output_NewLine();
         } else {
-            printf("ERROR: can not open file %s for write\n", filename.c_str());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("ERROR: can not open file " + filename + " for write");
+            Cli_Output.Output_NewLine();
         }
         return true;
     }
@@ -145,7 +153,9 @@ public:
         string filename = cmd->Items[2]->Value_Str;
         FILE *h = fopen(filename.c_str(), "rt");
         if (h) {
-            printf("%s Do script %s - Begin\n", Str_Rem.c_str(), filename.c_str());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Begin");
+            Cli_Output.Output_NewLine();
             bool is_debug = false;
             bool debug_res = false;
             char *s;
@@ -157,14 +167,17 @@ public:
                     if (!is_no_history && !is_debug) {
                         History.History_Put(s_trim);
                     }
-                    //Cli_Command_Processor.Do(s_trim, is_debug, debug_res);
                     Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
+                    Cli_Output.Output_Str(s_trim);
                     Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                 }
             } while (s && !Cmd_Script_Stop && !Cmd_Quit);
-            printf("%s Do script %s - %s\n", Str_Rem.c_str(), filename.c_str(), (Cmd_Script_Stop ? "Stopped" : "End"));
+            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop ? "Stopped" : "End"));
+            Cli_Output.Output_NewLine();
         } else {
-            printf("ERROR: can not open file %s for read\n", filename.c_str());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("ERROR: can not open file " + filename + " for read");
+            Cli_Output.Output_NewLine();
         }
         return true;
     }
