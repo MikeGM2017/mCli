@@ -20,6 +20,7 @@ class Cmd_Item_Rem : public Cmd_Item_Base {
 public:
 
     Cmd_Item_Rem(string str_rem, string help) : Cmd_Item_Base(str_rem, help) {
+        Type = "Rem";
     }
 
     virtual string Debug_Value_Get() {
