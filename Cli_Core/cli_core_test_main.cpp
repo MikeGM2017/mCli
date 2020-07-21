@@ -37,7 +37,7 @@
 
 #include "Cli_TAB_Processor.h"
 
-#include "Cli_Module_Test_Tab.h"
+#include "Cli_Module_Test_Tab_Min_Max.h"
 #include "Cli_Module_Test_Terminal.h"
 
 int main(int argc, char *argv[]) {
@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
     bool Cmd_Wait_Stop = false;
     Modules.Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
-    Modules.Add(new Cli_Module_Test_Tab());
+    Modules.Add(new Cli_Module_Test_Tab_Min_Max());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
 
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
