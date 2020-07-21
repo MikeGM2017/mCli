@@ -44,9 +44,7 @@ public:
         CMD_ID_help_full,
         CMD_ID_help_full_verbose,
         CMD_ID_help_command,
-        CMD_ID_help_command_all,
         CMD_ID_help_command_verbose,
-        CMD_ID_help_command_all_verbose,
 
         CMD_ID_help_module_module_name,
         CMD_ID_help_module_module_name_verbose,
