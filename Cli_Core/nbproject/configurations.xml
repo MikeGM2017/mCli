@@ -23,6 +23,7 @@
         <itemPath>Cli_Modules/Cli_Cmd_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Cmd_Privilege_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Debug.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Help.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_History.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Log.h</itemPath>
@@ -240,6 +241,11 @@
       <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Debug.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -648,6 +654,11 @@
       <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Debug.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>

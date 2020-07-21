@@ -380,8 +380,8 @@ public:
         cmd_items.push_back(Cmd_Item_Int("7", ""));
         cmd_items.push_back(Cmd_Item_Int_Range(1, 4095, "2000", ""));
         cmd_items.push_back(Cmd_Item_Int_List(1, 4095, "2,7,2000,3000-4000", ""));
-        
-        return false;
+
+
 
         for (int i = 0; i < cmd_items.size(); i++) {
             stringstream s_str;

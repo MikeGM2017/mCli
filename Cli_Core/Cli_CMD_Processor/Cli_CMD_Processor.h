@@ -125,11 +125,7 @@ public:
                                     break;
                                 default:
                                     Cli_Output.Output_NewLine();
-                                    Cli_Output.Output_Str("ERROR: ");
-                                    Cli_Output.Output_Str(s_trim);
-                                    Cli_Output.Output_Str(" - ");
-                                    Cli_Output.Output_Str(Cmd_Item_Valid_Result_Func::To_String(res_cmd_valid));
-                                    //Cli_Output.Output_NewLine();
+                                    Cli_Output.Output_Str("ERROR: " + s_trim + " - " + Cmd_Item_Valid_Result_Func::To_String(res_cmd_valid));
                             }
                         }
                     }
@@ -137,8 +133,7 @@ public:
             }
             if (!is_processed) {
                 Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str(s_trim);
-                Cli_Output.Output_Str(" - Not Processed");
+                Cli_Output.Output_Str(s_trim + " - Not Processed");
                 Cli_Output.Output_NewLine();
             }
         } else {

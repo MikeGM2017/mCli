@@ -31,14 +31,13 @@
 #include "Cli_Module_Base_Wait.h"
 #include "Cli_Module_Base_Debug.h"
 
-#include "Cli_Module_Test_Tab.h"
-
 #include "Str_Filter.h"
 
 #include "Cli_CMD_Processor.h"
 
 #include "Cli_TAB_Processor.h"
 
+#include "Cli_Module_Test_Tab.h"
 #include "Cli_Module_Test_Terminal.h"
 
 int main(int argc, char *argv[]) {
@@ -94,7 +93,7 @@ int main(int argc, char *argv[]) {
     Modules.Add(new Cli_Module_Test_Tab());
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
 
-    Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor));
+    Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
     // Modules Add - End
 
@@ -141,7 +140,6 @@ int main(int argc, char *argv[]) {
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
             {
-                //Cli.Process_Tab(input_item, is_invitation_print);
                 TAB_Processor.Process_Input_Item(input_item, is_invitation_print);
             }
                 break;

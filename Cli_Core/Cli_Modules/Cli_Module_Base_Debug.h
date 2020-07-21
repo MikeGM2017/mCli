@@ -14,7 +14,13 @@
 #ifndef CLI_MODULE_BASE_DEBUG_H
 #define CLI_MODULE_BASE_DEBUG_H
 
+#include <sstream>
+
+using namespace std;
+
 #include "Cli_Module.h"
+
+#include "Cli_Output_Abstract.h"
 
 #include "Cli_CMD_Processor_Abstract.h"
 
@@ -25,8 +31,10 @@ protected:
     Cli_Modules &Modules;
 
     vector<Level_Description> &Levels;
-    
+
     Cli_CMD_Processor_Abstract &CMD_Processor;
+
+    Cli_Output_Abstract &Cli_Output;
 
 public:
 
@@ -46,9 +54,11 @@ public:
     }
 
     Cli_Module_Base_Debug(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
-            vector<Level_Description> &levels, Cli_CMD_Processor_Abstract &cmd_processor) : Cli_Module("Base Debug"),
+            vector<Level_Description> &levels, Cli_CMD_Processor_Abstract &cmd_processor,
+            Cli_Output_Abstract &cli_output) : Cli_Module("Base Debug"),
     User_Privilege(user_privilege), Modules(modules),
-    Levels(levels), CMD_Processor(cmd_processor) {
+    Levels(levels), CMD_Processor(cmd_processor),
+    Cli_Output(cli_output) {
         {
             // debug cli
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_debug_cli);
@@ -113,17 +123,24 @@ public:
             int &total_count_checked,
             int &total_count_passed,
             int &total_count_failed) {
-        bool is_no_history = true;
         bool is_debug = true;
         bool debug_res = false;
         for (int module = 0; module < Modules.Get_Size(); module++) {
             Cli_Module *module_ptr = Modules.Get(module);
             total_count_cmd_id += module_ptr->Cmd_ID_Count_Get();
-            if (is_counts)
-                printf("Module: %s id_cnt=%d\n", module_ptr->Name_Get().c_str(), module_ptr->Cmd_ID_Count_Get());
+            if (is_counts) {
+                stringstream s_str;
+                s_str << "Module: " << module_ptr->Name_Get() << " id_cnt=" << module_ptr->Cmd_ID_Count_Get();
+                Cli_Output.Output_Str(s_str.str());
+                Cli_Output.Output_NewLine();
+            }
             total_count += module_ptr->Cmd_Count_Get();
-            if (is_counts)
-                printf("Module: %s cmd_cnt=%d\n", module_ptr->Name_Get().c_str(), module_ptr->Cmd_Count_Get());
+            if (is_counts) {
+                stringstream s_str;
+                s_str << "Module: " << module_ptr->Name_Get() << " cmd_cnt=" << module_ptr->Cmd_Count_Get();
+                Cli_Output.Output_Str(s_str.str());
+                Cli_Output.Output_NewLine();
+            }
             for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
                 Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
                 string s;
@@ -142,16 +159,20 @@ public:
                     debug_res = false;
                     CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                     if (is_verbose) {
-                        if (!is_failed_only || (is_failed_only && !debug_res))
-                            printf("%s - %s\n", s.c_str(), debug_res ? "Ok" : "Failed");
+                        if (!is_failed_only || (is_failed_only && !debug_res)) {
+                            Cli_Output.Output_Str(s + " - " + (debug_res ? "Ok" : "Failed"));
+                            Cli_Output.Output_NewLine();
+                        }
                     }
                 } else {
                     Levels.push_back(Level_Description(level));
                     debug_res = false;
                     CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                     if (is_verbose) {
-                        if (!is_failed_only || (is_failed_only && !debug_res))
-                            printf("[%s] %s - %s\n", cmd_ptr->Level_Get().c_str(), s.c_str(), debug_res ? "Ok" : "Failed");
+                        if (!is_failed_only || (is_failed_only && !debug_res)) {
+                            Cli_Output.Output_Str("[" + cmd_ptr->Level_Get() + "] " + s + " - " + (debug_res ? "Ok" : "Failed"));
+                            Cli_Output.Output_NewLine();
+                        }
                     }
                 }
                 total_count_checked++;
@@ -170,16 +191,22 @@ public:
         int total_count_checked = 0;
         int total_count_passed = 0;
         int total_count_failed = 0;
+        Cli_Output.Output_NewLine();
         Debug_Cli_Modules(is_counts, is_verbose, is_failed_only,
                 total_count_cmd_id,
                 total_count,
                 total_count_checked,
                 total_count_passed,
                 total_count_failed);
-        printf("Debug Cli Result: id_cnt:%d total:%d checked:%d passed:%d failed:%d\n",
-                total_count_cmd_id,
-                total_count,
-                total_count_checked, total_count_passed, total_count_failed);
+        stringstream s_str;
+        s_str << "Debug Cli Result:"
+                << " id_cnt:" << total_count_cmd_id
+                << " total:" << total_count
+                << " checked:" << total_count_checked
+                << " passed:" << total_count_passed
+                << " failed:" << total_count_failed;
+        Cli_Output.Output_Str(s_str.str());
+        Cli_Output.Output_NewLine();
         Levels.clear();
 
         return true;

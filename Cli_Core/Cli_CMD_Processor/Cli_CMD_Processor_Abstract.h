@@ -28,7 +28,7 @@ public:
 
     virtual ~Cli_CMD_Processor_Abstract() {
     }
-    
+
     virtual bool Process_Input_Item(Cli_Input_Item &input_item, bool is_debug, bool &debug_res) = 0;
 
 };
