@@ -64,9 +64,9 @@ public:
 
     virtual string Str_Trim(string s) {
         int pos_beg = 0;
-        int pos_end = s.size() - 1;
+        int pos_end = s.size() ? (s.size() - 1) : 0;
         while (pos_beg < s.size() && (s[pos_beg] == ' ' || s[pos_beg] == '\t' || s[pos_beg] == '\r' || s[pos_beg] == '\n')) pos_beg++;
-        while (pos_end - 1 > pos_beg && (s[pos_end] == ' ' || s[pos_end] == '\t' || s[pos_end] == '\r' || s[pos_end] == '\n')) pos_end--;
+        while (pos_end > pos_beg && (s[pos_end] == ' ' || s[pos_end] == '\t' || s[pos_end] == '\r' || s[pos_end] == '\n')) pos_end--;
         string s_trim = s.substr(pos_beg, pos_end - pos_beg + 1);
         return s_trim;
     }
