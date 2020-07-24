@@ -32,6 +32,7 @@ public:
             case CMD_ITEM_MATCH_BUT_ERROR: return "MATCH_BUT_ERROR";
             case CMD_ITEM_EMPTY: return "EMPTY";
             case CMD_ITEM_INCOMPLETE: return "INCOMPLETE";
+            case CMD_ITEM_INCOMPLETE_STR: return "INCOMPLETE_STR";
             case CMD_ITEM_TOO_LONG: return "TOO_LONG";
             case CMD_ITEM_OUT_OF_RANGE: return "OUT_OF_RANGE";
             case CMD_ITEM_OUT_OF_ORDER: return "OUT_OF_ORDER";

@@ -44,7 +44,7 @@ public:
 
         if (s.size() == 0) return CMD_ITEM_EMPTY;
 
-        if (s.size() == 1 && s[0] == '"') return CMD_ITEM_INCOMPLETE;
+        if (s.size() == 1 && s[0] == '"') return CMD_ITEM_INCOMPLETE_STR;
         if (s.size() >= 1 && s[0] != '"') return CMD_ITEM_ERROR;
 
         for (int pos = 0; pos < s.size(); pos++) {
@@ -72,10 +72,10 @@ public:
 
         if (s.size() == 2) {
             if (s[0] == '"' && s[1] == '"') return CMD_ITEM_ERROR; //CMD_ITEM_OK;
-            return CMD_ITEM_INCOMPLETE;
+            return CMD_ITEM_INCOMPLETE_STR;
         }
 
-        if (s[s.size() - 1] != '"') return CMD_ITEM_INCOMPLETE;
+        if (s[s.size() - 1] != '"') return CMD_ITEM_INCOMPLETE_STR;
 
         return CMD_ITEM_OK;
     }

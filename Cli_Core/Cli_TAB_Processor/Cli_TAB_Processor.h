@@ -131,7 +131,7 @@ public:
 
         vector<Cli_TAB_Result *> cmd_tab_list;
 
-        bool is_block_space_after = false;
+        bool is_incomplete_str = false;
         char last_char = 0;
         bool is_last_char_space = false;
         bool is_last_char_comma = false;
@@ -209,56 +209,65 @@ public:
                                             //cmd_tab_ptr->is_space_after_add = false;
                                             cmd_tab_list.push_back(cmd_tab_ptr);
                                         }
-                                    } else if (res_parse == CMD_ITEM_INCOMPLETE) {
-                                        string token_str = tokens[token]->Text_Get();
-                                        string cmd_item_str = cmd_item_ptr->Text_Get();
-                                        vector<string> s_incomplete_tail_list;
-                                        if (!is_last_char_space) {
-                                            s_incomplete_tail_list = cmd_item_ptr->Incomplete_Tail_List_Get(token_str);
-                                        }
-                                        if (!s_incomplete_tail_list.empty()) {
+                                    } else if (res_parse == CMD_ITEM_INCOMPLETE || res_parse == CMD_ITEM_INCOMPLETE_STR) {
+                                        if (res_parse == CMD_ITEM_INCOMPLETE_STR) {
                                             Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
                                             cmd_tab_ptr->cmd_ptr = cmd_ptr;
-                                            cmd_tab_ptr->s_add_list = s_incomplete_tail_list;
-
-                                            string s_beg;
-                                            if (!token_str.empty()) {
-                                                size_t pos = token_str.find_last_of(','); // @Magic: for Cmd_Item_Word_List
-                                                if (pos == token_str.npos) {
-                                                    s_beg = token_str;
-                                                } else {
-                                                    s_beg = token_str.substr(pos + 1); // @Magic: for Cmd_Item_Word_List
-                                                }
-                                            }
-
-                                            for (int s_add_index = 0; s_add_index < cmd_tab_ptr->s_add_list.size(); s_add_index++) {
-                                                string s_add_item = cmd_tab_ptr->s_add_list[s_add_index];
-                                                cmd_tab_ptr->s_full_list.push_back(s_beg + s_add_item);
-                                            }
-
-                                            cmd_tab_ptr->is_space_after_add =
-                                                    cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
-
-                                            if (token == cmd_ptr->Items.size() - 1) { // Last token in cmd list
-                                                cmd_tab_ptr->Is_Enter = true;
-                                                cmd_tab_ptr->is_space_after_add = false;
-                                            }
-
+                                            is_incomplete_str = true;
+                                            cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get() + " - Incomplete";
+                                            cmd_tab_ptr->is_space_after_add = false;
                                             cmd_tab_list.push_back(cmd_tab_ptr);
-                                        } else if (s_incomplete_tail_list.empty()) {
-                                            Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
-                                            cmd_tab_ptr->cmd_ptr = cmd_ptr;
-                                            char last_token_char = (token_str.empty() ? 0 : token_str[token_str.size() - 1]);
-                                            if (!is_last_char_space || last_token_char == ' ' || last_token_char == '\t') {
-                                                cmd_tab_ptr->s_log = cmd_item_str + " - Incomplete";
+                                        } else {
+                                            string token_str = tokens[token]->Text_Get();
+                                            string cmd_item_str = cmd_item_ptr->Text_Get();
+                                            vector<string> s_incomplete_tail_list;
+                                            if (!is_last_char_space) {
+                                                s_incomplete_tail_list = cmd_item_ptr->Incomplete_Tail_List_Get(token_str);
                                             }
-                                            if (!is_last_char_comma && !is_last_char_commas) {
+                                            if (!s_incomplete_tail_list.empty()) {
+                                                Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
+                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                                cmd_tab_ptr->s_add_list = s_incomplete_tail_list;
+
+                                                string s_beg;
+                                                if (!token_str.empty()) {
+                                                    size_t pos = token_str.find_last_of(','); // @Magic: for Cmd_Item_Word_List
+                                                    if (pos == token_str.npos) {
+                                                        s_beg = token_str;
+                                                    } else {
+                                                        s_beg = token_str.substr(pos + 1); // @Magic: for Cmd_Item_Word_List
+                                                    }
+                                                }
+
+                                                for (int s_add_index = 0; s_add_index < cmd_tab_ptr->s_add_list.size(); s_add_index++) {
+                                                    string s_add_item = cmd_tab_ptr->s_add_list[s_add_index];
+                                                    cmd_tab_ptr->s_full_list.push_back(s_beg + s_add_item);
+                                                }
+
                                                 cmd_tab_ptr->is_space_after_add =
                                                         cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
-                                            } else {
-                                                cmd_tab_ptr->is_space_after_add = false;
+
+                                                if (token == cmd_ptr->Items.size() - 1) { // Last token in cmd list
+                                                    cmd_tab_ptr->Is_Enter = true;
+                                                    cmd_tab_ptr->is_space_after_add = false;
+                                                }
+
+                                                cmd_tab_list.push_back(cmd_tab_ptr);
+                                            } else if (s_incomplete_tail_list.empty()) {
+                                                Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
+                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                                char last_token_char = (token_str.empty() ? 0 : token_str[token_str.size() - 1]);
+                                                if (!is_last_char_space || last_token_char == ' ' || last_token_char == '\t') {
+                                                    cmd_tab_ptr->s_log = cmd_item_str + " - Incomplete";
+                                                }
+                                                if (!is_last_char_comma && !is_last_char_commas) {
+                                                    cmd_tab_ptr->is_space_after_add =
+                                                            cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                                } else {
+                                                    cmd_tab_ptr->is_space_after_add = false;
+                                                }
+                                                cmd_tab_list.push_back(cmd_tab_ptr);
                                             }
-                                            cmd_tab_list.push_back(cmd_tab_ptr);
                                         }
                                     } else {
                                         is_valid = false;
@@ -542,6 +551,9 @@ public:
                             Is_Space_After = true; // wrong: help "s<TAB> -> + ' ' (1 case)
                             //Is_Space_After = is_space_after_log_1; // wrong: set str<TAB> -> log str + no ' ' (12 cases)
                             //Is_Space_After = false; // wrong: set str<TAB> -> log str + no ' ' (12 cases)
+                        }
+                        if (is_incomplete_str) {
+                            Is_Space_After = false;
                         }
                     }
 
@@ -929,7 +941,7 @@ public:
         }
         cmd_tab_list.clear();
 
-        if (is_block_space_after) {
+        if (is_incomplete_str) {
             Is_Space_After = false;
         }
 

@@ -37,7 +37,7 @@ protected:
             char c = s_src[i];
             switch (c) {
                 case '\\':
-                    decode_res = CMD_ITEM_INCOMPLETE;
+                    decode_res = CMD_ITEM_INCOMPLETE_STR;
                     is_escape = true;
                     break;
                 default:
@@ -73,7 +73,7 @@ protected:
         }
 
         if (is_in_commas && c_commas != c_last)
-            return CMD_ITEM_INCOMPLETE;
+            return CMD_ITEM_INCOMPLETE_STR;
 
         if (c_last == '"' || c_last == '\'') {
             if (c_last != s_src[0])
@@ -110,8 +110,8 @@ public:
         if (s.size() == 1) {
             if (s[0] == '\n') return CMD_ITEM_ERROR;
             if (s[0] == '\r') return CMD_ITEM_ERROR;
-            if (s[0] == '"') return CMD_ITEM_INCOMPLETE;
-            if (s[0] == '\'') return CMD_ITEM_INCOMPLETE;
+            if (s[0] == '"') return CMD_ITEM_INCOMPLETE_STR;
+            if (s[0] == '\'') return CMD_ITEM_INCOMPLETE_STR;
             if (s[0] != '"' && s[0] != '\'') return CMD_ITEM_OK;
         }
 
@@ -122,8 +122,8 @@ public:
         if (s.size() == 2) {
             if (s[0] == '"' && s[1] == '"') return CMD_ITEM_OK;
             if (s[0] == '\'' && s[1] == '\'') return CMD_ITEM_OK;
-            if (s[0] == '"' && s[1] != '"') return CMD_ITEM_INCOMPLETE;
-            if (s[0] == '\'' && s[1] != '\'') return CMD_ITEM_INCOMPLETE;
+            if (s[0] == '"' && s[1] != '"') return CMD_ITEM_INCOMPLETE_STR;
+            if (s[0] == '\'' && s[1] != '\'') return CMD_ITEM_INCOMPLETE_STR;
             if (s[0] != '\\' && s[1] != '\\') {
                 if (s[0] != '"' && s[1] == '"') return CMD_ITEM_ERROR;
                 if (s[0] != '\'' && s[1] == '\'') return CMD_ITEM_ERROR;
