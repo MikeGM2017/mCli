@@ -18,6 +18,9 @@
         <itemPath>Cli_Input/Cli_Input_Abstract.h</itemPath>
         <itemPath>Cli_Input/Cli_Input_termios.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f11" displayName="Cli_Module_Test" projectFiles="true">
+        <itemPath>Cli_Module_Test/Cli_Module_Test_Tab.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f4" displayName="Cli_Modules" projectFiles="true">
         <itemPath>Cli_Modules/Cli_Cmd.h</itemPath>
         <itemPath>Cli_Modules/Cli_Cmd_ID.h</itemPath>
@@ -46,6 +49,7 @@
         <itemPath>Cli_TAB_Processor/Cli_TAB_Processor.h</itemPath>
         <itemPath>Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h</itemPath>
         <itemPath>Cli_TAB_Processor/Cli_TAB_Result.h</itemPath>
+        <itemPath>Cli_TAB_Processor/Cli_TAB_Variant.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Cmd_Item" projectFiles="true">
         <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
@@ -208,6 +212,7 @@
             <pElem>Cli_History</pElem>
             <pElem>Cli_CMD_Processor</pElem>
             <pElem>Cli_TAB_Processor</pElem>
+            <pElem>Cli_Module_Test</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
@@ -233,6 +238,11 @@
       <item path="Cli_Input/Cli_Input_termios.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_termios.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Test/Cli_Module_Test_Tab.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Cmd.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -303,6 +313,11 @@
             flavor2="0">
       </item>
       <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Variant.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -650,6 +665,11 @@
       </item>
       <item path="Cli_Input/Cli_Input_termios.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Module_Test/Cli_Module_Test_Tab.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Cmd.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Cmd_ID.h" ex="false" tool="3" flavor2="0">
@@ -719,6 +739,11 @@
             flavor2="0">
       </item>
       <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Variant.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
