@@ -82,8 +82,9 @@ public:
         CMD_ID_test_set_datetime,
         CMD_ID_test_set_enable,
         CMD_ID_test_set_loopback,
-        CMD_ID_test_set_loopback_repeating,
         CMD_ID_test_set_loopback_disable,
+        CMD_ID_test_set_loopback_repeating,
+        CMD_ID_test_set_loopback_repeating_disable,
         CMD_ID_LAST
     };
 
@@ -334,6 +335,19 @@ public:
             Cmd_Add(cmd);
         }
         {
+            // test set loopback disable
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback_disable);
+            cmd->Text_Set("set loopback disable");
+            cmd->Help_Set("test: set loopback disable");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
+            cmd->Item_Add(new Cmd_Item_Word("disable", "test: set loopback disable"));
+            Cmd_Add(cmd);
+        }
+
+        {
             // test set loopback repeating [raw,net,local,remote]
             vector<string> words;
             words.push_back("raw");
@@ -355,17 +369,18 @@ public:
 
             Cmd_Add(cmd);
         }
-
         {
-            // test set loopback disable
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback_disable);
-            cmd->Text_Set("set loopback disable");
-            cmd->Help_Set("test: set loopback disable");
+            // test set loopback repeating disable
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback_repeating_disable);
+            cmd->Text_Set("set loopback repeating disable");
+            cmd->Help_Set("test: set loopback repeating disable");
             cmd->Is_Global_Set(false);
             cmd->Level_Set("test terminal");
             cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
             cmd->Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
-            cmd->Item_Add(new Cmd_Item_Word("disable", "test: set loopback disable"));
+            cmd->Item_Add(new Cmd_Item_Word("repeating", "test: set loopback repeating"));
+            cmd->Item_Add(new Cmd_Item_Word("disable", "test: set loopback repeating disable"));
+
             Cmd_Add(cmd);
         }
 
@@ -507,6 +522,7 @@ public:
         }
         Cli_Output.Output_Str(s_str.str());
         Cli_Output.Output_NewLine();
+        return true;
     }
 
     bool test_set_str(string value) {
@@ -599,6 +615,14 @@ public:
         return true;
     }
 
+    bool test_set_loopback_disable() {
+        Value_Loopback = "disable";
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str("Loopback=" + Value_Loopback);
+        Cli_Output.Output_NewLine();
+        return true;
+    }
+
     bool test_set_loopback_repeating(Cli_Cmd *cmd) {
 
         Cmd_Item_Word_List *word_list = (Cmd_Item_Word_List *) cmd->Items[3];
@@ -617,10 +641,10 @@ public:
         return true;
     }
 
-    bool test_set_loopback_disable() {
-        Value_Loopback = "disable";
+    bool test_set_loopback_repeating_disable() {
+        Value_Loopback_Repeating = "disable";
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Loopback=" + Value_Loopback);
+        Cli_Output.Output_Str("Loopback Repeating=" + Value_Loopback_Repeating);
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -723,14 +747,16 @@ public:
             case CMD_ID_test_set_loopback:
                 if (is_debug) return true;
                 return test_set_loopback(cmd);
+            case CMD_ID_test_set_loopback_disable:
+                if (is_debug) return true;
+                return test_set_loopback_disable();
 
             case CMD_ID_test_set_loopback_repeating:
                 if (is_debug) return true;
                 return test_set_loopback_repeating(cmd);
-
-            case CMD_ID_test_set_loopback_disable:
+            case CMD_ID_test_set_loopback_repeating_disable:
                 if (is_debug) return true;
-                return test_set_loopback_disable();
+                return test_set_loopback_repeating_disable();
 
         }
         return false; // Not Implemented

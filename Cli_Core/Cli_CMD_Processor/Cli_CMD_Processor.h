@@ -103,6 +103,7 @@ public:
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr->Is_Valid(tokens);
                             switch (res_cmd_valid) {
                                 case CMD_ITEM_OK:
+                                case CMD_ITEM_OK_CAN_CONTINUE:
                                 {
                                     if (!is_debug)
                                         Cli_Output.Output_NewLine();

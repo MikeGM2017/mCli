@@ -16,6 +16,7 @@
 
 enum Cmd_Item_Valid_Result {
     CMD_ITEM_OK,
+    CMD_ITEM_OK_CAN_CONTINUE,
     CMD_ITEM_NOT_MATCH,
     CMD_ITEM_ERROR,
     CMD_ITEM_MATCH_BUT_ERROR,
