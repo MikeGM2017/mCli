@@ -104,6 +104,7 @@ public:
                             switch (res_cmd_valid) {
                                 case CMD_ITEM_OK:
                                 case CMD_ITEM_OK_CAN_CONTINUE:
+                                case CMD_ITEM_OK_STR_WITHOUT_COMMAS:
                                 {
                                     if (!is_debug)
                                         Cli_Output.Output_NewLine();

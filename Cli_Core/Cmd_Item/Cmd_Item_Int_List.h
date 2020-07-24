@@ -120,10 +120,10 @@ public:
         }
         // Последнее значение
         if (prev_is_minus) {
-            return CMD_ITEM_INCOMPLETE;
+            return CMD_ITEM_INCOMPLETE_STR;
         }
         if (!prev_is_digit) {
-            return CMD_ITEM_INCOMPLETE;
+            return CMD_ITEM_INCOMPLETE_STR;
         }
         // Повтор для последнего значения - Beg
         if (n_beg_Valid && prev_is_digit) {
@@ -153,10 +153,10 @@ public:
         // Повтор для последнего значения - End
 
         if (s[s.size() - 1] == ',') {
-            return CMD_ITEM_INCOMPLETE;
+            return CMD_ITEM_INCOMPLETE_STR;
         }
         if (s[s.size() - 1] == '-') {
-            return CMD_ITEM_INCOMPLETE;
+            return CMD_ITEM_INCOMPLETE_STR;
         }
 
         return CMD_ITEM_OK; // Список значений, попадающие в Min...Max

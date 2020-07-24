@@ -27,6 +27,7 @@ public:
         switch (v) {
             case CMD_ITEM_OK: return "OK";
             case CMD_ITEM_OK_CAN_CONTINUE: return "OK_CAN_CONTINUE";
+            case CMD_ITEM_OK_STR_WITHOUT_COMMAS: return "OK_STR_WITHOUT_COMMAS";
             case CMD_ITEM_NOT_MATCH: return "NOT_MATCH";
             case CMD_ITEM_ERROR: return "ERROR";
             case CMD_ITEM_MATCH_BUT_ERROR: return "MATCH_BUT_ERROR";

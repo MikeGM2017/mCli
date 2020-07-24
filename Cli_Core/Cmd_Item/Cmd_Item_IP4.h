@@ -67,10 +67,10 @@ public:
 
         if (is_Point_Double) return CMD_ITEM_ERROR;
 
-        if (pointCount < 3) return CMD_ITEM_INCOMPLETE;
+        if (pointCount < 3) return CMD_ITEM_INCOMPLETE_STR;
         if (pointCount > 3) return CMD_ITEM_ERROR;
 
-        if (nCount < 4) return CMD_ITEM_INCOMPLETE;
+        if (nCount < 4) return CMD_ITEM_INCOMPLETE_STR;
         if (nCount > 4) return CMD_ITEM_ERROR;
 
         return CMD_ITEM_OK;

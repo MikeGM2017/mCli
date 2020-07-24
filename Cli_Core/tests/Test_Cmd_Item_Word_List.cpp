@@ -28,14 +28,14 @@ typedef std::pair< std::string, Cmd_Item_Valid_Result > Cmd_Item_Test_Pair;
 static const Cmd_Item_Test_Pair TestVector_1[] = {
     Cmd_Item_Test_Pair("", CMD_ITEM_EMPTY),
 
-    Cmd_Item_Test_Pair("raw", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("net", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("local", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("remote", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("raw", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("net", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("local", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("remote", CMD_ITEM_OK_CAN_CONTINUE),
 
     Cmd_Item_Test_Pair("raw,net,local,remote", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("raw,net,local", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("raw,net", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("raw,net,local", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("raw,net", CMD_ITEM_OK_CAN_CONTINUE),
 
     Cmd_Item_Test_Pair("r", CMD_ITEM_INCOMPLETE),
     Cmd_Item_Test_Pair("ra", CMD_ITEM_INCOMPLETE),
@@ -111,14 +111,14 @@ void test1() {
 static const Cmd_Item_Test_Pair TestVector_2[] = {
     Cmd_Item_Test_Pair("", CMD_ITEM_EMPTY),
 
-    Cmd_Item_Test_Pair("raw", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("net", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("local", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("remote", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("raw", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("net", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("local", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("remote", CMD_ITEM_OK_CAN_CONTINUE),
 
-    Cmd_Item_Test_Pair("raw,net,local,remote", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("raw,net,local", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("raw,net", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("raw,net,local,remote", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("raw,net,local", CMD_ITEM_OK_CAN_CONTINUE),
+    Cmd_Item_Test_Pair("raw,net", CMD_ITEM_OK_CAN_CONTINUE),
 
     Cmd_Item_Test_Pair("r", CMD_ITEM_INCOMPLETE),
     Cmd_Item_Test_Pair("ra", CMD_ITEM_INCOMPLETE),
@@ -147,10 +147,10 @@ static const Cmd_Item_Test_Pair TestVector_2[] = {
     Cmd_Item_Test_Pair("local,r", CMD_ITEM_INCOMPLETE),
     Cmd_Item_Test_Pair("remote,r", CMD_ITEM_INCOMPLETE),
 
-    Cmd_Item_Test_Pair("raw,raw", CMD_ITEM_OK),//CMD_ITEM_ERROR), // @Attention: Can Repeat
-    Cmd_Item_Test_Pair("net,net", CMD_ITEM_OK),//CMD_ITEM_ERROR), // @Attention: Can Repeat
-    Cmd_Item_Test_Pair("local,local", CMD_ITEM_OK),//CMD_ITEM_ERROR), // @Attention: Can Repeat
-    Cmd_Item_Test_Pair("remote,remote", CMD_ITEM_OK),//CMD_ITEM_ERROR), // @Attention: Can Repeat
+    Cmd_Item_Test_Pair("raw,raw", CMD_ITEM_OK_CAN_CONTINUE),//CMD_ITEM_ERROR), // @Attention: Can Repeat
+    Cmd_Item_Test_Pair("net,net", CMD_ITEM_OK_CAN_CONTINUE),//CMD_ITEM_ERROR), // @Attention: Can Repeat
+    Cmd_Item_Test_Pair("local,local", CMD_ITEM_OK_CAN_CONTINUE),//CMD_ITEM_ERROR), // @Attention: Can Repeat
+    Cmd_Item_Test_Pair("remote,remote", CMD_ITEM_OK_CAN_CONTINUE),//CMD_ITEM_ERROR), // @Attention: Can Repeat
 
     Cmd_Item_Test_Pair("rawz", CMD_ITEM_ERROR),
     Cmd_Item_Test_Pair("netz", CMD_ITEM_ERROR),

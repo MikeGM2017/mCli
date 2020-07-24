@@ -165,49 +165,61 @@ public:
                                     cmd_tab_ptr->is_space_after_add = false;
                                     cmd_tab_list.push_back(cmd_tab_ptr);
                                 } else if (token < tokens.size() - 1) { // Not last token in token list, but not OK -> not valid
-                                    if (res_parse != CMD_ITEM_OK) {
+                                    if (res_parse != CMD_ITEM_OK
+                                            && res_parse != CMD_ITEM_OK_CAN_CONTINUE
+                                            && res_parse != CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
                                         is_valid = false;
                                         break;
                                     }
                                 } else if (token == tokens.size() - 1) { // Last token in token list
-                                    if (res_parse == CMD_ITEM_OK) {
-                                        if (token < cmd_ptr->Items.size() - 1) { // Not last token in cmd list
-                                            Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
-                                            cmd_tab_ptr->cmd_ptr = cmd_ptr;
-
-                                            //cmd_tab_ptr->is_space_after_add =
-                                            //        cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
-                                            if (token + 1 < cmd_ptr->Items.size() - 1) {
-                                                cmd_tab_ptr->is_space_after_add =
-                                                        cmd_item_ptr->Is_Space_After_Add(cmd_ptr->Items[token + 1]->Text_Get());
-                                            } else {
-                                                cmd_tab_ptr->is_space_after_add = false; // Next token - last token in cmd list
-                                            }
-
-                                            //if (is_last_space) {
-                                            cmd_tab_ptr->s_log = cmd_ptr->Items[token + 1]->Text_Get();
-                                            //cmd_tab_ptr->s_log_or_add = cmd_ptr->Items[token + 1]->Text_Get();
-                                            //} else {
-                                            //    cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
-                                            //    cmd_tab_ptr->s_log_or_add = cmd_item_ptr->Text_Get();
-                                            //}
-
-                                            cmd_tab_list.push_back(cmd_tab_ptr);
-                                        } else if (token == cmd_ptr->Items.size() - 1) { // Last token in cmd list
+                                    if (res_parse == CMD_ITEM_OK || res_parse == CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
+                                        if (res_parse == CMD_ITEM_OK_STR_WITHOUT_COMMAS && !is_last_char_space) {
                                             Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
                                             cmd_tab_ptr->cmd_ptr = cmd_ptr;
                                             cmd_tab_ptr->Is_Enter = true;
-                                            ////cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
-
-                                            //if (cmd_item_ptr->Type_Get() == "Str") {
-                                            //    cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
-                                            //}
-
-                                            //cmd_tab_ptr->s_log_or_add = cmd_item_ptr->Text_Get();
-                                            cmd_tab_ptr->is_space_after_add =
-                                                    cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
-                                            //cmd_tab_ptr->is_space_after_add = false;
+                                            //is_incomplete_str = true;
+                                            cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
+                                            cmd_tab_ptr->is_space_after_add = false;
                                             cmd_tab_list.push_back(cmd_tab_ptr);
+                                        } else {
+                                            if (token < cmd_ptr->Items.size() - 1) { // Not last token in cmd list
+                                                Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
+                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
+
+                                                //cmd_tab_ptr->is_space_after_add =
+                                                //        cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                                if (token + 1 < cmd_ptr->Items.size() - 1) {
+                                                    cmd_tab_ptr->is_space_after_add =
+                                                            cmd_item_ptr->Is_Space_After_Add(cmd_ptr->Items[token + 1]->Text_Get());
+                                                } else {
+                                                    cmd_tab_ptr->is_space_after_add = false; // Next token - last token in cmd list
+                                                }
+
+                                                //if (is_last_space) {
+                                                cmd_tab_ptr->s_log = cmd_ptr->Items[token + 1]->Text_Get();
+                                                //cmd_tab_ptr->s_log_or_add = cmd_ptr->Items[token + 1]->Text_Get();
+                                                //} else {
+                                                //    cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
+                                                //    cmd_tab_ptr->s_log_or_add = cmd_item_ptr->Text_Get();
+                                                //}
+
+                                                cmd_tab_list.push_back(cmd_tab_ptr);
+                                            } else if (token == cmd_ptr->Items.size() - 1) { // Last token in cmd list
+                                                Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
+                                                cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                                cmd_tab_ptr->Is_Enter = true;
+                                                ////cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
+
+                                                //if (cmd_item_ptr->Type_Get() == "Str") {
+                                                //    cmd_tab_ptr->s_log = cmd_item_ptr->Text_Get();
+                                                //}
+
+                                                //cmd_tab_ptr->s_log_or_add = cmd_item_ptr->Text_Get();
+                                                cmd_tab_ptr->is_space_after_add =
+                                                        cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
+                                                //cmd_tab_ptr->is_space_after_add = false;
+                                                cmd_tab_list.push_back(cmd_tab_ptr);
+                                            }
                                         }
                                     } else if (res_parse == CMD_ITEM_INCOMPLETE || res_parse == CMD_ITEM_INCOMPLETE_STR) {
                                         if (res_parse == CMD_ITEM_INCOMPLETE_STR) {
@@ -248,7 +260,7 @@ public:
                                                         cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
 
                                                 if (token == cmd_ptr->Items.size() - 1) { // Last token in cmd list
-                                                    cmd_tab_ptr->Is_Enter = true;
+                                                    //cmd_tab_ptr->Is_Enter = true;
                                                     cmd_tab_ptr->is_space_after_add = false;
                                                 }
 
@@ -501,8 +513,18 @@ public:
                             break;
                         }
                     }
-                    string s_last_token = tokens[tokens.size() - 1]->Text_Get();
-                    string s_common_part = s_common.substr(s_last_token.size());
+                    string s_last_token1 = tokens[tokens.size() - 1]->Text_Get();
+                    string s_last_token;
+                    size_t pos = s_last_token1.find_last_of(','); // @Magic: for Cmd_Item_Word_List
+                    if (pos == s_last_token1.npos) {
+                        s_last_token = s_last_token1;
+                    } else {
+                        s_last_token = s_last_token1.substr(pos + 1); // @Magic: for Cmd_Item_Word_List
+                    }
+                    string s_common_part;
+                    if (!s_common.empty()) {
+                        s_common_part = s_common.substr(s_last_token.size());
+                    }
                     if (!s_common_part.empty()) {
                         Is_Log = false;
                         s_log = "";
@@ -877,20 +899,27 @@ public:
                     break;
                 case CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_NO_SPACE:
                 {
-                    Is_Log = true;
+//                    Is_Log = true;
+//
+//                    s_log = "";
+//                    for (int i = 0; i < s_log_vector.size(); i++) {
+//                        s_log += " ";
+//                        s_log += s_log_vector[i];
+//                    }
+//                    s_log += " " + s_add_full_1;
+//                    s_log += " <Enter>";
+//
+//                    Is_Add = false;
+//                    s_add = "";
+//                    Is_Space_Before = false;
+//                    Is_Space_After = false;
 
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-                    s_log += " " + s_add_full_1;
-                    s_log += " <Enter>";
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
+                                        Is_Log = false;
+                                        s_log = "";
+                                        Is_Add = true;
+                                        s_add = s_add_1;
+                                        Is_Space_Before = false;
+                                        Is_Space_After = true;
 
                     is_tab_variant_found = true;
                 }

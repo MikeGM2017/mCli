@@ -30,15 +30,15 @@ static const Cmd_Item_Test_Pair TestVector[] = {
     Cmd_Item_Test_Pair("\"<str>\"", CMD_ITEM_OK),
     Cmd_Item_Test_Pair("\"  <str1>   <str2>    \"", CMD_ITEM_OK),
     Cmd_Item_Test_Pair("\"\"", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("\"", CMD_ITEM_INCOMPLETE),
-    Cmd_Item_Test_Pair("\"<str>", CMD_ITEM_INCOMPLETE),
+    Cmd_Item_Test_Pair("\"", CMD_ITEM_INCOMPLETE_STR),
+    Cmd_Item_Test_Pair("\"<str>", CMD_ITEM_INCOMPLETE_STR),
     Cmd_Item_Test_Pair("<str>\"", CMD_ITEM_ERROR),
-    Cmd_Item_Test_Pair("FF:FF:FF:FF:FF:FF", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("FF:FF:FF:FF:FF:FF", CMD_ITEM_OK_STR_WITHOUT_COMMAS),
 
     Cmd_Item_Test_Pair("<str>'", CMD_ITEM_ERROR),
 
     // Escaped:
-    Cmd_Item_Test_Pair("\\\"Str\\\"", CMD_ITEM_OK),
+    Cmd_Item_Test_Pair("\\\"Str\\\"", CMD_ITEM_OK_STR_WITHOUT_COMMAS),
 };
 
 void test1() {

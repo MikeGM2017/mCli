@@ -28,9 +28,9 @@ typedef std::pair< std::string, Cmd_Item_Valid_Result > Cmd_Item_Test_Pair;
 static const Cmd_Item_Test_Pair TestVector[] = {
     Cmd_Item_Test_Pair("", CMD_ITEM_EMPTY),
     Cmd_Item_Test_Pair("00:00:00:00:00:00", CMD_ITEM_OK),
-    Cmd_Item_Test_Pair("00:00:00:00:00:0", CMD_ITEM_INCOMPLETE),
+    Cmd_Item_Test_Pair("00:00:00:00:00:0", CMD_ITEM_INCOMPLETE_STR),
     Cmd_Item_Test_Pair("00:00:00:00:00:0x", CMD_ITEM_ERROR),
-    Cmd_Item_Test_Pair("00:00:00:00:00", CMD_ITEM_INCOMPLETE),
+    Cmd_Item_Test_Pair("00:00:00:00:00", CMD_ITEM_INCOMPLETE_STR),
     Cmd_Item_Test_Pair("00:00:00:00:00:FF", CMD_ITEM_OK),
     Cmd_Item_Test_Pair("FF:FF:FF:FF:FF:FF", CMD_ITEM_OK),
 };

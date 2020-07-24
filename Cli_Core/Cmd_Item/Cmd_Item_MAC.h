@@ -57,7 +57,7 @@ public:
             if (!Is_Char_Valid(s[pos], pos, s.size())) return CMD_ITEM_ERROR;
         }
 
-        if (s.size() < 17) return CMD_ITEM_INCOMPLETE;
+        if (s.size() < 17) return CMD_ITEM_INCOMPLETE_STR;
         if (s.size() > 17) return CMD_ITEM_ERROR;
 
         return CMD_ITEM_OK;

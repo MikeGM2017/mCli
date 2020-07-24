@@ -80,6 +80,10 @@ protected:
                 return CMD_ITEM_ERROR;
         }
 
+        if (decode_res == CMD_ITEM_OK && !s_src.empty() && s_src[0] != '\"' && s_src[0] != '\'') {
+            decode_res = CMD_ITEM_OK_STR_WITHOUT_COMMAS;
+        }
+
         return decode_res;
     }
 
@@ -98,21 +102,21 @@ public:
 
         //if (s == "\"\"") s = ""; // @Attention
 
-        if (s.size() >= 2 && s[0] == '"' && s[s.size() - 1] == '"')
-            s = s.substr(1, s.size() - 2);
-        else if (s.size() >= 2 && s[0] == '\'' && s[s.size() - 1] == '\'')
-            s = s.substr(1, s.size() - 2);
+        //if (s.size() >= 2 && s[0] == '"' && s[s.size() - 1] == '"')
+        //    s = s.substr(1, s.size() - 2);
+        //else if (s.size() >= 2 && s[0] == '\'' && s[s.size() - 1] == '\'')
+        //    s = s.substr(1, s.size() - 2);
 
         Value_Str = s; // @Attention: s is not decoded with escapes
 
-        if (s.size() == 0) return CMD_ITEM_OK; // @Attention
+        if (s.size() == 0) return CMD_ITEM_OK_STR_WITHOUT_COMMAS; // @Attention
 
         if (s.size() == 1) {
             if (s[0] == '\n') return CMD_ITEM_ERROR;
             if (s[0] == '\r') return CMD_ITEM_ERROR;
             if (s[0] == '"') return CMD_ITEM_INCOMPLETE_STR;
             if (s[0] == '\'') return CMD_ITEM_INCOMPLETE_STR;
-            if (s[0] != '"' && s[0] != '\'') return CMD_ITEM_OK;
+            if (s[0] != '"' && s[0] != '\'') return CMD_ITEM_OK_STR_WITHOUT_COMMAS;
         }
 
         //        if (s.size() >= 1 && s[0] != '"') {
@@ -127,8 +131,8 @@ public:
             if (s[0] != '\\' && s[1] != '\\') {
                 if (s[0] != '"' && s[1] == '"') return CMD_ITEM_ERROR;
                 if (s[0] != '\'' && s[1] == '\'') return CMD_ITEM_ERROR;
-                if (s[0] != '"' && s[1] != '"') return CMD_ITEM_OK;
-                if (s[0] != '\'' && s[1] != '\'') return CMD_ITEM_OK;
+                if (s[0] != '"' && s[1] != '"') return CMD_ITEM_OK_STR_WITHOUT_COMMAS;
+                if (s[0] != '\'' && s[1] != '\'') return CMD_ITEM_OK_STR_WITHOUT_COMMAS;
             }
         }
 

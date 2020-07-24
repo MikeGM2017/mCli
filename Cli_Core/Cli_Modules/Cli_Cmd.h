@@ -133,7 +133,9 @@ public:
                 if (i == Items.size() - 1) {
                     // Последний токен может быть введен не до конца или с ошибкой
                     return res_valid;
-                } else if (res_valid != CMD_ITEM_OK) {
+                } else if (res_valid != CMD_ITEM_OK
+                        && res_valid != CMD_ITEM_OK_CAN_CONTINUE
+                        && res_valid != CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
                     return res_valid;
                 }
             }

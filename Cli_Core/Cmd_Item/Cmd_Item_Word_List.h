@@ -80,11 +80,13 @@ public:
         }
 
         bool is_equal_all = true;
+        int found_count = 0;
         for (int i = 0; i < Values_Str.size(); i++) {
             bool found = false;
             for (int j = 0; j < Words.size(); j++) {
                 if (Values_Str[i] == Words[j]) {
                     found = true;
+                    found_count++;
                     break;
                 }
             }
@@ -96,7 +98,10 @@ public:
 
         if (s[s.size() - 1] == ',') return CMD_ITEM_INCOMPLETE;
 
-        if (is_equal_all) return CMD_ITEM_OK;
+        if (!Is_Repeat && is_equal_all && found_count == Words.size()) return CMD_ITEM_OK;
+
+        if (!Is_Repeat && is_equal_all && found_count < Words.size()) return CMD_ITEM_OK_CAN_CONTINUE;
+        if (Is_Repeat && is_equal_all) return CMD_ITEM_OK_CAN_CONTINUE;
 
         //        string s_last = Values_Str.back();
         //        for (int i = 0; i < Words.size(); i++) {
