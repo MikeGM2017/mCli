@@ -46,7 +46,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cli_Input_C_Item.o \
 	${OBJECTDIR}/Cli_Input_C_termios.o \
 	${OBJECTDIR}/Cli_Module.o \
-	${OBJECTDIR}/Cli_Module_Help.o \
+	${OBJECTDIR}/Cli_Module_Base_Help.o \
 	${OBJECTDIR}/Cli_Modules.o \
 	${OBJECTDIR}/Cli_Output_C_printf.o \
 	${OBJECTDIR}/Cli_TAB_Processor.o \
@@ -140,10 +140,10 @@ ${OBJECTDIR}/Cli_Module.o: Cli_Module.c
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module.o Cli_Module.c
 
-${OBJECTDIR}/Cli_Module_Help.o: Cli_Module_Help.c 
+${OBJECTDIR}/Cli_Module_Base_Help.o: Cli_Module_Base_Help.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Help.o Cli_Module_Help.c
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Help.o Cli_Module_Base_Help.c
 
 ${OBJECTDIR}/Cli_Modules.o: Cli_Modules.c 
 	${MKDIR} -p ${OBJECTDIR}

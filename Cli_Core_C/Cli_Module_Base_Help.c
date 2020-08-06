@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-#include "Cli_Module_Help.h"
+#include "Cli_Module_Base_Help.h"
 
 #include "Cli_Cmd_Item_Word.h"
 #include "Cli_Cmd_Item_Str.h"
@@ -159,7 +159,7 @@ static void Help_Cli_Modules_Print(int user_privilege, struct Cli_Modules *modul
 
 }
 
-static void help(struct Cli_Module_Help *module_help,
+static void help(struct Cli_Module_Base_Help *module_help,
         char *level, int is_full, int is_verbose, int is_module_full,
         char *module_filter, char *command_filter, struct Cli_Output_C *Cli_Output) {
     int modules_count = 0;
@@ -196,7 +196,7 @@ static void help(struct Cli_Module_Help *module_help,
 }
 
 static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
-    struct Cli_Module_Help *module_help = (struct Cli_Module_Help *) module;
+    struct Cli_Module_Base_Help *module_help = (struct Cli_Module_Base_Help *) module;
     struct Level_Description level = Level_Description_Init();
     //string parameter;
     if (Levels->Size > 0) {
@@ -339,9 +339,9 @@ static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, s
     return 0; // Failed
 }
 
-struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privilege, struct Cli_Modules *modules,
+struct Cli_Module_Base_Help Cli_Module_Base_Help_Init(enum Cli_Cmd_Privilege_ID user_privilege, struct Cli_Modules *modules,
         struct Str_Filter *help_str_filter, struct Cli_Output_C *cli_output) {
-    struct Cli_Module_Help module_help;
+    struct Cli_Module_Base_Help module_help;
     struct Cli_Module *module_base = &module_help.Module_Base;
     Cli_Module_Init_Base(module_base, "Help");
 
@@ -357,9 +357,9 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
 
         static struct Cli_Cmd_Item cmd_item_H;
 
-        cmd_H = Cli_Cmd_Init(CMD_ID_help_H, "H", "help");
+        cmd_H = Cli_Cmd_Init(CMD_ID_help_H, "H", "show help");
 
-        cmd_item_H = Cli_Cmd_Item_Word_Init("H", "help");
+        cmd_item_H = Cli_Cmd_Item_Word_Init("H", "show help");
 
         Cli_Cmd_Add_Item(&cmd_H, &cmd_item_H);
 
@@ -371,9 +371,9 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
 
         static struct Cli_Cmd_Item cmd_item_help;
 
-        cmd_help = Cli_Cmd_Init(CMD_ID_help, "help", "help");
+        cmd_help = Cli_Cmd_Init(CMD_ID_help, "help", "show help");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
 
         Cli_Cmd_Add_Item(&cmd_help, &cmd_item_help);
 
@@ -386,10 +386,10 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         static struct Cli_Cmd_Item cmd_item_help;
         static struct Cli_Cmd_Item cmd_item_verbose;
 
-        cmd_help_verbose = Cli_Cmd_Init(CMD_ID_help_verbose, "help verbose", "help verbose");
+        cmd_help_verbose = Cli_Cmd_Init(CMD_ID_help_verbose, "help verbose", "show commands with arguments information");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
-        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "help verbose");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
+        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "show all arguments information");
 
         Cli_Cmd_Add_Item(&cmd_help_verbose, &cmd_item_help);
         Cli_Cmd_Add_Item(&cmd_help_verbose, &cmd_item_verbose);
@@ -403,10 +403,10 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         static struct Cli_Cmd_Item cmd_item_help;
         static struct Cli_Cmd_Item cmd_item_full;
 
-        cmd_help_full = Cli_Cmd_Init(CMD_ID_help_full, "help full", "help full");
+        cmd_help_full = Cli_Cmd_Init(CMD_ID_help_full, "help full", "show all commands");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
-        cmd_item_full = Cli_Cmd_Item_Word_Init("full", "help full");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
+        cmd_item_full = Cli_Cmd_Item_Word_Init("full", "show all commands");
 
         Cli_Cmd_Add_Item(&cmd_help_full, &cmd_item_help);
         Cli_Cmd_Add_Item(&cmd_help_full, &cmd_item_full);
@@ -421,11 +421,11 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         static struct Cli_Cmd_Item cmd_item_full;
         static struct Cli_Cmd_Item cmd_item_verbose;
 
-        cmd_help_full_verbose = Cli_Cmd_Init(CMD_ID_help_full_verbose, "help full verbose", "help full verbose");
+        cmd_help_full_verbose = Cli_Cmd_Init(CMD_ID_help_full_verbose, "help full verbose", "show all commands with arguments information");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
-        cmd_item_full = Cli_Cmd_Item_Word_Init("full", "help full");
-        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "help full verbose");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
+        cmd_item_full = Cli_Cmd_Item_Word_Init("full", "show all commands");
+        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "show all arguments information");
 
         Cli_Cmd_Add_Item(&cmd_help_full_verbose, &cmd_item_help);
         Cli_Cmd_Add_Item(&cmd_help_full_verbose, &cmd_item_full);
@@ -442,11 +442,11 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         static struct Cli_Cmd_Item cmd_item_module_name;
 
         cmd_help_module_module_name = Cli_Cmd_Init(CMD_ID_help_module_module_name,
-                "help module <module_name>", "help module <module_name> (by filter)");
+                "help module \"<module_name>\"", "show module commands (modules by filter)");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
-        cmd_item_module = Cli_Cmd_Item_Word_Init("module", "help module");
-        cmd_item_module_name = Cli_Cmd_Item_Str_Init("<module_name>", "help module <module_name> (by filter)");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
+        cmd_item_module = Cli_Cmd_Item_Word_Init("module", "show module commands (modules by filter)");
+        cmd_item_module_name = Cli_Cmd_Item_Str_Init("\"<module_name>\"", "modules about which need to obtain information (by filter)");
 
         Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_help);
         Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_module);
@@ -464,12 +464,12 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         static struct Cli_Cmd_Item cmd_item_verbose;
 
         cmd_help_module_module_name = Cli_Cmd_Init(CMD_ID_help_module_module_name_verbose,
-                "help module <module_name> verbose", "help module <module_name> (by filter) verbose");
+                "help module \"<module_name>\" verbose", "show module commands (modules by filter) with arguments information");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
-        cmd_item_module = Cli_Cmd_Item_Word_Init("module", "help module");
-        cmd_item_module_name = Cli_Cmd_Item_Str_Init("<module_name>", "help module <module_name> (by filter)");
-        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "help module <module_name> (by filter) verbose");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
+        cmd_item_module = Cli_Cmd_Item_Word_Init("module", "show module commands (modules by filter)");
+        cmd_item_module_name = Cli_Cmd_Item_Str_Init("\"<module_name>\"", "modules about which need to obtain information (by filter)");
+        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "show all arguments information");
 
         Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_help);
         Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_module);
@@ -485,10 +485,10 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         static struct Cli_Cmd_Item cmd_item_help;
         static struct Cli_Cmd_Item cmd_item_command;
 
-        cmd_help_command = Cli_Cmd_Init(CMD_ID_help_command, "help <command>", "help <command> (by filter)");
+        cmd_help_command = Cli_Cmd_Init(CMD_ID_help_command, "help \"<command>\"", "show selected commands (by filter)");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
-        cmd_item_command = Cli_Cmd_Item_Str_Init("<command>", "help <command> (by filter)");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
+        cmd_item_command = Cli_Cmd_Item_Str_Init("\"<command>\"", "command about which need to obtain information (by filter)");
 
         Cli_Cmd_Add_Item(&cmd_help_command, &cmd_item_help);
         Cli_Cmd_Add_Item(&cmd_help_command, &cmd_item_command);
@@ -503,11 +503,12 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         static struct Cli_Cmd_Item cmd_item_command;
         static struct Cli_Cmd_Item cmd_item_verbose;
 
-        cmd_help_command_verbose = Cli_Cmd_Init(CMD_ID_help_command_verbose, "help <command> verbose", "help <command> (by filter) verbose");
+        cmd_help_command_verbose = Cli_Cmd_Init(CMD_ID_help_command_verbose,
+                "help \"<command>\" verbose", "show selected commands (by filter) with arguments information");
 
-        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
-        cmd_item_command = Cli_Cmd_Item_Str_Init("<command>", "help <command> (by filter)");
-        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "help <command> (by filter) verbose");
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "show help");
+        cmd_item_command = Cli_Cmd_Item_Str_Init("\"<command>\"", "command about which need to obtain information (by filter)");
+        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "show all arguments information");
 
         Cli_Cmd_Add_Item(&cmd_help_command_verbose, &cmd_item_help);
         Cli_Cmd_Add_Item(&cmd_help_command_verbose, &cmd_item_command);

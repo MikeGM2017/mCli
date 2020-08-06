@@ -22,7 +22,8 @@ static enum Cmd_Item_Valid_Result Decode(char *s_src, char *s_dst) {
     int s_dst_pos = 0;
     s_dst[0] = '\0';
 
-    for (int i = 0; i < s_src_size; i++) {
+    int i;
+    for (i = 0; i < s_src_size; i++) {
         if (i == 0) {
             char c = s_src[i];
             if (c == '"' || c == '\'') {
@@ -129,7 +130,8 @@ static enum Cmd_Item_Valid_Result Parse(struct Cli_Cmd_Item *item, char *s) {
         }
     }
 
-    for (int pos = 0; pos < s_size; pos++) {
+    int pos;
+    for (pos = 0; pos < s_size; pos++) {
         if (!item->Is_Char_Valid(s[pos], pos, s_size)) return CMD_ITEM_ERROR;
     }
 

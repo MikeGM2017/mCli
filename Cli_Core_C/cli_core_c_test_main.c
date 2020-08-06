@@ -9,7 +9,7 @@
 #include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Module.h"
 
-#include "Cli_Module_Help.h"
+#include "Cli_Module_Base_Help.h"
 
 #include "Cli_Modules.h"
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
     struct Str_Filter Filter = Str_Filter_Init('.', '*');
 
-    struct Cli_Module_Help module_help = Cli_Module_Help_Init(User_Privilege, &Modules, &Filter, &Cli_Output);
+    struct Cli_Module_Base_Help module_help = Cli_Module_Base_Help_Init(User_Privilege, &Modules, &Filter, &Cli_Output);
     Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_help);
 
     //    Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));

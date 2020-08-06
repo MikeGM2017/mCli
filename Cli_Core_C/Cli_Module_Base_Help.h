@@ -27,7 +27,7 @@ extern "C" {
 #include "Str_Filter.h"
 #include "Cli_Output_C.h"
 
-    struct Cli_Module_Help {
+    struct Cli_Module_Base_Help {
         struct Cli_Module Module_Base;
         enum Cli_Cmd_Privilege_ID User_Privilege;
         struct Cli_Modules *Modules;
@@ -35,7 +35,7 @@ extern "C" {
         struct Cli_Output_C *Cli_Output;
     };
 
-    struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privilege, struct Cli_Modules *modules,
+    struct Cli_Module_Base_Help Cli_Module_Base_Help_Init(enum Cli_Cmd_Privilege_ID user_privilege, struct Cli_Modules *modules,
             struct Str_Filter *help_str_filter, struct Cli_Output_C *cli_output);
 
 #ifdef __cplusplus
