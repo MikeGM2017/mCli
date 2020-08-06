@@ -23,7 +23,7 @@ extern "C" {
 
 #define CLI_CMD_TEXT_SIZE_DEF 32
 #define CLI_CMD_LEVEL_SIZE_DEF 32
-#define CLI_CMD_HELP_SIZE_DEF 32
+#define CLI_CMD_HELP_SIZE_DEF 64
 
     struct Cli_Cmd {
         char Text[CLI_CMD_TEXT_SIZE_DEF];

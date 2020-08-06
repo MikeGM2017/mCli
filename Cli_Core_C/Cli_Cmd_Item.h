@@ -24,7 +24,7 @@ extern "C" {
 #include "Cmd_Item_Valid_Result.h"
 
 #define CLI_CMD_ITEM_TEXT_SIZE_DEF 32
-#define CLI_CMD_ITEM_HELP_SIZE_DEF 32
+#define CLI_CMD_ITEM_HELP_SIZE_DEF 64
 #define CLI_CMD_ITEM_VALUE_STR_SIZE_DEF 32
 
     struct Cli_Cmd_Item;

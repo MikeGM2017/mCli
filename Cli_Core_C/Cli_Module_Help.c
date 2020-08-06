@@ -15,13 +15,15 @@ enum Local_Cmd_ID {
     CMD_ID_help_H,
     CMD_ID_help,
     CMD_ID_help_verbose,
+
     CMD_ID_help_full,
     CMD_ID_help_full_verbose,
-    CMD_ID_help_command,
-    CMD_ID_help_command_verbose,
 
     CMD_ID_help_module_module_name,
     CMD_ID_help_module_module_name_verbose,
+
+    CMD_ID_help_command,
+    CMD_ID_help_command_verbose,
 
     CMD_ID_LAST
 };
@@ -231,6 +233,73 @@ static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, s
                     module_help->Cli_Output);
         }
             return 1;
+
+        case CMD_ID_help_full:
+            if (is_debug) return 1;
+        {
+            int is_full = 1;
+            int is_verbose = 0;
+            int is_module_full = 0;
+            char *module_filter = "*";
+            char *command_filter = "*";
+            help(module_help, level.Level,
+                    is_full, is_verbose, is_module_full,
+                    module_filter, command_filter,
+                    module_help->Cli_Output);
+        }
+            return 1;
+        case CMD_ID_help_full_verbose:
+            if (is_debug) return 1;
+        {
+            int is_full = 1;
+            int is_verbose = 1;
+            int is_module_full = 0;
+            char *module_filter = "*";
+            char *command_filter = "*";
+            help(module_help, level.Level,
+                    is_full, is_verbose, is_module_full,
+                    module_filter, command_filter,
+                    module_help->Cli_Output);
+        }
+            return 1;
+
+        case CMD_ID_help_module_module_name:
+            if (is_debug) return 1;
+        {
+            struct Cli_Cmd_Item *cmd_item_ptr_1 = cmd->Item_Head; // help
+            struct Cli_Cmd_Item *cmd_item_ptr_2 = cmd_item_ptr_1->Cmd_Item_Next; // module
+            struct Cli_Cmd_Item *cmd_item_ptr_3 = cmd_item_ptr_2->Cmd_Item_Next; // module_name -> module_filter
+
+            int is_full = 0;
+            int is_verbose = 0;
+            int is_module_full = 0;
+            char *module_filter = cmd_item_ptr_3->Value_Str;
+            char *command_filter = "*";
+            help(module_help, level.Level,
+                    is_full, is_verbose, is_module_full,
+                    module_filter, command_filter,
+                    module_help->Cli_Output);
+        }
+            return 1;
+        case CMD_ID_help_module_module_name_verbose:
+            if (is_debug) return 1;
+        {
+            struct Cli_Cmd_Item *cmd_item_ptr_1 = cmd->Item_Head; // help
+            struct Cli_Cmd_Item *cmd_item_ptr_2 = cmd_item_ptr_1->Cmd_Item_Next; // module
+            struct Cli_Cmd_Item *cmd_item_ptr_3 = cmd_item_ptr_2->Cmd_Item_Next; // module_name -> module_filter
+
+            int is_full = 0;
+            int is_verbose = 1;
+            int is_module_full = 0;
+            char *module_filter = cmd_item_ptr_3->Value_Str;
+            char *command_filter = "*";
+            help(module_help, level.Level,
+                    is_full, is_verbose, is_module_full,
+                    module_filter, command_filter,
+                    module_help->Cli_Output);
+        }
+            return 1;
+
         case CMD_ID_help_command:
             if (is_debug) return 1;
         {
@@ -239,6 +308,23 @@ static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, s
 
             int is_full = 0;
             int is_verbose = 0;
+            int is_module_full = 0;
+            char *module_filter = "*";
+            char *command_filter = cmd_item_ptr_2->Value_Str;
+            help(module_help, level.Level,
+                    is_full, is_verbose, is_module_full,
+                    module_filter, command_filter,
+                    module_help->Cli_Output);
+        }
+            return 1;
+        case CMD_ID_help_command_verbose:
+            if (is_debug) return 1;
+        {
+            struct Cli_Cmd_Item *cmd_item_ptr_1 = cmd->Item_Head; // help
+            struct Cli_Cmd_Item *cmd_item_ptr_2 = cmd_item_ptr_1->Cmd_Item_Next; // <command>
+
+            int is_full = 0;
+            int is_verbose = 1;
             int is_module_full = 0;
             char *module_filter = "*";
             char *command_filter = cmd_item_ptr_2->Value_Str;
@@ -268,6 +354,7 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
 
     {
         static struct Cli_Cmd cmd_H;
+
         static struct Cli_Cmd_Item cmd_item_H;
 
         cmd_H = Cli_Cmd_Init(CMD_ID_help_H, "H", "help");
@@ -281,6 +368,7 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
 
     {
         static struct Cli_Cmd cmd_help;
+
         static struct Cli_Cmd_Item cmd_item_help;
 
         cmd_help = Cli_Cmd_Init(CMD_ID_help, "help", "help");
@@ -294,6 +382,7 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
 
     {
         static struct Cli_Cmd cmd_help_verbose;
+
         static struct Cli_Cmd_Item cmd_item_help;
         static struct Cli_Cmd_Item cmd_item_verbose;
 
@@ -309,7 +398,90 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
     }
 
     {
+        static struct Cli_Cmd cmd_help_full;
+
+        static struct Cli_Cmd_Item cmd_item_help;
+        static struct Cli_Cmd_Item cmd_item_full;
+
+        cmd_help_full = Cli_Cmd_Init(CMD_ID_help_full, "help full", "help full");
+
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
+        cmd_item_full = Cli_Cmd_Item_Word_Init("full", "help full");
+
+        Cli_Cmd_Add_Item(&cmd_help_full, &cmd_item_help);
+        Cli_Cmd_Add_Item(&cmd_help_full, &cmd_item_full);
+
+        Cli_Module_Add_Cmd(module_base, &cmd_help_full);
+    }
+
+    {
+        static struct Cli_Cmd cmd_help_full_verbose;
+
+        static struct Cli_Cmd_Item cmd_item_help;
+        static struct Cli_Cmd_Item cmd_item_full;
+        static struct Cli_Cmd_Item cmd_item_verbose;
+
+        cmd_help_full_verbose = Cli_Cmd_Init(CMD_ID_help_full_verbose, "help full verbose", "help full verbose");
+
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
+        cmd_item_full = Cli_Cmd_Item_Word_Init("full", "help full");
+        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "help full verbose");
+
+        Cli_Cmd_Add_Item(&cmd_help_full_verbose, &cmd_item_help);
+        Cli_Cmd_Add_Item(&cmd_help_full_verbose, &cmd_item_full);
+        Cli_Cmd_Add_Item(&cmd_help_full_verbose, &cmd_item_verbose);
+
+        Cli_Module_Add_Cmd(module_base, &cmd_help_full_verbose);
+    }
+
+    {
+        static struct Cli_Cmd cmd_help_module_module_name;
+
+        static struct Cli_Cmd_Item cmd_item_help;
+        static struct Cli_Cmd_Item cmd_item_module;
+        static struct Cli_Cmd_Item cmd_item_module_name;
+
+        cmd_help_module_module_name = Cli_Cmd_Init(CMD_ID_help_module_module_name,
+                "help module <module_name>", "help module <module_name> (by filter)");
+
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
+        cmd_item_module = Cli_Cmd_Item_Word_Init("module", "help module");
+        cmd_item_module_name = Cli_Cmd_Item_Str_Init("<module_name>", "help module <module_name> (by filter)");
+
+        Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_help);
+        Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_module);
+        Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_module_name);
+
+        Cli_Module_Add_Cmd(module_base, &cmd_help_module_module_name);
+    }
+
+    {
+        static struct Cli_Cmd cmd_help_module_module_name;
+
+        static struct Cli_Cmd_Item cmd_item_help;
+        static struct Cli_Cmd_Item cmd_item_module;
+        static struct Cli_Cmd_Item cmd_item_module_name;
+        static struct Cli_Cmd_Item cmd_item_verbose;
+
+        cmd_help_module_module_name = Cli_Cmd_Init(CMD_ID_help_module_module_name_verbose,
+                "help module <module_name> verbose", "help module <module_name> (by filter) verbose");
+
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
+        cmd_item_module = Cli_Cmd_Item_Word_Init("module", "help module");
+        cmd_item_module_name = Cli_Cmd_Item_Str_Init("<module_name>", "help module <module_name> (by filter)");
+        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "help module <module_name> (by filter) verbose");
+
+        Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_help);
+        Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_module);
+        Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_module_name);
+        Cli_Cmd_Add_Item(&cmd_help_module_module_name, &cmd_item_verbose);
+
+        Cli_Module_Add_Cmd(module_base, &cmd_help_module_module_name);
+    }
+
+    {
         static struct Cli_Cmd cmd_help_command;
+
         static struct Cli_Cmd_Item cmd_item_help;
         static struct Cli_Cmd_Item cmd_item_command;
 
@@ -322,6 +494,26 @@ struct Cli_Module_Help Cli_Module_Help_Init(enum Cli_Cmd_Privilege_ID user_privi
         Cli_Cmd_Add_Item(&cmd_help_command, &cmd_item_command);
 
         Cli_Module_Add_Cmd(module_base, &cmd_help_command);
+    }
+
+    {
+        static struct Cli_Cmd cmd_help_command_verbose;
+
+        static struct Cli_Cmd_Item cmd_item_help;
+        static struct Cli_Cmd_Item cmd_item_command;
+        static struct Cli_Cmd_Item cmd_item_verbose;
+
+        cmd_help_command_verbose = Cli_Cmd_Init(CMD_ID_help_command_verbose, "help <command> verbose", "help <command> (by filter) verbose");
+
+        cmd_item_help = Cli_Cmd_Item_Word_Init("help", "help");
+        cmd_item_command = Cli_Cmd_Item_Str_Init("<command>", "help <command> (by filter)");
+        cmd_item_verbose = Cli_Cmd_Item_Word_Init("verbose", "help <command> (by filter) verbose");
+
+        Cli_Cmd_Add_Item(&cmd_help_command_verbose, &cmd_item_help);
+        Cli_Cmd_Add_Item(&cmd_help_command_verbose, &cmd_item_command);
+        Cli_Cmd_Add_Item(&cmd_help_command_verbose, &cmd_item_verbose);
+
+        Cli_Module_Add_Cmd(module_base, &cmd_help_command_verbose);
     }
 
     return module_help;
