@@ -131,10 +131,12 @@ int main(int argc, char *argv[]) {
                 }
 
                 int debug_res = 0;
-                int res_cmd_process = CMD_Processor.Process_Input_Item(&CMD_Processor, &input_item, is_debug, &debug_res);
-                if (!res_cmd_process) {
-                    Cli_Output.Output_NewLine();
-                }
+                //int res_cmd_process = CMD_Processor.Process_Input_Item(&CMD_Processor, &input_item, is_debug, &debug_res);
+                //if (!res_cmd_process) {
+                //    Cli_Output.Output_NewLine();
+                //}
+                CMD_Processor.Process_Input_Item(&CMD_Processor, &input_item, is_debug, &debug_res);
+                Cli_Output.Output_NewLine();
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:

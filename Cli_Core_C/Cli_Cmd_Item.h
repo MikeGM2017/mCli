@@ -30,6 +30,7 @@ extern "C" {
     struct Cli_Cmd_Item;
 
     typedef enum Cmd_Item_Valid_Result ftParse(struct Cli_Cmd_Item *item, char *s);
+    typedef int ftIs_Char_Valid(char c, int pos, int len);
 
     struct Cli_Cmd_Item {
         enum Cli_Cmd_Item_Type Cmd_Item_Type;
@@ -39,6 +40,7 @@ extern "C" {
 
         char Value_Str[CLI_CMD_ITEM_VALUE_STR_SIZE_DEF];
 
+        ftIs_Char_Valid *Is_Char_Valid;
         ftParse *Parse;
     };
 

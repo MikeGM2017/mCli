@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cli_CMD_Processor.o \
 	${OBJECTDIR}/Cli_Cmd.o \
 	${OBJECTDIR}/Cli_Cmd_Item.o \
+	${OBJECTDIR}/Cli_Cmd_Item_Str.o \
 	${OBJECTDIR}/Cli_Cmd_Item_Word.o \
 	${OBJECTDIR}/Cli_Core.o \
 	${OBJECTDIR}/Cli_History.o \
@@ -98,6 +99,11 @@ ${OBJECTDIR}/Cli_Cmd_Item.o: Cli_Cmd_Item.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Cmd_Item.o Cli_Cmd_Item.c
+
+${OBJECTDIR}/Cli_Cmd_Item_Str.o: Cli_Cmd_Item_Str.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Cmd_Item_Str.o Cli_Cmd_Item_Str.c
 
 ${OBJECTDIR}/Cli_Cmd_Item_Word.o: Cli_Cmd_Item_Word.c 
 	${MKDIR} -p ${OBJECTDIR}

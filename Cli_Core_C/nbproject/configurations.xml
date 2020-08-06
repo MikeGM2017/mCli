@@ -7,6 +7,7 @@
       <itemPath>Cli_CMD_Processor.h</itemPath>
       <itemPath>Cli_Cmd.h</itemPath>
       <itemPath>Cli_Cmd_Item.h</itemPath>
+      <itemPath>Cli_Cmd_Item_Str.h</itemPath>
       <itemPath>Cli_Cmd_Item_Type.h</itemPath>
       <itemPath>Cli_Cmd_Item_Word.h</itemPath>
       <itemPath>Cli_Cmd_Privilege_ID.h</itemPath>
@@ -44,6 +45,7 @@
       <itemPath>Cli_CMD_Processor.c</itemPath>
       <itemPath>Cli_Cmd.c</itemPath>
       <itemPath>Cli_Cmd_Item.c</itemPath>
+      <itemPath>Cli_Cmd_Item_Str.c</itemPath>
       <itemPath>Cli_Cmd_Item_Word.c</itemPath>
       <itemPath>Cli_Core.c</itemPath>
       <itemPath>Cli_History.c</itemPath>
@@ -101,6 +103,10 @@
       <item path="Cli_Cmd_Item.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Cmd_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Str.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Cmd_Item_Type.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -226,6 +232,10 @@
       <item path="Cli_Cmd_Item.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Cmd_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Str.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Cmd_Item_Type.h" ex="false" tool="3" flavor2="0">
       </item>

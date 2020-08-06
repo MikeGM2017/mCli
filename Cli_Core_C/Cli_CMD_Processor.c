@@ -110,7 +110,7 @@ static int Process_Input_Item(struct Cli_CMD_Processor *cmd_processor,
                                             cmd_processor->Cli_Output->Output_Str(" - Not Implemented (Module \"");
                                             cmd_processor->Cli_Output->Output_Str(module_ptr->Name);
                                             cmd_processor->Cli_Output->Output_Str("\")");
-                                            cmd_processor->Cli_Output->Output_NewLine();
+                                            //cmd_processor->Cli_Output->Output_NewLine();
                                         }
                                     } else {
                                         (*debug_res) = 1;
@@ -140,10 +140,10 @@ static int Process_Input_Item(struct Cli_CMD_Processor *cmd_processor,
             cmd_processor->Cli_Output->Output_NewLine();
             cmd_processor->Cli_Output->Output_Str(s_trim);
             cmd_processor->Cli_Output->Output_Str(" - Not Processed");
-            cmd_processor->Cli_Output->Output_NewLine();
+            //cmd_processor->Cli_Output->Output_NewLine();
         }
     } else {
-        cmd_processor->Cli_Output->Output_NewLine();
+        //cmd_processor->Cli_Output->Output_NewLine();
     }
     return 1; // Ok
 }

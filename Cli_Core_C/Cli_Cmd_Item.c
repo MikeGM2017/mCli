@@ -6,12 +6,16 @@
 
 #include "Cli_Cmd_Item.h"
 
+static int Is_Char_Valid(char c, int pos, int len) {
+    return 1; // Допустимы все символы в любой позиции
+}
+
 static enum Cmd_Item_Valid_Result Parse(struct Cli_Cmd_Item *item, char *s) {
+    if (s[0] == '\0') return CMD_ITEM_EMPTY;
+
     int len = CLI_CMD_ITEM_VALUE_STR_SIZE_DEF - 1;
     strncpy(item->Value_Str, s, len);
     item->Value_Str[len] = '\0';
-
-    if (s[0] == '\0') return CMD_ITEM_EMPTY;
 
     if (!strncmp(item->Text, s, CLI_CMD_ITEM_TEXT_SIZE_DEF)) return CMD_ITEM_OK;
 
@@ -39,5 +43,6 @@ void Cli_Cmd_Item_Init_Base(struct Cli_Cmd_Item *item, enum Cli_Cmd_Item_Type it
 
     item->Cmd_Item_Next = NULL;
 
+    item->Is_Char_Valid = Is_Char_Valid;
     item->Parse = Parse;
 }
