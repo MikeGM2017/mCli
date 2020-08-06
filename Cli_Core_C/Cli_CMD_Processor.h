@@ -26,7 +26,7 @@ extern "C" {
 #include "Cmd_Token_Parser.h"
 #include "Cli_Input_C.h"
 #include "Cli_Output_C.h"
-    
+
 #include "Cmd_Item_Valid_Result_Func.h"
 
 #define CLI_CMD_PROCESSOR_STR_REM_SIZE_DEF 32

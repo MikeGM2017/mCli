@@ -11,7 +11,6 @@
       <itemPath>Cli_Cmd_Item_Word.h</itemPath>
       <itemPath>Cli_Cmd_Privilege_ID.h</itemPath>
       <itemPath>Cli_Core.h</itemPath>
-      <itemPath>Cli_Core_CPP.h</itemPath>
       <itemPath>Cli_History.h</itemPath>
       <itemPath>Cli_Input_C.h</itemPath>
       <itemPath>Cli_Input_C_Item.h</itemPath>
@@ -114,8 +113,6 @@
       <item path="Cli_Core.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Core.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Cli_Core_CPP.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_History.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -241,8 +238,6 @@
       <item path="Cli_Core.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Core.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Cli_Core_CPP.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_History.c" ex="false" tool="0" flavor2="0">
       </item>

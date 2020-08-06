@@ -17,7 +17,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 #include "Cli_Module.h"
 
     struct Cli_Modules {
@@ -26,9 +26,9 @@ extern "C" {
     };
 
     void Cli_Modules_Init_Base(struct Cli_Modules *module_list);
-    
+
     struct Cli_Modules Cli_Modules_Init(void);
-    
+
     void Cli_Modules_Add(struct Cli_Modules *module_list, struct Cli_Module *module);
 
 #ifdef __cplusplus

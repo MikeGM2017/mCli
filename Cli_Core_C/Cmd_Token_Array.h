@@ -26,9 +26,9 @@ extern "C" {
         struct Cmd_Token Items[CMD_TOKEN_ARRAY_SIZE_DEF];
         int Size;
     };
-    
+
     struct Cmd_Token_Array Cmd_Token_Array_Init(void);
-    
+
     int Cmd_Token_Array_Add(struct Cmd_Token_Array *tokens, struct Cmd_Token *token);
 
 #ifdef __cplusplus

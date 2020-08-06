@@ -21,13 +21,13 @@ extern "C" {
 #include <string.h>
 
 #include "Cli_Cmd.h"
-    
+
 #include "Level_Description_Array.h"
 
 #define CLI_MODULE_NAME_SIZE_DEF 32
-    
+
     struct Cli_Module;
-    
+
     typedef int ftExecute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug);
 
     struct Cli_Module {
@@ -35,7 +35,7 @@ extern "C" {
         struct Cli_Cmd *Cmd_Head;
         struct Cli_Cmd *Cmd_Tail;
         struct Cli_Module *Module_Next;
-        
+
         ftExecute *Execute;
     };
 
@@ -44,9 +44,9 @@ extern "C" {
     struct Cli_Module Cli_Module_Init(char *name);
 
     void Cli_Module_Add(struct Cli_Module *module_parent, struct Cli_Module *module);
-    
+
     void Cli_Module_Add_Cmd(struct Cli_Module *module, struct Cli_Cmd *cmd);
-    
+
 #ifdef __cplusplus
 }
 #endif

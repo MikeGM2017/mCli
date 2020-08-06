@@ -14,15 +14,15 @@
 #ifndef CLI_INPUT_C_H
 #define CLI_INPUT_C_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <string.h>
 
 #include "Cli_Input_C_Item.h"
 
 #include "Cli_Output_C.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #define CLI_INPUT_C_TITLE_SIZE 32
 #define CLI_INPUT_C_USER_SIZE 32

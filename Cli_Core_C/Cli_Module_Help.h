@@ -14,6 +14,10 @@
 #ifndef CLI_MODULE_HELP_H
 #define CLI_MODULE_HELP_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 
 #include "Cli_Module.h"
@@ -22,10 +26,6 @@
 #include "Cli_Modules.h"
 #include "Str_Filter.h"
 #include "Cli_Output_C.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
     struct Cli_Module_Help {
         struct Cli_Module Module_Base;

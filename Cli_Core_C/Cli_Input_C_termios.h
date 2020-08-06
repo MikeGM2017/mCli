@@ -14,6 +14,10 @@
 #ifndef CLI_INPUT_C_TERMIOS_H
 #define CLI_INPUT_C_TERMIOS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
@@ -29,10 +33,6 @@
 #endif
 
 #include "Cli_Input_C.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
     struct Cli_Input_C_Termios {
         struct Cli_Input_C Cli_Input_Base;

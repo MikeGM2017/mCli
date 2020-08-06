@@ -17,17 +17,17 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 #include <string.h>
 
     struct Cli_Core;
-    
+
     typedef char *ftStr_Trim(char *s, char *s_trim);
 
     struct Cli_Core {
         ftStr_Trim *Str_Trim;
     };
-    
+
     struct Cli_Core Cli_Core_Init(void);
 
 #ifdef __cplusplus

@@ -19,7 +19,7 @@ extern "C" {
 #endif
 
 #include "Cli_Cmd_Item.h"
-    
+
     struct Cli_Cmd_Item Cli_Cmd_Item_Word_Init(char *text, char *help);
 
 #ifdef __cplusplus

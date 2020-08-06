@@ -40,7 +40,7 @@ extern "C" {
         struct Cli_Cmd_Item *Item_Head;
         struct Cli_Cmd_Item *Item_Tail;
         int Items_Size;
-        
+
         struct Cli_Cmd *Cmd_Next;
     };
 

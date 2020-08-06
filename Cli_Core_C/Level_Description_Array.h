@@ -21,7 +21,7 @@ extern "C" {
 #include "Level_Description.h"
 
 #define LEVEL_DESCRIPTION_ARRAY_SIZE_DEF 32
-    
+
     struct Level_Description_Array;
 
     typedef int ftLevel_Description_Array_Add(struct Level_Description_Array *levels, struct Level_Description *level);
