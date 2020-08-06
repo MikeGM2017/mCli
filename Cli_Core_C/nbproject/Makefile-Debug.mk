@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cli_CMD_Processor.o \
 	${OBJECTDIR}/Cli_Cmd.o \
 	${OBJECTDIR}/Cli_Cmd_Item.o \
+	${OBJECTDIR}/Cli_Cmd_Item_Rem.o \
 	${OBJECTDIR}/Cli_Cmd_Item_Str.o \
 	${OBJECTDIR}/Cli_Cmd_Item_Word.o \
 	${OBJECTDIR}/Cli_Core.o \
@@ -47,6 +48,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cli_Input_C_termios.o \
 	${OBJECTDIR}/Cli_Module.o \
 	${OBJECTDIR}/Cli_Module_Base_Help.o \
+	${OBJECTDIR}/Cli_Module_Base_Rem.o \
 	${OBJECTDIR}/Cli_Modules.o \
 	${OBJECTDIR}/Cli_Output_C_printf.o \
 	${OBJECTDIR}/Cli_TAB_Processor.o \
@@ -100,6 +102,11 @@ ${OBJECTDIR}/Cli_Cmd_Item.o: Cli_Cmd_Item.c
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Cmd_Item.o Cli_Cmd_Item.c
 
+${OBJECTDIR}/Cli_Cmd_Item_Rem.o: Cli_Cmd_Item_Rem.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Cmd_Item_Rem.o Cli_Cmd_Item_Rem.c
+
 ${OBJECTDIR}/Cli_Cmd_Item_Str.o: Cli_Cmd_Item_Str.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -144,6 +151,11 @@ ${OBJECTDIR}/Cli_Module_Base_Help.o: Cli_Module_Base_Help.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Help.o Cli_Module_Base_Help.c
+
+${OBJECTDIR}/Cli_Module_Base_Rem.o: Cli_Module_Base_Rem.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Rem.o Cli_Module_Base_Rem.c
 
 ${OBJECTDIR}/Cli_Modules.o: Cli_Modules.c 
 	${MKDIR} -p ${OBJECTDIR}

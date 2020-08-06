@@ -7,6 +7,7 @@
       <itemPath>Cli_CMD_Processor.h</itemPath>
       <itemPath>Cli_Cmd.h</itemPath>
       <itemPath>Cli_Cmd_Item.h</itemPath>
+      <itemPath>Cli_Cmd_Item_Rem.h</itemPath>
       <itemPath>Cli_Cmd_Item_Str.h</itemPath>
       <itemPath>Cli_Cmd_Item_Type.h</itemPath>
       <itemPath>Cli_Cmd_Item_Word.h</itemPath>
@@ -19,6 +20,7 @@
       <itemPath>Cli_Input_Item_Type.h</itemPath>
       <itemPath>Cli_Module.h</itemPath>
       <itemPath>Cli_Module_Base_Help.h</itemPath>
+      <itemPath>Cli_Module_Base_Rem.h</itemPath>
       <itemPath>Cli_Modules.h</itemPath>
       <itemPath>Cli_Output_C.h</itemPath>
       <itemPath>Cli_Output_C_printf.h</itemPath>
@@ -45,6 +47,7 @@
       <itemPath>Cli_CMD_Processor.c</itemPath>
       <itemPath>Cli_Cmd.c</itemPath>
       <itemPath>Cli_Cmd_Item.c</itemPath>
+      <itemPath>Cli_Cmd_Item_Rem.c</itemPath>
       <itemPath>Cli_Cmd_Item_Str.c</itemPath>
       <itemPath>Cli_Cmd_Item_Word.c</itemPath>
       <itemPath>Cli_Core.c</itemPath>
@@ -54,6 +57,7 @@
       <itemPath>Cli_Input_C_termios.c</itemPath>
       <itemPath>Cli_Module.c</itemPath>
       <itemPath>Cli_Module_Base_Help.c</itemPath>
+      <itemPath>Cli_Module_Base_Rem.c</itemPath>
       <itemPath>Cli_Modules.c</itemPath>
       <itemPath>Cli_Output_C_printf.c</itemPath>
       <itemPath>Cli_TAB_Processor.c</itemPath>
@@ -104,6 +108,10 @@
       </item>
       <item path="Cli_Cmd_Item.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Cmd_Item_Rem.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Cmd_Item_Str.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
@@ -145,6 +153,10 @@
       <item path="Cli_Module_Base_Help.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Rem.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -233,6 +245,10 @@
       </item>
       <item path="Cli_Cmd_Item.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Cmd_Item_Rem.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Cmd_Item_Str.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
@@ -274,6 +290,10 @@
       <item path="Cli_Module_Base_Help.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Rem.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules.c" ex="false" tool="0" flavor2="0">
       </item>

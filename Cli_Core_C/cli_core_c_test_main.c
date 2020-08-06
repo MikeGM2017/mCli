@@ -9,6 +9,7 @@
 #include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Module.h"
 
+#include "Cli_Module_Base_Rem.h"
 #include "Cli_Module_Base_Help.h"
 
 #include "Cli_Modules.h"
@@ -56,6 +57,9 @@ int main(int argc, char *argv[]) {
     //(User_Privilege, &Modules, &Levels, &Token_Parser, Cli_Input, &Cli_Output, Str_Rem_DEF);
 
     // Modules Add - Begin
+
+    struct Cli_Module_Base_Rem module_rem = Cli_Module_Base_Rem_Init(Str_Rem_DEF, &Cli_Output);
+    Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_rem);
 
     struct Str_Filter Filter = Str_Filter_Init('.', '*');
 
