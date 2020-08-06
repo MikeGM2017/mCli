@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>Cli_CMD_Processor.h</itemPath>
+      <itemPath>Cli_Cmd.h</itemPath>
+      <itemPath>Cli_Cmd_Item.h</itemPath>
+      <itemPath>Cli_Cmd_Item_Type.h</itemPath>
+      <itemPath>Cli_Cmd_Item_Word.h</itemPath>
+      <itemPath>Cli_Cmd_Privilege_ID.h</itemPath>
+      <itemPath>Cli_Core.h</itemPath>
+      <itemPath>Cli_Core_CPP.h</itemPath>
+      <itemPath>Cli_History.h</itemPath>
+      <itemPath>Cli_Input_C.h</itemPath>
+      <itemPath>Cli_Input_C_Item.h</itemPath>
+      <itemPath>Cli_Input_C_termios.h</itemPath>
+      <itemPath>Cli_Input_Item_Type.h</itemPath>
+      <itemPath>Cli_Module.h</itemPath>
+      <itemPath>Cli_Module_Help.h</itemPath>
+      <itemPath>Cli_Modules.h</itemPath>
+      <itemPath>Cli_Output_C.h</itemPath>
+      <itemPath>Cli_Output_C_printf.h</itemPath>
+      <itemPath>Cli_TAB_Processor.h</itemPath>
+      <itemPath>Cmd_Item_Valid_Result.h</itemPath>
+      <itemPath>Cmd_Item_Valid_Result_Func.h</itemPath>
+      <itemPath>Cmd_Token.h</itemPath>
+      <itemPath>Cmd_Token_Array.h</itemPath>
+      <itemPath>Cmd_Token_Parser.h</itemPath>
+      <itemPath>Cmd_Token_Parser_Char_Type.h</itemPath>
+      <itemPath>Cmd_Token_Parser_Char_Type_Func.h</itemPath>
+      <itemPath>Cmd_Token_Parser_Result.h</itemPath>
+      <itemPath>Level_Description.h</itemPath>
+      <itemPath>Level_Description_Array.h</itemPath>
+      <itemPath>Str_Filter.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Cli_CMD_Processor.c</itemPath>
+      <itemPath>Cli_Cmd.c</itemPath>
+      <itemPath>Cli_Cmd_Item.c</itemPath>
+      <itemPath>Cli_Cmd_Item_Word.c</itemPath>
+      <itemPath>Cli_Core.c</itemPath>
+      <itemPath>Cli_History.c</itemPath>
+      <itemPath>Cli_Input_C.c</itemPath>
+      <itemPath>Cli_Input_C_Item.c</itemPath>
+      <itemPath>Cli_Input_C_termios.c</itemPath>
+      <itemPath>Cli_Module.c</itemPath>
+      <itemPath>Cli_Module_Help.c</itemPath>
+      <itemPath>Cli_Modules.c</itemPath>
+      <itemPath>Cli_Output_C_printf.c</itemPath>
+      <itemPath>Cli_TAB_Processor.c</itemPath>
+      <itemPath>Cmd_Item_Valid_Result_Func.c</itemPath>
+      <itemPath>Cmd_Token.c</itemPath>
+      <itemPath>Cmd_Token_Array.c</itemPath>
+      <itemPath>Cmd_Token_Parser.c</itemPath>
+      <itemPath>Cmd_Token_Parser_Char_Type_Func.c</itemPath>
+      <itemPath>Level_Description.c</itemPath>
+      <itemPath>Level_Description_Array.c</itemPath>
+      <itemPath>Str_Filter.c</itemPath>
+      <itemPath>cli_core_c_test_main.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_c_test</output>
+        </linkerTool>
+      </compileType>
+      <item path="Cli_CMD_Processor.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_CMD_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Word.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Core.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Core.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Core_CPP.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_History.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_History.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_C.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Input_C.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_Item.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_termios.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_termios.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Help.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_C.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_printf.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_printf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item_Valid_Result_Func.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Item_Valid_Result_Func.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Array.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Array.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Char_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Char_Type_Func.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Char_Type_Func.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Level_Description.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Level_Description_Array.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Level_Description_Array.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Str_Filter.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Str_Filter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cli_core_c_test_main.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="Cli_CMD_Processor.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_CMD_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Word.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Core.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Core.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Core_CPP.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_History.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_History.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_C.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Input_C.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_Item.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_termios.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Input_C_termios.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Help.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_C.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_printf.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_printf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item_Valid_Result_Func.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Item_Valid_Result_Func.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Array.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Array.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Char_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Char_Type_Func.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Char_Type_Func.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Level_Description.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Level_Description_Array.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Level_Description_Array.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Str_Filter.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Str_Filter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cli_core_c_test_main.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
