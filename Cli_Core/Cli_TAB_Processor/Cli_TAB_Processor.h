@@ -31,8 +31,6 @@ using namespace std;
 #include "Cli_Output_Abstract.h"
 #include "TAB_Cmd.h"
 
-#include "Cli_TAB_Variant.h"
-
 class Cli_TAB_Processor : public Cli_TAB_Processor_Abstract {
 protected:
 
@@ -215,7 +213,7 @@ public:
                                                 //}
 
                                                 //cmd_tab_ptr->s_log_or_add = cmd_item_ptr->Text_Get();
-                                                    cmd_tab_ptr->is_space_after_add =
+                                                cmd_tab_ptr->is_space_after_add =
                                                         cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
                                                 //cmd_tab_ptr->is_space_after_add = false;
                                                 cmd_tab_list.push_back(cmd_tab_ptr);
@@ -294,13 +292,9 @@ public:
         }
         // </editor-fold>
 
-
-        Cli_TAB_Variant tab_variant = CLI_TAB_VARIANT_EMPTY_STRING;
-
         {
 
             bool Is_Enter = false;
-            bool Is_Last_Space = is_last_char_space;
             set<string> s_add_set;
             set<string> s_log_set;
             string s_add_1;
@@ -348,158 +342,59 @@ public:
                     is_space_after_log_1 = true;
             }
 
-            if (s_cmd_in_trim.empty()) {
-                tab_variant = CLI_TAB_VARIANT_EMPTY_STRING;
-            }
+            Is_Space_Before = false;
 
-            if (Is_Enter == false) {
+            Is_Log = false;
+            s_log = "";
+            Is_Add = false;
+            s_add = "";
+            Is_Space_After = false;
 
-                if (Is_Enter == false && s_log_set.size() == 0 && s_add_set.size() == 0 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_NO_LOG_NO_ADD_NO_SPACE; // ERROR: CMD not found, cmd_tab_list empty
-                } else if (Is_Enter == false && s_log_set.size() == 0 && s_add_set.size() == 0 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_NO_LOG_NO_ADD_SPACE; //
-                } else if (Is_Enter == false && s_log_set.size() == 0 && s_add_set.size() == 1 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_NO_LOG_1_ADD_NO_SPACE; // 1 add -> Is_Add
-                } else if (Is_Enter == false && s_log_set.size() == 0 && s_add_set.size() == 1 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_NO_LOG_1_ADD_SPACE; //
-                } else if (Is_Enter == false && s_log_set.size() == 0 && s_add_set.size() >= 2 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_NO_LOG_2_ADD_NO_SPACE; //
-                } else if (Is_Enter == false && s_log_set.size() == 0 && s_add_set.size() >= 2 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_NO_LOG_2_ADD_SPACE;
-
-                } else if (Is_Enter == false && s_log_set.size() == 1 && s_add_set.size() == 0 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_1_LOG_NO_ADD_NO_SPACE; // 0 add, but 1 log - not message -> Is_Add
-                } else if (Is_Enter == false && s_log_set.size() == 1 && s_add_set.size() == 0 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_1_LOG_NO_ADD_SPACE; //
-                } else if (Is_Enter == false && s_log_set.size() == 1 && s_add_set.size() == 1 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_1_LOG_1_ADD_NO_SPACE;
-                } else if (Is_Enter == false && s_log_set.size() == 1 && s_add_set.size() == 1 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_1_LOG_1_ADD_SPACE;
-                } else if (Is_Enter == false && s_log_set.size() == 1 && s_add_set.size() >= 2 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_1_LOG_2_ADD_NO_SPACE;
-                } else if (Is_Enter == false && s_log_set.size() == 1 && s_add_set.size() >= 2 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_1_LOG_2_ADD_SPACE;
-
-                } else if (Is_Enter == false && s_log_set.size() >= 2 && s_add_set.size() == 0 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_2_LOG_NO_ADD_NO_SPACE; //
-                } else if (Is_Enter == false && s_log_set.size() >= 2 && s_add_set.size() == 0 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_2_LOG_NO_ADD_SPACE; //
-                } else if (Is_Enter == false && s_log_set.size() >= 2 && s_add_set.size() == 1 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_2_LOG_1_ADD_NO_SPACE;
-                } else if (Is_Enter == false && s_log_set.size() >= 2 && s_add_set.size() == 1 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_2_LOG_1_ADD_SPACE;
-                } else if (Is_Enter == false && s_log_set.size() >= 2 && s_add_set.size() >= 2 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_2_LOG_2_ADD_NO_SPACE;
-                } else if (Is_Enter == false && s_log_set.size() >= 2 && s_add_set.size() >= 2 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_NO_ENTER_2_LOG_2_ADD_SPACE;
-
-                }
-
-            }
-
-            if (Is_Enter == true) {
-
-                if (Is_Enter == true && s_log_set.size() == 0 && s_add_set.size() == 0 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_NO_LOG_NO_ADD_NO_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() == 0 && s_add_set.size() == 0 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_NO_LOG_NO_ADD_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() == 0 && s_add_set.size() == 1 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_NO_LOG_1_ADD_NO_SPACE; //
-                } else if (Is_Enter == true && s_log_set.size() == 0 && s_add_set.size() == 1 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_NO_LOG_1_ADD_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() == 0 && s_add_set.size() >= 2 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_NO_SPACE; //
-                } else if (Is_Enter == true && s_log_set.size() == 0 && s_add_set.size() >= 2 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_SPACE;
-
-                } else if (Is_Enter == true && s_log_set.size() == 1 && s_add_set.size() == 0 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_1_LOG_NO_ADD_NO_SPACE; //
-                } else if (Is_Enter == true && s_log_set.size() == 1 && s_add_set.size() == 0 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_1_LOG_NO_ADD_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() == 1 && s_add_set.size() == 1 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_1_LOG_1_ADD_NO_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() == 1 && s_add_set.size() == 1 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_1_LOG_1_ADD_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() == 1 && s_add_set.size() >= 2 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_1_LOG_2_ADD_NO_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() == 1 && s_add_set.size() >= 2 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_1_LOG_2_ADD_SPACE;
-
-                } else if (Is_Enter == true && s_log_set.size() >= 2 && s_add_set.size() == 0 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_2_LOG_NO_ADD_NO_SPACE; //
-                } else if (Is_Enter == true && s_log_set.size() >= 2 && s_add_set.size() == 0 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_2_LOG_NO_ADD_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() >= 2 && s_add_set.size() == 1 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_NO_SPACE; //
-                } else if (Is_Enter == true && s_log_set.size() >= 2 && s_add_set.size() == 1 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() >= 2 && s_add_set.size() >= 2 && Is_Last_Space == false) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_2_LOG_2_ADD_NO_SPACE;
-                } else if (Is_Enter == true && s_log_set.size() >= 2 && s_add_set.size() >= 2 && Is_Last_Space == true) {
-                    tab_variant = CLI_TAB_VARIANT_ENTER_2_LOG_2_ADD_SPACE;
-
-                }
-
-            }
-
-            int unexpexted_count = 0;
-
-            bool is_tab_variant_found = false;
-            switch (tab_variant) {
-
-                case CLI_TAB_VARIANT_EMPTY_STRING:
-                    unexpexted_count++;
-                    break;
-
-
-
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_NO_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-                    s_log = " <Error>";
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
+            if (s_add_vector.size() == 0 && s_log_vector.size() == 0) {
+                s_log = (Is_Enter ? " <Enter>" : " <Error>");
+            } else if (!Is_Enter && s_add_vector.size() == 1 && s_log_vector.size() == 0) {
+                s_add = s_add_1;
+                if (is_space_after_add_1)
+                    Is_Space_After = true;
+                else
                     Is_Space_After = false;
+            } else if (!Is_Enter && s_add_vector.size() == 0 && s_log_vector.size() == 1) {
+                if (!s_log_1.empty() && s_log_1[0] != '<' && s_log_1[0] != '\"' && s_log_1[0] != '\'' && s_log_1[0] != '[') {
+                    if (!is_last_char_space)
+                        s_add = " " + s_log_1;
+                    else
+                        s_add = s_log_1;
 
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_NO_ADD_SPACE:
-                {
-                    Is_Log = true;
-                    s_log = " <Error>";
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_1_ADD_NO_SPACE:
-                {
-                    Is_Log = false;
-                    s_log = "";
-                    Is_Add = true;
-                    s_add = s_add_1;
-                    Is_Space_Before = false;
-
-                    if (is_space_after_add_1)
+                    if (is_space_after_log_1)
                         Is_Space_After = true;
                     else
                         Is_Space_After = false;
-                    Is_Space_After = is_space_after_add_1;
-                    //Is_Space_After = false;
-                    ////Is_Space_After = true;
-
-                    is_tab_variant_found = true;
+                } else {
+                    s_log = " " + s_log_1;
+                    if (!is_last_char_comma) {
+                        Is_Space_After = true;
+                    }
                 }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_1_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_2_ADD_NO_SPACE:
+            } else if (Is_Enter && s_add_vector.size() == 0 && s_log_vector.size() == 1) {
+                s_log = " " + s_log_1 + " <Enter>";
+                if (is_space_after_log_1)
+                    Is_Space_After = true;
+                else
+                    Is_Space_After = false;
+            } else if (!Is_Enter && s_add_vector.size() == 1 && s_log_vector.size() == 1) {
+                s_log = " " + s_log_1 + " " + s_add_full_1;
+            } else if (Is_Enter && s_add_vector.size() == 1 && s_log_vector.size() == 1) {
+                s_add = s_add_1;
+                Is_Space_After = true;
+            } else if (s_add_vector.size() == 0 && s_log_vector.size() >= 2) {
+                s_log = "";
+                for (int i = 0; i < s_log_vector.size(); i++) {
+                    s_log += " " + s_log_vector[i];
+                }
+                if (Is_Enter)
+                    s_log += " <Enter>";
+                Is_Space_After = true;
+            } else if (!Is_Enter && s_add_vector.size() >= 2 && s_log_vector.size() == 0) {
                 {
                     // Add minimal common part or log full variants
                     int len_min = s_add_vector[0].size();
@@ -537,491 +432,38 @@ public:
                         s_common_part = s_common.substr(s_last_token.size());
                     }
                     if (!s_common_part.empty()) {
-                        Is_Log = false;
-                        s_log = "";
-                        Is_Add = true;
                         s_add = s_common_part;
-                        Is_Space_Before = false;
-                        Is_Space_After = false;
                     } else {
-                        Is_Log = true;
-
                         s_log = "";
                         for (int i = 0; i < s_add_vector.size(); i++) {
                             s_log += " ";
                             s_log += s_add_vector[i];
                         }
-
-                        Is_Add = false;
-                        s_add = "";
-                        Is_Space_Before = false;
-                        Is_Space_After = false;
                     }
-
-                    is_tab_variant_found = true;
                 }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_2_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_NO_ADD_NO_SPACE:
-                {
-                    if (!s_log_1.empty() && s_log_1[0] != '<' && s_log_1[0] != '\"' && s_log_1[0] != '\'' && s_log_1[0] != '[') {
-                        Is_Log = false;
-                        s_log = "";
-                        Is_Add = true;
-                        s_add = " " + s_log_1;
-                        Is_Space_Before = false;
-
-                        if (is_space_after_log_1)
-                            Is_Space_After = true;
-                        else
-                            Is_Space_After = false;
-                        Is_Space_After = is_space_after_log_1;
-                        ////Is_Space_After = false;
-                        //Is_Space_After = true;
-                    } else {
-                        Is_Log = true;
-                        s_log = " " + s_log_1;
-                        Is_Add = false;
-                        s_add = "";
-                        Is_Space_Before = false;
-                        if (!is_last_char_comma && !is_last_char_commas) {
-                            Is_Space_After = true; // wrong: help "s<TAB> -> + ' ' (1 case)
-                            //Is_Space_After = is_space_after_log_1; // wrong: set str<TAB> -> log str + no ' ' (12 cases)
-                            //Is_Space_After = false; // wrong: set str<TAB> -> log str + no ' ' (12 cases)
-                        }
-                        if (is_incomplete_str) {
-                            Is_Space_After = false;
-                        }
-                    }
-
-                    is_tab_variant_found = true;
+            } else if (s_add_vector.size() >= 2 || s_log_vector.size() >= 2) {
+                s_log = "";
+                for (int i = 0; i < s_log_vector.size(); i++) {
+                    s_log += " ";
+                    s_log += s_log_vector[i];
                 }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_NO_ADD_SPACE:
-                {
-                    if (!s_log_1.empty() && s_log_1[0] != '<' && s_log_1[0] != '\"' && s_log_1[0] != '\'' && s_log_1[0] != '[') {
-                        Is_Log = false;
-                        s_log = "";
-                        Is_Add = true;
-                        s_add = s_log_1;
-                        Is_Space_Before = false;
-                        Is_Space_After = false;
-                    } else {
-                        Is_Log = true;
-                        s_log = " " + s_log_1;
-                        Is_Add = false;
-                        s_add = "";
-                        Is_Space_Before = false;
-                        Is_Space_After = false;
-                    }
-
-                    is_tab_variant_found = true;
+                for (int i = 0; i < s_add_vector.size(); i++) {
+                    s_log += " ";
+                    s_log += s_add_vector[i];
                 }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_1_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-                    s_log = " " + s_log_1 + " " + s_add_full_1;
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_1_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_2_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = " " + s_log_1;
-                    for (int i = 0; i < s_add_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_add_vector[i];
-                    }
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_2_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_NO_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = true;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_NO_ADD_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-
-                    if (is_space_after_log_1)
-                        Is_Space_After = true;
-                    else
-                        Is_Space_After = false;
-                    Is_Space_After = is_space_after_log_1;
-                    ////Is_Space_After = false;
-                    //Is_Space_After = true;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_1_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-                    for (int i = 0; i < s_add_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_add_vector[i];
-                    }
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_1_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_2_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-                    for (int i = 0; i < s_add_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_add_vector[i];
-                    }
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_2_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-
-
-
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_NO_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-                    s_log = " <Enter>";
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_NO_ADD_SPACE:
-                {
-                    Is_Log = true;
-                    s_log = " <Enter>";
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_1_ADD_NO_SPACE:
-                {
-                    Is_Log = false; // @Attention: unreachable case?
-                    s_log = "";
-                    Is_Add = true;
-                    s_add = s_add_1;
-                    Is_Space_Before = false;
-
-                    if (is_space_after_add_1)
-                        Is_Space_After = true; // @Attention: unreachable case?
-                    else
-                        Is_Space_After = false; // @Attention: unreachable case?
-                    Is_Space_After = is_space_after_add_1;
-                    //Is_Space_After = false;
-                    //Is_Space_After = true;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_1_ADD_SPACE:
-                    break;
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_NO_SPACE:
-                {
-                    Is_Log = true; // @Attention: unreachable case?
-
-                    s_log = "";
-                    for (int i = 0; i < s_add_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_add_vector[i];
-                    }
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-
-                case CLI_TAB_VARIANT_ENTER_1_LOG_NO_ADD_NO_SPACE:
-                {
-                    if (s_log_1 == ",") {
-                        Is_Log = true;
-                        s_log = " " + s_log_1 + " <Enter>";
-                        Is_Add = false;
-                        s_add = "";
-                        Is_Space_Before = false;
-                        Is_Space_After = false;
-                    } else {
-                        Is_Log = true;
-                        s_log = " " + s_log_1 + " <Enter>";
-                        Is_Add = false;
-                        s_add = "";
-                        Is_Space_Before = false;
-
-                        if (is_space_after_log_1)
-                            Is_Space_After = true;
-                        else
-                            Is_Space_After = false;
-                        Is_Space_After = is_space_after_log_1; // wrong: help z<TAB> -> verbose <Enter> (wanted: "<command>" <Enter>) (1 case) - Acceptable
-                        //Is_Space_After = false; // wrong: help full<TAB> -> verbose <Enter> (no ' ') (10 cases)
-                        //Is_Space_After = true; // wrong: help h<TAB> -> verbose <Enter> + ' ' (1 case) - BAD
-                    }
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_1_LOG_NO_ADD_SPACE:
-                {
-                    Is_Log = true;
-                    s_log = " " + s_log_1 + " <Enter>";
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_1_LOG_1_ADD_NO_SPACE:
-                {
-                    Is_Log = false;
-                    s_log = "";
-                    Is_Add = true;
-                    s_add = s_add_1;
-                    Is_Space_Before = false;
-                    
-                    if (is_space_after_add_1)
-                        Is_Space_After = true;
-                    else
-                        Is_Space_After = false; // @Attention: unreachable case?
-                    Is_Space_After = is_space_after_add_1;
-                    //Is_Space_After = false;
-                    ///Is_Space_After = true;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_1_LOG_1_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-                case CLI_TAB_VARIANT_ENTER_1_LOG_2_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-                    for (int i = 0; i < s_add_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_add_vector[i];
-                    }
+                if (Is_Enter)
                     s_log += " <Enter>";
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_1_LOG_2_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-
-                case CLI_TAB_VARIANT_ENTER_2_LOG_NO_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-                    s_log += " <Enter>";
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-
-                    if (is_space_after_log_1)
-                        Is_Space_After = true;
-                    else
-                        Is_Space_After = false; // @Attention: unreachable case?
-                    Is_Space_After = is_space_after_log_1;
-                    //Is_Space_After = false;
-                    ////Is_Space_After = true;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_2_LOG_NO_ADD_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-                    s_log += " <Enter>";
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_NO_SPACE:
-                {
-                    //                    Is_Log = true;
-                    //
-                    //                    s_log = "";
-                    //                    for (int i = 0; i < s_log_vector.size(); i++) {
-                    //                        s_log += " ";
-                    //                        s_log += s_log_vector[i];
-                    //                    }
-                    //                    s_log += " " + s_add_full_1;
-                    //                    s_log += " <Enter>";
-                    //
-                    //                    Is_Add = false;
-                    //                    s_add = "";
-                    //                    Is_Space_Before = false;
-                    //                    Is_Space_After = false;
-
-                    Is_Log = false; // @Attention: unreachable case?
-                    s_log = "";
-                    Is_Add = true;
-                    s_add = s_add_1;
-                    Is_Space_Before = false;
-                    Is_Space_After = true;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-                case CLI_TAB_VARIANT_ENTER_2_LOG_2_ADD_NO_SPACE:
-                {
-                    Is_Log = true;
-
-                    s_log = "";
-                    for (int i = 0; i < s_log_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_log_vector[i];
-                    }
-                    for (int i = 0; i < s_add_vector.size(); i++) {
-                        s_log += " ";
-                        s_log += s_add_vector[i];
-                    }
-                    s_log += " <Enter>";
-
-                    Is_Add = false;
-                    s_add = "";
-                    Is_Space_Before = false;
-                    Is_Space_After = false;
-
-                    is_tab_variant_found = true;
-                }
-                    break;
-                case CLI_TAB_VARIANT_ENTER_2_LOG_2_ADD_SPACE:
-                    unexpexted_count++;
-                    break;
-
-
-
+            } else {
+                s_log = " <Error>";
             }
 
-            if (!is_tab_variant_found) {
-                Is_Log = true;
-                s_log = " \"" + s_cmd_in_trim + "\" - No Tab Variant found";
-                Is_Add = false;
-                s_add = "";
-                Is_Space_Before = false;
+            Is_Add = !s_add.empty();
+            Is_Log = !s_log.empty();
+
+            if (is_incomplete_str) {
+                Is_Space_After = false;
+            }
+            if (is_last_char_space) {
                 Is_Space_After = false;
             }
 
@@ -1031,10 +473,6 @@ public:
             delete cmd_tab_list[i];
         }
         cmd_tab_list.clear();
-
-        if (is_incomplete_str) {
-            Is_Space_After = false;
-        }
 
     }
 

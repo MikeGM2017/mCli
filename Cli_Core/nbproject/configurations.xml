@@ -49,7 +49,6 @@
         <itemPath>Cli_TAB_Processor/Cli_TAB_Processor.h</itemPath>
         <itemPath>Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h</itemPath>
         <itemPath>Cli_TAB_Processor/Cli_TAB_Result.h</itemPath>
-        <itemPath>Cli_TAB_Processor/Cli_TAB_Variant.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Cmd_Item" projectFiles="true">
         <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
@@ -313,11 +312,6 @@
             flavor2="0">
       </item>
       <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Cli_TAB_Processor/Cli_TAB_Variant.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -739,11 +733,6 @@
             flavor2="0">
       </item>
       <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Cli_TAB_Processor/Cli_TAB_Variant.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
