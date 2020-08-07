@@ -442,10 +442,14 @@ public:
 
             }
 
+            int unexpexted_count = 0;
+
             bool is_tab_variant_found = false;
             switch (tab_variant) {
 
-                case CLI_TAB_VARIANT_EMPTY_STRING: break;
+                case CLI_TAB_VARIANT_EMPTY_STRING:
+                    unexpexted_count++;
+                    break;
 
 
 
@@ -480,6 +484,11 @@ public:
                     Is_Add = true;
                     s_add = s_add_1;
                     Is_Space_Before = false;
+
+                    if (is_space_after_add_1)
+                        Is_Space_After = true;
+                    else
+                        Is_Space_After = false;
                     Is_Space_After = is_space_after_add_1;
                     //Is_Space_After = false;
                     ////Is_Space_After = true;
@@ -487,7 +496,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_1_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_1_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
                 case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_2_ADD_NO_SPACE:
                 {
                     // Add minimal common part or log full variants
@@ -550,7 +561,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_2_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_NO_ENTER_NO_LOG_2_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
 
                 case CLI_TAB_VARIANT_NO_ENTER_1_LOG_NO_ADD_NO_SPACE:
                 {
@@ -560,6 +573,11 @@ public:
                         Is_Add = true;
                         s_add = " " + s_log_1;
                         Is_Space_Before = false;
+
+                        if (is_space_after_log_1)
+                            Is_Space_After = true;
+                        else
+                            Is_Space_After = false;
                         Is_Space_After = is_space_after_log_1;
                         ////Is_Space_After = false;
                         //Is_Space_After = true;
@@ -615,7 +633,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_1_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_1_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
                 case CLI_TAB_VARIANT_NO_ENTER_1_LOG_2_ADD_NO_SPACE:
                 {
                     Is_Log = true;
@@ -634,7 +654,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_2_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_NO_ENTER_1_LOG_2_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
 
                 case CLI_TAB_VARIANT_NO_ENTER_2_LOG_NO_ADD_NO_SPACE:
                 {
@@ -667,6 +689,11 @@ public:
                     Is_Add = false;
                     s_add = "";
                     Is_Space_Before = false;
+
+                    if (is_space_after_log_1)
+                        Is_Space_After = true;
+                    else
+                        Is_Space_After = false;
                     Is_Space_After = is_space_after_log_1;
                     ////Is_Space_After = false;
                     //Is_Space_After = true;
@@ -696,7 +723,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_1_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_1_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
                 case CLI_TAB_VARIANT_NO_ENTER_2_LOG_2_ADD_NO_SPACE:
                 {
                     Is_Log = true;
@@ -719,7 +748,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_2_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_NO_ENTER_2_LOG_2_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
 
 
 
@@ -761,7 +792,8 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_1_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_ENTER_NO_LOG_1_ADD_SPACE:
+                    break;
                 case CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_NO_SPACE:
                 {
                     Is_Log = true;
@@ -780,7 +812,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
 
                 case CLI_TAB_VARIANT_ENTER_1_LOG_NO_ADD_NO_SPACE:
                 {
@@ -797,6 +831,11 @@ public:
                         Is_Add = false;
                         s_add = "";
                         Is_Space_Before = false;
+
+                        if (is_space_after_log_1)
+                            Is_Space_After = true;
+                        else
+                            Is_Space_After = false;
                         Is_Space_After = is_space_after_log_1; // wrong: help z<TAB> -> verbose <Enter> (wanted: "<command>" <Enter>) (1 case) - Acceptable
                         //Is_Space_After = false; // wrong: help full<TAB> -> verbose <Enter> (no ' ') (10 cases)
                         //Is_Space_After = true; // wrong: help h<TAB> -> verbose <Enter> + ' ' (1 case) - BAD
@@ -831,7 +870,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_ENTER_1_LOG_1_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_ENTER_1_LOG_1_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
                 case CLI_TAB_VARIANT_ENTER_1_LOG_2_ADD_NO_SPACE:
                 {
                     Is_Log = true;
@@ -855,7 +896,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_ENTER_1_LOG_2_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_ENTER_1_LOG_2_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
 
                 case CLI_TAB_VARIANT_ENTER_2_LOG_NO_ADD_NO_SPACE:
                 {
@@ -871,6 +914,11 @@ public:
                     Is_Add = false;
                     s_add = "";
                     Is_Space_Before = false;
+
+                    if (is_space_after_log_1)
+                        Is_Space_After = true;
+                    else
+                        Is_Space_After = false;
                     Is_Space_After = is_space_after_log_1;
                     //Is_Space_After = false;
                     ////Is_Space_After = true;
@@ -899,32 +947,34 @@ public:
                     break;
                 case CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_NO_SPACE:
                 {
-//                    Is_Log = true;
-//
-//                    s_log = "";
-//                    for (int i = 0; i < s_log_vector.size(); i++) {
-//                        s_log += " ";
-//                        s_log += s_log_vector[i];
-//                    }
-//                    s_log += " " + s_add_full_1;
-//                    s_log += " <Enter>";
-//
-//                    Is_Add = false;
-//                    s_add = "";
-//                    Is_Space_Before = false;
-//                    Is_Space_After = false;
+                    //                    Is_Log = true;
+                    //
+                    //                    s_log = "";
+                    //                    for (int i = 0; i < s_log_vector.size(); i++) {
+                    //                        s_log += " ";
+                    //                        s_log += s_log_vector[i];
+                    //                    }
+                    //                    s_log += " " + s_add_full_1;
+                    //                    s_log += " <Enter>";
+                    //
+                    //                    Is_Add = false;
+                    //                    s_add = "";
+                    //                    Is_Space_Before = false;
+                    //                    Is_Space_After = false;
 
-                                        Is_Log = false;
-                                        s_log = "";
-                                        Is_Add = true;
-                                        s_add = s_add_1;
-                                        Is_Space_Before = false;
-                                        Is_Space_After = true;
+                    Is_Log = false;
+                    s_log = "";
+                    Is_Add = true;
+                    s_add = s_add_1;
+                    Is_Space_Before = false;
+                    Is_Space_After = true;
 
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_ENTER_2_LOG_1_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
                 case CLI_TAB_VARIANT_ENTER_2_LOG_2_ADD_NO_SPACE:
                 {
                     Is_Log = true;
@@ -948,7 +998,9 @@ public:
                     is_tab_variant_found = true;
                 }
                     break;
-                case CLI_TAB_VARIANT_ENTER_2_LOG_2_ADD_SPACE: break;
+                case CLI_TAB_VARIANT_ENTER_2_LOG_2_ADD_SPACE:
+                    unexpexted_count++;
+                    break;
 
 
 

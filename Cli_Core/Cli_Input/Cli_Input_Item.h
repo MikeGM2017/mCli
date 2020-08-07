@@ -28,19 +28,19 @@ public:
 
     Cli_Input_Item(Cli_Input_Item_Type type, string text) : Type(type), Text(text) {
     }
-    
+
     Cli_Input_Item_Type Type_Get() {
         return Type;
     }
-    
+
     void Type_Set(Cli_Input_Item_Type type) {
         Type = type;
     }
-    
+
     string Text_Get() {
         return Text;
     }
-    
+
     void Text_Set(string text) {
         Text = text;
     }
