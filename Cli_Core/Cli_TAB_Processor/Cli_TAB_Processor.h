@@ -215,7 +215,7 @@ public:
                                                 //}
 
                                                 //cmd_tab_ptr->s_log_or_add = cmd_item_ptr->Text_Get();
-                                                cmd_tab_ptr->is_space_after_add =
+                                                    cmd_tab_ptr->is_space_after_add =
                                                         cmd_item_ptr->Is_Space_After_Add(token_ptr->Text_Get());
                                                 //cmd_tab_ptr->is_space_after_add = false;
                                                 cmd_tab_list.push_back(cmd_tab_ptr);
@@ -780,16 +780,16 @@ public:
                     break;
                 case CLI_TAB_VARIANT_ENTER_NO_LOG_1_ADD_NO_SPACE:
                 {
-                    Is_Log = false;
+                    Is_Log = false; // @Attention: unreachable case?
                     s_log = "";
                     Is_Add = true;
                     s_add = s_add_1;
                     Is_Space_Before = false;
 
                     if (is_space_after_add_1)
-                        Is_Space_After = true;
+                        Is_Space_After = true; // @Attention: unreachable case?
                     else
-                        Is_Space_After = false;
+                        Is_Space_After = false; // @Attention: unreachable case?
                     Is_Space_After = is_space_after_add_1;
                     //Is_Space_After = false;
                     //Is_Space_After = true;
@@ -801,7 +801,7 @@ public:
                     break;
                 case CLI_TAB_VARIANT_ENTER_NO_LOG_2_ADD_NO_SPACE:
                 {
-                    Is_Log = true;
+                    Is_Log = true; // @Attention: unreachable case?
 
                     s_log = "";
                     for (int i = 0; i < s_add_vector.size(); i++) {
@@ -872,7 +872,7 @@ public:
                     if (is_space_after_add_1)
                         Is_Space_After = true;
                     else
-                        Is_Space_After = false;
+                        Is_Space_After = false; // @Attention: unreachable case?
                     Is_Space_After = is_space_after_add_1;
                     //Is_Space_After = false;
                     ///Is_Space_After = true;
@@ -928,7 +928,7 @@ public:
                     if (is_space_after_log_1)
                         Is_Space_After = true;
                     else
-                        Is_Space_After = false;
+                        Is_Space_After = false; // @Attention: unreachable case?
                     Is_Space_After = is_space_after_log_1;
                     //Is_Space_After = false;
                     ////Is_Space_After = true;
@@ -972,7 +972,7 @@ public:
                     //                    Is_Space_Before = false;
                     //                    Is_Space_After = false;
 
-                    Is_Log = false;
+                    Is_Log = false; // @Attention: unreachable case?
                     s_log = "";
                     Is_Add = true;
                     s_add = s_add_1;
