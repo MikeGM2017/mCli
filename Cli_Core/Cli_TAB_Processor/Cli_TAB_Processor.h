@@ -371,7 +371,7 @@ public:
                         Is_Space_After = false;
                 } else {
                     s_log = " " + s_log_1;
-                    if (!is_last_char_comma) {
+                    if (!is_last_char_comma && !is_last_char_commas) {
                         Is_Space_After = true;
                     }
                 }
