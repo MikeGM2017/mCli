@@ -158,6 +158,8 @@ public:
         if (s[s.size() - 1] == '-') {
             return CMD_ITEM_INCOMPLETE_STR;
         }
+        
+        return CMD_ITEM_OK_CAN_CONTINUE;
 
         return CMD_ITEM_OK; // Список значений, попадающие в Min...Max
     }
