@@ -785,6 +785,11 @@ public:
                     Is_Add = true;
                     s_add = s_add_1;
                     Is_Space_Before = false;
+
+                    if (is_space_after_add_1)
+                        Is_Space_After = true;
+                    else
+                        Is_Space_After = false;
                     Is_Space_After = is_space_after_add_1;
                     //Is_Space_After = false;
                     //Is_Space_After = true;
@@ -863,6 +868,11 @@ public:
                     Is_Add = true;
                     s_add = s_add_1;
                     Is_Space_Before = false;
+                    
+                    if (is_space_after_add_1)
+                        Is_Space_After = true;
+                    else
+                        Is_Space_After = false;
                     Is_Space_After = is_space_after_add_1;
                     //Is_Space_After = false;
                     ///Is_Space_After = true;
