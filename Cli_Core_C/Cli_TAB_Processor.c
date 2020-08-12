@@ -39,7 +39,7 @@ static int TAB_Cmd_Ptr_Check_By_Level(struct Cli_Cmd *cmd_ptr, enum Cli_Cmd_Priv
 }
 
 static void TAB_Cmd_Add_By_Level(struct Cli_Cmd *cmd_ptr, enum Cli_Cmd_Privilege_ID user_privilege, char *level,
-        char **str_list, int *str_list_size, int str_list_size_max) {
+        struct Str_List_Item *str_list, int *str_list_size, int str_list_size_max) {
     int is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, user_privilege, level);
     if (is_cmd_prt_valid) {
         char *s = cmd_ptr->Item_Head->Text;
@@ -47,7 +47,7 @@ static void TAB_Cmd_Add_By_Level(struct Cli_Cmd *cmd_ptr, enum Cli_Cmd_Privilege
         int i;
         int found = 0;
         for (i = 0; i < (*str_list_size); i++) {
-            char *str_list_ptr = str_list[i];
+            char *str_list_ptr = str_list[i].Text;
             if (!strcmp(str_list_ptr, s)) {
                 found = 1;
                 break;
@@ -55,9 +55,7 @@ static void TAB_Cmd_Add_By_Level(struct Cli_Cmd *cmd_ptr, enum Cli_Cmd_Privilege
         }
 
         if (!found && (*str_list_size) < str_list_size_max) {
-            int len = CLI_CMD_TEXT_SIZE_DEF - 1;
-            strncpy(str_list[(*str_list_size)], s, len);
-            str_list[(*str_list_size)][len] = '\0';
+            Str_List_Item_Text_Set(&str_list[(*str_list_size)], s);
             (*str_list_size)++;
         }
     }
@@ -69,12 +67,12 @@ static void TAB_Help_Get(enum Cli_Cmd_Privilege_ID user_privilege,
 
 #define TAB_HELP_STR_LIST_SIZE_DEF 32
 
-    char str_list[TAB_HELP_STR_LIST_SIZE_DEF][CLI_CMD_TEXT_SIZE_DEF];
+    struct Str_List_Item str_list[TAB_HELP_STR_LIST_SIZE_DEF];
     int str_list_size = 0;
 
-    strncpy(str_list[str_list_size++], "H", CLI_CMD_TEXT_SIZE_DEF);
-    strncpy(str_list[str_list_size++], "Q", CLI_CMD_TEXT_SIZE_DEF);
-    strncpy(str_list[str_list_size++], "E", CLI_CMD_TEXT_SIZE_DEF);
+    strncpy(str_list[str_list_size++].Text, "H", CLI_CMD_TEXT_SIZE_DEF);
+    strncpy(str_list[str_list_size++].Text, "Q", CLI_CMD_TEXT_SIZE_DEF);
+    strncpy(str_list[str_list_size++].Text, "E", CLI_CMD_TEXT_SIZE_DEF);
 
     struct Cli_Module *module_ptr = modules->Module_Head;
     while (module_ptr) {
@@ -96,7 +94,7 @@ static void TAB_Help_Get(enum Cli_Cmd_Privilege_ID user_privilege,
     int s_out_pos = 0;
     int i;
     for (i = 0; i < str_list_size; i++) {
-        s_out_pos = snprintf(s_out + s_out_pos, s_out_size - s_out_pos, " %s", str_list[i]);
+        s_out_pos += snprintf(s_out + s_out_pos, s_out_size - s_out_pos, " %s", str_list[i].Text);
     }
 
 }

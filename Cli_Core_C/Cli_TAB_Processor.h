@@ -26,8 +26,10 @@ extern "C" {
 #include "Cmd_Token_Parser.h"
 #include "Cli_Input_C.h"
 #include "Cli_Output_C.h"
-    
+
 #include "TAB_Cmd.h"
+
+#include "Str_List_Item.h"
 
 #define CLI_TAB_PROCESSOR_STR_REM_SIZE_DEF 32
 
