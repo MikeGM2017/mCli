@@ -36,6 +36,8 @@
       <itemPath>Level_Description.h</itemPath>
       <itemPath>Level_Description_Array.h</itemPath>
       <itemPath>Str_Filter.h</itemPath>
+      <itemPath>TAB_Cmd.h</itemPath>
+      <itemPath>TAB_Cmd_ID.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -69,6 +71,7 @@
       <itemPath>Level_Description.c</itemPath>
       <itemPath>Level_Description_Array.c</itemPath>
       <itemPath>Str_Filter.c</itemPath>
+      <itemPath>TAB_Cmd.c</itemPath>
       <itemPath>cli_core_c_test_main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -210,6 +213,12 @@
       </item>
       <item path="Str_Filter.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="TAB_Cmd.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cli_core_c_test_main.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
@@ -346,6 +355,12 @@
       <item path="Str_Filter.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Str_Filter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_core_c_test_main.c" ex="false" tool="0" flavor2="0">
       </item>

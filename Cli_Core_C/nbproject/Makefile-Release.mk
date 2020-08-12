@@ -60,6 +60,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Level_Description.o \
 	${OBJECTDIR}/Level_Description_Array.o \
 	${OBJECTDIR}/Str_Filter.o \
+	${OBJECTDIR}/TAB_Cmd.o \
 	${OBJECTDIR}/cli_core_c_test_main.o
 
 
@@ -211,6 +212,11 @@ ${OBJECTDIR}/Str_Filter.o: Str_Filter.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Str_Filter.o Str_Filter.c
+
+${OBJECTDIR}/TAB_Cmd.o: TAB_Cmd.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/TAB_Cmd.o TAB_Cmd.c
 
 ${OBJECTDIR}/cli_core_c_test_main.o: cli_core_c_test_main.c 
 	${MKDIR} -p ${OBJECTDIR}
