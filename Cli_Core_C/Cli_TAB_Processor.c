@@ -99,10 +99,86 @@ static void TAB_Help_Get(enum Cli_Cmd_Privilege_ID user_privilege,
 
 }
 
+static void TAB_Cmd_List_Get_With_Flags(
+        // in
+        enum Cli_Cmd_Privilege_ID user_privilege, struct Cli_Modules *modules,
+        char *level, char *s_cmd_in, char *s_cmd_in_trim, struct Cmd_Token_Array *tokens,
+        // out
+        char *s_log, int s_log_size_max,
+        char *s_add, int s_add_size_max,
+        int *Is_Log, int *Is_Add, int *Is_Space_Before, int *Is_Space_After) {
+
+    // Dummy
+    strcpy(s_log, " Dummy <Dummy>");
+    (*Is_Log) = 1;
+    s_add[0] = '\0';
+    (*Is_Add) = 0;
+
+}
+
+static void TAB_Cmd_List_Get(
+        // in
+        enum Cli_Cmd_Privilege_ID user_privilege, struct Cli_Modules *modules,
+        char *level, char *s_cmd_in, char *s_cmd_in_trim, struct Cmd_Token_Array *tokens,
+        //out
+        struct TAB_Cmd *tab_cmd_list, int *tab_cmd_list_size, int tab_cmd_list_size_max) {
+
+#define TAB_STR_LOG_SIZE_DEF 1024
+#define TAB_STR_ADD_SIZE_DEF 1024
+
+    char s_log[TAB_STR_LOG_SIZE_DEF] = "";
+    char s_add[TAB_STR_ADD_SIZE_DEF] = "";
+
+    int Is_Log = 0;
+    int Is_Add = 0;
+    int Is_Space_Before = 0;
+    int Is_Space_After = 0;
+
+    TAB_Cmd_List_Get_With_Flags(
+            // in
+            user_privilege, modules, level, s_cmd_in, s_cmd_in_trim, tokens,
+            // out
+            s_log, TAB_STR_LOG_SIZE_DEF,
+            s_add, TAB_STR_ADD_SIZE_DEF,
+            &Is_Log, &Is_Add, &Is_Space_Before, &Is_Space_After);
+
+    if (Is_Log && (*tab_cmd_list_size) < tab_cmd_list_size_max) {
+        tab_cmd_list[(*tab_cmd_list_size)].ID = TAB_CMD_ID_LOG_PRINT;
+
+        int len = TAB_CMD_TEXT_SIZE_DEF - 1;
+        strncpy(tab_cmd_list[(*tab_cmd_list_size)].Text, s_log, len);
+        tab_cmd_list[(*tab_cmd_list_size)].Text[len] = '\0';
+
+        (*tab_cmd_list_size)++;
+    }
+    if (Is_Space_Before && (*tab_cmd_list_size) < tab_cmd_list_size_max) {
+        tab_cmd_list[(*tab_cmd_list_size)].ID = TAB_CMD_ID_INPUT_CHECK_SPACE;
+        tab_cmd_list[(*tab_cmd_list_size)].Text[0] = '\0';
+        (*tab_cmd_list_size)++;
+    }
+    if (Is_Add && (*tab_cmd_list_size) < tab_cmd_list_size_max) {
+        tab_cmd_list[(*tab_cmd_list_size)].ID = TAB_CMD_ID_INPUT_ADD;
+
+        int len = TAB_CMD_TEXT_SIZE_DEF - 1;
+        strncpy(tab_cmd_list[(*tab_cmd_list_size)].Text, s_add, len);
+        tab_cmd_list[(*tab_cmd_list_size)].Text[len] = '\0';
+
+        (*tab_cmd_list_size)++;
+    }
+    if (Is_Space_After && (*tab_cmd_list_size) < tab_cmd_list_size_max) {
+        tab_cmd_list[(*tab_cmd_list_size)].ID = TAB_CMD_ID_INPUT_CHECK_SPACE;
+        tab_cmd_list[(*tab_cmd_list_size)].Text[0] = '\0';
+        (*tab_cmd_list_size)++;
+    }
+
+}
+
 static int Process_Input_Item(struct Cli_TAB_Processor *tab_processor,
         struct Cli_Input_C_Item *input_item, int *is_invitation_print) {
 
 #define TAB_CMD_LIST_SIZE_DEF 4
+
+#define TAB_HELP_TOKEN_LIST_SIZE_DEF 32
 
     struct TAB_Cmd tab_cmd_list[TAB_CMD_LIST_SIZE_DEF];
     int tab_cmd_list_size = 0;
@@ -131,6 +207,15 @@ static int Process_Input_Item(struct Cli_TAB_Processor *tab_processor,
         //        for (int i = 0; i < tokens.size(); i++)
         //            delete tokens[i];
         //        tokens.clear();
+        enum Cmd_Token_Parser_Result parse_res = CMD_TOKEN_PARSER_ERROR;
+        struct Cmd_Token_Array tokens = tab_processor->Parser->Parse(s_trim, tab_processor->Str_Rem, &parse_res);
+
+        TAB_Cmd_List_Get(
+                // in
+                tab_processor->User_Privilege, tab_processor->Modules, level,
+                Cli_Input_C_Item_Text_Get(input_item), s_trim, &tokens,
+                // out
+                tab_cmd_list, &tab_cmd_list_size, TAB_CMD_LIST_SIZE_DEF);
     }
 
     if (tab_cmd_list_size) {
