@@ -48,6 +48,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cli_Input_C_termios.o \
 	${OBJECTDIR}/Cli_Module.o \
 	${OBJECTDIR}/Cli_Module_Base_Help.o \
+	${OBJECTDIR}/Cli_Module_Base_Quit.o \
 	${OBJECTDIR}/Cli_Module_Base_Rem.o \
 	${OBJECTDIR}/Cli_Modules.o \
 	${OBJECTDIR}/Cli_Output_C_printf.o \
@@ -153,6 +154,11 @@ ${OBJECTDIR}/Cli_Module_Base_Help.o: Cli_Module_Base_Help.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Help.o Cli_Module_Base_Help.c
+
+${OBJECTDIR}/Cli_Module_Base_Quit.o: Cli_Module_Base_Quit.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Quit.o Cli_Module_Base_Quit.c
 
 ${OBJECTDIR}/Cli_Module_Base_Rem.o: Cli_Module_Base_Rem.c 
 	${MKDIR} -p ${OBJECTDIR}

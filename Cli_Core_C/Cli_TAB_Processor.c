@@ -99,6 +99,26 @@ static void TAB_Help_Get(enum Cli_Cmd_Privilege_ID user_privilege,
 
 }
 
+static void Str_List_Add_Unique(struct Str_List_Item *s_list, int *s_list_size, int s_list_size_max, char *s) {
+    if ((*s_list_size) < s_list_size_max) {
+        int i;
+        int found = 0;
+        for (i = 0; i < (*s_list_size); i++) {
+            if (!strncmp(s_list[i].Text, s, STR_LIST_ITEM_TEXT_SIZE_DEF)) {
+                found = 1;
+                break;
+            }
+        }
+
+        if (!found) {
+            int len = STR_LIST_ITEM_TEXT_SIZE_DEF - 1;
+            strncpy(s_list[(*s_list_size)].Text, s, len);
+            s_list[(*s_list_size)].Text[len] = '\0';
+            (*s_list_size)++;
+        }
+    }
+}
+
 static void TAB_Cmd_List_Get_With_Flags(
         // in
         enum Cli_Cmd_Privilege_ID user_privilege, struct Cli_Modules *modules,
@@ -108,11 +128,89 @@ static void TAB_Cmd_List_Get_With_Flags(
         char *s_add, int s_add_size_max,
         int *Is_Log, int *Is_Add, int *Is_Space_Before, int *Is_Space_After) {
 
-    // Dummy
-    strcpy(s_log, " Dummy <Dummy>");
-    (*Is_Log) = 1;
-    s_add[0] = '\0';
-    (*Is_Add) = 0;
+    int is_incomplete_str = 0;
+    char last_char = 0;
+    int is_last_char_space = 0;
+    int is_last_char_comma = 0;
+    int is_last_char_commas = 0;
+
+    int s_cmd_in_size = strlen(s_cmd_in);
+    int s_cmd_in_empty = (s_cmd_in[0] == '\0');
+    if (!s_cmd_in_empty) {
+        last_char = s_cmd_in[s_cmd_in_size - 1];
+        if (last_char == ' ' || last_char == '\t') is_last_char_space = 1;
+        else if (last_char == ',') is_last_char_comma = 1;
+        else if (last_char == '\'' || last_char == '\"') is_last_char_commas = 1;
+    }
+
+    int Is_Enter = 0;
+
+#define TAB_STR_LOG_LIST_SIZE_DEF 64
+#define TAB_STR_ADD_LIST_SIZE_DEF 64
+
+    struct Str_List_Item s_log_list[TAB_STR_LOG_LIST_SIZE_DEF];
+    int s_log_list_size = 0;
+
+    struct Str_List_Item s_add_list[TAB_STR_ADD_LIST_SIZE_DEF];
+    int s_add_list_size = 0;
+
+    struct Cli_Module *module_ptr = modules->Module_Head;
+    while (module_ptr) {
+        {
+            struct Cli_Cmd *cmd_ptr = module_ptr->Cmd_Head;
+            while (cmd_ptr) {
+                {
+                    int is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, user_privilege, level);
+                    if (is_cmd_prt_valid) {
+                        if (tokens->Size <= cmd_ptr->Items_Size) {
+                            int is_valid = 1;
+                            int token;
+                            struct Cli_Cmd_Item *cmd_item_ptr = cmd_ptr->Item_Head;
+                            for (token = 0; token < tokens->Size && cmd_item_ptr; token++) {
+                                struct Cmd_Token *token_ptr = &tokens->Items[token];
+                                {
+                                    //                                    enum Cmd_Item_Valid_Result res_parse = cmd_item_ptr->Parse(cmd_item_ptr, token_ptr->Text);
+                                    //                                    if (res_parse == CMD_ITEM_OK_CAN_CONTINUE) {
+                                    //                                        Cli_TAB_Result *cmd_tab_ptr = new Cli_TAB_Result;
+                                    //                                        cmd_tab_ptr->cmd_ptr = cmd_ptr;
+                                    //                                        cmd_tab_ptr->Is_Enter = true;
+                                    //                                        cmd_tab_ptr->s_log = ",";
+                                    //                                        cmd_tab_ptr->is_space_after_add = false;
+                                    //                                        cmd_tab_list.push_back(cmd_tab_ptr);
+                                    //                                    }
+                                    enum Cmd_Item_Valid_Result res_parse = cmd_item_ptr->Parse(cmd_item_ptr, token_ptr->Text);
+                                    if (res_parse == CMD_ITEM_OK
+                                            || res_parse == CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
+                                        if (token == cmd_ptr->Items_Size - 1) { // Full cmd found -> <Enter>
+                                            Is_Enter = 1;
+                                        } else if (token == tokens->Size - 1) { // Partial cmd found -> next token -> log or add
+                                            struct Cli_Cmd_Item *cmd_item_ptr_next = cmd_item_ptr->Cmd_Item_Next;
+                                            Str_List_Add_Unique(s_log_list, &s_log_list_size, TAB_STR_LOG_LIST_SIZE_DEF, cmd_item_ptr_next->Text);
+                                        }
+                                    }
+                                }
+                                cmd_item_ptr = cmd_item_ptr->Cmd_Item_Next;
+                            }
+                        }
+                    }
+                }
+                cmd_ptr = cmd_ptr->Cmd_Next;
+            }
+        }
+        module_ptr = module_ptr->Module_Next;
+    }
+
+    int i;
+    int s_log_pos = 0;
+    for (i = 0; i < s_log_list_size; i++) {
+        s_log_pos += snprintf(s_log + s_log_pos, TAB_STR_LOG_LIST_SIZE_DEF - 1 - s_log_pos, " %s", s_log_list[i].Text);
+    }
+    if (Is_Enter) {
+        s_log_pos += snprintf(s_log + s_log_pos, TAB_STR_LOG_LIST_SIZE_DEF - 1 - s_log_pos, " %s", "<Enter>");
+    }
+    if (s_log_pos > 0) {
+        (*Is_Log) = 1;
+    }
 
 }
 

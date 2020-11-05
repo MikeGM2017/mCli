@@ -288,6 +288,10 @@ static int Input_kbhit(struct Cli_Input_C *obj) {
     return 0;
 }
 
+static int Char_Get_Blocked(struct Cli_Input_C *obj) {
+    return 0;
+}
+
 struct Cli_Input_C Cli_Input_C_base(struct Cli_Output_C *cli_output) {
     struct Cli_Input_C Cli_Input_Base;
     memset(&Cli_Input_Base, 0, sizeof (struct Cli_Input_C));
@@ -331,7 +335,9 @@ struct Cli_Input_C Cli_Input_C_base(struct Cli_Output_C *cli_output) {
     Cli_Input_Base.Input_Item_Get = Input_Item_Get;
     Cli_Input_Base.Input_sleep = Input_sleep;
     Cli_Input_Base.Input_kbhit = Input_kbhit;
-    
+
+    Cli_Input_Base.Char_Get_Blocked = Char_Get_Blocked;
+
     Cli_Input_Base.Cli_Output = cli_output;
 
     return Cli_Input_Base;

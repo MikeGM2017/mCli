@@ -11,6 +11,7 @@
 
 #include "Cli_Module_Base_Rem.h"
 #include "Cli_Module_Base_Help.h"
+#include "Cli_Module_Base_Quit.h"
 
 #include "Cli_Modules.h"
 
@@ -69,6 +70,10 @@ int main(int argc, char *argv[]) {
     //    Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
     //
     int Cmd_Quit = 0;
+
+    struct Cli_Module_Base_Quit module_quit = Cli_Module_Base_Quit_Init(Cli_Input, &Cli_Output, &Cmd_Quit);
+    Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_quit);
+
     //    Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
     //
     //    Str_Filter str_filter('?', '*');

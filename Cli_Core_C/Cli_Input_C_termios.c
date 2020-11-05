@@ -277,6 +277,14 @@ static int Input_kbhit(struct Cli_Input_C *obj) {
     return 0;
 }
 
+static int Char_Get_Blocked(struct Cli_Input_C *obj) {
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
+    int c = getchar();
+    fcntl(STDIN_FILENO, F_SETFL, flags);
+    return c;
+}
+
 struct Cli_Input_C_Termios Cli_Input_C_termios(struct Cli_Output_C *cli_output) {
     struct Cli_Input_C Cli_Input_Base = Cli_Input_C_base(cli_output);
 
@@ -288,6 +296,8 @@ struct Cli_Input_C_Termios Cli_Input_C_termios(struct Cli_Output_C *cli_output) 
     Cli_Input_Base.Input_kbhit = Input_kbhit;
 
     Cli_Input_Base.Is_Echo_On(&Cli_Input_Base);
+
+    Cli_Input_Base.Char_Get_Blocked = Char_Get_Blocked;
 
     struct Cli_Input_C_Termios Cli_Input_Termios;
     memset(&Cli_Input_Termios, 0, sizeof (struct Cli_Input_C_Termios));

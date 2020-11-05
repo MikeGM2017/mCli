@@ -20,6 +20,7 @@
       <itemPath>Cli_Input_Item_Type.h</itemPath>
       <itemPath>Cli_Module.h</itemPath>
       <itemPath>Cli_Module_Base_Help.h</itemPath>
+      <itemPath>Cli_Module_Base_Quit.h</itemPath>
       <itemPath>Cli_Module_Base_Rem.h</itemPath>
       <itemPath>Cli_Modules.h</itemPath>
       <itemPath>Cli_Output_C.h</itemPath>
@@ -60,6 +61,7 @@
       <itemPath>Cli_Input_C_termios.c</itemPath>
       <itemPath>Cli_Module.c</itemPath>
       <itemPath>Cli_Module_Base_Help.c</itemPath>
+      <itemPath>Cli_Module_Base_Quit.c</itemPath>
       <itemPath>Cli_Module_Base_Rem.c</itemPath>
       <itemPath>Cli_Modules.c</itemPath>
       <itemPath>Cli_Output_C_printf.c</itemPath>
@@ -158,6 +160,10 @@
       <item path="Cli_Module_Base_Help.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Quit.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Rem.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -305,6 +311,10 @@
       <item path="Cli_Module_Base_Help.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Quit.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Rem.c" ex="false" tool="0" flavor2="0">
       </item>

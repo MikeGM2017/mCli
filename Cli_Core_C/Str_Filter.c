@@ -120,6 +120,10 @@ int Str_Filter_Is_Match(struct Str_Filter *str_filter, char *filter, char *s) {
         return 1;
     if (filter_size == 3 && filter[0] == '\'' && filter[1] == str_filter->C_Multy && filter[2] == '\'')
         return 1;
+    
+    // get substring without commas
+    
+    char s_without_commas[] = "";
 
     if (filter_size && filter[0] == str_filter->C_Multy) {
         for (i = 0; i < s_size; i++) {
