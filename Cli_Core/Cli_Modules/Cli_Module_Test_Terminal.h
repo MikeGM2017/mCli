@@ -763,6 +763,32 @@ public:
     }
 
     virtual void To_Map(map<string, string> &values_map) {
+
+        string Prefix = "Test_Terminal";
+
+        {
+            stringstream s_str;
+            s_str << Value_Int;
+            values_map[Prefix + ".Value_Int"] = s_str.str();
+        }
+        {
+            stringstream s_str;
+            s_str << Value_Int_Range;
+            values_map[Prefix + ".Value_Int_Range"] = s_str.str();
+        }
+
+        values_map[Prefix + ".Value_Str"] = Value_Str;
+        values_map[Prefix + ".Value_Date"] = Value_Date;
+        values_map[Prefix + ".Value_Time"] = Value_Time;
+        values_map[Prefix + ".Value_DateTime"] = Value_DateTime;
+        values_map[Prefix + ".Value_IP4"] = Value_IP4;
+        values_map[Prefix + ".Value_Mask"] = Value_Mask;
+        values_map[Prefix + ".Value_IP6"] = Value_IP6;
+        values_map[Prefix + ".Value_MAC"] = Value_MAC;
+        values_map[Prefix + ".Value_Enable"] = Value_Enable;
+        values_map[Prefix + ".Value_Loopback"] = Value_Loopback;
+        values_map[Prefix + ".Value_Loopback_Repeating"] = Value_Loopback_Repeating;
+
     }
 
 };
