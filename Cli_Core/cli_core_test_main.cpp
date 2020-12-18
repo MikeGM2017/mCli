@@ -40,9 +40,13 @@
 #include "Cli_Module_Test_Tab_Min_Max.h"
 #include "Cli_Module_Test_Terminal.h"
 
+#include "Cli_Module_Check.h"
+
 int main(int argc, char *argv[]) {
 
     const string Version = "0.01";
+
+    map<string, string> Values_Map;
 
     Cli_Output_printf Cli_Output;
 
@@ -94,6 +98,8 @@ int main(int argc, char *argv[]) {
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
 
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
+
+    Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop)));
 
     // Modules Add - End
 

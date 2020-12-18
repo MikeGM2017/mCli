@@ -4,6 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f12" displayName="Check" projectFiles="true">
+        <itemPath>Cli_Modules/Cli_Module_Check.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f9" displayName="Cli_CMD_Processor" projectFiles="true">
         <itemPath>Cli_CMD_Processor/Cli_CMD_Processor.h</itemPath>
         <itemPath>Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h</itemPath>
@@ -54,6 +57,8 @@
         <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Date.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_DateTime.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_EQU.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_EQU_Range.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_IP4.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_IP6.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Int.h</itemPath>
@@ -201,6 +206,7 @@
       <compileType>
         <ccTool>
           <incDir>
+            <pElem>.</pElem>
             <pElem>Cli_Core</pElem>
             <pElem>Cli_Input</pElem>
             <pElem>Cli_Output</pElem>
@@ -279,6 +285,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Check.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
             ex="false"
             tool="3"
@@ -318,6 +326,10 @@
       <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU_Range.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -700,6 +712,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Check.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
             ex="false"
             tool="3"
@@ -739,6 +753,10 @@
       <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU_Range.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
       </item>
