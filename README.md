@@ -3,7 +3,7 @@ Console Command Line Interface framework
 
 Features: Modules / Command Levels / Tab Hints
 
-Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX
+Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby; Python; Erlang
 
 IDE:
 
