@@ -135,7 +135,6 @@ public:
             case CMD_ID_wait:
                 if (is_debug) return true;
                 return wait(cmd, Log_Wait_Enable);
-                break;
         }
         return false; // Not Implemented
     }

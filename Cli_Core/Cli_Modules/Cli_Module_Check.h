@@ -19,14 +19,14 @@
 using namespace std;
 
 #include "Cli_Module.h"
-#include "Cli_Output/Cli_Output_Abstract.h"
-#include "Cmd_Item/Cmd_Item_Str.h"
-#include "Cmd_Item/Cmd_Item_Word.h"
-#include "Cmd_Item/Cmd_Item_Int.h"
-#include "Cmd_Item/Cmd_Item_EQU_Range.h"
-#include "Cli_Modules/Cli_Modules.h"
-#include "Cli_Modules/Str_Filter_Abstract.h"
-#include "Cli_Modules/Str_Filter.h"
+#include "Cli_Output_Abstract.h"
+#include "Cmd_Item_Str.h"
+#include "Cmd_Item_Word.h"
+#include "Cmd_Item_Int.h"
+#include "Cmd_Item_EQU_Range.h"
+#include "Cli_Modules.h"
+#include "Str_Filter_Abstract.h"
+#include "Str_Filter.h"
 
 class Cli_Module_Check : public Cli_Module {
 protected:
