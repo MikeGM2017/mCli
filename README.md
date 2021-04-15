@@ -3,7 +3,7 @@ Console Command Line Interface framework
 
 Features: Modules / Command Levels / Tab Hints
 
-Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX
+Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby (Curses)
 
 IDE:
 
@@ -13,21 +13,7 @@ Dev-C++ 5.11 - for target conio ("/Dev-Cpp/MinGW64/bin/*" used in NetBeans as To
 
 Projects:
 
-  - Cli_Input_CPP_conio
-
-  - Cli_Input_CPP_ncurses
-
-  - Cli_Input_CPP_pdcurses
-
-  - Cli_Input_CPP_termios
-  
-  - Cli_Input_C_conio
-
-  - Cli_Input_C_ncurses
-
-  - Cli_Input_C_pdcurses
-
-  - Cli_Input_C_termios
+  - Cli_Core - Main Project (C++)
 
 Test Projects:
 
@@ -41,6 +27,8 @@ Test Projects:
 
   - Cli_Input_Test_Key_Codes_termios
 
+  - Cli_Input_Test_Key_Codes_Ruby_curses
+
 - test output methods:
 
   - Cli_Output_CPP_cout_Test
@@ -50,9 +38,33 @@ Test Projects:
   - Cli_Output_CPP_pdcurses_Test
 
   - Cli_Output_CPP_printf_Test
-  
+
   - Cli_Output_C_ncurses_Test
 
   - Cli_Output_C_pdcurses_Test
 
   - Cli_Output_C_printf_Test
+
+  - Cli_Output_Ruby_print
+
+  - Cli_Output_Ruby_curses
+
+- test input methods:
+
+  - Cli_Input_CPP_conio
+
+  - Cli_Input_CPP_ncurses
+
+  - Cli_Input_CPP_pdcurses
+
+  - Cli_Input_CPP_termios
+
+  - Cli_Input_C_conio
+
+  - Cli_Input_C_ncurses
+
+  - Cli_Input_C_pdcurses
+
+  - Cli_Input_C_termios
+
+  - Cli_Input_Ruby_curses
