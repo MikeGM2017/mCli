@@ -30,6 +30,9 @@
 
 #include "Cli_TAB_Processor.h"
 
+#include "Mem_Manager_malloc_free.h"
+#include "Mem_Manager_buf.h"
+
 int main(int argc, char *argv[]) {
 
     char Version[] = "0.01";
@@ -115,6 +118,35 @@ int main(int argc, char *argv[]) {
     Cli_Output.Output_Str(" V");
     Cli_Output.Output_Str(Version);
     Cli_Output.Output_NewLine();
+    Cli_Output.Output_NewLine();
+
+    struct Mem_Manager_C Mem_Manager1 = Mem_Manager_malloc_free_Init();
+    const int buf_main_size = 1000000;
+    char *buf_main = 0;
+    enum Mem_Manager_Res buf_main_res = Mem_Manager1.Mem_Manager_Alloc(&Mem_Manager1, buf_main_size, &buf_main);
+    if (buf_main_res == MEM_MANAGER_OK) {
+        Cli_Output.Output_Str("Mem 1000000 - Ok");
+        Cli_Output.Output_NewLine();
+
+        struct Mem_Manager_buf Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
+        char *buf_1 = 0;
+        int buf_1_size = 10000;
+        struct Mem_Manager_C *Mem_Manager2 = &Mem_Manager2_buf.Mem_Manager_Base;
+        enum Mem_Manager_Res buf_1_res = Mem_Manager2->Mem_Manager_Alloc(Mem_Manager2, buf_1_size, &buf_1);
+
+        if (buf_1_res == MEM_MANAGER_OK) {
+            Cli_Output.Output_Str("buf 10000 - Ok");
+            Cli_Output.Output_NewLine();
+        } else {
+            Cli_Output.Output_Str("buf 10000 - Failed");
+            Cli_Output.Output_NewLine();
+        }
+        Cli_Output.Output_NewLine();
+
+    } else {
+        Cli_Output.Output_Str("Mem 1000000 - Failed");
+        Cli_Output.Output_NewLine();
+    }
     Cli_Output.Output_NewLine();
 
     int stop = 0;

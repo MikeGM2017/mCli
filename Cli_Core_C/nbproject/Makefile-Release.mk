@@ -60,6 +60,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cmd_Token_Parser_Char_Type_Func.o \
 	${OBJECTDIR}/Level_Description.o \
 	${OBJECTDIR}/Level_Description_Array.o \
+	${OBJECTDIR}/Mem_Manager_buf.o \
+	${OBJECTDIR}/Mem_Manager_malloc_free.o \
 	${OBJECTDIR}/Str_Filter.o \
 	${OBJECTDIR}/Str_List_Item.o \
 	${OBJECTDIR}/TAB_Cmd.o \
@@ -214,6 +216,16 @@ ${OBJECTDIR}/Level_Description_Array.o: Level_Description_Array.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Level_Description_Array.o Level_Description_Array.c
+
+${OBJECTDIR}/Mem_Manager_buf.o: Mem_Manager_buf.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Mem_Manager_buf.o Mem_Manager_buf.c
+
+${OBJECTDIR}/Mem_Manager_malloc_free.o: Mem_Manager_malloc_free.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Mem_Manager_malloc_free.o Mem_Manager_malloc_free.c
 
 ${OBJECTDIR}/Str_Filter.o: Str_Filter.c 
 	${MKDIR} -p ${OBJECTDIR}
