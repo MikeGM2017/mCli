@@ -13,7 +13,7 @@ Dev-C++ 5.11 - for target conio ("/Dev-Cpp/MinGW64/bin/*" used in NetBeans as To
 
 Projects:
 
-  - Cli_Core - Main Project (C++)
+  - Cli_Core - Cli Core Test Project (C++, Linux/termios)
 
 Test Projects:
 
