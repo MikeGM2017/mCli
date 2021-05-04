@@ -29,6 +29,8 @@ Test Projects:
 
   - Cli_Input_Test_Key_Codes_Ruby_curses
 
+  - Cli_Input_Test_Key_Codes_JavaFX
+
 - test output methods:
 
   - Cli_Output_CPP_cout_Test
@@ -49,6 +51,8 @@ Test Projects:
 
   - Cli_Output_Ruby_curses
 
+  - Cli_Output_JavaFX_Test
+
 - test input methods:
 
   - Cli_Input_CPP_conio
@@ -68,3 +72,6 @@ Test Projects:
   - Cli_Input_C_termios
 
   - Cli_Input_Ruby_curses
+
+  - Cli_Input_JavaFX_Test
+
