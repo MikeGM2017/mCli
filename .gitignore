@@ -66,3 +66,9 @@
 /mCli_CPP_termios_printf_Test_TAB/
 /Cli_Core_C/build/
 /Cli_Core_C/dist/
+Cli_Input_JavaFX_Test/build/
+Cli_Input_JavaFX_Test/dist/
+Cli_Input_Test_Key_Codes_JavaFX/build/
+Cli_Input_Test_Key_Codes_JavaFX/dist/
+Cli_Output_JavaFX_Test/build/
+Cli_Output_JavaFX_Test/dist/
