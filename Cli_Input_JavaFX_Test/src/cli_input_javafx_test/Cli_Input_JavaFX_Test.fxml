@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cli_input_javafx_test.Cli_Input_JavaFX_TestController">
+    <children>
+        <TextArea id="Cli_Input_TextArea" fx:id="Cli_Input_TextArea" layoutX="7.0" layoutY="6.0" onKeyPressed="#On_Key_Pressed_Action" prefHeight="189.0" prefWidth="307.0" text="Test Cli Input JavaFX V0.01" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0" />
+    </children>
+</AnchorPane>
