@@ -153,6 +153,22 @@ public class Cli_Input_JavaFX_TestController implements Initializable {
                     case INPUT_CMD_DELETE:
                         is_cmd_delete = true;
                         break;
+                    case INPUT_CMD_CTRL_C:
+                    case INPUT_CMD_CTRL_Z:
+                    case INPUT_CMD_CTRL_BACKSLASH:
+                        if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
+                            Cli_Input.Wait_Count_Set(-1);
+                            Cli_Output.Output_Str("Wait stopped");
+                            Cli_Output.Output_NewLine();
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Input.Input_Str_Set_Empty();
+                            Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                        } else {
+                            Cli_Output.Output_NewLine();
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Input.Input_Str_Set_Empty();
+                        }
+                        break;
                     default:
                         String s = item.Type_Get().toString() + ":\"" + item.Text_Get() + "\"";
                         System.out.println(s);

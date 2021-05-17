@@ -468,11 +468,14 @@ class Cli_Input_JavaFX extends Cli_Input_JavaFX_Test {
         KeyCode keyCode = event.getCode();
 
         if (event.isControlDown() && keyCode == KeyCode.C) {
-            On_Key_CTRL_C();
+            //On_Key_CTRL_C();
+            item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_C, Input_Str_Get());
         } else if (event.isControlDown() && keyCode == KeyCode.Z) {
-            On_Key_CTRL_Z();
+            //On_Key_CTRL_Z();
+            item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_Z, Input_Str_Get());
         } else if (event.isControlDown() && keyCode == KeyCode.BACK_SLASH) {
-            On_Key_CTRL_Backslash();
+            //On_Key_CTRL_Backslash();
+            item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_BACKSLASH, Input_Str_Get());
         } else {
 
             switch (keyCode) {
