@@ -3,7 +3,7 @@ Console Command Line Interface framework
 
 Features: Modules / Command Levels / Tab Hints
 
-Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby (Curses)
+Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby (Curses); Qt
 
 IDE:
 
@@ -30,6 +30,10 @@ Test Projects:
   - Cli_Input_Test_Key_Codes_Ruby_curses
 
   - Cli_Input_Test_Key_Codes_JavaFX
+
+  - Cli_Input_Test_Key_Codes_Qt_QPlainTextEdit
+
+  - Cli_Input_Test_Key_Codes_Qt_QTextEdit
 
 - test output methods:
 
