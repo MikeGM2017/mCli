@@ -57,6 +57,8 @@ Test Projects:
 
   - Cli_Output_JavaFX_Test
 
+  - Cli_Output_Qt_QPlainTextEdit_Test 
+
 - test input methods:
 
   - Cli_Input_CPP_conio
@@ -78,4 +80,6 @@ Test Projects:
   - Cli_Input_Ruby_curses
 
   - Cli_Input_JavaFX_Test
+
+  - Cli_Input_Qt_QPlainTextEdit_Test
 
