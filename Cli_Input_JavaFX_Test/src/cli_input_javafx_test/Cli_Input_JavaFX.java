@@ -226,7 +226,7 @@ class Cli_Input_JavaFX extends Cli_Input_JavaFX_Test {
                         Input_Str_Set_Empty();
                         Wait_Count--;
                     }
-                    Input_sleep();
+                    Input_sleep(1);
                 }
             }
         };
@@ -525,9 +525,9 @@ class Cli_Input_JavaFX extends Cli_Input_JavaFX_Test {
         return item;
     }
 
-    public void Input_sleep() {
+    public void Input_sleep(int sleep_sec) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(sleep_sec * 1000);
         } catch (InterruptedException ex) {
             System.out.println("Input_sleep() - Failed");
         }
