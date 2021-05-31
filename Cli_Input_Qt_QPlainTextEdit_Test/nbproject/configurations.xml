@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>Cli_Input_Abstract.h</itemPath>
+      <itemPath>Cli_Input_Item.h</itemPath>
+      <itemPath>Cli_Input_Item_Type.h</itemPath>
+      <itemPath>Cli_Input_Qt.h</itemPath>
+      <itemPath>Cli_Input_Test_Key_Processor.h</itemPath>
+      <itemPath>Cli_Key_Processor_Abstract.h</itemPath>
+      <itemPath>Cli_Output_Abstract.h</itemPath>
+      <itemPath>Cli_Output_Form_QPlainTextEdit.h</itemPath>
+      <itemPath>Cli_Output_QPlainTextEdit.h</itemPath>
+      <itemPath>Input_Mode_Type.h</itemPath>
+      <itemPath>cli_qplaintextedit.h</itemPath>
+      <itemPath>ui_Cli_Output_Form_QPlainTextEdit.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+      <itemPath>Cli_Output_Form_QPlainTextEdit.ui</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Cli_Input_Qt_QPlainTextEdit_Test_main.cpp</itemPath>
+      <itemPath>Cli_Output_Form_QPlainTextEdit.cpp.cc</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="4">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <modules>core gui widgets</modules>
+      </qt>
+      <compileType>
+      </compileType>
+      <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Qt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Qt_QPlainTextEdit_Test_main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Cli_Input_Test_Key_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Key_Processor_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.cpp.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cli_qplaintextedit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_Cli_Output_Form_QPlainTextEdit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="4">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <buildMode>1</buildMode>
+        <modules>core gui widgets</modules>
+      </qt>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Qt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Qt_QPlainTextEdit_Test_main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Cli_Input_Test_Key_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Key_Processor_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.cpp.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cli_qplaintextedit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_Cli_Output_Form_QPlainTextEdit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
