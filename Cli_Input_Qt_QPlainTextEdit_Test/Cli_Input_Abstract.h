@@ -54,8 +54,8 @@ protected:
 
 public:
 
-    Cli_Input_Abstract(Cli_Output_Abstract &cli_output) : Divider_L("["), Divider_R("]"), Cli_Output(cli_output),
-    Is_Echo(true), Input_Str_Pos(0), Input_Mode(INPUT_MODE_NORMAL), Wait_Count(-1) {
+    Cli_Input_Abstract(Cli_Output_Abstract &cli_output) : Invitation("> "), Divider_L("["), Divider_R("]"),
+    Cli_Output(cli_output), Is_Echo(true), Input_Str_Pos(0), Input_Mode(INPUT_MODE_NORMAL), Wait_Count(-1) {
     }
 
     virtual ~Cli_Input_Abstract() {
@@ -158,11 +158,11 @@ public:
     virtual void Wait_Count_Set(int v) {
         Wait_Count = v;
     }
-    
+
     virtual void Chars_Not_Allowed_Str_Set(QString s) {
         Chars_Not_Allowed_Str = s;
     }
-    
+
     virtual QString Chars_Not_Allowed_Str_Get() {
         return Chars_Not_Allowed_Str;
     }

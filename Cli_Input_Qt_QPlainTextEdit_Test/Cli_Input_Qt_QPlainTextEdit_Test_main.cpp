@@ -75,9 +75,9 @@ int main(int argc, char *argv[]) {
     Cli_Input.Title_Set("cli demo");
     Cli_Input.User_Set("root");
     Cli_Input.Level_Set("top level");
-    Cli_Input.Invitation_Set("> ");
-    Cli_Input.Divider_L_Set("[");
-    Cli_Input.Divider_R_Set("]");
+    Cli_Input.Invitation_Set("> "); // @Optional
+    Cli_Input.Divider_L_Set("["); // @Optional
+    Cli_Input.Divider_R_Set("]"); // @Optional
     Cli_Input.Input_Init();
 
     Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
