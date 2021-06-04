@@ -3,13 +3,15 @@ Console Command Line Interface framework
 
 Features: Modules / Command Levels / Tab Hints
 
-Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby (Curses); Qt
+Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby (Curses); Qt; C#
 
 IDE:
 
 NetBeans IDE 8.1 - for all projects
 
 Dev-C++ 5.11 - for target conio ("/Dev-Cpp/MinGW64/bin/*" used in NetBeans as Tool Collection "GNU_DevCpp")
+
+MS Visual Studio - for C# projects
 
 Projects:
 
@@ -34,6 +36,8 @@ Test Projects:
   - Cli_Input_Test_Key_Codes_Qt_QPlainTextEdit
 
   - Cli_Input_Test_Key_Codes_Qt_QTextEdit
+
+  - Cli_Input_Test_Key_Codes_CS
 
 - test output methods:
 
