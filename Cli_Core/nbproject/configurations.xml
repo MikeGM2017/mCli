@@ -38,6 +38,7 @@
         <itemPath>Cli_Modules/Cli_Module_Check.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Tab_Min_Max.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Terminal.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Vars.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter.h</itemPath>
@@ -53,6 +54,7 @@
         <itemPath>Cli_TAB_Processor/Cli_TAB_Result.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Cmd_Item" projectFiles="true">
+        <itemPath>Cmd_Item/Cmd_Item_Assignment_Mark.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Date.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_DateTime.h</itemPath>
@@ -65,6 +67,7 @@
         <itemPath>Cmd_Item/Cmd_Item_Int_List_Item.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Int_Range.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_MAC.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Point_Var_Name.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Str.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Time.h</itemPath>
@@ -298,6 +301,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Vars.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
@@ -322,6 +327,11 @@
       </item>
       <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Assignment_Mark.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
@@ -345,6 +355,8 @@
       <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Point_Var_Name.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -727,6 +739,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Vars.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
@@ -751,6 +765,11 @@
       </item>
       <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Assignment_Mark.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
@@ -774,6 +793,8 @@
       <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Point_Var_Name.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>

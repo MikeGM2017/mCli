@@ -94,6 +94,7 @@ public:
                         break;
                     case CMD_TOKEN_PARSER_CHAR_TYPE_ALPHA:
                     case CMD_TOKEN_PARSER_CHAR_TYPE_DIGIT:
+                    case CMD_TOKEN_PARSER_CHAR_TYPE_POINT:
                     default: // @Attention: default: for str filter like *elp 
                         pos_next = Get_Val(s, pos);
                         found = true;

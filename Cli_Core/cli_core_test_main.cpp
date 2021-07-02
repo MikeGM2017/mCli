@@ -41,6 +41,7 @@
 #include "Cli_Module_Test_Terminal.h"
 
 #include "Cli_Module_Check.h"
+#include "Cli_Module_Vars.h"
 
 int main(int argc, char *argv[]) {
 
@@ -100,6 +101,8 @@ int main(int argc, char *argv[]) {
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
     Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop)));
+    
+    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output)));
 
     // Modules Add - End
 

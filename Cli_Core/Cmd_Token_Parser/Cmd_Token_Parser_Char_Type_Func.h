@@ -35,6 +35,7 @@ public:
             case '\'': // @Attention
                 return CMD_TOKEN_PARSER_CHAR_TYPE_COMMAS;
         }
+        if (c == '.') return CMD_TOKEN_PARSER_CHAR_TYPE_POINT;
         return CMD_TOKEN_PARSER_CHAR_TYPE_ERROR;
     }
 
