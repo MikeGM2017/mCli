@@ -19,6 +19,9 @@
 class Cmd_Item_Point_Var_Name : public Cmd_Item_Word {
 protected:
 
+    char C_Single;
+    char C_Multy;
+
     virtual bool Is_Char_Valid(char c, int pos, int len) {
 
         if (len < 2) return false;
@@ -29,6 +32,8 @@ protected:
         if (c >= 'A' && c <= 'Z') return true;
         if (c == '_') return true;
         if (pos > 1 && c >= '0' && c <= '9') return true;
+        if (pos > 0 && c == C_Single) return true;
+        if (pos > 0 && c == C_Multy) return true;
 
         return false;
     }
@@ -47,8 +52,13 @@ public:
         return CMD_ITEM_OK;
     }
 
-    Cmd_Item_Point_Var_Name(string text, string help) : Cmd_Item_Word(text, help) {
+    Cmd_Item_Point_Var_Name(string text, string help, char c_single = '?', char c_multy = '*') :
+    Cmd_Item_Word(text, help), C_Single(c_single), C_Multy(c_multy) {
         Type = "Point_Var_Name";
+    }
+
+    virtual string Debug_Value_Get() {
+        return ".v";
     }
 
 };
