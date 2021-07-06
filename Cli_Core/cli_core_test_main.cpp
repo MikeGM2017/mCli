@@ -76,7 +76,9 @@ int main(int argc, char *argv[]) {
     bool Cmd_Quit = false;
     Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
 
-    Str_Filter str_filter('?', '*');
+    char C_Single = '?';
+    char C_Multy = '*';
+    Str_Filter str_filter(C_Single, C_Multy);
     Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
     Modules.Add(new Cli_Module_Base_Modules(User_Privilege, Modules, str_filter, Cli_Output));
 
@@ -101,8 +103,8 @@ int main(int argc, char *argv[]) {
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
     Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop)));
-    
-    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output)));
+
+    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
 
     // Modules Add - End
 

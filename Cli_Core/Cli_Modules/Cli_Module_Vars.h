@@ -30,6 +30,9 @@ protected:
     Str_Filter_Abstract &Str_Filter;
     Cli_Output_Abstract &Cli_Output;
 
+    char C_Single;
+    char C_Multy;
+
 public:
 
     enum Local_CmdID {
@@ -47,17 +50,19 @@ public:
     }
 
     Cli_Module_Vars(Cli_Modules &modules, map<string, string> &values_map, Str_Filter_Abstract &str_filter,
-            Cli_Output_Abstract &cli_output) :
-    Cli_Module("Vars"), Modules(modules), Values_Map(values_map), Str_Filter(str_filter), Cli_Output(cli_output) {
+            Cli_Output_Abstract &cli_output,
+            char c_single = '?', char c_multy = '*') :
+    Cli_Module("Vars"), Modules(modules), Values_Map(values_map), Str_Filter(str_filter),
+    Cli_Output(cli_output), C_Single(c_single), C_Multy(c_multy) {
 
         // <editor-fold defaultstate="collapsed" desc="Vars: get/set">
         {
             // get
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name);
             cmd->Text_Set(".<var_name>");
-            cmd->Help_Set("get <var_name> value");
+            cmd->Help_Set("get <var_name> value (by filter)");
             cmd->Is_Global_Set(true);
-            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name"));
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name (by filter)", C_Single, C_Multy));
             Cmd_Add(cmd);
         }
 
@@ -67,9 +72,9 @@ public:
             cmd->Text_Set(".<var_name> = .<var2_name>");
             cmd->Help_Set("set <var_name> value of <var2_name>");
             cmd->Is_Global_Set(true);
-            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name"));
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
             cmd->Item_Add(new Cmd_Item_Assignment_Mark("=", "set"));
-            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var2_name>", "var2 name"));
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var2_name>", "var2 name", C_Single, C_Multy));
             Cmd_Add(cmd);
         }
         {
@@ -78,7 +83,7 @@ public:
             cmd->Text_Set(".<var_name> = <str>");
             cmd->Help_Set("set <var_name> to <str>");
             cmd->Is_Global_Set(true);
-            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name"));
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
             cmd->Item_Add(new Cmd_Item_Assignment_Mark("=", "set"));
             cmd->Item_Add(new Cmd_Item_Str("<str>", "new value"));
             Cmd_Add(cmd);
@@ -100,14 +105,14 @@ public:
             string item_var_name = iter->first;
             if (Str_Filter.Is_Match(var_name, item_var_name)) {
                 Cli_Output.Output_Str(item_var_name + " = \"" + iter->second + "\"");
+                Cli_Output.Output_NewLine();
                 found = true;
             }
         }
         if (!found) {
             Cli_Output.Output_Str(var_name + " - Not Found");
+            Cli_Output.Output_NewLine();
         }
-
-        Cli_Output.Output_NewLine();
         return true;
     }
 
