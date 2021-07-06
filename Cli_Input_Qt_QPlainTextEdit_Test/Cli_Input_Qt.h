@@ -48,7 +48,7 @@ public:
     ~Cli_Input_Qt_Wait_Thread() {
     }
 
-    virtual void Wai_Count_Set(int v) {
+    virtual void Wait_Count_Set(int v) {
         Wait_Count = v;
     }
 
@@ -76,7 +76,7 @@ public:
     virtual void Wait_Count_Set(int v) {
         Wait_Count = v;
         if (Wait_Thread) {
-            Wait_Thread->Wai_Count_Set(v);
+            Wait_Thread->Wait_Count_Set(v);
         }
     }
 
