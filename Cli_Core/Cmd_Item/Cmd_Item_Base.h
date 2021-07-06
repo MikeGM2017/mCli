@@ -42,6 +42,9 @@ public:
         Type = "Base";
     }
 
+    virtual ~Cmd_Item_Base() {
+    }
+
     virtual string Debug_Value_Get() {
         return Text;
     }
@@ -80,12 +83,12 @@ public:
                 + ": Value_Str:\"" + Value_Str + "\" ";
         return s;
     }
-    
+
     virtual vector<string> Incomplete_Tail_List_Get(string s) {
         vector<string> tail_list;
         return tail_list;
     }
-    
+
     virtual bool Is_Space_After_Add(string s) {
         return true;
     }

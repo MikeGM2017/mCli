@@ -32,7 +32,7 @@ public:
 
     virtual ~Cli_Modules() {
     }
-    
+
     virtual int Get_Size() {
         return Modules.size();
     }
