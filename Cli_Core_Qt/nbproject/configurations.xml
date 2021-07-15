@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="f3" displayName="Cli_CMD_Processor" projectFiles="true">
+        <itemPath>Cli_CMD_Processor/Cli_CMD_Processor.h</itemPath>
+        <itemPath>Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4" displayName="Cli_Core" projectFiles="true">
+        <itemPath>Cli_Core/Cli_Core.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5" displayName="Cli_History" projectFiles="true">
+        <itemPath>Cli_History/Cli_History.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="Cli_Input" projectFiles="true">
+        <itemPath>Cli_Input/Cli_Input_Abstract.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Item.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Item_Type.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Qt.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6" displayName="Cli_Module_Test" projectFiles="true">
+        <itemPath>Cli_Module_Test/Cli_Module_Test_Tab.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7" displayName="Cli_Modules" projectFiles="true">
+        <itemPath>Cli_Modules/Cli_Cmd.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Cmd_ID.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Cmd_Privilege_ID.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Debug.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Help.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_History.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Log.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Rem.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Script.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Wait.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Wait_Qt.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Check.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Test_Tab_Min_Max.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Test_Terminal.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Vars.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
+        <itemPath>Cli_Modules/Level_Description.h</itemPath>
+        <itemPath>Cli_Modules/Str_Filter.h</itemPath>
+        <itemPath>Cli_Modules/Str_Filter_Abstract.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="Cli_Output" projectFiles="true">
+        <itemPath>Cli_Output/Cli_Output_Abstract.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f8" displayName="Cli_TAB_Processor" projectFiles="true">
+        <itemPath>Cli_TAB_Processor/Cli_TAB_Processor.h</itemPath>
+        <itemPath>Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h</itemPath>
+        <itemPath>Cli_TAB_Processor/Cli_TAB_Result.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f9" displayName="Cmd_Item" projectFiles="true">
+        <itemPath>Cmd_Item/Cmd_Item_Assignment_Mark.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Date.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_DateTime.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_EQU.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_EQU_Range.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_IP4.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_IP6.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_List.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_List_Item.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_Range.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_MAC.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Point_Var_Name.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Str.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Time.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Valid_Result_Func.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word_List.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word_Range.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f10" displayName="Cmd_Token_Parser" projectFiles="true">
+        <itemPath>Cmd_Token_Parser/Cmd_Token.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Result.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f11" displayName="TAB_Cmd" projectFiles="true">
+        <itemPath>TAB_Cmd/TAB_Cmd.h</itemPath>
+        <itemPath>TAB_Cmd/TAB_Cmd_ID.h</itemPath>
+      </logicalFolder>
+      <itemPath>Cli_Core_Test_Key_Processor.h</itemPath>
+      <itemPath>Cli_Input_Test_Key_Processor.h</itemPath>
+      <itemPath>Cli_Key_Processor_Abstract.h</itemPath>
+      <itemPath>Cli_Output_Form_QPlainTextEdit.h</itemPath>
+      <itemPath>Cli_Output_QPlainTextEdit.h</itemPath>
+      <itemPath>Input_Mode_Type.h</itemPath>
+      <itemPath>cli_qplaintextedit.h</itemPath>
+      <itemPath>ui_Cli_Output_Form_QPlainTextEdit.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Cli_Output_Form_QPlainTextEdit.cpp.cc</itemPath>
+      <itemPath>cli_core_qt_test_main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="4">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <modules>core gui widgets</modules>
+      </qt>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>Cli_Input</pElem>
+            <pElem>Cli_Output</pElem>
+            <pElem>Cli_CMD_Processor</pElem>
+            <pElem>Cli_Core</pElem>
+            <pElem>Cli_History</pElem>
+            <pElem>Cli_Module_Test</pElem>
+            <pElem>Cli_Modules</pElem>
+            <pElem>Cli_TAB_Processor</pElem>
+            <pElem>Cmd_Item</pElem>
+            <pElem>Cmd_Token_Parser</pElem>
+            <pElem>TAB_Cmd</pElem>
+          </incDir>
+        </ccTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <additionalOptions>-v</additionalOptions>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Core_Test_Key_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_History/Cli_History.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Qt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Test_Key_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Key_Processor_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Test/Cli_Module_Test_Tab.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Debug.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Modules.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Script.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Wait_Qt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Check.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Terminal.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Vars.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.cpp.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Assignment_Mark.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP6.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Point_Var_Name.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Result.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cli_core_qt_test_main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cli_qplaintextedit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_Cli_Output_Form_QPlainTextEdit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="4">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <buildMode>1</buildMode>
+        <modules>core gui widgets</modules>
+      </qt>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Core_Test_Key_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_History/Cli_History.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Qt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Test_Key_Processor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Key_Processor_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Test/Cli_Module_Test_Tab.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Debug.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Modules.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Script.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Wait_Qt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Check.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Terminal.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Vars.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.cpp.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Cli_Output_Form_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_QPlainTextEdit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Assignment_Mark.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP6.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Point_Var_Name.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Result.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cli_core_qt_test_main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cli_qplaintextedit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_Cli_Output_Form_QPlainTextEdit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
