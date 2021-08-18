@@ -85,6 +85,9 @@ public:
         CMD_ID_test_set_loopback_disable,
         CMD_ID_test_set_loopback_repeating,
         CMD_ID_test_set_loopback_repeating_disable,
+
+        CMD_ID_phy_phynum_set_speed_speedvalue_duplex_duplexvalue,
+
         CMD_ID_LAST
     };
 
@@ -380,6 +383,36 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
             cmd->Item_Add(new Cmd_Item_Word("repeating", "test: set loopback repeating"));
             cmd->Item_Add(new Cmd_Item_Word("disable", "test: set loopback repeating disable"));
+
+            Cmd_Add(cmd);
+        }
+
+        {
+            // phy <phy_num> set speed <auto|10|100|1000> duplex <full|half>
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_phy_phynum_set_speed_speedvalue_duplex_duplexvalue);
+            cmd->Text_Set("phy <phy_num> set speed <auto|10|100|1000> duplex <auto|full|half>");
+            cmd->Help_Set("sw phy set speed and duplex");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set(New_Level);
+            cmd->Item_Add(new Cmd_Item_Word("phy", "sw phy"));
+            cmd->Item_Add(new Cmd_Item_Int_List(3, 4, "<phy_num:3-4>", "sw phy num"));
+            cmd->Item_Add(new Cmd_Item_Word("set", "sw phy set"));
+            cmd->Item_Add(new Cmd_Item_Word("speed", "sw phy set speed"));
+
+            vector<string> speed_words;
+            speed_words.push_back("auto");
+            speed_words.push_back("10");
+            speed_words.push_back("100");
+            speed_words.push_back("1000");
+            cmd->Item_Add(new Cmd_Item_Word_Range("<auto|10|100|1000>", "speed value", speed_words));
+
+            cmd->Item_Add(new Cmd_Item_Word("duplex", "sw phy set duplex"));
+
+            vector<string> duplex_words;
+            duplex_words.push_back("auto");
+            duplex_words.push_back("full");
+            duplex_words.push_back("half");
+            cmd->Item_Add(new Cmd_Item_Word_Range("<auto|full|half>", "duplex value", duplex_words));
 
             Cmd_Add(cmd);
         }
