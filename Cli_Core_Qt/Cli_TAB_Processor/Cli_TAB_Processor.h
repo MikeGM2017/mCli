@@ -468,6 +468,14 @@ public:
                                 Cmd_Item_Base *cmd_item_ptr = cmd_ptr->Items[token];
                                 Cmd_Token *token_ptr = tokens[token];
                                 Cmd_Item_Valid_Result res_parse = cmd_item_ptr->Parse(token_ptr->Text_Get());
+
+                                if (res_parse == CMD_ITEM_OK_CAN_CONTINUE && is_last_char_space) {
+                                    res_parse = CMD_ITEM_OK;
+                                }
+                                if (res_parse == CMD_ITEM_OK_CAN_CONTINUE && (token < tokens.size() - 1)) {
+                                    res_parse = CMD_ITEM_OK;
+                                }
+
                                 if (res_parse == CMD_ITEM_OK_CAN_CONTINUE) {
                                     TAB_On_OK_CAN_CONTINUE(tab_result_list, cmd_ptr);
                                 } else if (token < tokens.size() - 1) { // Not last token in token list, but not OK -> not valid
@@ -574,7 +582,8 @@ public:
                         case TAB_CMD_ID_LOG_PRINT:
                             Cli_Output.Output_NewLine();
                             Cli_Output.Output_Str(tab_cmd_ptr->Text);
-                            Cli_Output.Output_NewLine();
+                            // V04:
+                            //Cli_Output.Output_NewLine();
                             is_invitation_print = true;
                             break;
                         case TAB_CMD_ID_INPUT_ADD:
@@ -588,13 +597,53 @@ public:
                             break;
                         case TAB_CMD_ID_INPUT_CHECK_SPACE:
                         {
+                            // V01_Prev:
+                            //                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                            //                            if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
+                            //                                Cli_Input.Input_Str_Set((s_prev + " ").c_str());
+                            //                            }
+                            //                            Cli_Input.Input_Str_Modified_To_Output(s_prev.c_str());
+                            //                            Cli_Input.Input_End();
+                            //                            is_invitation_print = false;
+
+                            // V02:
+                            //                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                            //                            if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
+                            //                                Cli_Input.Input_Str_Set((s_prev + " ").c_str());
+                            //                                QString s_out_text = Cli_Output.Output_Text_Get();
+                            //                                QString s_out_text_new = s_out_text + "\n" + Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
+                            //                                Cli_Output.Output_Text_Set(s_out_text_new);
+                            //                            }
+                            //                            Cli_Input.Input_End();
+                            //                            is_invitation_print = false;
+
+                            // V03:
+                            //                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                            //                            if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
+                            //                                Cli_Input.Input_Str_Set((s_prev + " ").c_str());
+                            //                                //QString s_out_text = Cli_Output.Output_Text_Get();
+                            //                                //QString s_out_text_new = s_out_text + "\n" + Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
+                            //                                //Cli_Output.Output_Text_Set(s_out_text_new);
+                            //                            }
+                            //                            Cli_Input.Input_End();
+                            //                            is_invitation_print = true;
+
+                            // V04:
                             string s_prev = Cli_Input.Input_Str_Get().toStdString();
                             if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
                                 Cli_Input.Input_Str_Set((s_prev + " ").c_str());
+                                QString s_out_text = Cli_Output.Output_Text_Get();
+                                if (!is_invitation_print) { // @Attention \: is_invitation_print - from previose cycle! (TAB_CMD_ID_LOG_PRINT)
+                                    QString s_out_text_new = s_out_text + " ";
+                                    Cli_Output.Output_Text_Set(s_out_text_new);
+                                } else {
+                                    QString s_out_text_new = s_out_text + "\n" + Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
+                                    Cli_Output.Output_Text_Set(s_out_text_new);
+                                }
                             }
-                            Cli_Input.Input_Str_Modified_To_Output(s_prev.c_str());
                             Cli_Input.Input_End();
                             is_invitation_print = false;
+
                         }
                             break;
                     }
