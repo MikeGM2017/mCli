@@ -633,7 +633,7 @@ public:
                             if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
                                 Cli_Input.Input_Str_Set((s_prev + " ").c_str());
                                 QString s_out_text = Cli_Output.Output_Text_Get();
-                                if (!is_invitation_print) { // @Attention \: is_invitation_print - from previose cycle! (TAB_CMD_ID_LOG_PRINT)
+                                if (!is_invitation_print) { // @Attention \: is_invitation_print - from previous cycle! (TAB_CMD_ID_LOG_PRINT)
                                     QString s_out_text_new = s_out_text + " ";
                                     Cli_Output.Output_Text_Set(s_out_text_new);
                                 } else {
