@@ -78,3 +78,5 @@ Cli_Input_Qt_QPlainTextEdit_Test/build/
 Cli_Input_Qt_QPlainTextEdit_Test/dist/
 Cli_Output_Qt_QPlainTextEdit_Test/build/
 Cli_Output_Qt_QPlainTextEdit_Test/dist/
+/Cli_Core_Qt/build/
+/Cli_Core_Qt/dist/
