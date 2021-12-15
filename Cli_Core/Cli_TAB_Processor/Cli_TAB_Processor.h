@@ -14,6 +14,8 @@
 #ifndef CLI_TAB_PROCESSOR_H
 #define CLI_TAB_PROCESSOR_H
 
+#include <vector>
+#include <string>
 #include <list>
 #include <set>
 #include <algorithm>
@@ -45,16 +47,19 @@ protected:
 
     string Str_Rem;
 
+    vector<string> Log;
+    bool Log_Is_Active;
+
 public:
 
     Cli_TAB_Processor(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
             vector<Level_Description> &levels, Cmd_Token_Parser &parser,
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
-            string str_rem) :
+            string str_rem, bool log_is_active) :
     User_Privilege(user_privilege), Modules(modules),
     Levels(levels), Token_Parser(parser),
     Cli_Input(cli_input), Cli_Output(cli_output),
-    Str_Rem(str_rem) {
+    Str_Rem(str_rem), Log_Is_Active(log_is_active) {
     }
 
     virtual Level_Description Level_Get() {
@@ -63,6 +68,17 @@ public:
         }
         Level_Description level_top;
         return level_top;
+    }
+
+    int Log_Size_Get() {
+        return Log.size();
+    }
+
+    string Log_Item_Get(int index) {
+        if (index >= 0 && index < Log.size()) {
+            return Log[index];
+        }
+        return "";
     }
 
     static string Str_Trim(string s) {
@@ -584,6 +600,9 @@ public:
                             Cli_Output.Output_Str(tab_cmd_ptr->Text);
                             Cli_Output.Output_NewLine();
                             is_invitation_print = true;
+                            if (Log_Is_Active) {
+                                Log.push_back(tab_cmd_ptr->Text);
+                            }
                             break;
                         case TAB_CMD_ID_INPUT_ADD:
                         {
@@ -592,6 +611,9 @@ public:
                             Cli_Input.Input_Str_Modified_To_Output(s_prev);
                             Cli_Input.Input_End();
                             is_invitation_print = false;
+                            if (Log_Is_Active) {
+                                Log.push_back(tab_cmd_ptr->Text);
+                            }
                         }
                             break;
                         case TAB_CMD_ID_INPUT_CHECK_SPACE:
@@ -599,6 +621,9 @@ public:
                             string s_prev = Cli_Input.Input_Str_Get();
                             if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
                                 Cli_Input.Input_Str_Set(s_prev + " ");
+                                if (Log_Is_Active) {
+                                    Log.push_back(" ");
+                                }
                             }
                             Cli_Input.Input_Str_Modified_To_Output(s_prev);
                             Cli_Input.Input_End();

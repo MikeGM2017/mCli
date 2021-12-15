@@ -16,6 +16,7 @@
       </logicalFolder>
       <logicalFolder name="f2" displayName="Cli_Input" projectFiles="true">
         <itemPath>Cli_Input/Cli_Input_Abstract.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_ifstream.h</itemPath>
         <itemPath>Cli_Input/Cli_Input_termios.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f11" displayName="Cli_Module_Test" projectFiles="true">
@@ -46,6 +47,7 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="Cli_Output" projectFiles="true">
         <itemPath>Cli_Output/Cli_Output_Abstract.h</itemPath>
+        <itemPath>Cli_Output/Cli_Output_ofstream.h</itemPath>
         <itemPath>Cli_Output/Cli_Output_printf.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f10" displayName="Cli_TAB_Processor" projectFiles="true">
@@ -97,6 +99,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="Cli_Input" projectFiles="true">
+        <itemPath>Cli_Input/Cli_Input_ifstream.cpp</itemPath>
         <itemPath>Cli_Input/Cli_Input_termios.cpp</itemPath>
       </logicalFolder>
       <itemPath>cli_core_test_main.cpp</itemPath>
@@ -242,6 +245,10 @@
       </item>
       <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Input/Cli_Input_ifstream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_ifstream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input/Cli_Input_termios.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_termios.h" ex="false" tool="3" flavor2="0">
@@ -312,6 +319,8 @@
       <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_ofstream.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_printf.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -680,6 +689,10 @@
       </item>
       <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Input/Cli_Input_ifstream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_ifstream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input/Cli_Input_termios.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_termios.h" ex="false" tool="3" flavor2="0">
@@ -750,6 +763,8 @@
       <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_ofstream.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_printf.h" ex="false" tool="3" flavor2="0">
       </item>
