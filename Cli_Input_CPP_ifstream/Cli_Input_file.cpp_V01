@@ -1,0 +1,64 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+#include <fstream>
+
+#include "Cli_Input_file.h"
+
+bool Cli_Input_file::Input_Init() {
+    File_In.open(File_Name.c_str(), ios_base::in);
+    if (File_In.is_open()) {
+        return true; // Ok
+    }
+    return false; // Failed
+}
+
+bool Cli_Input_file::Input_Restore() {
+    File_In.close();
+    bool res_cli_output_close = Cli_Output.Output_Close();
+    if (res_cli_output_close) {
+        return true; // Ok
+    }
+    return false; // Failed
+}
+
+bool Cli_Input_file::Input_Clear() {
+    return true;
+}
+
+Cli_Input_Item Cli_Input_file::Input_Item_Get() {
+
+    Cli_Input_Item Input_Item(CLI_INPUT_ITEM_TYPE_NO, "");
+
+    string s;
+
+    bool res_getline = getline(File_In, s);
+
+    if (res_getline) {
+        Input_Item.Text_Set(s);
+        Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_STR);
+        Input_Str_Clear();
+    } else {
+        Input_Item.Text_Set("");
+        Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_QUIT);
+        Input_Str_Clear();
+    }
+
+    return Input_Item;
+}
+
+bool Cli_Input_file::Input_sleep(int sleep_sec) {
+#ifdef _WIN32
+    Sleep(sleep_sec * 1000);
+#else
+    sleep(sleep_sec);
+#endif
+    return true;
+}
+
+bool Cli_Input_file::Input_kbhit() {
+    return false;
+}
