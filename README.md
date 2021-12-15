@@ -49,11 +49,17 @@ Test Projects:
 
   - Cli_Output_CPP_printf_Test
 
+  - Cli_Output_CPP_file_Test (for test/debug)
+
+  - Cli_Output_CPP_ofstream_Test (for test/debug)
+
   - Cli_Output_C_ncurses_Test
 
   - Cli_Output_C_pdcurses_Test
 
   - Cli_Output_C_printf_Test
+
+  - Cli_Output_C_file_Test (for test/debug)
 
   - Cli_Output_Ruby_print
 
@@ -61,7 +67,7 @@ Test Projects:
 
   - Cli_Output_JavaFX_Test
 
-  - Cli_Output_Qt_QPlainTextEdit_Test 
+  - Cli_Output_Qt_QPlainTextEdit_Test
 
 - test input methods:
 
@@ -73,6 +79,10 @@ Test Projects:
 
   - Cli_Input_CPP_termios
 
+  - Cli_Input_CPP_file (for test/debug)
+
+  - Cli_Input_CPP_ifstream (for test/debug)
+
   - Cli_Input_C_conio
 
   - Cli_Input_C_ncurses
@@ -80,6 +90,8 @@ Test Projects:
   - Cli_Input_C_pdcurses
 
   - Cli_Input_C_termios
+
+  - Cli_Input_C_file (for test/debug)
 
   - Cli_Input_Ruby_curses
 
