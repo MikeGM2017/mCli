@@ -111,10 +111,6 @@ public:
     virtual string TAB_Help_Get(string level, Cli_Modules &modules) {
         list<string> str_list;
 
-        str_list.insert(str_list.end(), "H");
-        str_list.insert(str_list.end(), "Q");
-        str_list.insert(str_list.end(), "E");
-
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module *module_ptr = modules.Get(module);
             if (module_ptr) {
@@ -591,6 +587,7 @@ public:
         }
 
         if (tab_cmd_list.size()) {
+            bool is_prev_newline = false;
             for (int tab_cmd = 0; tab_cmd < tab_cmd_list.size(); tab_cmd++) {
                 TAB_Cmd *tab_cmd_ptr = tab_cmd_list[tab_cmd];
                 if (tab_cmd_ptr) {
@@ -603,31 +600,48 @@ public:
                             if (Log_Is_Active) {
                                 Log.push_back(tab_cmd_ptr->Text);
                             }
+                            Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().size());
+                            is_prev_newline = true;
                             break;
                         case TAB_CMD_ID_INPUT_ADD:
                         {
                             string s_prev = Cli_Input.Input_Str_Get();
-                            Cli_Input.Input_Str_Set(s_prev + tab_cmd_ptr->Text);
-                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
-                            Cli_Input.Input_End();
+                            int s_pos_prev = Cli_Input.Input_Str_Pos_Get();
+                            if (s_pos_prev == s_prev.size()) {
+                                Cli_Input.Input_Str_Set(s_prev + tab_cmd_ptr->Text);
+                                Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().size());
+                                Cli_Output.Output_Str(tab_cmd_ptr->Text);
+                            } else {
+                                Cli_Input.Input_Str_Set(s_prev + tab_cmd_ptr->Text);
+                                Cli_Input.Input_End();
+                            }
                             is_invitation_print = false;
                             if (Log_Is_Active) {
                                 Log.push_back(tab_cmd_ptr->Text);
                             }
+                            is_prev_newline = false;
                         }
                             break;
                         case TAB_CMD_ID_INPUT_CHECK_SPACE:
                         {
                             string s_prev = Cli_Input.Input_Str_Get();
+                            int s_pos_prev = Cli_Input.Input_Str_Pos_Get();
+                            bool is_changed = false;
                             if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
                                 Cli_Input.Input_Str_Set(s_prev + " ");
+                                is_changed = true;
                                 if (Log_Is_Active) {
                                     Log.push_back(" ");
                                 }
                             }
-                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
-                            Cli_Input.Input_End();
+                            if (is_changed && s_pos_prev == s_prev.size() && !is_prev_newline) {
+                                Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().size());
+                                Cli_Output.Output_Str(" ");
+                            } else {
+                                Cli_Input.Input_End();
+                            }
                             is_invitation_print = false;
+                            is_prev_newline = false;
                         }
                             break;
                     }
