@@ -18,8 +18,8 @@
 #include "Cli_Output_cout.h"
 
 void Help_Print() {
-    cout << "Program Cli_Input_CPP_ifstream" << endl;
-    cout << "Use: cli_input_cpp_ifstream [switches]" << endl;
+    cout << "Program Cli_Input_CPP_ifstream_as_termios" << endl;
+    cout << "Use: cli_input_cpp_ifstream_as_termios [switches]" << endl;
     cout << "-h        - print this help;" << endl;
     cout << "-a        - print arguments;" << endl;
     cout << "-f <file> - set input file;" << endl;
