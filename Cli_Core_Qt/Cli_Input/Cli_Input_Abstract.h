@@ -85,7 +85,7 @@ public:
     virtual void Level_Set_Qt(QString level) {
         Level = level;
     }
-    
+
     virtual void Level_Set(string level) { // @Compat: string -> QString
         Level_Set_Qt(level.c_str()); // @Compat: string -> QString
     }
@@ -133,6 +133,10 @@ public:
 
     virtual int Input_Str_Pos_Get() {
         return Input_Str_Pos;
+    }
+
+    virtual void Input_Str_Pos_Set(int v) {
+        Input_Str_Pos = v;
     }
 
     virtual QString Input_Str_Get() {
