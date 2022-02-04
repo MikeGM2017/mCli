@@ -113,6 +113,7 @@ int main(int argc, char** argv) {
             Cli_Output.Output_Str("TAB: ");
             Cli_Output.Output_Str(input_item.Text_Get());
             Cli_Output.Output_NewLine();
+            Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().size());
         } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_UP) {
             Cli_Output.Output_NewLine();
             Cli_Output.Output_Str("UP: ");

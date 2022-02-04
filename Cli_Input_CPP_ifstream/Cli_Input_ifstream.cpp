@@ -52,7 +52,6 @@ Cli_Input_Item Cli_Input_ifstream::Input_Item_Get() {
             if (!File_In.eof()) {
                 switch (c) {
                     case 9: // Tab
-                        Input_Str_Pos = Input_Str.size();
                         Input_Item.Text_Set(Input_Str);
                         Input_Item.Type_Set(CLI_INPUT_ITEM_TYPE_TAB);
                         stop = true;

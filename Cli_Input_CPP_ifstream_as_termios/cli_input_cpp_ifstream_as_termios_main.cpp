@@ -5,21 +5,70 @@
  */
 
 /* 
- * File:   cli_input_cpp_ncurses_main.cpp
+ * File:   cli_input_cpp_ifstream_as_termios_main.cpp
  * Author: mike
  *
- * Created on June 2, 2020, 12:16 PM
+ * Created on February 4, 2022, 1:58 PM
  */
 
-#include "Cli_Input_ncurses.h"
+#include <stdlib.h>
 
-#include "Cli_Output_ncurses.h"
+#include "Cli_Input_ifstream_as_termios.h"
 
-int main(int argc, char *argv[]) {
+#include "Cli_Output_cout.h"
 
-    Cli_Output_ncurses Cli_Output;
+void Help_Print() {
+    cout << "Program Cli_Input_CPP_ifstream" << endl;
+    cout << "Use: cli_input_cpp_ifstream [switches]" << endl;
+    cout << "-h        - print this help;" << endl;
+    cout << "-a        - print arguments;" << endl;
+    cout << "-f <file> - set input file;" << endl;
+}
 
-    Cli_Input_ncurses Cli_Input(Cli_Output);
+int main(int argc, char** argv) {
+
+    bool Arg_Help_Print = false;
+    bool Arg_Arguments_Print = false;
+    string Arg_File_In;
+
+    // Get Arg_XXX from cmdline
+    for (int i = 1; i < argc; i++) {
+        string s = argv[i];
+        if (s == "-h" || s == "-help" || s == "-?"
+                || s == "-h" || s == "-help" || s == "-?"
+                || s == "-h" || s == "-help" || s == "-?") {
+            Arg_Help_Print = true;
+        } else if (s == "-a") {
+            Arg_Arguments_Print = true;
+        } else if (s == "-f") {
+            i++;
+            if (i < argc && argv[i][0] != '-') {
+                Arg_File_In = argv[i];
+            } else {
+                cout << "ERROR: switch \"" << s << "\" without argument" << endl;
+                exit(1); // Error
+            }
+        }
+    }
+
+    // Force Arg_Help_Print (if run without switches)
+    if (argc == 1) {
+        Arg_Help_Print = true;
+    }
+
+    if (Arg_Help_Print) {
+        Help_Print();
+        exit(0); // Ok
+    }
+
+    if (Arg_Arguments_Print) {
+        cout << "Arguments:" << endl;
+        cout << "      File In: \"" << Arg_File_In << "\"" << endl;
+    }
+
+    Cli_Output_cout Cli_Output;
+
+    Cli_Input_ifstream_as_termios Cli_Input(Arg_File_In, Cli_Output);
 
     Cli_Input.Title_Set("cli demo");
     Cli_Input.User_Set("root");
@@ -31,8 +80,8 @@ int main(int argc, char *argv[]) {
 
     bool stop = false;
     do {
-        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+        //Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+        //Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
         Cli_Input_Item input_item = Cli_Input.Input_Item_Get();
         if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_STR) {
             string input_str = input_item.Text_Get();
@@ -52,7 +101,7 @@ int main(int argc, char *argv[]) {
                 Cli_Output.Output_Str(" - Not Processed");
                 Cli_Output.Output_NewLine();
             } else {
-                Cli_Output.Output_NewLine();
+                //Cli_Output.Output_NewLine();
             }
         } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_TAB) {
             Cli_Output.Output_NewLine();
@@ -78,16 +127,16 @@ int main(int argc, char *argv[]) {
         }
     } while (!stop);
 
-    Cli_Output.Output_NewLine();
-    do {
-        Cli_Output.Output_Str("Press Any Key to stop");
-        Cli_Output.Output_NewLine();
-        Cli_Input.Input_sleep(1);
-    } while (!Cli_Input.Input_kbhit());
-
-    Cli_Output.Output_Str("Press Any Key to exit");
-    Cli_Output.Output_NewLine();
-    Cli_Input_Item input_item = Cli_Input.Input_Item_Get();
+    //    Cli_Output.Output_NewLine();
+    //    do {
+    //        Cli_Output.Output_Str("Press Any Key to stop");
+    //        Cli_Output.Output_NewLine();
+    //        Cli_Input.Input_sleep(1);
+    //    } while (!Cli_Input.Input_kbhit());
+    //
+    //    Cli_Output.Output_Str("Press Any Key to exit");
+    //    Cli_Output.Output_NewLine();
+    //    Cli_Input_Item input_item = Cli_Input.Input_Item_Get();
 
     Cli_Input.Input_Restore();
 

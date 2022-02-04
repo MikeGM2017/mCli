@@ -150,6 +150,14 @@ public:
         Is_Echo = false;
     }
 
+    virtual int Input_Str_Pos_Get() {
+        return Input_Str_Pos;
+    }
+
+    virtual void Input_Str_Pos_Set(int v) {
+        Input_Str_Pos = v;
+    }
+
     virtual void Input_Str_To_Output() {
         if (Is_Echo_Get()) {
             Cli_Output.Output_Return();
