@@ -130,6 +130,10 @@ public:
         return Input_Str_Pos;
     }
 
+    virtual void Input_Str_Pos_Set(int v) {
+        Input_Str_Pos = v;
+    }
+
     virtual QString Input_Str_Get() {
         return Input_Str;
     }
