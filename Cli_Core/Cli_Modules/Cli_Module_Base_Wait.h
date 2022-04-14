@@ -41,7 +41,7 @@ protected:
 
 public:
 
-    enum Local_CmdID {
+    enum Local_Cmd_ID {
         CMD_ID_NO,
 
         CMD_ID_wait,
@@ -102,6 +102,11 @@ public:
 
         Cmd_Wait_Stop = false;
 
+        if (log_wait_enable) {
+            Cli_Output.Output_Str("Wait (Press Enter to stop):");
+            Cli_Output.Output_NewLine();
+        }
+
         for (int i = wait_sec; i > 0; i--) {
             if (Cmd_Wait_Stop) {
                 break;
@@ -109,7 +114,7 @@ public:
             if (log_wait_enable) {
                 stringstream s_str;
                 s_str << "Wait " << i;
-                Cli_Output.Output_Str(s_str.str().c_str());
+                Cli_Output.Output_Str(s_str.str());
                 Cli_Output.Output_NewLine();
             }
             if (Cli_Input.Input_kbhit()) {
@@ -121,7 +126,8 @@ public:
         return true;
     }
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
             case CMD_ID_wait_log_enable:
                 if (is_debug) return true;
@@ -135,6 +141,10 @@ public:
             case CMD_ID_wait:
                 if (is_debug) return true;
                 return wait(cmd, Log_Wait_Enable);
+
+            default:
+                return false; // Not Implemented
+
         }
         return false; // Not Implemented
     }

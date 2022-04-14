@@ -38,7 +38,7 @@ protected:
 
 public:
 
-    enum Local_CmdID {
+    enum Local_Cmd_ID {
         CMD_ID_NO,
 
         CMD_ID_debug_cli,
@@ -212,7 +212,8 @@ public:
         return true;
     }
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
             case CMD_ID_debug_cli:
                 if (is_debug) return true;
@@ -251,6 +252,10 @@ public:
                 return debug_cli(is_counts, is_verbose, is_failed_only);
             }
                 break;
+
+            default:
+                return false; // Not Implemented
+
         }
         return false; // Not Implemented
     }

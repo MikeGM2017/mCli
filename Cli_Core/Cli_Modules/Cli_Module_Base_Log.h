@@ -27,7 +27,7 @@ protected:
 
 public:
 
-    enum Local_CmdID {
+    enum Local_Cmd_ID {
         CMD_ID_NO,
 
         CMD_ID_log_clear,
@@ -55,12 +55,17 @@ public:
     virtual ~Cli_Module_Base_Log() {
     }
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
             case CMD_ID_log_clear:
                 if (is_debug) return true;
                 Cli_Input.Input_Clear();
                 return true;
+
+            default:
+                return false; // Not Implemented
+
         }
         return false; // Not Implemented
     }

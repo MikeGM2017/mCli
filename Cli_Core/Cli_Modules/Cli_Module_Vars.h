@@ -18,9 +18,9 @@
 
 #include "Cmd_Item_Point_Var_Name.h"
 #include "Cmd_Item_Assignment_Mark.h"
-#include "Cli_Output/Cli_Output_Abstract.h"
-#include "Cli_Modules/Str_Filter_Abstract.h"
-#include "Cmd_Item/Cmd_Item_Str.h"
+#include "Cli_Output_Abstract.h"
+#include "Str_Filter_Abstract.h"
+#include "Cmd_Item_Str.h"
 
 class Cli_Module_Vars : public Cli_Module {
 protected:
@@ -35,12 +35,16 @@ protected:
 
 public:
 
-    enum Local_CmdID {
+    enum Local_Cmd_ID {
         CMD_ID_NO,
 
         CMD_ID_point_var_name,
         CMD_ID_point_var_name_assign_str,
         CMD_ID_point_var_name_assign_point_var_name,
+
+        CMD_ID_point_var_name_inc,
+
+        CMD_ID_point_var_name_delete,
 
         CMD_ID_LAST
     };
@@ -86,6 +90,32 @@ public:
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
             cmd->Item_Add(new Cmd_Item_Assignment_Mark("=", "set"));
             cmd->Item_Add(new Cmd_Item_Str("<str>", "new value"));
+            Cmd_Add(cmd);
+        }
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Vars: inc">
+        {
+            // assign
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_inc);
+            cmd->Text_Set(".<var_name> inc");
+            cmd->Help_Set("increment <var_name>");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
+            cmd->Item_Add(new Cmd_Item_Word("inc", "increment"));
+            Cmd_Add(cmd);
+        }
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Vars: delete">
+        {
+            // assign
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_delete);
+            cmd->Text_Set(".<var_name> delete");
+            cmd->Help_Set("delete <var_name> (by filter)");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
+            cmd->Item_Add(new Cmd_Item_Word("delete", "delete (by filter)"));
             Cmd_Add(cmd);
         }
         // </editor-fold>
@@ -166,7 +196,51 @@ public:
         return true;
     }
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    bool var_inc(string point_var_name_str) {
+
+        string var_name = point_var_name_str.substr(1);
+        bool found = false;
+        for (map<string, string>::iterator iter = Values_Map.begin();
+                iter != Values_Map.end(); iter++) {
+            string item_var_name = iter->first;
+            if (var_name == item_var_name) {
+                int item_var_value_int_new = atoi(iter->second.c_str()) + 1;
+                stringstream s_str;
+                s_str << item_var_value_int_new;
+                iter->second = s_str.str();
+                found = true;
+            }
+        }
+        if (!found) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str(var_name + " - Not Found");
+            Cli_Output.Output_NewLine();
+        }
+        return true;
+    }
+
+    bool var_delete(string point_var_name_str) {
+
+        string var_name = point_var_name_str.substr(1);
+        bool found = false;
+        for (map<string, string>::iterator iter = Values_Map.begin();
+                iter != Values_Map.end(); iter++) {
+            string item_var_name = iter->first;
+            if (Str_Filter.Is_Match(var_name, item_var_name)) {
+                Values_Map.erase(iter);
+                found = true;
+            }
+        }
+        if (!found) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str(var_name + " - Not Found");
+            Cli_Output.Output_NewLine();
+        }
+        return true;
+    }
+
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
 
                 // <editor-fold defaultstate="collapsed" desc="Vars: get/set">
@@ -194,6 +268,31 @@ public:
             }
 
                 // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Vars: inc">
+
+            case CMD_ID_point_var_name_inc:
+                if (is_debug) return true;
+            {
+                string point_var_name_str = cmd->Items[0]->Value_Str;
+                return var_inc(point_var_name_str);
+            }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Vars: delete">
+
+            case CMD_ID_point_var_name_delete:
+                if (is_debug) return true;
+            {
+                string point_var_name_str = cmd->Items[0]->Value_Str;
+                return var_delete(point_var_name_str);
+            }
+
+                // </editor-fold>
+
+            default:
+                return false; // Not Implemented
 
         }
         return false; // Not Implemented

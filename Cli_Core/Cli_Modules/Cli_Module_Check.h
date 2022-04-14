@@ -47,7 +47,7 @@ protected:
 
 public:
 
-    enum Local_CmdID {
+    enum Local_Cmd_ID {
         CMD_ID_NO,
 
         CMD_ID_check_map,
@@ -1460,7 +1460,7 @@ public:
             int var2_value = atoi(var2_inc_iter->second.c_str());
 
             string var_left_value = var_left_iter->second;
-            string var_right_value = var_right_iter->second.c_str();
+            string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 var1_value++;
@@ -1591,7 +1591,7 @@ public:
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
         if (var_left_iter != Values_Map.end()) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
-            string var_left_value = var_left_iter->second.c_str();
+            string var_left_value = var_left_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 Do_Script_From_File(filename, is_no_history);
@@ -1645,8 +1645,8 @@ public:
         map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
         if (var_left_iter != Values_Map.end() && var_right_iter != Values_Map.end()) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
-            string var_left_value = var_left_iter->second.c_str();
-            string var_right_value = var_right_iter->second.c_str();
+            string var_left_value = var_left_iter->second;
+            string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 Do_Script_From_File(filename, is_no_history);
@@ -1679,8 +1679,8 @@ public:
                 ) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
             int var_left_value = atoi(var_left_iter->second.c_str());
-            //string var_left_value = var_left_iter->second.c_str();
-            //string var_right_value = var_right_iter->second.c_str();
+            //string var_left_value = var_left_iter->second;
+            //string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 Do_Command(command1);
@@ -1711,8 +1711,8 @@ public:
                 //&& var_right_iter != Values_Map.end()
                 ) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
-            string var_left_value = var_left_iter->second.c_str();
-            //string var_right_value = var_right_iter->second.c_str();
+            string var_left_value = var_left_iter->second;
+            //string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 Do_Command(command1);
@@ -1741,8 +1741,8 @@ public:
         map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
         if (var_left_iter != Values_Map.end() && var_right_iter != Values_Map.end()) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
-            string var_left_value = var_left_iter->second.c_str();
-            string var_right_value = var_right_iter->second.c_str();
+            string var_left_value = var_left_iter->second;
+            string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 Do_Command(command1);
@@ -1790,7 +1790,7 @@ public:
                 ) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
             int var_left_value = atoi(var_left_iter->second.c_str());
-            //string var_right_value = var_right_iter->second.c_str();
+            //string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 check_goto_label(label1);
@@ -1821,8 +1821,8 @@ public:
                 //&& var_right_iter != Values_Map.end()
                 ) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
-            string var_left_value = var_left_iter->second.c_str();
-            //string var_right_value = var_right_iter->second.c_str();
+            string var_left_value = var_left_iter->second;
+            //string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 check_goto_label(label1);
@@ -1851,8 +1851,8 @@ public:
         map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
         if (var_left_iter != Values_Map.end() && var_right_iter != Values_Map.end()) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
-            string var_left_value = var_left_iter->second.c_str();
-            string var_right_value = var_right_iter->second.c_str();
+            string var_left_value = var_left_iter->second;
+            string var_right_value = var_right_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 check_goto_label(label1);
@@ -1878,7 +1878,8 @@ public:
 
     // </editor-fold>
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
 
                 // <editor-fold defaultstate="collapsed" desc="Values_Map: print, clear">
@@ -2375,6 +2376,9 @@ public:
                 return check_var_by_var_goto_label(var_left, s_compare, var_right, label1, is_label2 = true, label2);
             }
                 // </editor-fold>
+
+            default:
+                return false; // Not Implemented
 
         }
         return false; // Not Implemented

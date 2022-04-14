@@ -23,7 +23,10 @@ using namespace std;
 
 #include "Cli_Output_Abstract.h"
 
+#include "Cli_Cmd_Privilege_ID.h"
 #include "Level_Description.h"
+#include "Cli_Modules.h"
+#include "Cmd_Token_Parser.h"
 
 class Cli_CMD_Processor : public Cli_CMD_Processor_Abstract {
 protected:
@@ -108,7 +111,7 @@ public:
                                 {
                                     if (!is_debug)
                                         Cli_Output.Output_NewLine();
-                                    bool res_execute = module_ptr->Execute(cmd_ptr->ID_Get(), cmd_ptr, Levels, is_debug);
+                                    bool res_execute = module_ptr->Execute(cmd_ptr, Levels, is_debug);
                                     if (!res_execute) {
                                         if (!is_debug) {
                                             Cli_Output.Output_NewLine();

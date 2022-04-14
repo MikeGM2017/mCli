@@ -14,6 +14,11 @@
 #ifndef CLI_MODULE_BASE_HELP_H
 #define CLI_MODULE_BASE_HELP_H
 
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+
 #include "Cli_Module.h"
 
 #include "Cmd_Item_Word.h"
@@ -210,7 +215,10 @@ public:
             int len_max, int &modules_count, int &commands_count,
             Cli_Output_Abstract &Cli_Output) {
 
-        Cli_Output.Output_NewLine();
+        stringstream s_str;
+
+        //Cli_Output.Output_NewLine();
+        s_str << endl;
 
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module *module_ptr = modules.Get(module);
@@ -233,24 +241,29 @@ public:
                     bool is_cmd_prt_valid = HELP_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level, is_full, is_module_full);
                     if (is_cmd_prt_valid && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get())) {
                         s_str2 << setw(len_max) << left << s_str1.str() << " - " << cmd_ptr->Help_Get();
-                        Cli_Output.Output_Str(s_str2.str());
-                        Cli_Output.Output_NewLine();
+                        //Cli_Output.Output_Str(s_str2.str());
+                        //Cli_Output.Output_NewLine();
+                        s_str << s_str2.str() << endl;
                         commands_count++;
-                        if (is_verbose) {
-                            for (int i = 0; i < cmd_ptr->Items.size(); i++) {
+                        if (is_verbose && cmd_ptr->Items.size() > 1) {
+                            for (int i = 1; i < cmd_ptr->Items.size(); i++) {
                                 Cmd_Item_Base *item = cmd_ptr->Items[i];
                                 stringstream s_str3;
                                 stringstream s_str4;
                                 s_str3 << " " << item->Text_Get();
                                 s_str4 << setw(len_max) << left << s_str3.str() << " - " << item->Help_Get();
-                                Cli_Output.Output_Str(s_str4.str());
-                                Cli_Output.Output_NewLine();
+                                //Cli_Output.Output_Str(s_str4.str());
+                                //Cli_Output.Output_NewLine();
+                                s_str << s_str4.str() << endl;
                             }
                         }
                     }
                 }
             }
         }
+
+        Cli_Output.Output_Str(s_str.str());
+
     }
 
     void help(string level, bool is_full, bool is_verbose, bool is_module_full,
@@ -286,7 +299,8 @@ public:
 
     }
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         Level_Description level;
         string parameter;
         if (Levels.size() > 0) {
@@ -375,6 +389,9 @@ public:
                 help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
             }
                 return true;
+
+            default:
+                return false; // Not Implemented
 
         }
         return false; // Not Implemented

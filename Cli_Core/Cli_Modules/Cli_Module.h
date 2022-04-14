@@ -54,7 +54,7 @@ public:
         return true;
     }
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) = 0;
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) = 0;
 
     // @Example: virtual bool Execute(...) {...}
     //virtual bool Execute(CliCmd_ID cmd_id, CliCmd *cmd, vector<LevelDescription> &Levels, bool is_debug) {

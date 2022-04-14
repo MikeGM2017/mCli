@@ -27,9 +27,9 @@ protected:
 
 public:
 
-    // Step 1: define Local_CmdID
+    // Step 1: define Local_Cmd_ID
 
-    enum Local_CmdID {
+    enum Local_Cmd_ID {
         CMD_ID_NO,
 
         CMD_ID_rem,
@@ -37,7 +37,7 @@ public:
         CMD_ID_LAST
     };
 
-    // Step 2: override virtual int Cmd_ID_Count_Get() - return id-count of Local_CmdID
+    // Step 2: override virtual int Cmd_ID_Count_Get() - return id-count of Local_Cmd_ID
 
     virtual int Cmd_ID_Count_Get() {
         return CMD_ID_LAST - CMD_ID_NO - 1;
@@ -65,7 +65,8 @@ public:
 
     // Step 5: override virtual bool Execute(...)
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
             case CMD_ID_rem:
                 if (is_debug) return true;
@@ -73,6 +74,10 @@ public:
                 string s_rem = cmd->Items[0]->Value_Str;
                 return rem(s_rem);
             }
+
+            default:
+                return false; // Not Implemented
+
         }
         return false; // Not Implemented
     }

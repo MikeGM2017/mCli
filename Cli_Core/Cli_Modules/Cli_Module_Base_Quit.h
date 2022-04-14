@@ -104,7 +104,8 @@ public:
     virtual ~Cli_Module_Base_Quit() {
     }
 
-    virtual bool Execute(Cli_Cmd_ID cmd_id, Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+    virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
+        enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
             case CMD_ID_quit:
             case CMD_ID_quit_Q:
@@ -115,6 +116,10 @@ public:
                 if (is_debug) return true;
                 Cmd_Quit = true;
                 return true;
+
+            default:
+                return false; // Not Implemented
+
         }
         return false; // Not Implemented
     }
