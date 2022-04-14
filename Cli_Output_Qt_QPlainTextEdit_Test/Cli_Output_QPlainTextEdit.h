@@ -31,6 +31,14 @@ public:
     virtual ~Cli_Output_QPlainTextEdit() {
     }
 
+    virtual bool Output_Init() {
+        return false;
+    }
+
+    virtual bool Output_Close() {
+        return false;
+    }
+
     virtual bool Output_Clear() {
         if (textEdit) {
             textEdit->setPlainText("");
@@ -39,23 +47,30 @@ public:
         return false;
     }
 
-    virtual void Output_Char(QChar c) {
-        Output_Str(c);
+    virtual void Output_Char(char c) {
+        if (textEdit) {
+            string s;
+            s.append(1, c);
+            Output_Str(s);
+        }
     }
 
-    virtual void Output_Str(QString s) {
+    virtual void Output_Str(string s) {
         if (textEdit) {
-            QString s1 = textEdit->toPlainText();
+            string s1 = textEdit->toPlainText().toStdString();
             int s_len = s1.length();
-            int s_pos = s_len - 1;
-            while (s_pos >= 0 && s1[s_pos] == 0x10) s_pos--;
+            int s_pos = s_len;
+            if (s_pos > 0 && s1[s_pos - 1] == 0x10) s_pos--;
             if (s_pos >= 0) {
-                QString s2 = s1.left(s_pos);
-                QString s3 = s;
-                QString s4 = s2 + s3;
-                textEdit->setPlainText(s4);
+                QTextCursor textCursor = textEdit->textCursor();
+                if (s_pos < s_len) {
+                    textCursor.setPosition(s_pos);
+                }
+                textCursor.setPosition(s_len, QTextCursor::KeepAnchor);
+                textEdit->setTextCursor(textCursor);
+                textEdit->insertPlainText(s.c_str());
             } else {
-                textEdit->appendPlainText(s);
+                textEdit->appendPlainText(s.c_str());
             }
             textEdit->moveCursor(QTextCursor::End);
         }
@@ -63,14 +78,15 @@ public:
 
     virtual void Output_NewLine() {
         if (textEdit) {
-            textEdit->appendPlainText("\n");
+            textEdit->appendPlainText(""); //@Attention: appendPlainText(s) appends '\n'!
         }
     }
 
     virtual void Output_Return() {
         if (textEdit) {
-            QTextCursor text_cursor = textEdit->textCursor();
-            int pos = text_cursor.position();
+            textEdit->moveCursor(QTextCursor::End);
+            QTextCursor textCursor = textEdit->textCursor();
+            int pos = textCursor.position();
             QString s1 = textEdit->toPlainText();
             int s_len = s1.length();
             int s_pos = s_len - 1;
@@ -83,9 +99,23 @@ public:
                 pos--;
             }
             if (pos >= 0) {
-                text_cursor.setPosition(pos);
-                textEdit->setTextCursor(text_cursor);
+                textCursor.setPosition(pos);
+                //textCursor.setPosition(s_len, QTextCursor::KeepAnchor);
+                textEdit->setTextCursor(textCursor);
             }
+        }
+    }
+
+    virtual void Caret_Pos_Set(int input_str_len, int input_str_pos) {
+        if (textEdit) {
+            QTextCursor textCursor = textEdit->textCursor();
+            int output_text_len = textEdit->toPlainText().length();
+            int caret_pos = output_text_len - input_str_len + input_str_pos;
+            if (caret_pos < 0) {
+                caret_pos = 0;
+            }
+            textCursor.setPosition(caret_pos);
+            textEdit->setTextCursor(textCursor);
         }
     }
 
