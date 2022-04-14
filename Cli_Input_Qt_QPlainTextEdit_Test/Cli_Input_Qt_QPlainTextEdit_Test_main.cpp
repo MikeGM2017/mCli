@@ -51,8 +51,11 @@ int main(int argc, char *argv[]) {
     Cli_QPlainTextEdit *cli_PlainTextEdit = Cli_Output_Form.findChild<Cli_QPlainTextEdit *>("textEdit");
 
     Cli_Output_QPlainTextEdit Cli_Output(cli_PlainTextEdit);
-    Cli_Input_Qt Cli_Input(Cli_Output);
-    QString Chars_Not_Allowed_Str = "@`|";
+
+    bool Log_Wait_Enable = true;
+    Cli_Input_Qt Cli_Input(Cli_Output, Log_Wait_Enable);
+
+    string Chars_Not_Allowed_Str = "@`|";
     Cli_Input.Chars_Not_Allowed_Str_Set(Chars_Not_Allowed_Str);
 
     Cli_Input_Test_Key_Processor cli_Key_Processor(Cli_Input, Cli_Output);

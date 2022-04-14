@@ -14,10 +14,7 @@
 #ifndef CLI_INPUT_ABSTRACT_H
 #define CLI_INPUT_ABSTRACT_H
 
-#include <QString>
-#include <QTextStream>
-
-#include <iomanip>
+#include <string>
 
 using namespace std;
 
@@ -29,17 +26,17 @@ using namespace std;
 
 #include "Input_Mode_Type.h"
 
-class Cli_Input_Abstract : public QObject {
-    Q_OBJECT
+class Cli_Input_Abstract {
+
 protected:
 
-    QString Title;
-    QString User;
-    QString Level;
-    QString Invitation;
-    QString Divider_L;
-    QString Divider_R;
-    QString Input_Str;
+    string Title;
+    string User;
+    string Level;
+    string Invitation;
+    string Divider_L;
+    string Divider_R;
+    string Input_Str;
 
     Cli_Output_Abstract &Cli_Output;
 
@@ -50,7 +47,7 @@ protected:
 
     int Wait_Count;
 
-    QString Chars_Not_Allowed_Str;
+    string Chars_Not_Allowed_Str;
 
 public:
 
@@ -61,66 +58,66 @@ public:
     virtual ~Cli_Input_Abstract() {
     }
 
-    virtual QString Title_Get() {
+    virtual string Title_Get() {
         return Title;
     }
 
-    virtual void Title_Set(QString title) {
+    virtual void Title_Set(string title) {
         Title = title;
     }
 
-    virtual QString User_Get() {
+    virtual string User_Get() {
         return User;
     }
 
-    virtual void User_Set(QString user) {
+    virtual void User_Set(string user) {
         User = user;
     }
 
-    virtual QString Level_Get() {
+    virtual string Level_Get() {
         return Level;
     }
 
-    virtual void Level_Set(QString level) {
+    virtual void Level_Set(string level) {
         Level = level;
     }
 
-    virtual QString Invitation_Get() {
+    virtual string Invitation_Get() {
         return Invitation;
     }
 
-    virtual void Invitation_Set(QString invitation) {
+    virtual void Invitation_Set(string invitation) {
         Invitation = invitation;
     }
 
-    virtual QString Divider_L_Get() {
+    virtual string Divider_L_Get() {
         return Divider_L;
     }
 
-    virtual void Divider_L_Set(QString divider_l) {
+    virtual void Divider_L_Set(string divider_l) {
         Divider_L = divider_l;
     }
 
-    virtual QString Divider_R_Get() {
+    virtual string Divider_R_Get() {
         return Divider_R;
     }
 
-    virtual void Divider_R_Set(QString divider_r) {
+    virtual void Divider_R_Set(string divider_r) {
         Divider_R = divider_r;
     }
 
-    virtual QString Invitation_Full_Get() { // Attention: Should be used for print cli invitation
-        QString s;
-        if (!Title.isEmpty()) {
+    virtual string Invitation_Full_Get() { // Attention: Should be used for print cli invitation
+        string s;
+        if (!Title.empty()) {
             s += Divider_L + Title + Divider_R;
         }
-        if (!User.isEmpty()) {
+        if (!User.empty()) {
             s += Divider_L + User + Divider_R;
         }
-        if (!Level.isEmpty()) {
+        if (!Level.empty()) {
             s += Divider_L + Level + Divider_R;
         }
-        if (!Invitation.isEmpty()) {
+        if (!Invitation.empty()) {
             s += Invitation;
         }
         return s;
@@ -134,11 +131,11 @@ public:
         Input_Str_Pos = v;
     }
 
-    virtual QString Input_Str_Get() {
+    virtual string Input_Str_Get() {
         return Input_Str;
     }
 
-    virtual void Input_Str_Set(QString s) {
+    virtual void Input_Str_Set(string s) {
         Input_Str = s;
     }
 
@@ -163,11 +160,11 @@ public:
         Wait_Count = v;
     }
 
-    virtual void Chars_Not_Allowed_Str_Set(QString s) {
+    virtual void Chars_Not_Allowed_Str_Set(string s) {
         Chars_Not_Allowed_Str = s;
     }
 
-    virtual QString Chars_Not_Allowed_Str_Get() {
+    virtual string Chars_Not_Allowed_Str_Get() {
         return Chars_Not_Allowed_Str;
     }
 
@@ -200,21 +197,19 @@ public:
             Cli_Output.Output_Return();
             Cli_Output.Output_Str(Invitation_Full_Get());
             if (Input_Str_Pos > 0) {
-                Cli_Output.Output_Str(Input_Str.mid(0, Input_Str_Pos));
+                Cli_Output.Output_Str(Input_Str.substr(0, Input_Str_Pos));
             }
         }
     }
 
-    virtual void Input_Str_Modified_To_Output(QString s_prev) {
+    virtual void Input_Str_Modified_To_Output(string s_prev) {
         if (Is_Echo_Get()) {
-            QTextStream s_str;
-            //s_str << setw(s_prev.size()) << " ";
-            s_str << QString(s_prev.size(), ' ');
+            string s;
+            s.append(s_prev.size(), ' ');
 
             Cli_Output.Output_Return();
             Cli_Output.Output_Str(Invitation_Full_Get());
-            //Cli_Output.Output_Str(s_str.str());
-            Cli_Output.Output_Str(s_str.readAll());
+            Cli_Output.Output_Str(s);
 
             Cli_Output.Output_Return();
             Cli_Output.Output_Str(Invitation_Full_Get());
@@ -223,7 +218,7 @@ public:
             Cli_Output.Output_Return();
             Cli_Output.Output_Str(Invitation_Full_Get());
             if (Input_Str_Pos > 0) {
-                Cli_Output.Output_Str(Input_Str.mid(0, Input_Str_Pos));
+                Cli_Output.Output_Str(Input_Str.substr(0, Input_Str_Pos));
             }
         }
     }
@@ -236,15 +231,14 @@ public:
             Input_Str += c;
             Input_Str_Pos++;
         } else {
-            QString s_prev = Input_Str;
+            string s_prev = Input_Str;
 
-            QTextStream s_str;
-            s_str << Input_Str.mid(0, Input_Str_Pos)
-                    << c
-                    << Input_Str.mid(Input_Str_Pos, Input_Str.size() - Input_Str_Pos);
+            string s1 = Input_Str.substr(0, Input_Str_Pos);
+            string s2_c;
+            s2_c.append(1, c);
+            string s3 = Input_Str.substr(Input_Str_Pos, Input_Str.size() - Input_Str_Pos);
 
-            //Input_Str = s_str.str();
-            Input_Str = s_str.readAll();
+            Input_Str = s1 + s2_c + s3;
             Input_Str_Pos++;
 
             Input_Str_Modified_To_Output(s_prev);
@@ -252,14 +246,14 @@ public:
     }
 
     virtual Cli_Input_Item Input_Back() {
-        if (!Input_Str.isEmpty() && Input_Str_Pos > 0) {
-            QString s_prev = Input_Str;
+        if (!Input_Str.empty() && Input_Str_Pos > 0) {
+            string s_prev = Input_Str;
             if (Input_Str_Pos == Input_Str.size()) {
-                Input_Str = s_prev.mid(0, s_prev.size() - 1);
+                Input_Str = s_prev.substr(0, s_prev.size() - 1);
                 Input_Str_Pos--;
             } else {
-                Input_Str = s_prev.mid(0, Input_Str_Pos - 1)
-                        + s_prev.mid(Input_Str_Pos, s_prev.size() - Input_Str_Pos);
+                Input_Str = s_prev.substr(0, Input_Str_Pos - 1)
+                        + s_prev.substr(Input_Str_Pos, s_prev.size() - Input_Str_Pos);
                 Input_Str_Pos--;
             }
             Input_Str_Modified_To_Output(s_prev);
@@ -268,10 +262,10 @@ public:
     }
 
     virtual Cli_Input_Item Input_Delete() {
-        if (!Input_Str.isEmpty() && Input_Str_Pos < Input_Str.size()) {
-            QString s_prev = Input_Str;
-            Input_Str = s_prev.mid(0, Input_Str_Pos)
-                    + s_prev.mid(Input_Str_Pos + 1, s_prev.size() - Input_Str_Pos - 1);
+        if (!Input_Str.empty() && Input_Str_Pos < Input_Str.size()) {
+            string s_prev = Input_Str;
+            Input_Str = s_prev.substr(0, Input_Str_Pos)
+                    + s_prev.substr(Input_Str_Pos + 1, s_prev.size() - Input_Str_Pos - 1);
             Input_Str_Modified_To_Output(s_prev);
         }
         return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_DELETE, "");
@@ -307,9 +301,9 @@ public:
 
     virtual bool Input_kbhit() = 0; // Attention: Not Blocked
 
-    virtual bool Is_Char_Valid(QString char_str) = 0;
+    virtual bool Is_Char_Valid(string char_str) = 0;
 
-    virtual Cli_Input_Item On_Key_Pressed(int key_code, QString key_str, bool is_ctrl, bool is_shift) = 0; // Attention: Not Blocked
+    virtual Cli_Input_Item On_Key_Pressed(int key_code, string key_str, bool is_ctrl, bool is_shift) = 0; // Attention: Not Blocked
 
 };
 

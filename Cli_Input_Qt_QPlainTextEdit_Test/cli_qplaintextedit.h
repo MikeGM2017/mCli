@@ -14,6 +14,10 @@
 #ifndef CLI_QPLAINTEXTEDIT_H
 #define CLI_QPLAINTEXTEDIT_H
 
+#include <string>
+
+using namespace std;
+
 #include <QtWidgets/QPlainTextEdit>
 
 #include <Qt>
@@ -31,7 +35,7 @@ protected:
         if (Key_Processor) {
 
             int key_code = e->key();
-            QString key_str = e->text();
+            string key_str = e->text().toStdString();
             bool is_ctrl = (e->modifiers() & Qt::ControlModifier) ? true : false;
             bool is_shift = (e->modifiers() & Qt::ShiftModifier) ? true : false;
 

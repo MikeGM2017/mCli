@@ -26,7 +26,7 @@ public:
     virtual ~Cli_Input_Test_Key_Processor() {
     }
 
-    virtual bool On_Key_Pressed(int key_code, QString key_str, bool is_ctrl, bool is_shift) {
+    virtual bool On_Key_Pressed(int key_code, string key_str, bool is_ctrl, bool is_shift) {
 
         Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(key_code, key_str, is_ctrl, is_shift);
 
@@ -45,10 +45,9 @@ public:
 
                     Cli_Output.Output_NewLine();
 
-                    QString s1 = input_item.Text_Get();
-                    string s2 = s1.toStdString();
+                    string s = input_item.Text_Get();
 
-                    if (s2 == "Q" || s2 == "quit") {
+                    if (s == "Q" || s == "quit") {
                         Cli_Output.Output_Str("Quit - Processed");
                         Cli_Output.Output_NewLine();
                         Cli_Input.Input_sleep(1);
@@ -120,7 +119,7 @@ public:
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
             {
-                QString s = "TAB: " + input_item.Text_Get();
+                string s = "TAB: " + input_item.Text_Get();
                 Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str(s);
                 Cli_Output.Output_NewLine();

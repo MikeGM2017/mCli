@@ -14,17 +14,19 @@
 #ifndef CLI_INPUT_ITEM_H
 #define CLI_INPUT_ITEM_H
 
-#include <Qt>
+#include <string>
+
+using namespace std;
 
 #include "Cli_Input_Item_Type.h"
 
 class Cli_Input_Item {
 protected:
     Cli_Input_Item_Type Type;
-    QString Text;
+    string Text;
 public:
 
-    Cli_Input_Item(Cli_Input_Item_Type type, QString text) : Type(type), Text(text) {
+    Cli_Input_Item(Cli_Input_Item_Type type, string text) : Type(type), Text(text) {
     }
 
     Cli_Input_Item_Type Type_Get() {
@@ -35,11 +37,11 @@ public:
         Type = type;
     }
 
-    QString Text_Get() {
+    string Text_Get() {
         return Text;
     }
 
-    void Text_Set(QString text) {
+    void Text_Set(string text) {
         Text = text;
     }
 
