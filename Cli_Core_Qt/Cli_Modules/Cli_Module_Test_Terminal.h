@@ -96,7 +96,7 @@ public:
     }
 
     bool test_terminal(vector<Level_Description> &Levels) {
-        Parent_Level = Cli_Input.Level_Get().toStdString();
+        Parent_Level = Cli_Input.Level_Get();
         Levels.push_back(Level_Description(New_Level));
         Cli_Input.Level_Set(New_Level);
         return true;

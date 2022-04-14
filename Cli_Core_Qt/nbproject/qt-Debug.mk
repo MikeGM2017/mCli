@@ -49,12 +49,10 @@ OBJECTS_DIR   = build/Debug/GNU-Linux/
 ####### Files
 
 SOURCES       = Cli_Output_Form_QPlainTextEdit.cpp.cc \
-		cli_core_qt_test_main.cpp moc_Cli_Input_Abstract.cpp \
-		moc_Cli_Input_Qt.cpp \
+		cli_core_qt_test_main.cpp moc_Cli_Input_Qt.cpp \
 		moc_Cli_Output_Form_QPlainTextEdit.cpp
 OBJECTS       = build/Debug/GNU-Linux/Cli_Output_Form_QPlainTextEdit.cpp.o \
 		build/Debug/GNU-Linux/cli_core_qt_test_main.o \
-		build/Debug/GNU-Linux/moc_Cli_Input_Abstract.o \
 		build/Debug/GNU-Linux/moc_Cli_Input_Qt.o \
 		build/Debug/GNU-Linux/moc_Cli_Output_Form_QPlainTextEdit.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -370,16 +368,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_Cli_Input_Abstract.cpp moc_Cli_Input_Qt.cpp moc_Cli_Output_Form_QPlainTextEdit.cpp
+compiler_moc_header_make_all: moc_Cli_Input_Qt.cpp moc_Cli_Output_Form_QPlainTextEdit.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_Cli_Input_Abstract.cpp moc_Cli_Input_Qt.cpp moc_Cli_Output_Form_QPlainTextEdit.cpp
-moc_Cli_Input_Abstract.cpp: Cli_Input/Cli_Input_Item.h \
-		Cli_Input/Cli_Input_Item_Type.h \
-		Cli_Output/Cli_Output_Abstract.h \
-		Input_Mode_Type.h \
-		Cli_Input/Cli_Input_Abstract.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_Input -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_Output -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_CMD_Processor -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_Core -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_History -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_Module_Test -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_Modules -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cli_TAB_Processor -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cmd_Item -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/Cmd_Token_Parser -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Core_Qt/nbproject/TAB_Cmd -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Cli_Input/Cli_Input_Abstract.h -o moc_Cli_Input_Abstract.cpp
-
+	-$(DEL_FILE) moc_Cli_Input_Qt.cpp moc_Cli_Output_Form_QPlainTextEdit.cpp
 moc_Cli_Input_Qt.cpp: Cli_Input/Cli_Input_Abstract.h \
 		Cli_Input/Cli_Input_Item.h \
 		Cli_Input/Cli_Input_Item_Type.h \
@@ -495,9 +486,6 @@ build/Debug/GNU-Linux/cli_core_qt_test_main.o: cli_core_qt_test_main.cpp Cli_Out
 		Cli_Modules/Cli_Module_Vars.h \
 		Cmd_Item/Cmd_Item_Assignment_Mark.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/cli_core_qt_test_main.o cli_core_qt_test_main.cpp
-
-build/Debug/GNU-Linux/moc_Cli_Input_Abstract.o: moc_Cli_Input_Abstract.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/moc_Cli_Input_Abstract.o moc_Cli_Input_Abstract.cpp
 
 build/Debug/GNU-Linux/moc_Cli_Input_Qt.o: moc_Cli_Input_Qt.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/moc_Cli_Input_Qt.o moc_Cli_Input_Qt.cpp

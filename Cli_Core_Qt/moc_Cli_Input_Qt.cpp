@@ -179,7 +179,7 @@ void Cli_Input_Qt::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 }
 
 const QMetaObject Cli_Input_Qt::staticMetaObject = {
-    { &Cli_Input_Abstract::staticMetaObject, qt_meta_stringdata_Cli_Input_Qt.data,
+    { &QObject::staticMetaObject, qt_meta_stringdata_Cli_Input_Qt.data,
       qt_meta_data_Cli_Input_Qt,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
@@ -194,12 +194,14 @@ void *Cli_Input_Qt::qt_metacast(const char *_clname)
     if (!_clname) return Q_NULLPTR;
     if (!strcmp(_clname, qt_meta_stringdata_Cli_Input_Qt.stringdata))
         return static_cast<void*>(const_cast< Cli_Input_Qt*>(this));
-    return Cli_Input_Abstract::qt_metacast(_clname);
+    if (!strcmp(_clname, "Cli_Input_Abstract"))
+        return static_cast< Cli_Input_Abstract*>(const_cast< Cli_Input_Qt*>(this));
+    return QObject::qt_metacast(_clname);
 }
 
 int Cli_Input_Qt::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = Cli_Input_Abstract::qt_metacall(_c, _id, _a);
+    _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

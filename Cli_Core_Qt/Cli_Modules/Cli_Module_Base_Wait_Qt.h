@@ -102,8 +102,8 @@ public:
 
         Cmd_Wait_Stop = false;
 
-        if (Log_Wait_Enable) {
-            Cli_Output.Output_Str_Qt("Wait (Press Enter to stop):");
+        if (log_wait_enable) {
+            Cli_Output.Output_Str("Wait (Press Enter to stop):");
             //Cli_Output.Output_NewLine();
         }
 

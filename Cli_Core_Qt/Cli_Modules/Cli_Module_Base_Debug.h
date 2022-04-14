@@ -154,7 +154,7 @@ public:
                 string level = cmd_ptr->Level_Get();
                 Levels.clear();
                 string s_trim = Str_Trim(s);
-                Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim.c_str());
+                Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
                 if (level.size() == 0) {
                     debug_res = false;
                     CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);

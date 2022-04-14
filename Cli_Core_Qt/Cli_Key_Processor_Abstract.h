@@ -17,8 +17,6 @@
 #include "Cli_Input_Abstract.h"
 #include "Cli_Output_Abstract.h"
 
-#include <QString>
-
 class Cli_Key_Processor_Abstract {
 protected:
 
@@ -34,7 +32,7 @@ public:
     virtual ~Cli_Key_Processor_Abstract() {
     }
 
-    virtual bool On_Key_Pressed(int key_code, QString key_str, bool is_ctrl) = 0;
+    virtual bool On_Key_Pressed(int key_code, string key_str, bool is_ctrl, bool is_shift) = 0;
 
 };
 

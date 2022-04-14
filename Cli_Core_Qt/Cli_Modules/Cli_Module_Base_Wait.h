@@ -102,6 +102,11 @@ public:
 
         Cmd_Wait_Stop = false;
 
+        if (log_wait_enable) {
+            Cli_Output.Output_Str("Wait (Press Enter to stop):");
+            Cli_Output.Output_NewLine();
+        }
+
         for (int i = wait_sec; i > 0; i--) {
             if (Cmd_Wait_Stop) {
                 break;

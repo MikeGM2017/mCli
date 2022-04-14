@@ -83,7 +83,7 @@ public:
     }
 
     virtual bool Process_Input_Item(Cli_Input_Item &input_item, bool is_debug, bool &debug_res) {
-        string s_trim = Str_Trim(input_item.Text_Get().toStdString());
+        string s_trim = Str_Trim(input_item.Text_Get());
 
         if (s_trim.size() == 0) return false;
 

@@ -45,9 +45,9 @@ public:
     virtual ~Cli_Core_Test_Key_Processor() {
     }
 
-    virtual bool On_Key_Pressed(int key_code, QString key_str, bool is_ctrl) {
+    virtual bool On_Key_Pressed(int key_code, string key_str, bool is_ctrl, bool is_shift) {
 
-        Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(key_code, key_str, is_ctrl);
+        Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(key_code, key_str, is_ctrl, is_shift);
 
         if (input_item.Type_Get() != CLI_INPUT_ITEM_TYPE_DELETE) {
             if (Cli_Input.Input_Mode_Get() == INPUT_MODE_PASSWD) {
@@ -66,7 +66,7 @@ public:
                     bool is_debug = false;
 
                     //string s_trim = Cli.Str_Trim(input_item.Text_Get());
-                    string s_trim = CMD_Processor.Str_Trim(input_item.Text_Get().toStdString()); // @Compat: string -> QString
+                    string s_trim = CMD_Processor.Str_Trim(input_item.Text_Get());
 
                     if (!is_no_history && !is_debug) {
                         History.History_Put(s_trim);
@@ -85,25 +85,25 @@ public:
                     Cli_Output.Output_NewLine();
                     if (input_item.Text_Get() == "Y" || input_item.Text_Get() == "y"
                             || input_item.Text_Get() == "YES" || input_item.Text_Get() == "Yes" || input_item.Text_Get() == "yes") {
-                        Cli_Output.Output_Str_Qt("Answer: Yes");
+                        Cli_Output.Output_Str("Answer: Yes");
                     } else {
-                        Cli_Output.Output_Str_Qt("Answer: No");
+                        Cli_Output.Output_Str("Answer: No");
                     }
                     Cli_Output.Output_NewLine();
 
                 } else if (Cli_Input.Input_Mode_Get() == INPUT_MODE_PASSWD) {
                     Cli_Output.Output_NewLine();
-                    Cli_Output.Output_Str_Qt("Password:" + input_item.Text_Get());
+                    Cli_Output.Output_Str("Password:" + input_item.Text_Get());
                     Cli_Output.Output_NewLine();
 
                 } else if (Cli_Input.Input_Mode_Get() == INPUT_MODE_WAIT) {
                     Cli_Input.Wait_Count_Set(-1);
                     Cli_Output.Output_NewLine();
-                    Cli_Output.Output_Str_Qt("Wait stopped");
+                    Cli_Output.Output_Str("Wait stopped");
                     Cli_Output.Output_NewLine();
                 }
 
-                Cli_Output.Output_Str_Qt(Cli_Input.Invitation_Full_Get());
+                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                 Cli_Input.Input_Str_Set_Empty();
                 Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
                 Cli_Input.Is_Echo_On();
@@ -117,15 +117,15 @@ public:
                     //                Cli_Output.Output_NewLine();
                     //                Cli_Output.Output_Str_Qt(s);
                     Cli_Output.Output_NewLine();
-                    Cli_Output.Output_Str_Qt(Cli_Input.Invitation_Full_Get());
-                    Cli_Output.Output_Str_Qt(Cli_Input.Input_Str_Get());
+                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
                 }
                 Cli_Output.Caret_Pos_Set(Cli_Input.Input_Str_Get().length(), Cli_Input.Input_Str_Pos_Get());
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_UP:
             {
-                string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                string s_prev = Cli_Input.Input_Str_Get();
                 Cli_Input.Input_Str_Set(History.History_Up().c_str());
                 Cli_Input.Input_Str_Modified_To_Output(s_prev.c_str());
                 Cli_Input.Input_End();
@@ -135,7 +135,7 @@ public:
                 break;
             case CLI_INPUT_ITEM_TYPE_DOWN:
             {
-                string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                string s_prev = Cli_Input.Input_Str_Get();
                 Cli_Input.Input_Str_Set(History.History_Down().c_str());
                 Cli_Input.Input_Str_Modified_To_Output(s_prev.c_str());
                 Cli_Input.Input_End();
@@ -146,7 +146,7 @@ public:
             case CLI_INPUT_ITEM_TYPE_QUIT:
             {
                 Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str_Qt("Quit");
+                Cli_Output.Output_Str("Quit");
                 Cli_Output.Output_NewLine();
                 exit(0); // Quit
             }
@@ -178,13 +178,13 @@ public:
                 if (Cli_Input.Input_Mode_Get() == INPUT_MODE_WAIT) {
                     Cli_Input.Wait_Count_Set(-1);
                     Cli_Output.Output_NewLine();
-                    Cli_Output.Output_Str_Qt("Wait stopped");
+                    Cli_Output.Output_Str("Wait stopped");
                     //Cli_Output.Output_NewLine();
                 }
                 Cli_Input.Input_Str_Set_Empty();
                 Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
                 Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str_Qt(Cli_Input.Invitation_Full_Get());
+                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                 break;
 
             case CLI_INPUT_ITEM_TYPE_CHAR_ADD:

@@ -47,56 +47,46 @@ public:
         return false;
     }
 
-    virtual void Output_Char_Qt(QChar c) {
-        Output_Str_Qt(c);
+    virtual void Output_Char(char c) {
+        if (textEdit) {
+            string s;
+            s.append(1, c);
+            Output_Str(s);
+        }
     }
 
-    virtual void Output_Str_Qt_V01(QString s) {
+    virtual void Output_Str(string s) {
         if (textEdit) {
-            QString s1 = textEdit->toPlainText();
+            string s1 = textEdit->toPlainText().toStdString();
             int s_len = s1.length();
-            int s_pos = s_len - 1;
-            while (s_pos >= 0 && s1[s_pos] == 0x10) s_pos--;
+            int s_pos = s_len;
+            if (s_pos > 0 && s1[s_pos - 1] == 0x10) s_pos--;
             if (s_pos >= 0) {
-                QString s2 = s1.left(s_pos);
-                QString s3 = s;
-                QString s4 = s2 + s3;
-                textEdit->setPlainText(s4);
+                QTextCursor textCursor = textEdit->textCursor();
+                if (s_pos < s_len) {
+                    textCursor.setPosition(s_pos);
+                }
+                textCursor.setPosition(s_len, QTextCursor::KeepAnchor);
+                textEdit->setTextCursor(textCursor);
+                textEdit->insertPlainText(s.c_str());
             } else {
-                textEdit->appendPlainText(s);
+                textEdit->appendPlainText(s.c_str());
             }
-            textEdit->moveCursor(QTextCursor::End);
-        }
-    }
-
-    virtual void Output_NewLine_V01() {
-        if (textEdit) {
-            textEdit->appendPlainText("\n");
-        }
-    }
-
-    virtual void Output_Str_Qt(QString s) {
-        if (textEdit) {
-            QString s1 = textEdit->toPlainText();
-            QString s2 = s1 + s;
-            textEdit->setPlainText(s2);
             textEdit->moveCursor(QTextCursor::End);
         }
     }
 
     virtual void Output_NewLine() {
         if (textEdit) {
-            QString s1 = textEdit->toPlainText();
-            QString s2 = s1 + "\n";
-            textEdit->setPlainText(s2);
-            textEdit->moveCursor(QTextCursor::End);
+            textEdit->appendPlainText(""); //@Attention: appendPlainText(s) appends '\n'!
         }
     }
 
     virtual void Output_Return() {
         if (textEdit) {
-            QTextCursor text_cursor = textEdit->textCursor();
-            int pos = text_cursor.position();
+            textEdit->moveCursor(QTextCursor::End);
+            QTextCursor textCursor = textEdit->textCursor();
+            int pos = textCursor.position();
             QString s1 = textEdit->toPlainText();
             int s_len = s1.length();
             int s_pos = s_len - 1;
@@ -109,32 +99,11 @@ public:
                 pos--;
             }
             if (pos >= 0) {
-                text_cursor.setPosition(pos);
-                textEdit->setTextCursor(text_cursor);
+                textCursor.setPosition(pos);
+                //textCursor.setPosition(s_len, QTextCursor::KeepAnchor);
+                textEdit->setTextCursor(textCursor);
             }
         }
-    }
-
-    virtual QString Output_Text_Get() {
-        if (textEdit) {
-            return textEdit->toPlainText();
-        }
-        return "";
-    }
-    
-    virtual void Output_Text_Set(QString s) {
-        if (textEdit) {
-            textEdit->setPlainText(s);
-        }
-    }
-
-    virtual int Output_TextCursor_Pos_Get() {
-        if (textEdit) {
-            QTextCursor textCursor = textEdit->textCursor();
-            int position = textCursor.position();
-            return position;
-        }
-        return 0;
     }
 
     virtual void Caret_Pos_Set(int input_str_len, int input_str_pos) {

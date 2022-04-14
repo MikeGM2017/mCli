@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     bool Log_Wait_Enable = true;
     Cli_Input_Qt Cli_Input(Cli_Output, Log_Wait_Enable);
 
-    QString Chars_Not_Allowed_Str = "@`|";
+    string Chars_Not_Allowed_Str = "@`|";
     Cli_Input.Chars_Not_Allowed_Str_Set(Chars_Not_Allowed_Str);
 
     vector<Level_Description> Levels;
@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
     Cli_Input.Divider_R_Set("]"); // @Optional
     Cli_Input.Input_Init();
 
-    Cli_Output.Output_Str_Qt(Cli_Input.Invitation_Full_Get());
+    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
 
     Cli_Output_Form.show();
 

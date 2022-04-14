@@ -31,10 +31,11 @@ protected:
         if (Key_Processor) {
 
             int key_code = e->key();
-            QString key_str = e->text();
+            string key_str = e->text().toStdString();
             bool is_ctrl = (e->modifiers() & Qt::ControlModifier) ? true : false;
+            bool is_shift = (e->modifiers() & Qt::ShiftModifier) ? true : false;
 
-            bool is_processed = Key_Processor->On_Key_Pressed(key_code, key_str, is_ctrl);
+            bool is_processed = Key_Processor->On_Key_Pressed(key_code, key_str, is_ctrl, is_shift);
             if (!is_processed) {
                 QPlainTextEdit::keyPressEvent(e);
             }

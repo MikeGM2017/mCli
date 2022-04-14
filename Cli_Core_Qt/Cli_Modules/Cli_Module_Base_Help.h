@@ -15,6 +15,7 @@
 #define CLI_MODULE_BASE_HELP_H
 
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -207,63 +208,13 @@ public:
         return len_max;
     }
 
-    virtual void Help_Cli_Modules_Print_V01(int user_privilege, Cli_Modules &modules,
-            string level,
-            bool is_full, bool is_verbose, bool is_module_full,
-            string module_filter, string command_filter, Str_Filter_Abstract &str_filter,
-            int len_max, int &modules_count, int &commands_count,
-            Cli_Output_Abstract &Cli_Output) {
-
-        Cli_Output.Output_NewLine();
-
-        for (int module = 0; module < modules.Get_Size(); module++) {
-            Cli_Module *module_ptr = modules.Get(module);
-            if (is_full || str_filter.Is_Match(module_filter, module_ptr->Name_Get())) {
-                modules_count++;
-                for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
-                    Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
-                    string s;
-                    stringstream s_str1;
-                    stringstream s_str2;
-                    if (level.size() == 0) {
-                        string s_level = cmd_ptr->Level_Get();
-                        if (s_level.size() > 0) {
-                            s += "[" + s_level + "] ";
-                            s_str1 << "[" << s_level << "] ";
-                        }
-                    }
-                    s += cmd_ptr->Text_Get();
-                    s_str1 << cmd_ptr->Text_Get();
-                    bool is_cmd_prt_valid = HELP_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level, is_full, is_module_full);
-                    if (is_cmd_prt_valid && str_filter.Is_Match(command_filter, cmd_ptr->Items[0]->Text_Get())) {
-                        s_str2 << setw(len_max) << left << s_str1.str() << " - " << cmd_ptr->Help_Get();
-                        Cli_Output.Output_Str(s_str2.str());
-                        Cli_Output.Output_NewLine();
-                        commands_count++;
-                        if (is_verbose) {
-                            for (int i = 0; i < cmd_ptr->Items.size(); i++) {
-                                Cmd_Item_Base *item = cmd_ptr->Items[i];
-                                stringstream s_str3;
-                                stringstream s_str4;
-                                s_str3 << " " << item->Text_Get();
-                                s_str4 << setw(len_max) << left << s_str3.str() << " - " << item->Help_Get();
-                                Cli_Output.Output_Str(s_str4.str());
-                                Cli_Output.Output_NewLine();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     virtual void Help_Cli_Modules_Print(int user_privilege, Cli_Modules &modules,
             string level,
             bool is_full, bool is_verbose, bool is_module_full,
             string module_filter, string command_filter, Str_Filter_Abstract &str_filter,
             int len_max, int &modules_count, int &commands_count,
             Cli_Output_Abstract &Cli_Output) {
-        
+
         stringstream s_str;
 
         //Cli_Output.Output_NewLine();
@@ -310,9 +261,9 @@ public:
                 }
             }
         }
-        
+
         Cli_Output.Output_Str(s_str.str());
-        
+
     }
 
     void help(string level, bool is_full, bool is_verbose, bool is_module_full,

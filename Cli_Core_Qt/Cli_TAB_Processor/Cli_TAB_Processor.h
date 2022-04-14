@@ -556,7 +556,7 @@ public:
 
     virtual void Process_Input_Item(Cli_Input_Item &input_item, bool &is_invitation_print) {
         vector<TAB_Cmd *> tab_cmd_list;
-        string s_trim = Str_Trim(input_item.Text_Get().toStdString());
+        string s_trim = Str_Trim(input_item.Text_Get());
         Level_Description level_description = Level_Get();
         string level = level_description.Level;
         string s_help;
@@ -567,7 +567,7 @@ public:
             Cmd_Token_Parser_Result parse_res = CMD_TOKEN_PARSER_ERROR;
             vector<Cmd_Token *> tokens = Token_Parser.Parse(s_trim, Str_Rem, parse_res);
 
-            tab_cmd_list = TAB_Cmd_List_Get(User_Privilege, Modules, level, input_item.Text_Get().toStdString(), s_trim, tokens);
+            tab_cmd_list = TAB_Cmd_List_Get(User_Privilege, Modules, level, input_item.Text_Get(), s_trim, tokens);
 
             for (int i = 0; i < tokens.size(); i++)
                 delete tokens[i];
@@ -588,28 +588,29 @@ public:
                             break;
                         case TAB_CMD_ID_INPUT_ADD:
                         {
-                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
-                            Cli_Input.Input_Str_Set((s_prev + tab_cmd_ptr->Text).c_str());
-                            Cli_Input.Input_Str_Modified_To_Output(s_prev.c_str());
-                            Cli_Input.Input_End();
+                            string s_prev = Cli_Input.Input_Str_Get();
+                            Cli_Input.Input_Str_Set(s_prev + tab_cmd_ptr->Text);
+                            //Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().size());
+                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                            //Cli_Input.Input_End();
                             is_invitation_print = false;
                         }
                             break;
                         case TAB_CMD_ID_INPUT_CHECK_SPACE:
                         {
                             // V01_Prev:
-                            //                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                            //                            string s_prev = Cli_Input.Input_Str_Get();
                             //                            if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
-                            //                                Cli_Input.Input_Str_Set((s_prev + " ").c_str());
+                            //                                Cli_Input.Input_Str_Set((s_prev + " "));
                             //                            }
-                            //                            Cli_Input.Input_Str_Modified_To_Output(s_prev.c_str());
+                            //                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
                             //                            Cli_Input.Input_End();
                             //                            is_invitation_print = false;
 
                             // V02:
-                            //                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                            //                            string s_prev = Cli_Input.Input_Str_Get();
                             //                            if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
-                            //                                Cli_Input.Input_Str_Set((s_prev + " ").c_str());
+                            //                                Cli_Input.Input_Str_Set((s_prev + " "));
                             //                                QString s_out_text = Cli_Output.Output_Text_Get();
                             //                                QString s_out_text_new = s_out_text + "\n" + Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
                             //                                Cli_Output.Output_Text_Set(s_out_text_new);
@@ -618,9 +619,9 @@ public:
                             //                            is_invitation_print = false;
 
                             // V03:
-                            //                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                            //                            string s_prev = Cli_Input.Input_Str_Get();
                             //                            if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
-                            //                                Cli_Input.Input_Str_Set((s_prev + " ").c_str());
+                            //                                Cli_Input.Input_Str_Set((s_prev + " "));
                             //                                //QString s_out_text = Cli_Output.Output_Text_Get();
                             //                                //QString s_out_text_new = s_out_text + "\n" + Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
                             //                                //Cli_Output.Output_Text_Set(s_out_text_new);
@@ -629,16 +630,20 @@ public:
                             //                            is_invitation_print = true;
 
                             // V04:
-                            string s_prev = Cli_Input.Input_Str_Get().toStdString();
+                            string s_prev = Cli_Input.Input_Str_Get();
                             if (s_prev.empty() || s_prev[s_prev.size() - 1] != ' ') {
-                                Cli_Input.Input_Str_Set((s_prev + " ").c_str());
-                                QString s_out_text = Cli_Output.Output_Text_Get();
+                                Cli_Input.Input_Str_Set((s_prev + " "));
+                                //QString s_out_text = Cli_Output.Output_Text_Get();
                                 if (!is_invitation_print) { // @Attention \: is_invitation_print - from previous cycle! (TAB_CMD_ID_LOG_PRINT)
-                                    QString s_out_text_new = s_out_text + " ";
-                                    Cli_Output.Output_Text_Set(s_out_text_new);
+                                    //QString s_out_text_new = s_out_text + " ";
+                                    //Cli_Output.Output_Text_Set(s_out_text_new);
+                                    Cli_Output.Output_Str(" ");
                                 } else {
-                                    QString s_out_text_new = s_out_text + "\n" + Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
-                                    Cli_Output.Output_Text_Set(s_out_text_new);
+                                    //QString s_out_text_new = s_out_text + "\n" + Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
+                                    //Cli_Output.Output_Text_Set(s_out_text_new);
+                                    string s = Cli_Input.Invitation_Full_Get() + Cli_Input.Input_Str_Get();
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Output.Output_Str(s);
                                 }
                             }
                             Cli_Input.Input_End();

@@ -167,7 +167,7 @@ public:
                     if (!is_no_history && !is_debug) {
                         History.History_Put(s_trim);
                     }
-                    Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim.c_str());
+                    Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
                     Cli_Output.Output_Str(s_trim);
                     Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                 }

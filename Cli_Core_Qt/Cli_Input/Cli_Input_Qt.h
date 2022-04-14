@@ -22,6 +22,10 @@
 #include <QKeyEvent>
 #include <QThread>
 
+#include <sstream>
+
+using namespace std;
+
 class Cli_Input_Qt_Wait_Thread : public QThread {
 
     Q_OBJECT
@@ -58,7 +62,7 @@ signals:
 
 };
 
-class Cli_Input_Qt : public Cli_Input_Abstract {
+class Cli_Input_Qt : public QObject, public Cli_Input_Abstract {
     Q_OBJECT
 protected:
 
@@ -130,10 +134,11 @@ public:
         return false;
     }
 
-    virtual bool Is_Char_Valid(QString char_str) {
-        if (!Chars_Not_Allowed_Str.isEmpty()) {
+    virtual bool Is_Char_Valid(string char_str) {
+        if (!Chars_Not_Allowed_Str.empty()) {
             for (int i = 0; i < char_str.length(); i++) {
-                if (Chars_Not_Allowed_Str.contains(char_str)) {
+                char c = char_str[i];
+                if (Chars_Not_Allowed_Str.find(c, 0) != string::npos) {
                     return false;
                 }
             }
@@ -141,41 +146,16 @@ public:
         return true;
     }
 
-    virtual void Input_Str_Modified_To_Output(QString s_prev) {
+    virtual void Input_Str_Modified_To_Output(string s_prev) {
         if (Is_Echo_Get()) {
-            QString s1 = Cli_Output.Output_Text_Get();
-            int s2_len = s1.length() - s_prev.length();
-            if (s2_len < 0) {
-                s2_len = 0;
-            }
-            QString s2 = s1.left(s2_len);
-            QString s3 = s2 + Input_Str;
-            Cli_Output.Output_Text_Set(s3);
-        }
-        return;
-        if (Is_Echo_Get()) {
-            QTextStream s_str;
-            //s_str << setw(s_prev.size()) << " ";
-            s_str << QString(s_prev.size(), ' ');
-
-            Cli_Output.Output_Return();
-            Cli_Output.Output_Str_Qt(Invitation_Full_Get());
-            //Cli_Output.Output_Str(s_str.str());
-            Cli_Output.Output_Str_Qt(s_str.readAll());
-
-            Cli_Output.Output_Return();
-            Cli_Output.Output_Str_Qt(Invitation_Full_Get());
-            Cli_Output.Output_Str_Qt(Input_Str);
-
-            Cli_Output.Output_Return();
-            Cli_Output.Output_Str_Qt(Invitation_Full_Get());
-            if (Input_Str_Pos > 0) {
-                Cli_Output.Output_Str_Qt(Input_Str.mid(0, Input_Str_Pos));
-            }
+            Input_Str_Pos_Set(Input_Str_Get().size());
+            Cli_Output.Caret_Pos_Set(Input_Str.size(), Input_Str.size() - s_prev.size());
+            Cli_Output.Output_Str(Input_Str);
+            Cli_Output.Caret_Pos_Set(Input_Str.size(), Input_Str_Pos);
         }
     }
 
-    virtual Cli_Input_Item Input_Add(QString key_str) {
+    virtual Cli_Input_Item Input_Add(string key_str, bool is_shift) {
 
         if (!Is_Char_Valid(key_str)) {
             return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_NO_ACTION, "");
@@ -188,13 +168,13 @@ public:
             Input_Str += key_str;
             Input_Str_Pos += key_str.length();
         } else {
-            QString s_prev = Input_Str;
-            QString s1 = "";
-            QString s2 = "";
+            string s_prev = Input_Str;
+            string s1 = "";
+            string s2 = "";
             if (Input_Str_Pos > 0)
-                s1 = s_prev.left(Input_Str_Pos);
+                s1 = s_prev.substr(0, Input_Str_Pos);
             if (Input_Str_Pos < Input_Str.size())
-                s2 = s_prev.right(s_prev.size() - Input_Str_Pos);
+                s2 = s_prev.substr(Input_Str_Pos, s_prev.size() - Input_Str_Pos);
             Input_Str = s1 + key_str + s2;
             Input_Str_Pos += key_str.length();
             //Input_Str_Modified_To_Output(s_prev);
@@ -227,14 +207,15 @@ public:
     }
 
     virtual Cli_Input_Item Input_Back() {
-        if (!Input_Str.isEmpty() && Input_Str_Pos > 0) {
-            QString s_prev = Input_Str;
+        if (!Input_Str.empty() && Input_Str_Pos > 0) {
+            string s_prev = Input_Str;
             if (Input_Str_Pos == Input_Str.size()) {
-                Input_Str = s_prev.mid(0, s_prev.size() - 1);
+                Input_Str = s_prev.substr(0, s_prev.size() - 1);
                 Input_Str_Pos--;
             } else {
-                Input_Str = s_prev.mid(0, Input_Str_Pos - 1)
-                        + s_prev.mid(Input_Str_Pos, s_prev.size() - Input_Str_Pos);
+                string s1 = s_prev.substr(0, Input_Str_Pos - 1);
+                string s2 = s_prev.substr(Input_Str_Pos, s_prev.size() - Input_Str_Pos);
+                Input_Str = s1 + s2;
                 Input_Str_Pos--;
             }
             //Input_Str_Modified_To_Output(s_prev);
@@ -244,14 +225,14 @@ public:
     }
 
     virtual Cli_Input_Item Input_Delete() {
-        if (!Input_Str.isEmpty() && Input_Str_Pos < Input_Str.size()) {
-            QString s_prev = Input_Str;
-            QString s1 = "";
-            QString s2 = "";
+        if (!Input_Str.empty() && Input_Str_Pos < Input_Str.size()) {
+            string s_prev = Input_Str;
+            string s1 = "";
+            string s2 = "";
             if (Input_Str_Pos > 0)
-                s1 = s_prev.left(Input_Str_Pos);
+                s1 = s_prev.substr(0, Input_Str_Pos);
             if (Input_Str_Pos < Input_Str.size())
-                s2 = s_prev.right(s_prev.size() - Input_Str_Pos - 1);
+                s2 = s_prev.substr(Input_Str_Pos + 1, s_prev.size() - Input_Str_Pos - 1);
             //Input_Str_Modified_To_Output(s_prev);
             Input_Str = s1 + s2;
             return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_DELETE, "");
@@ -259,7 +240,7 @@ public:
         return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_NO_ACTION, "");
     }
 
-    virtual Cli_Input_Item On_Key_Pressed(int key_code, QString key_str, bool is_ctrl) { // Attention: Not Blocked
+    virtual Cli_Input_Item On_Key_Pressed(int key_code, string key_str, bool is_ctrl, bool is_shift) { // Attention: Not Blocked
 
         if (key_code == Qt::Key_Control) {
             return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_CTRL, "NO");
@@ -299,7 +280,7 @@ public:
         } else if (key_code == Qt::Key_Delete) {
             return Input_Delete();
         } else {
-            return Input_Add(key_str);
+            return Input_Add(key_str, is_shift);
         }
 
         return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_NO, "NO");
@@ -311,15 +292,15 @@ public slots:
 
     void Wait_Count_Changed_Slot(int v) {
         if (v > 0) {
-            if (Log_Wait_Enable) {
-                Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str_Qt("Wait " + QString::number(v));
-            }
+            stringstream s_str;
+            s_str << v;
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Wait " + s_str.str());
         } else {
             Input_Str_Set_Empty();
             Input_Mode_Set(INPUT_MODE_NORMAL);
             Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str_Qt(Invitation_Full_Get());
+            Cli_Output.Output_Str(Invitation_Full_Get());
         }
         Wait_Count = v; // @Warning: Do Not Use Wait_Count_Set(v) - Cycled Settings -> Endless Wait Loop!
     }
