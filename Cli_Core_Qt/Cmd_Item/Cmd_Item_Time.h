@@ -84,7 +84,7 @@ public:
 
         return CMD_ITEM_OK;
     }
-    
+
     virtual bool Is_Space_After_Add(string s) {
         if (s.size() >= 10) {
             Cmd_Item_Valid_Result res = Parse(s);
