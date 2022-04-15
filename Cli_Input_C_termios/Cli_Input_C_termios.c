@@ -7,15 +7,15 @@
 #include "Cli_Input_C_termios.h"
 
 static struct Cli_Input_C *Cli_Input_Object = NULL;
-static struct Cli_Output_C *Cli_Output_Object = NULL;
 
 static void SIGINT_Handler(int sig) { // Ctrl+C
     if (Cli_Input_Object) {
         Cli_Input_Object->Input_Str_Clear(Cli_Input_Object);
     }
-    if (Cli_Output_Object) {
-        Cli_Output_Object->Output_NewLine();
-        Cli_Output_Object->Output_Str(Cli_Input_Object->Invitation_Full_Get(Cli_Input_Object));
+    struct Cli_Output_C *cli_output_obj = Cli_Input_Object->Cli_Output;
+    if (cli_output_obj) {
+        cli_output_obj->Output_NewLine(cli_output_obj);
+        cli_output_obj->Output_Str(cli_output_obj, Cli_Input_Object->Invitation_Full_Get(Cli_Input_Object));
     }
 }
 
@@ -23,9 +23,10 @@ static void SIGTSTP_Handler(int sig) { // Ctrl+Z
     if (Cli_Input_Object) {
         Cli_Input_Object->Input_Str_Clear(Cli_Input_Object);
     }
-    if (Cli_Output_Object) {
-        Cli_Output_Object->Output_NewLine();
-        Cli_Output_Object->Output_Str(Cli_Input_Object->Invitation_Full_Get(Cli_Input_Object));
+    struct Cli_Output_C *cli_output_obj = Cli_Input_Object->Cli_Output;
+    if (cli_output_obj) {
+        cli_output_obj->Output_NewLine(cli_output_obj);
+        cli_output_obj->Output_Str(cli_output_obj, Cli_Input_Object->Invitation_Full_Get(Cli_Input_Object));
     }
 }
 
@@ -33,7 +34,6 @@ static int Input_Init(struct Cli_Input_C *obj) {
     struct Cli_Input_C_Termios *obj_termios = (struct Cli_Input_C_Termios *) obj;
 
     Cli_Input_Object = obj;
-    Cli_Output_Object = obj->Cli_Output;
 
     signal(SIGINT, SIGINT_Handler); // Ctrl+C
     signal(SIGTSTP, SIGTSTP_Handler); // Ctrl+Z
@@ -43,7 +43,8 @@ static int Input_Init(struct Cli_Input_C *obj) {
     obj_termios->terminal_state_new.c_lflag &= ~(ICANON | ECHO);
     int res_tcsetattr = tcsetattr(STDIN_FILENO, TCSANOW, &obj_termios->terminal_state_new);
 
-    int res_cli_output_init = obj->Cli_Output->Output_Init();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    int res_cli_output_init = cli_output_obj->Output_Init(cli_output_obj);
 
     if (res_tcgetattr == 0 && res_tcsetattr == 0 && res_cli_output_init) {
         return 1; // Ok
@@ -57,7 +58,8 @@ static int Input_Restore(struct Cli_Input_C *obj) {
 
     int res_tcsetattr = tcsetattr(STDIN_FILENO, TCSANOW, &obj_termios->terminal_state_prev);
 
-    int res_cli_output_close = obj->Cli_Output->Output_Close();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    int res_cli_output_close = cli_output_obj->Output_Close(cli_output_obj);
 
     if (res_tcsetattr == 0 && res_cli_output_close) {
         return 1; // Ok
@@ -67,8 +69,9 @@ static int Input_Restore(struct Cli_Input_C *obj) {
 }
 
 static int Input_Clear(struct Cli_Input_C *obj) {
-    if (!obj->Cli_Output->Output_Clear())
-        obj->Cli_Output->Output_Str("\033[H\033[J");
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    if (!cli_output_obj->Output_Clear(cli_output_obj))
+        cli_output_obj->Output_Str(cli_output_obj, "\033[H\033[J");
     return 1; // Ok
 }
 

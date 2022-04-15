@@ -7,21 +7,26 @@
 #include "Cli_Input_C_ncurses.h"
 
 static int Input_Init(struct Cli_Input_C *obj) {
-    return obj->Cli_Output->Output_Init();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    return cli_output_obj->Output_Init(cli_output_obj);
 }
 
 static int Input_Restore(struct Cli_Input_C *obj) {
-    return obj->Cli_Output->Output_Close();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    return cli_output_obj->Output_Close(cli_output_obj);
 }
 
 static int Input_Clear(struct Cli_Input_C *obj) {
-    if (!obj->Cli_Output->Output_Clear())
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    if (!cli_output_obj->Output_Clear(cli_output_obj))
         clear();
     return 1;
 }
 
 static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
     int stop = 0;
+
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
 
     struct Cli_Input_C_Item Input_Item;
     memset(&Input_Item, 0, sizeof (struct Cli_Input_C_Item));
@@ -39,16 +44,16 @@ static struct Cli_Input_C_Item Input_Item_Get(struct Cli_Input_C *obj) {
                 break;
             case 0x03: // Ctrl+C
                 obj->Input_Str_Clear(obj);
-                obj->Cli_Output->Output_NewLine();
-                obj->Cli_Output->Output_Str(obj->Invitation_Full_Get(obj));
+                cli_output_obj->Output_NewLine(cli_output_obj);
+                cli_output_obj->Output_Str(cli_output_obj, obj->Invitation_Full_Get(obj));
                 break;
             case 0x1C: // Ctrl+"\"
                 Cli_Input_C_Item_Text_Set(&Input_Item, obj->Input_Str);
                 Cli_Input_C_Item_Type_Set(&Input_Item, CLI_INPUT_ITEM_TYPE_QUIT);
                 obj->Input_Str_Clear(obj);
-                obj->Cli_Output->Output_NewLine();
-                obj->Cli_Output->Output_Str("Ctrl+\\");
-                obj->Cli_Output->Output_NewLine();
+                cli_output_obj->Output_NewLine(cli_output_obj);
+                cli_output_obj->Output_Str(cli_output_obj, "Ctrl+\\");
+                cli_output_obj->Output_NewLine(cli_output_obj);
                 stop = 1;
                 break;
             case 8: // BACK

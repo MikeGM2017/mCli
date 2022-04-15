@@ -6,7 +6,7 @@
 
 #include "Cli_Output_C_pdcurses.h"
 
-static int Cli_Output_Init_pdcurses(void) {
+static int Cli_Output_Init_pdcurses(struct Cli_Output_C *obj) {
     initscr();
 
     noecho();
@@ -22,29 +22,29 @@ static int Cli_Output_Init_pdcurses(void) {
     return 1; // Ok
 }
 
-static int Cli_Output_Close_pdcurses(void) {
+static int Cli_Output_Close_pdcurses(struct Cli_Output_C *obj) {
     endwin();
     return 1; // Ok
 }
 
-static int Cli_Output_Clear_pdcurses(void) {
+static int Cli_Output_Clear_pdcurses(struct Cli_Output_C *obj) {
     clear();
     return 1; // Ok
 }
 
-static void Cli_Output_NewLine_pdcurses(void) {
+static void Cli_Output_NewLine_pdcurses(struct Cli_Output_C *obj) {
     printw("\n");
 }
 
-static void Cli_Output_Char_pdcurses(char c) {
+static void Cli_Output_Char_pdcurses(struct Cli_Output_C *obj, char c) {
     printw("%c", c);
 }
 
-static void Cli_Output_Str_pdcurses(char *s) {
+static void Cli_Output_Str_pdcurses(struct Cli_Output_C *obj, char *s) {
     printw("%s", s);
 }
 
-static void Cli_Output_Return_pdcurses(void) {
+static void Cli_Output_Return_pdcurses(struct Cli_Output_C *obj) {
     printw("\r");
 }
 

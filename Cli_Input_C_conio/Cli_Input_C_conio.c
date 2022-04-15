@@ -7,35 +7,36 @@
 #include "Cli_Input_C_conio.h"
 
 static struct Cli_Input_C *Cli_Input_Object = NULL;
-static struct Cli_Output_C *Cli_Output_Object = NULL;
 
 static void SIGINT_Handler(int sig) { // Ctrl+C
     if (Cli_Input_Object) {
         Cli_Input_Object->Input_Str_Clear(Cli_Input_Object);
     }
-    if (Cli_Output_Object) {
-        Cli_Output_Object->Output_NewLine();
-        Cli_Output_Object->Output_Str(Cli_Input_Object->Invitation_Full_Get(Cli_Input_Object));
+    struct Cli_Output_C *cli_output_obj = Cli_Input_Object->Cli_Output;
+    if (cli_output_obj) {
+        cli_output_obj->Output_NewLine(cli_output_obj);
+        cli_output_obj->Output_Str(cli_output_obj, Cli_Input_Object->Invitation_Full_Get(Cli_Input_Object));
     }
 }
 
 static int Input_Init(struct Cli_Input_C *obj) {
-    struct Cli_Input_C_Conio *obj_conio = (struct Cli_Input_C_Conio *) obj;
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
 
     Cli_Input_Object = obj;
-    Cli_Output_Object = obj->Cli_Output;
 
     signal(SIGINT, SIGINT_Handler); // Ctrl+C
 
-    return obj->Cli_Output->Output_Init();
+    return cli_output_obj->Output_Init(cli_output_obj);
 }
 
 static int Input_Restore(struct Cli_Input_C *obj) {
-    return obj->Cli_Output->Output_Close();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    return cli_output_obj->Output_Close(cli_output_obj);
 }
 
 static int Input_Clear(struct Cli_Input_C *obj) {
-    if (!obj->Cli_Output->Output_Clear())
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    if (!cli_output_obj->Output_Clear(cli_output_obj))
         system("cls");
     return 1;
 }

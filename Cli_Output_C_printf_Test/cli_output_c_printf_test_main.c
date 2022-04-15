@@ -19,27 +19,27 @@ int main(int argc, char** argv) {
 
     struct Cli_Output_C Cli_Output = Cli_Output_C_printf();
 
-    Cli_Output.Output_Init();
+    Cli_Output.Output_Init(&Cli_Output);
 
-    Cli_Output.Output_Char('X');
-    Cli_Output.Output_NewLine();
-    Cli_Output.Output_Str(" - Ok");
-    Cli_Output.Output_NewLine();
-    Cli_Output.Output_Str("End");
-    Cli_Output.Output_Return();
+    Cli_Output.Output_Char(&Cli_Output, 'X');
+    Cli_Output.Output_NewLine(&Cli_Output);
+    Cli_Output.Output_Str(&Cli_Output, " - Ok");
+    Cli_Output.Output_NewLine(&Cli_Output);
+    Cli_Output.Output_Str(&Cli_Output, "End");
+    Cli_Output.Output_Return(&Cli_Output);
 
     getchar();
 
-    int res_clear = Cli_Output.Output_Clear();
-    Cli_Output.Output_NewLine();
+    int res_clear = Cli_Output.Output_Clear(&Cli_Output);
+    Cli_Output.Output_NewLine(&Cli_Output);
     if (res_clear)
-        Cli_Output.Output_Str("Cleared");
+        Cli_Output.Output_Str(&Cli_Output, "Cleared");
     else
-        Cli_Output.Output_Str("Not Cleared");
+        Cli_Output.Output_Str(&Cli_Output, "Not Cleared");
 
     getchar();
 
-    Cli_Output.Output_Close();
+    Cli_Output.Output_Close(&Cli_Output);
 
     return 0;
 }

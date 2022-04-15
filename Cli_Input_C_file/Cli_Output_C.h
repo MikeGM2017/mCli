@@ -18,13 +18,15 @@
 extern "C" {
 #endif
 
-typedef int ftOutput_Init(void);
-typedef int ftOutput_Close(void);
-typedef int ftOutput_Clear(void);
-typedef void ftOutput_NewLine(void);
-typedef void ftOutput_Char(char c);
-typedef void ftOutput_Str(char *s);
-typedef void ftOutput_Return(void);
+struct Cli_Output_C;
+
+typedef int ftOutput_Init(struct Cli_Output_C *obj);
+typedef int ftOutput_Close(struct Cli_Output_C *obj);
+typedef int ftOutput_Clear(struct Cli_Output_C *obj);
+typedef void ftOutput_NewLine(struct Cli_Output_C *obj);
+typedef void ftOutput_Char(struct Cli_Output_C *obj, char c);
+typedef void ftOutput_Str(struct Cli_Output_C *obj, char *s);
+typedef void ftOutput_Return(struct Cli_Output_C *obj);
 
 struct Cli_Output_C {
     ftOutput_Init *Output_Init;

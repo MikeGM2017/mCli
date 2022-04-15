@@ -24,7 +24,14 @@ extern "C" {
 
 #define CLI_OUTPUT_C_FILENAME_SIZE 4096
 
-    struct Cli_Output_C Cli_Output_C_file(char *filename);
+    struct Cli_Output_C_file {
+        struct Cli_Output_C Cli_Output_Base;
+
+        char File_Name[CLI_OUTPUT_C_FILENAME_SIZE]; // @Attention: Cli_Output_C_file specific
+        FILE *File_Out; // @Attention: Cli_Output_C_file specific
+    };
+
+    struct Cli_Output_C_file Cli_Output_C_file(char *filename);
 
 #ifdef __cplusplus
 }

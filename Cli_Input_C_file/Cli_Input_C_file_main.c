@@ -89,49 +89,49 @@ int main(int argc, char** argv) {
 
     int stop = 0;
     do {
-        Cli_Output.Output_Str(Cli_Input->Invitation_Full_Get(Cli_Input));
-        Cli_Output.Output_Str(Cli_Input->Input_Str_Get(Cli_Input));
+        Cli_Output.Output_Str(&Cli_Output, Cli_Input->Invitation_Full_Get(Cli_Input));
+        Cli_Output.Output_Str(&Cli_Output, Cli_Input->Input_Str_Get(Cli_Input));
         struct Cli_Input_C_Item input_item = Cli_Input->Input_Item_Get(Cli_Input);
         if (Cli_Input_C_Item_Type_Get(&input_item) == CLI_INPUT_ITEM_TYPE_STR) {
             char input_str[CLI_INPUT_C_ITEM_TEXT_SIZE];
             strncpy(input_str, Cli_Input_C_Item_Text_Get(&input_item), CLI_INPUT_C_ITEM_TEXT_SIZE);
             if (input_str[0] == 'Q') {
-                Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str("Quit - Processed");
-                Cli_Output.Output_NewLine();
+                Cli_Output.Output_NewLine(&Cli_Output);
+                Cli_Output.Output_Str(&Cli_Output, "Quit - Processed");
+                Cli_Output.Output_NewLine(&Cli_Output);
                 stop = 1; // Quit
             } else if (input_str[0] == 'C') {
                 Cli_Input->Input_Clear(Cli_Input);
-                Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str("Clear - Processed");
-                Cli_Output.Output_NewLine();
+                Cli_Output.Output_NewLine(&Cli_Output);
+                Cli_Output.Output_Str(&Cli_Output, "Clear - Processed");
+                Cli_Output.Output_NewLine(&Cli_Output);
             } else if (input_str[0]) {
-                Cli_Output.Output_NewLine();
-                Cli_Output.Output_Str(Cli_Input_C_Item_Text_Get(&input_item));
-                Cli_Output.Output_Str(" - Not Processed");
-                Cli_Output.Output_NewLine();
+                Cli_Output.Output_NewLine(&Cli_Output);
+                Cli_Output.Output_Str(&Cli_Output, Cli_Input_C_Item_Text_Get(&input_item));
+                Cli_Output.Output_Str(&Cli_Output, " - Not Processed");
+                Cli_Output.Output_NewLine(&Cli_Output);
             } else {
-                Cli_Output.Output_NewLine();
+                Cli_Output.Output_NewLine(&Cli_Output);
             }
         } else if (Cli_Input_C_Item_Type_Get(&input_item) == CLI_INPUT_ITEM_TYPE_TAB) {
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str("TAB: ");
-            Cli_Output.Output_Str(Cli_Input_C_Item_Text_Get(&input_item));
-            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine(&Cli_Output);
+            Cli_Output.Output_Str(&Cli_Output, "TAB: ");
+            Cli_Output.Output_Str(&Cli_Output, Cli_Input_C_Item_Text_Get(&input_item));
+            Cli_Output.Output_NewLine(&Cli_Output);
         } else if (Cli_Input_C_Item_Type_Get(&input_item) == CLI_INPUT_ITEM_TYPE_UP) {
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str("UP: ");
-            Cli_Output.Output_Str(Cli_Input_C_Item_Text_Get(&input_item));
-            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine(&Cli_Output);
+            Cli_Output.Output_Str(&Cli_Output, "UP: ");
+            Cli_Output.Output_Str(&Cli_Output, Cli_Input_C_Item_Text_Get(&input_item));
+            Cli_Output.Output_NewLine(&Cli_Output);
         } else if (Cli_Input_C_Item_Type_Get(&input_item) == CLI_INPUT_ITEM_TYPE_DOWN) {
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str("DOWN: ");
-            Cli_Output.Output_Str(Cli_Input_C_Item_Text_Get(&input_item));
-            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine(&Cli_Output);
+            Cli_Output.Output_Str(&Cli_Output, "DOWN: ");
+            Cli_Output.Output_Str(&Cli_Output, Cli_Input_C_Item_Text_Get(&input_item));
+            Cli_Output.Output_NewLine(&Cli_Output);
         } else if (Cli_Input_C_Item_Type_Get(&input_item) == CLI_INPUT_ITEM_TYPE_QUIT) {
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str("Quit - Processed");
-            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine(&Cli_Output);
+            Cli_Output.Output_Str(&Cli_Output, "Quit - Processed");
+            Cli_Output.Output_NewLine(&Cli_Output);
             stop = 1; // Quit
         }
     } while (!stop);
