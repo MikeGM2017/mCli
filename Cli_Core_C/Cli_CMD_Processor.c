@@ -6,14 +6,14 @@
 
 #include "Cli_CMD_Processor.h"
 
-static char *Str_Trim(char *s, char *s_trim) {
+static char *Str_Trim(char *s, char *s_trim, int s_trim_size) {
     int s_size = strlen(s);
     int pos_beg = 0;
     int pos_end = s_size ? (s_size - 1) : 0;
     while (pos_beg < s_size && (s[pos_beg] == ' ' || s[pos_beg] == '\t' || s[pos_beg] == '\r' || s[pos_beg] == '\n')) pos_beg++;
     while (pos_end > pos_beg && (s[pos_end] == ' ' || s[pos_end] == '\t' || s[pos_end] == '\r' || s[pos_end] == '\n')) pos_end--;
     if (pos_end >= pos_beg) {
-        int len = pos_end - pos_beg + 1;
+        int len = s_trim_size - 1;
         strncpy(s_trim, s + pos_beg, len);
         s_trim[len] = '\0';
     } else {
@@ -68,7 +68,7 @@ static enum Cmd_Item_Valid_Result Cmd_Is_Valid(struct Cli_CMD_Processor *cmd_pro
 static int Process_Input_Item(struct Cli_CMD_Processor *cmd_processor,
         struct Cli_Input_C_Item *input_item, int is_debug, int *debug_res) {
     char s_trim[CLI_INPUT_C_ITEM_TEXT_SIZE];
-    Str_Trim(Cli_Input_C_Item_Text_Get(input_item), s_trim);
+    Str_Trim(Cli_Input_C_Item_Text_Get(input_item), s_trim, CLI_INPUT_C_ITEM_TEXT_SIZE);
     int s_trim_size = strnlen(s_trim, CLI_INPUT_C_ITEM_TEXT_SIZE);
 
     if (s_trim_size == 0) return 0;
