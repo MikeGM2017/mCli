@@ -39,7 +39,8 @@ int main(int argc, char** argv) {
         struct Cli_Input_C_Item input_item = Cli_Input->Input_Item_Get(Cli_Input);
         if (Cli_Input_C_Item_Type_Get(&input_item) == CLI_INPUT_ITEM_TYPE_STR) {
             char input_str[CLI_INPUT_C_ITEM_TEXT_SIZE];
-            strncpy(input_str, Cli_Input_C_Item_Text_Get(&input_item), CLI_INPUT_C_ITEM_TEXT_SIZE);
+            strncpy(input_str, Cli_Input_C_Item_Text_Get(&input_item), CLI_INPUT_C_ITEM_TEXT_SIZE - 1);
+            input_str[CLI_INPUT_C_ITEM_TEXT_SIZE - 1] = '\0';
             if (input_str[0] == 'Q') {
                 Cli_Output.Output_NewLine(&Cli_Output);
                 Cli_Output.Output_Str(&Cli_Output, "Quit - Processed");

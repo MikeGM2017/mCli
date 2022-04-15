@@ -11,7 +11,8 @@ static char *Title_Get(struct Cli_Input_C *obj) {
 }
 
 static void Title_Set(struct Cli_Input_C *obj, char *title) {
-    strncpy(obj->Title, title, CLI_INPUT_C_TITLE_SIZE);
+    strncpy(obj->Title, title, CLI_INPUT_C_TITLE_SIZE - 1);
+    obj->Title[CLI_INPUT_C_TITLE_SIZE - 1] = '\0';
 }
 
 static char *User_Get(struct Cli_Input_C *obj) {
@@ -19,7 +20,8 @@ static char *User_Get(struct Cli_Input_C *obj) {
 }
 
 static void User_Set(struct Cli_Input_C *obj, char *user) {
-    strncpy(obj->User, user, CLI_INPUT_C_USER_SIZE);
+    strncpy(obj->User, user, CLI_INPUT_C_USER_SIZE - 1);
+    obj->User[CLI_INPUT_C_USER_SIZE - 1] = '\0';
 }
 
 static char *Level_Get(struct Cli_Input_C *obj) {
@@ -27,7 +29,8 @@ static char *Level_Get(struct Cli_Input_C *obj) {
 }
 
 static void Level_Set(struct Cli_Input_C *obj, char *level) {
-    strncpy(obj->Level, level, CLI_INPUT_C_LEVEL_SIZE);
+    strncpy(obj->Level, level, CLI_INPUT_C_LEVEL_SIZE - 1);
+    obj->Level[CLI_INPUT_C_LEVEL_SIZE - 1] = '\0';
 }
 
 static char *Invitation_Get(struct Cli_Input_C *obj) {
@@ -35,7 +38,8 @@ static char *Invitation_Get(struct Cli_Input_C *obj) {
 }
 
 static void Invitation_Set(struct Cli_Input_C *obj, char *invitation) {
-    strncpy(obj->Invitation, invitation, CLI_INPUT_C_INVITATION_SIZE);
+    strncpy(obj->Invitation, invitation, CLI_INPUT_C_INVITATION_SIZE - 1);
+    obj->Invitation[CLI_INPUT_C_INVITATION_SIZE - 1] = '\0';
 }
 
 static char *Divider_L_Get(struct Cli_Input_C *obj) {
@@ -43,7 +47,8 @@ static char *Divider_L_Get(struct Cli_Input_C *obj) {
 }
 
 static void Divider_L_Set(struct Cli_Input_C *obj, char *divider_l) {
-    strncpy(obj->Divider_L, divider_l, CLI_INPUT_C_DIVIDER_SIZE);
+    strncpy(obj->Divider_L, divider_l, CLI_INPUT_C_DIVIDER_SIZE - 1);
+    obj->Divider_L[CLI_INPUT_C_DIVIDER_SIZE - 1] = '\0';
 }
 
 static char *Divider_R_Get(struct Cli_Input_C *obj) {
@@ -51,7 +56,8 @@ static char *Divider_R_Get(struct Cli_Input_C *obj) {
 }
 
 static void Divider_R_Set(struct Cli_Input_C *obj, char *divider_r) {
-    strncpy(obj->Divider_R, divider_r, CLI_INPUT_C_DIVIDER_SIZE);
+    strncpy(obj->Divider_R, divider_r, CLI_INPUT_C_DIVIDER_SIZE - 1);
+    obj->Divider_R[CLI_INPUT_C_DIVIDER_SIZE - 1] = '\0';
 }
 
 static char *Invitation_Full_Get(struct Cli_Input_C *obj) { // Attention: Should be used for print cli invitation
@@ -76,6 +82,7 @@ static char *Invitation_Full_Get(struct Cli_Input_C *obj) { // Attention: Should
     if (obj->Invitation[0]) {
         p = strncat(p, obj->Invitation, CLI_INPUT_C_INVITATION_SIZE - (p - s));
     }
+    s[CLI_INPUT_C_INVITATION_SIZE - 1] = '\0';
     return s;
 }
 
@@ -84,7 +91,8 @@ static char *Input_Str_Get(struct Cli_Input_C *obj) {
 };
 
 static void Input_Str_Set(struct Cli_Input_C *obj, char *s) {
-    strncpy(obj->Input_Str, s, CLI_INPUT_C_INPUT_STR_SIZE);
+    strncpy(obj->Input_Str, s, CLI_INPUT_C_INPUT_STR_SIZE - 1);
+    obj->Input_Str[CLI_INPUT_C_INPUT_STR_SIZE - 1] = '\0';
 };
 
 static void Input_Str_Clear(struct Cli_Input_C *obj) {
@@ -176,7 +184,8 @@ static void Input_Add(struct Cli_Input_C *obj, char c) {
         } else {
 
             char s_prev[CLI_INPUT_C_INPUT_STR_SIZE];
-            strncpy(s_prev, obj->Input_Str, CLI_INPUT_C_INPUT_STR_SIZE);
+            strncpy(s_prev, obj->Input_Str, CLI_INPUT_C_INPUT_STR_SIZE - 1);
+            s_prev[CLI_INPUT_C_INPUT_STR_SIZE - 1] = '\0';
 
             obj->Input_Str[obj->Input_Str_Pos] = c;
             strncpy(obj->Input_Str + obj->Input_Str_Pos + 1,
@@ -195,7 +204,8 @@ static void Input_Add(struct Cli_Input_C *obj, char c) {
 static void Input_Back(struct Cli_Input_C *obj) {
     if (obj->Input_Str[0] && obj->Input_Str_Pos > 0) {
         char s_prev[CLI_INPUT_C_INPUT_STR_SIZE];
-        strncpy(s_prev, obj->Input_Str, CLI_INPUT_C_INPUT_STR_SIZE);
+        strncpy(s_prev, obj->Input_Str, CLI_INPUT_C_INPUT_STR_SIZE - 1);
+        s_prev[CLI_INPUT_C_INPUT_STR_SIZE - 1] = '\0';
         if (obj->Input_Str_Pos == obj->Input_Str_Size) {
             obj->Input_Str[obj->Input_Str_Size] = '\0';
             obj->Input_Str_Size--;
@@ -218,7 +228,8 @@ static void Input_Back(struct Cli_Input_C *obj) {
 static void Input_Delete(struct Cli_Input_C *obj) {
     if (obj->Input_Str[0] && obj->Input_Str_Pos < obj->Input_Str_Size) {
         char s_prev[CLI_INPUT_C_INPUT_STR_SIZE];
-        strncpy(s_prev, obj->Input_Str, CLI_INPUT_C_INPUT_STR_SIZE);
+        strncpy(s_prev, obj->Input_Str, CLI_INPUT_C_INPUT_STR_SIZE - 1);
+        s_prev[CLI_INPUT_C_INPUT_STR_SIZE - 1] = '\0';
         if (obj->Input_Str_Pos < obj->Input_Str_Size - 1) {
             strncpy(obj->Input_Str + obj->Input_Str_Pos,
                     s_prev + obj->Input_Str_Pos + 1,
@@ -271,8 +282,10 @@ static int Input_kbhit(struct Cli_Input_C *obj) {
 struct Cli_Input_C Cli_Input_C_base(void) {
     struct Cli_Input_C Cli_Input_Base;
     memset(&Cli_Input_Base, 0, sizeof (struct Cli_Input_C));
-    strncpy(Cli_Input_Base.Divider_L, CLI_INPUT_C_DIVIDER_L_DEF, CLI_INPUT_C_DIVIDER_SIZE);
-    strncpy(Cli_Input_Base.Divider_R, CLI_INPUT_C_DIVIDER_R_DEF, CLI_INPUT_C_DIVIDER_SIZE);
+    strncpy(Cli_Input_Base.Divider_L, CLI_INPUT_C_DIVIDER_L_DEF, CLI_INPUT_C_DIVIDER_SIZE - 1);
+    Cli_Input_Base.Divider_L[CLI_INPUT_C_DIVIDER_SIZE - 1] = '\0';
+    strncpy(Cli_Input_Base.Divider_R, CLI_INPUT_C_DIVIDER_R_DEF, CLI_INPUT_C_DIVIDER_SIZE - 1);
+    Cli_Input_Base.Divider_R[CLI_INPUT_C_DIVIDER_SIZE - 1] = '\0';
 
     Cli_Input_Base.Title_Get = Title_Get;
     Cli_Input_Base.Title_Set = Title_Set;
