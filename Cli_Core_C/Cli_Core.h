@@ -22,7 +22,7 @@ extern "C" {
 
     struct Cli_Core;
 
-    typedef char *ftStr_Trim(char *s, char *s_trim);
+    typedef char *ftStr_Trim(char *s, char *s_trim, int s_trim_size);
 
     struct Cli_Core {
         ftStr_Trim *Str_Trim;
