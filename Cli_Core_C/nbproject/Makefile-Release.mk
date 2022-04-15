@@ -55,6 +55,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cli_Module_Base_Rem.o \
 	${OBJECTDIR}/Cli_Module_Mem_Manager.o \
 	${OBJECTDIR}/Cli_Modules.o \
+	${OBJECTDIR}/Cli_Output_C_file.o \
 	${OBJECTDIR}/Cli_Output_C_printf.o \
 	${OBJECTDIR}/Cli_TAB_Processor.o \
 	${OBJECTDIR}/Cmd_Item_Valid_Result_Func.o \
@@ -195,6 +196,11 @@ ${OBJECTDIR}/Cli_Modules.o: Cli_Modules.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Modules.o Cli_Modules.c
+
+${OBJECTDIR}/Cli_Output_C_file.o: Cli_Output_C_file.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Output_C_file.o Cli_Output_C_file.c
 
 ${OBJECTDIR}/Cli_Output_C_printf.o: Cli_Output_C_printf.c 
 	${MKDIR} -p ${OBJECTDIR}

@@ -117,15 +117,37 @@ int main(int argc, char** argv) {
 
     if (Arg_Arguments_Print) {
         printf("Arguments:\n");
-        printf("      File In: \"%s\"\n", Arg_File_In);
+        printf(" File In         : \"%s\"\n", Arg_File_In);
+        printf(" File Log        : \"%s\"\n", Arg_File_Log);
+        printf(" File Tab Log    : \"%s\"\n", Arg_File_TabLog);
+        printf(" File History Log: \"%s\"\n", Arg_File_History);
     }
 
     char Version[] = "0.01";
 
-    struct Cli_Output_C Cli_Output = Cli_Output_C_printf();
+    struct Cli_Output_C Cli_Output_printf;
+    struct Cli_Output_C_file Cli_Output_file;
+    struct Cli_Output_C *Cli_Output = NULL;
+    if (Arg_File_Log) {
+        Cli_Output_file = Cli_Output_C_file(Arg_File_Log);
+        Cli_Output = (struct Cli_Output_C *) &Cli_Output_file;
+    } else {
+        Cli_Output_printf = Cli_Output_C_printf();
+        Cli_Output = &Cli_Output_printf;
+    }
+    Cli_Output->Output_Init(Cli_Output);
 
-    struct Cli_Input_C_Termios Cli_Input_C_Termios = Cli_Input_C_termios(&Cli_Output);
-    struct Cli_Input_C *Cli_Input = &Cli_Input_C_Termios.Cli_Input_Base;
+    struct Cli_Input_C_Termios Cli_Input_C_Termios;
+    struct Cli_Input_C_File Cli_Input_file;
+    struct Cli_Input_C *Cli_Input = NULL;
+    if (Arg_File_In) {
+        Cli_Input_file = Cli_Input_C_file(Cli_Output, Arg_File_In);
+        Cli_Input = &Cli_Input_file.Cli_Input_Base;
+    } else {
+        Cli_Input_C_Termios = Cli_Input_C_termios(Cli_Output);
+        Cli_Input = &Cli_Input_C_Termios.Cli_Input_Base;
+    }
+    Cli_Input->Input_Init(Cli_Input);
 
     struct Level_Description_Array Levels = Level_Description_Array_Init();
 
@@ -139,27 +161,27 @@ int main(int argc, char** argv) {
     struct Cli_History History = Cli_History_Init();
 
     struct Cli_CMD_Processor CMD_Processor = Cli_CMD_Processor_Init
-            (User_Privilege, &Modules, &Levels, &Token_Parser, Cli_Input, &Cli_Output, Str_Rem_DEF);
+            (User_Privilege, &Modules, &Levels, &Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
     struct Cli_TAB_Processor TAB_Processor = Cli_TAB_Processor_Init
-            (User_Privilege, &Modules, &Levels, &Token_Parser, Cli_Input, &Cli_Output, Str_Rem_DEF);
+            (User_Privilege, &Modules, &Levels, &Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
     struct Cli_Core Cli = Cli_Core_Init();
-    //(User_Privilege, &Modules, &Levels, &Token_Parser, Cli_Input, &Cli_Output, Str_Rem_DEF);
+    //(User_Privilege, &Modules, &Levels, &Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
 
     // Modules Add - Begin
 
-    struct Cli_Module_Base_Rem module_rem = Cli_Module_Base_Rem_Init(Str_Rem_DEF, &Cli_Output);
+    struct Cli_Module_Base_Rem module_rem = Cli_Module_Base_Rem_Init(Str_Rem_DEF, Cli_Output);
     Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_rem);
 
     struct Str_Filter Filter = Str_Filter_Init('.', '*');
 
-    struct Cli_Module_Base_Help module_help = Cli_Module_Base_Help_Init(User_Privilege, &Modules, &Filter, &Cli_Output);
+    struct Cli_Module_Base_Help module_help = Cli_Module_Base_Help_Init(User_Privilege, &Modules, &Filter, Cli_Output);
     Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_help);
 
     //    Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
     //
     int Cmd_Quit = 0;
 
-    struct Cli_Module_Base_Quit module_quit = Cli_Module_Base_Quit_Init(Cli_Input, &Cli_Output, &Cmd_Quit);
+    struct Cli_Module_Base_Quit module_quit = Cli_Module_Base_Quit_Init(Cli_Input, Cli_Output, &Cmd_Quit);
     Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_quit);
 
     //    Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
@@ -168,13 +190,13 @@ int main(int argc, char** argv) {
     //    Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
     //    Modules.Add(new Cli_Module_Base_Modules(User_Privilege, Modules, str_filter, Cli_Output));
 
-    struct Cli_Module_Base_Modules module_modules = Cli_Module_Base_Modules_Init(&Modules, &Filter, &Cli_Output);
+    struct Cli_Module_Base_Modules module_modules = Cli_Module_Base_Modules_Init(&Modules, &Filter, Cli_Output);
     Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_modules);
 
     //    Cli_History History;
     //    Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
 
-    struct Cli_Module_Base_History module_history = Cli_Module_Base_History_Init(&History, &Cli_Output);
+    struct Cli_Module_Base_History module_history = Cli_Module_Base_History_Init(&History, Cli_Output);
     Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_history);
 
     //
@@ -205,12 +227,12 @@ int main(int argc, char** argv) {
     Cli_Input->Divider_R_Set(Cli_Input, "]");
     Cli_Input->Input_Init(Cli_Input);
 
-    Cli_Output.Output_NewLine(&Cli_Output);
-    Cli_Output.Output_Str(&Cli_Output, "mCli: Cli Core Test");
-    Cli_Output.Output_Str(&Cli_Output, " V");
-    Cli_Output.Output_Str(&Cli_Output, Version);
-    Cli_Output.Output_NewLine(&Cli_Output);
-    Cli_Output.Output_NewLine(&Cli_Output);
+    Cli_Output->Output_NewLine(Cli_Output);
+    Cli_Output->Output_Str(Cli_Output, "mCli: Cli Core Test");
+    Cli_Output->Output_Str(Cli_Output, " V");
+    Cli_Output->Output_Str(Cli_Output, Version);
+    Cli_Output->Output_NewLine(Cli_Output);
+    Cli_Output->Output_NewLine(Cli_Output);
 
     struct Mem_Manager_C Mem_Manager1 = Mem_Manager_malloc_free_Init();
     const int buf_main_size = 0x1000000;
@@ -218,8 +240,8 @@ int main(int argc, char** argv) {
     enum Mem_Manager_Res buf_main_res = Mem_Manager1.Mem_Manager_Alloc(&Mem_Manager1, buf_main_size, &buf_main);
     struct Mem_Manager_buf Mem_Manager2_buf;
     if (buf_main_res == MEM_MANAGER_OK) {
-        Cli_Output.Output_Str(&Cli_Output, "Mem 1000000 - Ok");
-        Cli_Output.Output_NewLine(&Cli_Output);
+        Cli_Output->Output_Str(Cli_Output, "Mem 1000000 - Ok");
+        Cli_Output->Output_NewLine(Cli_Output);
 
         //struct Mem_Manager_buf Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
         Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
@@ -229,30 +251,30 @@ int main(int argc, char** argv) {
         enum Mem_Manager_Res buf_1_res = Mem_Manager2->Mem_Manager_Alloc(Mem_Manager2, buf_1_size, &buf_1);
 
         if (buf_1_res == MEM_MANAGER_OK) {
-            Cli_Output.Output_Str(&Cli_Output, "buf 10000 - Ok");
-            Cli_Output.Output_NewLine(&Cli_Output);
+            Cli_Output->Output_Str(Cli_Output, "buf 10000 - Ok");
+            Cli_Output->Output_NewLine(Cli_Output);
         } else {
-            Cli_Output.Output_Str(&Cli_Output, "buf 10000 - Failed");
-            Cli_Output.Output_NewLine(&Cli_Output);
+            Cli_Output->Output_Str(Cli_Output, "buf 10000 - Failed");
+            Cli_Output->Output_NewLine(Cli_Output);
         }
-        Cli_Output.Output_NewLine(&Cli_Output);
+        Cli_Output->Output_NewLine(Cli_Output);
 
     } else {
-        Cli_Output.Output_Str(&Cli_Output, "Mem 1000000 - Failed");
-        Cli_Output.Output_NewLine(&Cli_Output);
+        Cli_Output->Output_Str(Cli_Output, "Mem 1000000 - Failed");
+        Cli_Output->Output_NewLine(Cli_Output);
     }
-    Cli_Output.Output_NewLine(&Cli_Output);
+    Cli_Output->Output_NewLine(Cli_Output);
 
     struct Cli_Module_Mem_Manager module_mem_manager = Cli_Module_Mem_Manager_Init(
-            (struct Mem_Manager_C *) &Mem_Manager2_buf, &Cli_Output);
+            (struct Mem_Manager_C *) &Mem_Manager2_buf, Cli_Output);
     Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_mem_manager);
 
     int stop = 0;
     int is_invitation_print = 1;
     do {
         if (is_invitation_print) {
-            Cli_Output.Output_Str(&Cli_Output, Cli_Input->Invitation_Full_Get(Cli_Input));
-            Cli_Output.Output_Str(&Cli_Output, Cli_Input->Input_Str_Get(Cli_Input));
+            Cli_Output->Output_Str(Cli_Output, Cli_Input->Invitation_Full_Get(Cli_Input));
+            Cli_Output->Output_Str(Cli_Output, Cli_Input->Input_Str_Get(Cli_Input));
         }
         is_invitation_print = 1;
         struct Cli_Input_C_Item input_item = Cli_Input->Input_Item_Get(Cli_Input);
@@ -263,7 +285,7 @@ int main(int argc, char** argv) {
                 int is_debug = 0;
 
                 char s_trim[CLI_INPUT_C_ITEM_TEXT_SIZE];
-                Cli.Str_Trim(Cli_Input_C_Item_Text_Get(&input_item), s_trim);
+                Cli.Str_Trim(Cli_Input_C_Item_Text_Get(&input_item), s_trim, CLI_INPUT_C_ITEM_TEXT_SIZE);
 
                 if (!is_no_history && !is_debug) {
                     History.History_Put(&History, s_trim);
@@ -272,10 +294,10 @@ int main(int argc, char** argv) {
                 int debug_res = 0;
                 //int res_cmd_process = CMD_Processor.Process_Input_Item(&CMD_Processor, &input_item, is_debug, &debug_res);
                 //if (!res_cmd_process) {
-                //    Cli_Output.Output_NewLine();
+                //    Cli_Output->Output_NewLine();
                 //}
                 CMD_Processor.Process_Input_Item(&CMD_Processor, &input_item, is_debug, &debug_res);
-                Cli_Output.Output_NewLine(&Cli_Output);
+                Cli_Output->Output_NewLine(Cli_Output);
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
@@ -309,8 +331,8 @@ int main(int argc, char** argv) {
                 break;
             case CLI_INPUT_ITEM_TYPE_QUIT:
             {
-                Cli_Output.Output_Str(&Cli_Output, "Quit - Processed");
-                Cli_Output.Output_NewLine(&Cli_Output);
+                Cli_Output->Output_Str(Cli_Output, "Quit - Processed");
+                Cli_Output->Output_NewLine(Cli_Output);
                 stop = 1; // Quit
             }
                 break;
@@ -320,14 +342,15 @@ int main(int argc, char** argv) {
         }
 
         if (Cmd_Quit) {
-            Cli_Output.Output_Str(&Cli_Output, "Quit - Processed");
-            Cli_Output.Output_NewLine(&Cli_Output);
+            Cli_Output->Output_Str(Cli_Output, "Quit - Processed");
+            Cli_Output->Output_NewLine(Cli_Output);
             stop = 1; // Quit
         }
 
     } while (!stop);
 
     Cli_Input->Input_Restore(Cli_Input);
+    Cli_Output->Output_Close(Cli_Output);
 
     return 0;
 }

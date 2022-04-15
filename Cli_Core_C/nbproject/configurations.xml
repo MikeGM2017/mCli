@@ -22,6 +22,7 @@
       <itemPath>Cli_History.h</itemPath>
       <itemPath>Cli_Input_C.h</itemPath>
       <itemPath>Cli_Input_C_Item.h</itemPath>
+      <itemPath>Cli_Input_C_file.h</itemPath>
       <itemPath>Cli_Input_C_termios.h</itemPath>
       <itemPath>Cli_Input_Item_Type.h</itemPath>
       <itemPath>Cli_Module.h</itemPath>
@@ -33,6 +34,7 @@
       <itemPath>Cli_Module_Mem_Manager.h</itemPath>
       <itemPath>Cli_Modules.h</itemPath>
       <itemPath>Cli_Output_C.h</itemPath>
+      <itemPath>Cli_Output_C_file.h</itemPath>
       <itemPath>Cli_Output_C_printf.h</itemPath>
       <itemPath>Cli_TAB_Processor.h</itemPath>
       <itemPath>Cmd_Item_Valid_Result.h</itemPath>
@@ -81,6 +83,7 @@
       <itemPath>Cli_Module_Base_Rem.c</itemPath>
       <itemPath>Cli_Module_Mem_Manager.c</itemPath>
       <itemPath>Cli_Modules.c</itemPath>
+      <itemPath>Cli_Output_C_file.c</itemPath>
       <itemPath>Cli_Output_C_printf.c</itemPath>
       <itemPath>Cli_TAB_Processor.c</itemPath>
       <itemPath>Cmd_Item_Valid_Result_Func.c</itemPath>
@@ -166,6 +169,8 @@
       </item>
       <item path="Cli_Input_C_file.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="Cli_Input_C_file.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input_C_termios.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Input_C_termios.h" ex="false" tool="3" flavor2="0">
@@ -205,6 +210,10 @@
       <item path="Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_C.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_file.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_file.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_C_printf.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -343,6 +352,8 @@
       </item>
       <item path="Cli_Input_C_file.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="Cli_Input_C_file.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input_C_termios.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Input_C_termios.h" ex="false" tool="3" flavor2="0">
@@ -382,6 +393,10 @@
       <item path="Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_C.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_file.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Output_C_file.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_C_printf.c" ex="false" tool="0" flavor2="0">
       </item>
