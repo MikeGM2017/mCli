@@ -6,7 +6,7 @@
 
 #include "Cli_Module.h"
 
-static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
+static int Execute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
     return 0; /*Failed*/
 }
 

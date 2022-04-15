@@ -28,7 +28,7 @@ extern "C" {
 
     struct Cli_Module;
 
-    typedef int ftExecute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug);
+    typedef int ftExecute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug);
 
     struct Cli_Module {
         char Name[CLI_MODULE_NAME_SIZE_DEF];

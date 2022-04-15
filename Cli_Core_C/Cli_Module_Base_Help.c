@@ -195,7 +195,7 @@ static void help(struct Cli_Module_Base_Help *module_help,
 
 }
 
-static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
+static int Execute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
     struct Cli_Module_Base_Help *module_help = (struct Cli_Module_Base_Help *) module;
     struct Level_Description level = Level_Description_Init();
     //string parameter;
@@ -203,7 +203,7 @@ static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, s
         level = Levels->Items[Levels->Size];
         //parameter = level.Parameter;
     }
-    switch (cmd_id) {
+    switch (cmd->ID) {
         case CMD_ID_help_H:
         case CMD_ID_help:
             if (is_debug) return 1;

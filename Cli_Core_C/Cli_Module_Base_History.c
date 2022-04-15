@@ -35,7 +35,7 @@ static void history_clear(struct Cli_History *History, struct Cli_Output_C * Cli
     History->Clear(History);
 }
 
-static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
+static int Execute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
     struct Cli_Module_Base_History *module_history = (struct Cli_Module_Base_History *) module;
     struct Level_Description level = Level_Description_Init();
     //string parameter;
@@ -43,7 +43,7 @@ static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, s
         level = Levels->Items[Levels->Size];
         //parameter = level.Parameter;
     }
-    switch (cmd_id) {
+    switch (cmd->ID) {
         case CMD_ID_history:
         case CMD_ID_history_show:
             if (is_debug) return 1;

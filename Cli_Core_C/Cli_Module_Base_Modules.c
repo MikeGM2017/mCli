@@ -40,7 +40,7 @@ static void modules_by_filter_print(char *module_filter, struct Cli_Modules *Mod
     }
 }
 
-static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
+static int Execute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
     struct Cli_Module_Base_Modules *module_modules = (struct Cli_Module_Base_Modules *) module;
     struct Level_Description level = Level_Description_Init();
     //string parameter;
@@ -48,7 +48,7 @@ static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, s
         level = Levels->Items[Levels->Size];
         //parameter = level.Parameter;
     }
-    switch (cmd_id) {
+    switch (cmd->ID) {
         case CMD_ID_modules:
             if (is_debug) return 1;
         {

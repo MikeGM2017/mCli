@@ -43,9 +43,9 @@ static int quit_with_prompt(struct Cli_Input_C *Cli_Input, struct Cli_Output_C *
     return 1;
 }
 
-static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
+static int Execute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
     struct Cli_Module_Base_Quit *module_quit = (struct Cli_Module_Base_Quit *) module;
-    switch (cmd_id) {
+    switch (cmd->ID) {
         case CMD_ID_Q:
         case CMD_ID_quit_force:
         case CMD_ID_E:

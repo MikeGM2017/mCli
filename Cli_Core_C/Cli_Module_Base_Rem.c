@@ -23,9 +23,9 @@ int rem(struct Cli_Output_C *Cli_Output, char *s_rem) {
     return 1;
 }
 
-static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
+static int Execute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
     struct Cli_Module_Base_Rem *module_rem = (struct Cli_Module_Base_Rem *) module;
-    switch (cmd_id) {
+    switch (cmd->ID) {
         case CMD_ID_rem:
             if (is_debug) return 1;
         {

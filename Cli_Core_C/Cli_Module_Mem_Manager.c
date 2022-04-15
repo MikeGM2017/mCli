@@ -27,7 +27,7 @@ static void mem_info(struct Mem_Manager_C *Mem_Manager, struct Cli_Output_C *Cli
     Cli_Output->Output_NewLine(Cli_Output);
 }
 
-static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
+static int Execute(struct Cli_Module *module, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {
     struct Cli_Module_Mem_Manager *module_mem_manager = (struct Cli_Module_Mem_Manager *) module;
     struct Level_Description level = Level_Description_Init();
     //string parameter;
@@ -35,7 +35,7 @@ static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, s
         level = Levels->Items[Levels->Size];
         //parameter = level.Parameter;
     }
-    switch (cmd_id) {
+    switch (cmd->ID) {
         case CMD_ID_M:
         case CMD_ID_mem:
         case CMD_ID_mem_info:

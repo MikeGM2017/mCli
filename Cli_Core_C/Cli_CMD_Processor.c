@@ -102,7 +102,7 @@ static int Process_Input_Item(struct Cli_CMD_Processor *cmd_processor,
                                 {
                                     if (!is_debug)
                                         cmd_processor->Cli_Output->Output_NewLine(cmd_processor->Cli_Output);
-                                    int res_execute = module_ptr->Execute(module_ptr, cmd_ptr->ID, cmd_ptr, cmd_processor->Levels, is_debug);
+                                    int res_execute = module_ptr->Execute(module_ptr, cmd_ptr, cmd_processor->Levels, is_debug);
                                     if (!res_execute) {
                                         if (!is_debug) {
                                             cmd_processor->Cli_Output->Output_NewLine(cmd_processor->Cli_Output);
