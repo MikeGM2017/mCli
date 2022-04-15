@@ -111,15 +111,18 @@ static void Input_Str_Clear(struct Cli_Input_C *obj) {
 };
 
 static int Input_Init(struct Cli_Input_C *obj) {
-    return obj->Cli_Output->Output_Init();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    return cli_output_obj->Output_Init(cli_output_obj);
 }
 
 static int Input_Restore(struct Cli_Input_C *obj) {
-    return obj->Cli_Output->Output_Close();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    return cli_output_obj->Output_Close(cli_output_obj);
 }
 
 static int Input_Clear(struct Cli_Input_C *obj) {
-    return obj->Cli_Output->Output_Clear();
+    struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+    return cli_output_obj->Output_Clear(cli_output_obj);
 }
 
 static int Is_Echo_Get(struct Cli_Input_C *obj) {
@@ -136,14 +139,15 @@ static void Is_Echo_Off(struct Cli_Input_C *obj) {
 
 static void Input_Str_To_Output(struct Cli_Input_C *obj) {
     if (obj->Is_Echo_Get(obj)) {
-        obj->Cli_Output->Output_Return();
-        obj->Cli_Output->Output_Str(Invitation_Full_Get(obj));
+        struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+        cli_output_obj->Output_Return(cli_output_obj);
+        cli_output_obj->Output_Str(cli_output_obj, Invitation_Full_Get(obj));
         if (obj->Input_Str_Pos > 0) {
             char input_substr[CLI_INPUT_C_INPUT_STR_SIZE];
             int len = obj->Input_Str_Pos;
             strncpy(input_substr, obj->Input_Str, len);
             input_substr[len] = '\0';
-            obj->Cli_Output->Output_Str(input_substr);
+            cli_output_obj->Output_Str(cli_output_obj, input_substr);
         }
     }
 }
@@ -156,23 +160,25 @@ static void Input_Str_Modified_To_Output(struct Cli_Input_C *obj, char *s_prev) 
         memset(s_prev_space, ' ', s_prev_len);
         s_prev_space[s_prev_len] = '\0';
 
-        obj->Cli_Output->Output_Return();
-        obj->Cli_Output->Output_Str(obj->Invitation_Full_Get(obj));
-        obj->Cli_Output->Output_Str(s_prev_space);
+        struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
 
-        obj->Cli_Output->Output_Return();
-        obj->Cli_Output->Output_Str(obj->Invitation_Full_Get(obj));
-        obj->Cli_Output->Output_Str(obj->Input_Str);
+        cli_output_obj->Output_Return(cli_output_obj);
+        cli_output_obj->Output_Str(cli_output_obj, obj->Invitation_Full_Get(obj));
+        cli_output_obj->Output_Str(cli_output_obj, s_prev_space);
+
+        cli_output_obj->Output_Return(cli_output_obj);
+        cli_output_obj->Output_Str(cli_output_obj, obj->Invitation_Full_Get(obj));
+        cli_output_obj->Output_Str(cli_output_obj, obj->Input_Str);
 
         // @Attetion: May optimize: if(obj->Input_Str_Pos < obj->Input_Str_Size)
-        obj->Cli_Output->Output_Return();
-        obj->Cli_Output->Output_Str(obj->Invitation_Full_Get(obj));
+        cli_output_obj->Output_Return(cli_output_obj);
+        cli_output_obj->Output_Str(cli_output_obj, obj->Invitation_Full_Get(obj));
         if (obj->Input_Str_Pos > 0) {
             char input_substr[CLI_INPUT_C_INPUT_STR_SIZE];
             int len = obj->Input_Str_Pos;
             strncpy(input_substr, obj->Input_Str, len);
             input_substr[len] = '\0';
-            obj->Cli_Output->Output_Str(input_substr);
+            cli_output_obj->Output_Str(cli_output_obj, input_substr);
         }
     }
 }
@@ -181,7 +187,8 @@ static void Input_Add(struct Cli_Input_C *obj, char c) {
     if (obj->Input_Str_Size < CLI_INPUT_C_INPUT_STR_SIZE) {
         if (obj->Input_Str_Pos == obj->Input_Str_Size) {
             if (obj->Is_Echo_Get(obj)) {
-                obj->Cli_Output->Output_Char(c);
+                struct Cli_Output_C *cli_output_obj = obj->Cli_Output;
+                cli_output_obj->Output_Char(cli_output_obj, c);
             }
             obj->Input_Str[obj->Input_Str_Size] = c;
             obj->Input_Str_Size++;

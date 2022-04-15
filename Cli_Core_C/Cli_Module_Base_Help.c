@@ -95,7 +95,7 @@ static void Help_Cli_Modules_Print(int user_privilege, struct Cli_Modules *modul
         int len_max, int *modules_count, int *commands_count,
         struct Cli_Output_C *Cli_Output) {
 
-    Cli_Output->Output_NewLine();
+    Cli_Output->Output_NewLine(Cli_Output);
 
     struct Cli_Module *module_ptr = modules->Module_Head;
     while (module_ptr) {
@@ -109,41 +109,41 @@ static void Help_Cli_Modules_Print(int user_privilege, struct Cli_Modules *modul
                         if (is_cmd_prt_valid && Str_Filter_Is_Match(str_filter, command_filter, cmd_ptr->Item_Head->Text)) {
                             if (level[0] == '\0') {
                                 if (cmd_ptr->Level[0] != '\0') {
-                                    Cli_Output->Output_Str("[");
-                                    Cli_Output->Output_Str(cmd_ptr->Level);
-                                    Cli_Output->Output_Str("] ");
+                                    Cli_Output->Output_Str(Cli_Output, "[");
+                                    Cli_Output->Output_Str(Cli_Output, cmd_ptr->Level);
+                                    Cli_Output->Output_Str(Cli_Output, "] ");
                                 }
                             }
-                            Cli_Output->Output_Str(cmd_ptr->Text);
+                            Cli_Output->Output_Str(Cli_Output, cmd_ptr->Text);
                             int text_len = strlen(cmd_ptr->Text);
                             //if (text_len < len_max) {
                             if (text_len < len_max + 1) { // @Attention: len_max + 1 - cmd_item adds: ' '
                                 int i;
                                 //for (i = text_len; i < len_max; i++) {
                                 for (i = text_len; i < len_max + 1; i++) { // @Attention: len_max + 1 - cmd_item adds: ' '
-                                    Cli_Output->Output_Char(' ');
+                                    Cli_Output->Output_Char(Cli_Output, ' ');
                                 }
                             }
-                            Cli_Output->Output_Str(" - ");
-                            Cli_Output->Output_Str(cmd_ptr->Help);
-                            Cli_Output->Output_NewLine();
+                            Cli_Output->Output_Str(Cli_Output, " - ");
+                            Cli_Output->Output_Str(Cli_Output, cmd_ptr->Help);
+                            Cli_Output->Output_NewLine(Cli_Output);
                             (*commands_count)++;
                             if (is_verbose) {
                                 struct Cli_Cmd_Item *cmd_item_ptr = cmd_ptr->Item_Head;
                                 while (cmd_item_ptr) {
                                     {
-                                        Cli_Output->Output_Str(" ");
-                                        Cli_Output->Output_Str(cmd_item_ptr->Text);
+                                        Cli_Output->Output_Str(Cli_Output, " ");
+                                        Cli_Output->Output_Str(Cli_Output, cmd_item_ptr->Text);
                                         int text_len = strlen(cmd_item_ptr->Text);
                                         if (text_len < len_max) {
                                             int i;
                                             for (i = text_len; i < len_max; i++) {
-                                                Cli_Output->Output_Char(' ');
+                                                Cli_Output->Output_Char(Cli_Output, ' ');
                                             }
                                         }
-                                        Cli_Output->Output_Str(" - ");
-                                        Cli_Output->Output_Str(cmd_item_ptr->Help);
-                                        Cli_Output->Output_NewLine();
+                                        Cli_Output->Output_Str(Cli_Output, " - ");
+                                        Cli_Output->Output_Str(Cli_Output, cmd_item_ptr->Help);
+                                        Cli_Output->Output_NewLine(Cli_Output);
                                     }
                                     cmd_item_ptr = cmd_item_ptr->Cmd_Item_Next;
                                 }
@@ -180,15 +180,15 @@ static void help(struct Cli_Module_Base_Help *module_help,
             Cli_Output);
 
     if (modules_count == 0) {
-        Cli_Output->Output_Str("modules \"");
-        Cli_Output->Output_Str(module_filter);
-        Cli_Output->Output_Str("\" - not found");
-        Cli_Output->Output_NewLine();
+        Cli_Output->Output_Str(Cli_Output, "modules \"");
+        Cli_Output->Output_Str(Cli_Output, module_filter);
+        Cli_Output->Output_Str(Cli_Output, "\" - not found");
+        Cli_Output->Output_NewLine(Cli_Output);
     } else if (commands_count == 0) {
-        Cli_Output->Output_Str("commands \"");
-        Cli_Output->Output_Str(command_filter);
-        Cli_Output->Output_Str("\" - not found");
-        Cli_Output->Output_NewLine();
+        Cli_Output->Output_Str(Cli_Output, "commands \"");
+        Cli_Output->Output_Str(Cli_Output, command_filter);
+        Cli_Output->Output_Str(Cli_Output, "\" - not found");
+        Cli_Output->Output_NewLine(Cli_Output);
     } else {
         //Cli_Output->Output_NewLine();
     }

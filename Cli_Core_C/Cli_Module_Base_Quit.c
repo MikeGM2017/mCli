@@ -29,14 +29,14 @@ static int quit_without_prompt(
     return 1;
 }
 
-static int quit_with_prompt(struct Cli_Input_C *cli_input, struct Cli_Output_C *cli_output,
+static int quit_with_prompt(struct Cli_Input_C *Cli_Input, struct Cli_Output_C *Cli_Output,
         char *prompt,
         // out
         int *cmd_quit) {
-    cli_output->Output_NewLine();
-    cli_output->Output_Str(prompt);
-    char c = cli_input->Char_Get_Blocked(cli_input);
-    cli_output->Output_NewLine();
+    Cli_Output->Output_NewLine(Cli_Output);
+    Cli_Output->Output_Str(Cli_Output, prompt);
+    char c = Cli_Input->Char_Get_Blocked(Cli_Input);
+    Cli_Output->Output_NewLine(Cli_Output);
     if (c == 'y' || c == 'Y') {
         (*cmd_quit) = 1; // Cmd: Quit
     }

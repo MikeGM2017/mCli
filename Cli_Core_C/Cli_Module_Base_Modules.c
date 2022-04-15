@@ -21,22 +21,22 @@ enum Local_CmdID {
 
 static void modules_by_filter_print(char *module_filter, struct Cli_Modules *Modules, struct Str_Filter *Module_Str_Filter,
         struct Cli_Output_C *Cli_Output) {
-    Cli_Output->Output_NewLine();
+    Cli_Output->Output_NewLine(Cli_Output);
     int found = 0;
     struct Cli_Module *module_ptr = Modules->Module_Head;
     while (module_ptr) {
         char *module_name = module_ptr->Name;
         module_ptr = module_ptr->Module_Next;
         if (Str_Filter_Is_Match(Module_Str_Filter, module_filter, module_name)) {
-            Cli_Output->Output_Str(module_name);
-            Cli_Output->Output_NewLine();
+            Cli_Output->Output_Str(Cli_Output, module_name);
+            Cli_Output->Output_NewLine(Cli_Output);
             found = 1;
         }
     }
     if (!found) {
-        Cli_Output->Output_Str(module_filter);
-        Cli_Output->Output_Str(" - Not Found");
-        Cli_Output->Output_NewLine();
+        Cli_Output->Output_Str(Cli_Output, module_filter);
+        Cli_Output->Output_Str(Cli_Output, " - Not Found");
+        Cli_Output->Output_NewLine(Cli_Output);
     }
 }
 

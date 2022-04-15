@@ -322,9 +322,9 @@ static int Process_Input_Item(struct Cli_TAB_Processor *tab_processor,
             if (tab_cmd_ptr) {
                 switch (tab_cmd_ptr->ID) {
                     case TAB_CMD_ID_LOG_PRINT:
-                        tab_processor->Cli_Output->Output_NewLine();
-                        tab_processor->Cli_Output->Output_Str(tab_cmd_ptr->Text);
-                        tab_processor->Cli_Output->Output_NewLine();
+                        tab_processor->Cli_Output->Output_NewLine(tab_processor->Cli_Output);
+                        tab_processor->Cli_Output->Output_Str(tab_processor->Cli_Output, tab_cmd_ptr->Text);
+                        tab_processor->Cli_Output->Output_NewLine(tab_processor->Cli_Output);
                         (*is_invitation_print) = 1;
                         break;
                     case TAB_CMD_ID_INPUT_ADD:
@@ -373,7 +373,7 @@ static int Process_Input_Item(struct Cli_TAB_Processor *tab_processor,
             }
         }
     } else {
-        tab_processor->Cli_Output->Output_NewLine();
+        tab_processor->Cli_Output->Output_NewLine(tab_processor->Cli_Output);
     }
 
     return 1; // Ok

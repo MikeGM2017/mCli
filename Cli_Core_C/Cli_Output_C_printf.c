@@ -6,33 +6,33 @@
 
 #include "Cli_Output_C_printf.h"
 
-static int Cli_Output_Init_printf(void) {
+static int Cli_Output_Init_printf(struct Cli_Output_C *obj) {
     return 1; // Ok
 }
 
-static int Cli_Output_Close_printf(void) {
+static int Cli_Output_Close_printf(struct Cli_Output_C *obj) {
     return 1; // Ok
 }
 
-static int Cli_Output_Clear_printf(void) {
+static int Cli_Output_Clear_printf(struct Cli_Output_C *obj) {
     return 0; // Failed: can not clear
 }
 
-static void Cli_Output_NewLine_printf(void) {
+static void Cli_Output_NewLine_printf(struct Cli_Output_C *obj) {
     printf("\n");
 }
 
-static void Cli_Output_Char_printf(char c) {
+static void Cli_Output_Char_printf(struct Cli_Output_C *obj, char c) {
     printf("%c", c);
     fflush(stdout);
 }
 
-static void Cli_Output_Str_printf(char *s) {
+static void Cli_Output_Str_printf(struct Cli_Output_C *obj, char *s) {
     printf("%s", s);
     fflush(stdout);
 }
 
-static void Cli_Output_Return_printf(void) {
+static void Cli_Output_Return_printf(struct Cli_Output_C *obj) {
     printf("\r");
 }
 

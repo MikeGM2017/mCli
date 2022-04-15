@@ -14,13 +14,13 @@
 #ifndef CLI_OUTPUT_C_PRINTF_H
 #define CLI_OUTPUT_C_PRINTF_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdio.h>
 
 #include "Cli_Output_C.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
     struct Cli_Output_C Cli_Output_C_printf(void);
 

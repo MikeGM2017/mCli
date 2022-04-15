@@ -22,9 +22,9 @@ static void mem_info(struct Mem_Manager_C *Mem_Manager, struct Cli_Output_C *Cli
     const int s_size = 1000;
     char s[s_size];
     Mem_Manager->Mem_Manager_Info(Mem_Manager, s, s_size);
-    Cli_Output->Output_NewLine();
-    Cli_Output->Output_Str(s);
-    Cli_Output->Output_NewLine();
+    Cli_Output->Output_NewLine(Cli_Output);
+    Cli_Output->Output_Str(Cli_Output, s);
+    Cli_Output->Output_NewLine(Cli_Output);
 }
 
 static int Execute(struct Cli_Module *module, int cmd_id, struct Cli_Cmd *cmd, struct Level_Description_Array *Levels, int is_debug) {

@@ -17,9 +17,9 @@ enum Local_CmdID {
 };
 
 int rem(struct Cli_Output_C *Cli_Output, char *s_rem) {
-    Cli_Output->Output_NewLine();
-    Cli_Output->Output_Str(s_rem);
-    Cli_Output->Output_NewLine();
+    Cli_Output->Output_NewLine(Cli_Output);
+    Cli_Output->Output_Str(Cli_Output, s_rem);
+    Cli_Output->Output_NewLine(Cli_Output);
     return 1;
 }
 

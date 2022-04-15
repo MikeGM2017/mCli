@@ -205,12 +205,12 @@ int main(int argc, char** argv) {
     Cli_Input->Divider_R_Set(Cli_Input, "]");
     Cli_Input->Input_Init(Cli_Input);
 
-    Cli_Output.Output_NewLine();
-    Cli_Output.Output_Str("mCli: Cli Core Test");
-    Cli_Output.Output_Str(" V");
-    Cli_Output.Output_Str(Version);
-    Cli_Output.Output_NewLine();
-    Cli_Output.Output_NewLine();
+    Cli_Output.Output_NewLine(&Cli_Output);
+    Cli_Output.Output_Str(&Cli_Output, "mCli: Cli Core Test");
+    Cli_Output.Output_Str(&Cli_Output, " V");
+    Cli_Output.Output_Str(&Cli_Output, Version);
+    Cli_Output.Output_NewLine(&Cli_Output);
+    Cli_Output.Output_NewLine(&Cli_Output);
 
     struct Mem_Manager_C Mem_Manager1 = Mem_Manager_malloc_free_Init();
     const int buf_main_size = 0x1000000;
@@ -218,8 +218,8 @@ int main(int argc, char** argv) {
     enum Mem_Manager_Res buf_main_res = Mem_Manager1.Mem_Manager_Alloc(&Mem_Manager1, buf_main_size, &buf_main);
     struct Mem_Manager_buf Mem_Manager2_buf;
     if (buf_main_res == MEM_MANAGER_OK) {
-        Cli_Output.Output_Str("Mem 1000000 - Ok");
-        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str(&Cli_Output, "Mem 1000000 - Ok");
+        Cli_Output.Output_NewLine(&Cli_Output);
 
         //struct Mem_Manager_buf Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
         Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
@@ -229,19 +229,19 @@ int main(int argc, char** argv) {
         enum Mem_Manager_Res buf_1_res = Mem_Manager2->Mem_Manager_Alloc(Mem_Manager2, buf_1_size, &buf_1);
 
         if (buf_1_res == MEM_MANAGER_OK) {
-            Cli_Output.Output_Str("buf 10000 - Ok");
-            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str(&Cli_Output, "buf 10000 - Ok");
+            Cli_Output.Output_NewLine(&Cli_Output);
         } else {
-            Cli_Output.Output_Str("buf 10000 - Failed");
-            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str(&Cli_Output, "buf 10000 - Failed");
+            Cli_Output.Output_NewLine(&Cli_Output);
         }
-        Cli_Output.Output_NewLine();
+        Cli_Output.Output_NewLine(&Cli_Output);
 
     } else {
-        Cli_Output.Output_Str("Mem 1000000 - Failed");
-        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str(&Cli_Output, "Mem 1000000 - Failed");
+        Cli_Output.Output_NewLine(&Cli_Output);
     }
-    Cli_Output.Output_NewLine();
+    Cli_Output.Output_NewLine(&Cli_Output);
 
     struct Cli_Module_Mem_Manager module_mem_manager = Cli_Module_Mem_Manager_Init(
             (struct Mem_Manager_C *) &Mem_Manager2_buf, &Cli_Output);
@@ -251,8 +251,8 @@ int main(int argc, char** argv) {
     int is_invitation_print = 1;
     do {
         if (is_invitation_print) {
-            Cli_Output.Output_Str(Cli_Input->Invitation_Full_Get(Cli_Input));
-            Cli_Output.Output_Str(Cli_Input->Input_Str_Get(Cli_Input));
+            Cli_Output.Output_Str(&Cli_Output, Cli_Input->Invitation_Full_Get(Cli_Input));
+            Cli_Output.Output_Str(&Cli_Output, Cli_Input->Input_Str_Get(Cli_Input));
         }
         is_invitation_print = 1;
         struct Cli_Input_C_Item input_item = Cli_Input->Input_Item_Get(Cli_Input);
@@ -275,7 +275,7 @@ int main(int argc, char** argv) {
                 //    Cli_Output.Output_NewLine();
                 //}
                 CMD_Processor.Process_Input_Item(&CMD_Processor, &input_item, is_debug, &debug_res);
-                Cli_Output.Output_NewLine();
+                Cli_Output.Output_NewLine(&Cli_Output);
             }
                 break;
             case CLI_INPUT_ITEM_TYPE_TAB:
@@ -309,8 +309,8 @@ int main(int argc, char** argv) {
                 break;
             case CLI_INPUT_ITEM_TYPE_QUIT:
             {
-                Cli_Output.Output_Str("Quit - Processed");
-                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str(&Cli_Output, "Quit - Processed");
+                Cli_Output.Output_NewLine(&Cli_Output);
                 stop = 1; // Quit
             }
                 break;
@@ -320,8 +320,8 @@ int main(int argc, char** argv) {
         }
 
         if (Cmd_Quit) {
-            Cli_Output.Output_Str("Quit - Processed");
-            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str(&Cli_Output, "Quit - Processed");
+            Cli_Output.Output_NewLine(&Cli_Output);
             stop = 1; // Quit
         }
 

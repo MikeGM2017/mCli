@@ -101,15 +101,15 @@ static int Process_Input_Item(struct Cli_CMD_Processor *cmd_processor,
                                 case CMD_ITEM_OK_STR_WITHOUT_COMMAS:
                                 {
                                     if (!is_debug)
-                                        cmd_processor->Cli_Output->Output_NewLine();
+                                        cmd_processor->Cli_Output->Output_NewLine(cmd_processor->Cli_Output);
                                     int res_execute = module_ptr->Execute(module_ptr, cmd_ptr->ID, cmd_ptr, cmd_processor->Levels, is_debug);
                                     if (!res_execute) {
                                         if (!is_debug) {
-                                            cmd_processor->Cli_Output->Output_NewLine();
-                                            cmd_processor->Cli_Output->Output_Str(s_trim);
-                                            cmd_processor->Cli_Output->Output_Str(" - Not Implemented (Module \"");
-                                            cmd_processor->Cli_Output->Output_Str(module_ptr->Name);
-                                            cmd_processor->Cli_Output->Output_Str("\")");
+                                            cmd_processor->Cli_Output->Output_NewLine(cmd_processor->Cli_Output);
+                                            cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, s_trim);
+                                            cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, " - Not Implemented (Module \"");
+                                            cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, module_ptr->Name);
+                                            cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, "\")");
                                             //cmd_processor->Cli_Output->Output_NewLine();
                                         }
                                     } else {
@@ -123,11 +123,11 @@ static int Process_Input_Item(struct Cli_CMD_Processor *cmd_processor,
                                 case CMD_ITEM_NOT_MATCH:
                                     break;
                                 default:
-                                    cmd_processor->Cli_Output->Output_NewLine();
-                                    cmd_processor->Cli_Output->Output_Str("ERROR: ");
-                                    cmd_processor->Cli_Output->Output_Str(s_trim);
-                                    cmd_processor->Cli_Output->Output_Str(" - ");
-                                    cmd_processor->Cli_Output->Output_Str(Cmd_Item_Valid_Result_To_String(res_cmd_valid));
+                                    cmd_processor->Cli_Output->Output_NewLine(cmd_processor->Cli_Output);
+                                    cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, "ERROR: ");
+                                    cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, s_trim);
+                                    cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, " - ");
+                                    cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, Cmd_Item_Valid_Result_To_String(res_cmd_valid));
                             }
                         }
                     }
@@ -137,9 +137,9 @@ static int Process_Input_Item(struct Cli_CMD_Processor *cmd_processor,
             module_ptr = module_ptr->Module_Next;
         }
         if (!is_processed) {
-            cmd_processor->Cli_Output->Output_NewLine();
-            cmd_processor->Cli_Output->Output_Str(s_trim);
-            cmd_processor->Cli_Output->Output_Str(" - Not Processed");
+            cmd_processor->Cli_Output->Output_NewLine(cmd_processor->Cli_Output);
+            cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, s_trim);
+            cmd_processor->Cli_Output->Output_Str(cmd_processor->Cli_Output, " - Not Processed");
             //cmd_processor->Cli_Output->Output_NewLine();
         }
     } else {

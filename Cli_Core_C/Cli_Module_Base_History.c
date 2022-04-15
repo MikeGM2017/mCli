@@ -20,14 +20,14 @@ enum Local_CmdID {
 };
 
 static void history_show(struct Cli_History *History, struct Cli_Output_C *Cli_Output) {
-    Cli_Output->Output_NewLine();
-    Cli_Output->Output_Str("History:");
-    Cli_Output->Output_NewLine();
+    Cli_Output->Output_NewLine(Cli_Output);
+    Cli_Output->Output_Str(Cli_Output, "History:");
+    Cli_Output->Output_NewLine(Cli_Output);
     int history_size = History->History_Size_Get(History);
     int i;
     for (i = 0; i < (history_size - 1); i++) { // @Attention : Not show last cmd!
-        Cli_Output->Output_Str(History->History_Item_Get(History, i));
-        Cli_Output->Output_NewLine();
+        Cli_Output->Output_Str(Cli_Output, History->History_Item_Get(History, i));
+        Cli_Output->Output_NewLine(Cli_Output);
     }
 }
 
