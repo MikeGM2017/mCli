@@ -45,11 +45,15 @@ OBJECTFILES= \
 	${OBJECTDIR}/Cli_History.o \
 	${OBJECTDIR}/Cli_Input_C.o \
 	${OBJECTDIR}/Cli_Input_C_Item.o \
+	${OBJECTDIR}/Cli_Input_C_file.o \
 	${OBJECTDIR}/Cli_Input_C_termios.o \
 	${OBJECTDIR}/Cli_Module.o \
 	${OBJECTDIR}/Cli_Module_Base_Help.o \
+	${OBJECTDIR}/Cli_Module_Base_History.o \
+	${OBJECTDIR}/Cli_Module_Base_Modules.o \
 	${OBJECTDIR}/Cli_Module_Base_Quit.o \
 	${OBJECTDIR}/Cli_Module_Base_Rem.o \
+	${OBJECTDIR}/Cli_Module_Mem_Manager.o \
 	${OBJECTDIR}/Cli_Modules.o \
 	${OBJECTDIR}/Cli_Output_C_printf.o \
 	${OBJECTDIR}/Cli_TAB_Processor.o \
@@ -142,6 +146,11 @@ ${OBJECTDIR}/Cli_Input_C_Item.o: Cli_Input_C_Item.c
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input_C_Item.o Cli_Input_C_Item.c
 
+${OBJECTDIR}/Cli_Input_C_file.o: Cli_Input_C_file.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input_C_file.o Cli_Input_C_file.c
+
 ${OBJECTDIR}/Cli_Input_C_termios.o: Cli_Input_C_termios.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -157,6 +166,16 @@ ${OBJECTDIR}/Cli_Module_Base_Help.o: Cli_Module_Base_Help.c
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Help.o Cli_Module_Base_Help.c
 
+${OBJECTDIR}/Cli_Module_Base_History.o: Cli_Module_Base_History.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_History.o Cli_Module_Base_History.c
+
+${OBJECTDIR}/Cli_Module_Base_Modules.o: Cli_Module_Base_Modules.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Modules.o Cli_Module_Base_Modules.c
+
 ${OBJECTDIR}/Cli_Module_Base_Quit.o: Cli_Module_Base_Quit.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -166,6 +185,11 @@ ${OBJECTDIR}/Cli_Module_Base_Rem.o: Cli_Module_Base_Rem.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Base_Rem.o Cli_Module_Base_Rem.c
+
+${OBJECTDIR}/Cli_Module_Mem_Manager.o: Cli_Module_Mem_Manager.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Module_Mem_Manager.o Cli_Module_Mem_Manager.c
 
 ${OBJECTDIR}/Cli_Modules.o: Cli_Modules.c 
 	${MKDIR} -p ${OBJECTDIR}

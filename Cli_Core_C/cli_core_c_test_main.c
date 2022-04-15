@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 
+#include <stdlib.h>
+
 #include "Cli_Input_C_termios.h"
+#include "Cli_Input_C_file.h"
 
 #include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Module.h"
@@ -12,10 +15,13 @@
 #include "Cli_Module_Base_Rem.h"
 #include "Cli_Module_Base_Help.h"
 #include "Cli_Module_Base_Quit.h"
+#include "Cli_Module_Base_History.h"
+#include "Cli_Module_Base_Modules.h"
 
 #include "Cli_Modules.h"
 
 #include "Cli_Output_C_printf.h"
+#include "Cli_Output_C_file.h"
 
 #include "Cmd_Token_Array.h"
 #include "Cmd_Token_Parser.h"
@@ -32,8 +38,87 @@
 
 #include "Mem_Manager_malloc_free.h"
 #include "Mem_Manager_buf.h"
+#include "Cli_Module_Mem_Manager.h"
 
-int main(int argc, char *argv[]) {
+void Help_Print() {
+    printf("Program Cli_Core_C_Test\n");
+    printf("Use: cli_core_c_test [switches]\n");
+    printf("-h               - print this help;\n");
+    printf("-a               - print arguments;\n");
+    printf("-f        <file> - set input file;\n");
+    printf("-flog     <file> - set output log file;\n");
+    printf("-ftablog  <file> - set output tablog file;\n");
+    printf("-fhistory <file> - set output history file;\n");
+}
+
+int main(int argc, char** argv) {
+
+    int Arg_Help_Print = 0;
+    int Arg_Arguments_Print = 0;
+    char *Arg_File_In = NULL;
+    char *Arg_File_Log = NULL;
+    char *Arg_File_TabLog = NULL;
+    char *Arg_File_History = NULL;
+
+    // Get Arg_XXX from cmdline
+    int i;
+    for (i = 1; i < argc; i++) {
+        char *s = argv[i];
+        if (!strcmp(s, "-h") || !strcmp(s, "-help") || !strcmp(s, "-?")
+                || !strcmp(s, "-h") || !strcmp(s, "-help") || !strcmp(s, "-?")
+                || !strcmp(s, "-h") || !strcmp(s, "-help") || !strcmp(s, "-?")) {
+            Arg_Help_Print = 1;
+        } else if (!strcmp(s, "-a")) {
+            Arg_Arguments_Print = 1;
+        } else if (!strcmp(s, "-f")) {
+            i++;
+            if (i < argc && argv[i][0] != '-') {
+                Arg_File_In = argv[i];
+            } else {
+                printf("ERROR: switch \"%s\" without argument\n", s);
+                exit(1); // Error
+            }
+        } else if (!strcmp(s, "-flog")) {
+            i++;
+            if (i < argc && argv[i][0] != '-') {
+                Arg_File_Log = argv[i];
+            } else {
+                printf("ERROR: switch \"%s\" without argument\n", s);
+                exit(1); // Error
+            }
+        } else if (!strcmp(s, "-ftablog")) {
+            i++;
+            if (i < argc && argv[i][0] != '-') {
+                Arg_File_TabLog = argv[i];
+            } else {
+                printf("ERROR: switch \"%s\" without argument\n", s);
+                exit(1); // Error
+            }
+        } else if (!strcmp(s, "-fhistory")) {
+            i++;
+            if (i < argc && argv[i][0] != '-') {
+                Arg_File_History = argv[i];
+            } else {
+                printf("ERROR: switch \"%s\" without argument\n", s);
+                exit(1); // Error
+            }
+        }
+    }
+
+    // Force Arg_Help_Print (if run without switches)
+    //if (argc == 1) {
+    //    Arg_Help_Print = 1;
+    //}
+
+    if (Arg_Help_Print) {
+        Help_Print();
+        exit(0); // Ok
+    }
+
+    if (Arg_Arguments_Print) {
+        printf("Arguments:\n");
+        printf("      File In: \"%s\"\n", Arg_File_In);
+    }
 
     char Version[] = "0.01";
 
@@ -82,9 +167,16 @@ int main(int argc, char *argv[]) {
     //    Str_Filter str_filter('?', '*');
     //    Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
     //    Modules.Add(new Cli_Module_Base_Modules(User_Privilege, Modules, str_filter, Cli_Output));
-    //
+
+    struct Cli_Module_Base_Modules module_modules = Cli_Module_Base_Modules_Init(&Modules, &Filter, &Cli_Output);
+    Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_modules);
+
     //    Cli_History History;
     //    Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
+
+    struct Cli_Module_Base_History module_history = Cli_Module_Base_History_Init(&History, &Cli_Output);
+    Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_history);
+
     //
     //    Modules.Add(new Cli_Module_Base_Log(Cli_Input));
     //
@@ -121,14 +213,16 @@ int main(int argc, char *argv[]) {
     Cli_Output.Output_NewLine();
 
     struct Mem_Manager_C Mem_Manager1 = Mem_Manager_malloc_free_Init();
-    const int buf_main_size = 1000000;
+    const int buf_main_size = 0x1000000;
     char *buf_main = 0;
     enum Mem_Manager_Res buf_main_res = Mem_Manager1.Mem_Manager_Alloc(&Mem_Manager1, buf_main_size, &buf_main);
+    struct Mem_Manager_buf Mem_Manager2_buf;
     if (buf_main_res == MEM_MANAGER_OK) {
         Cli_Output.Output_Str("Mem 1000000 - Ok");
         Cli_Output.Output_NewLine();
 
-        struct Mem_Manager_buf Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
+        //struct Mem_Manager_buf Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
+        Mem_Manager2_buf = Mem_Manager_buf_Init(buf_main, buf_main_size);
         char *buf_1 = 0;
         int buf_1_size = 10000;
         struct Mem_Manager_C *Mem_Manager2 = &Mem_Manager2_buf.Mem_Manager_Base;
@@ -148,6 +242,10 @@ int main(int argc, char *argv[]) {
         Cli_Output.Output_NewLine();
     }
     Cli_Output.Output_NewLine();
+
+    struct Cli_Module_Mem_Manager module_mem_manager = Cli_Module_Mem_Manager_Init(
+            (struct Mem_Manager_C *) &Mem_Manager2_buf, &Cli_Output);
+    Cli_Modules_Add(&Modules, (struct Cli_Module *) &module_mem_manager);
 
     int stop = 0;
     int is_invitation_print = 1;

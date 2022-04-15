@@ -148,7 +148,7 @@ static enum Cmd_Item_Valid_Result Parse(struct Cli_Cmd_Item *item, char *s) {
 
 struct Cli_Cmd_Item Cli_Cmd_Item_Str_Init(char *text, char *help) {
     struct Cli_Cmd_Item item;
-    Cli_Cmd_Item_Init_Base(&item, CLI_CMD_ITEM_TYPE_WORD, text, help);
+    Cli_Cmd_Item_Init_Base(&item, CLI_CMD_ITEM_TYPE_STR, text, help);
 
     item.Is_Char_Valid = Is_Char_Valid;
     item.Parse = Parse;

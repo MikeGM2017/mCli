@@ -23,7 +23,7 @@ static char *History_Item_Get(struct Cli_History *history, int index) {
 
 static void History_Put(struct Cli_History *history, char *s_trim) {
     if (history->History_Size < CLI_HISTORY_ITEMS_SIZE_DEF) {
-        if (history->History_Size == 0 || strncmp(history->History[history->History_Size].Text, s_trim, CLI_HISTORY_ITEM_TEXT_SIZE)) {
+        if (history->History_Size == 0 || strncmp(history->History[history->History_Size - 1].Text, s_trim, CLI_HISTORY_ITEM_TEXT_SIZE)) {
             int len = CLI_HISTORY_ITEM_TEXT_SIZE - 1;
             strncpy(history->History[history->History_Size].Text, s_trim, len);
             history->History[history->History_Size].Text[len] = '\0';

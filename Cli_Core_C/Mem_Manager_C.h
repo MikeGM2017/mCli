@@ -24,10 +24,12 @@ extern "C" {
 
     typedef enum Mem_Manager_Res ftMem_Manager_Alloc(struct Mem_Manager_C *obj, int size, char **p);
     typedef enum Mem_Manager_Res ftMem_Manager_Free(struct Mem_Manager_C *obj, char *p);
+    typedef enum Mem_Manager_Res ftMem_Manager_Info(struct Mem_Manager_C *obj, char *s, int s_len);
 
     struct Mem_Manager_C {
         ftMem_Manager_Alloc *Mem_Manager_Alloc;
         ftMem_Manager_Free *Mem_Manager_Free;
+        ftMem_Manager_Info *Mem_Manager_Info;
     };
 
 #ifdef __cplusplus

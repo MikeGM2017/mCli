@@ -20,6 +20,8 @@ extern "C" {
 
 #include "Mem_Manager_C.h"
 
+#include <stdio.h>
+
     struct Mem_Manager_buf {
         struct Mem_Manager_C Mem_Manager_Base;
         char *buf;

@@ -26,8 +26,11 @@
       <itemPath>Cli_Input_Item_Type.h</itemPath>
       <itemPath>Cli_Module.h</itemPath>
       <itemPath>Cli_Module_Base_Help.h</itemPath>
+      <itemPath>Cli_Module_Base_History.h</itemPath>
+      <itemPath>Cli_Module_Base_Modules.h</itemPath>
       <itemPath>Cli_Module_Base_Quit.h</itemPath>
       <itemPath>Cli_Module_Base_Rem.h</itemPath>
+      <itemPath>Cli_Module_Mem_Manager.h</itemPath>
       <itemPath>Cli_Modules.h</itemPath>
       <itemPath>Cli_Output_C.h</itemPath>
       <itemPath>Cli_Output_C_printf.h</itemPath>
@@ -68,11 +71,15 @@
       <itemPath>Cli_History.c</itemPath>
       <itemPath>Cli_Input_C.c</itemPath>
       <itemPath>Cli_Input_C_Item.c</itemPath>
+      <itemPath>Cli_Input_C_file.c</itemPath>
       <itemPath>Cli_Input_C_termios.c</itemPath>
       <itemPath>Cli_Module.c</itemPath>
       <itemPath>Cli_Module_Base_Help.c</itemPath>
+      <itemPath>Cli_Module_Base_History.c</itemPath>
+      <itemPath>Cli_Module_Base_Modules.c</itemPath>
       <itemPath>Cli_Module_Base_Quit.c</itemPath>
       <itemPath>Cli_Module_Base_Rem.c</itemPath>
+      <itemPath>Cli_Module_Mem_Manager.c</itemPath>
       <itemPath>Cli_Modules.c</itemPath>
       <itemPath>Cli_Output_C_printf.c</itemPath>
       <itemPath>Cli_TAB_Processor.c</itemPath>
@@ -157,6 +164,8 @@
       </item>
       <item path="Cli_Input_C_Item.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Input_C_file.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="Cli_Input_C_termios.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Input_C_termios.h" ex="false" tool="3" flavor2="0">
@@ -171,6 +180,14 @@
       </item>
       <item path="Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Module_Base_History.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_History.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Modules.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Module_Base_Quit.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
@@ -178,6 +195,10 @@
       <item path="Cli_Module_Base_Rem.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Mem_Manager.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Mem_Manager.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -320,6 +341,8 @@
       </item>
       <item path="Cli_Input_C_Item.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Input_C_file.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="Cli_Input_C_termios.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Input_C_termios.h" ex="false" tool="3" flavor2="0">
@@ -334,6 +357,14 @@
       </item>
       <item path="Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Module_Base_History.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_History.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Modules.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Base_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Module_Base_Quit.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
@@ -341,6 +372,10 @@
       <item path="Cli_Module_Base_Rem.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Module_Mem_Manager.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Cli_Module_Mem_Manager.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules.c" ex="false" tool="0" flavor2="0">
       </item>
