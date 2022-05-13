@@ -64,14 +64,14 @@ public:
             // get
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name);
             cmd->Text_Set(".<var_name>");
-            cmd->Help_Set("get <var_name> value (by filter)");
+            cmd->Help_Set("get <var_name> value (by filter, .* - get all vars)");
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name (by filter)", C_Single, C_Multy));
             Cmd_Add(cmd);
         }
 
         {
-            // assign @Attention: Must be before CMD_ID_point_var_name_assign_str
+            // assign int @Attention: Must be before CMD_ID_point_var_name_assign_str
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_assign_point_var_name);
             cmd->Text_Set(".<var_name> = .<var2_name>");
             cmd->Help_Set("set <var_name> value of <var2_name>");
@@ -82,7 +82,7 @@ public:
             Cmd_Add(cmd);
         }
         {
-            // assign
+            // assign str
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_assign_str);
             cmd->Text_Set(".<var_name> = <str>");
             cmd->Help_Set("set <var_name> to <str>");
@@ -96,7 +96,7 @@ public:
 
         // <editor-fold defaultstate="collapsed" desc="Vars: inc">
         {
-            // assign
+            // inc @Attention: increment as integer only (string converted to "0")
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_inc);
             cmd->Text_Set(".<var_name> inc");
             cmd->Help_Set("increment <var_name>");
@@ -109,10 +109,10 @@ public:
 
         // <editor-fold defaultstate="collapsed" desc="Vars: delete">
         {
-            // assign
+            // delete
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_delete);
             cmd->Text_Set(".<var_name> delete");
-            cmd->Help_Set("delete <var_name> (by filter)");
+            cmd->Help_Set("delete <var_name> (by filter, .* - delete all vars)");
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
             cmd->Item_Add(new Cmd_Item_Word("delete", "delete (by filter)"));
