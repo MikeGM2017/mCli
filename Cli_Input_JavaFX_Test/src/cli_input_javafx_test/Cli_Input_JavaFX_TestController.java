@@ -93,7 +93,7 @@ public class Cli_Input_JavaFX_TestController implements Initializable {
                                 Cli_Input.Wait_Count_Set(10);
                                 break;
                             } else if (item.Text_Get().equals("H") || item.Text_Get().equals("help")) {
-                                Cli_Output.Output_Str("Help: Q - quit, C - clear, H - help, A - prompt(y/n), P - password(no echo), W - wait");
+                                Help_Print();
                                 Cli_Output.Output_NewLine();
                             } else if (item.Text_Get().length() > 0) {
                                 Cli_Output.Output_Str(item.Text_Get() + " - Not Processed");
@@ -128,7 +128,8 @@ public class Cli_Input_JavaFX_TestController implements Initializable {
                         break;
                     case INPUT_CMD_TAB:
                         Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str("TAB: \"" + item.Text_Get() + "\" - Not Processed");
+                        //Cli_Output.Output_Str("TAB: \"" + item.Text_Get() + "\" - Not Processed");
+                        Help_Print();
                         Cli_Output.Output_NewLine();
                         Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                         Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
@@ -183,6 +184,10 @@ public class Cli_Input_JavaFX_TestController implements Initializable {
             event.consume();
         }
 
+    }
+
+    protected void Help_Print() {
+        Cli_Output.Output_Str("Help: Q - quit, C - clear, H - help, A - prompt(y/n), P - password(no echo), W - wait");
     }
 
 }
