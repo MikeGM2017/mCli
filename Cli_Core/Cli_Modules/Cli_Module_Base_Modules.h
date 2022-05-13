@@ -99,7 +99,9 @@ public:
             Cli_Module *module_ptr = Modules.Get(module);
             if (module_ptr) {
                 string module_name = module_ptr->Name_Get();
-                if (str_filter.Is_Match(module_filter, module_name)) {
+                string module_name_with_commas = "\"" + module_ptr->Name_Get() + "\"";
+                if (str_filter.Is_Match(module_filter, module_name)
+                        || str_filter.Is_Match(module_filter, module_name_with_commas)) {
                     Cli_Output.Output_Str(module_name);
                     Cli_Output.Output_NewLine();
                     found = true;

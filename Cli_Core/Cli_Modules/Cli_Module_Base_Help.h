@@ -178,7 +178,10 @@ public:
 
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module *module_ptr = modules.Get(module);
-            if (is_full || str_filter.Is_Match(module_filter, module_ptr->Name_Get())) {
+            string module_name = module_ptr->Name_Get();
+            string module_name_with_commas = "\"" + module_ptr->Name_Get() + "\"";
+            if (is_full || str_filter.Is_Match(module_filter, module_name)
+                    || str_filter.Is_Match(module_filter, module_name_with_commas)) {
                 for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
                     Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
                     bool is_cmd_prt_valid = HELP_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level, is_full, is_module_full);
@@ -222,7 +225,10 @@ public:
 
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module *module_ptr = modules.Get(module);
-            if (is_full || str_filter.Is_Match(module_filter, module_ptr->Name_Get())) {
+            string module_name = module_ptr->Name_Get();
+            string module_name_with_commas = "\"" + module_ptr->Name_Get() + "\"";
+            if (is_full || str_filter.Is_Match(module_filter, module_name)
+                    || str_filter.Is_Match(module_filter, module_name_with_commas)) {
                 modules_count++;
                 for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
                     Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
