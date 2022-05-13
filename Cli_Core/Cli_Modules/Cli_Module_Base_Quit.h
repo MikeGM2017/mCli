@@ -21,6 +21,7 @@
 class Cli_Module_Base_Quit : public Cli_Module {
 protected:
 
+    bool &Cmd_Exit;
     bool &Cmd_Quit;
 
 public:
@@ -42,7 +43,7 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Quit(bool &cmd_quit) : Cli_Module("Base Quit"), Cmd_Quit(cmd_quit) {
+    Cli_Module_Base_Quit(bool &cmd_exit, bool &cmd_quit) : Cli_Module("Base Quit"), Cmd_Exit(cmd_exit), Cmd_Quit(cmd_quit) {
         {
             // E - exit
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_exit_E);
@@ -50,6 +51,15 @@ public:
             cmd->Help_Set("exit from program");
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Word("E", "exit from program"));
+            Cmd_Add(cmd);
+        }
+        {
+            // Q - quit
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_quit_Q);
+            cmd->Text_Set("Q");
+            cmd->Help_Set("exit from program");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("Q", "exit from program"));
             Cmd_Add(cmd);
         }
         {
@@ -69,15 +79,6 @@ public:
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Word("exit", "exit from program"));
             cmd->Item_Add(new Cmd_Item_Word("force", "exit from program (forced)"));
-            Cmd_Add(cmd);
-        }
-        {
-            // Q - quit
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_quit_Q);
-            cmd->Text_Set("Q");
-            cmd->Help_Set("exit from program");
-            cmd->Is_Global_Set(true);
-            cmd->Item_Add(new Cmd_Item_Word("Q", "exit from program"));
             Cmd_Add(cmd);
         }
         {
@@ -110,16 +111,15 @@ public:
             case CMD_ID_quit:
             case CMD_ID_quit_Q:
             case CMD_ID_quit_force:
+                if (is_debug) return true;
+                Cmd_Quit = true;
+                return true;
             case CMD_ID_exit:
             case CMD_ID_exit_E:
             case CMD_ID_exit_force:
                 if (is_debug) return true;
-                Cmd_Quit = true;
+                Cmd_Exit = true;
                 return true;
-
-            default:
-                return false; // Not Implemented
-
         }
         return false; // Not Implemented
     }

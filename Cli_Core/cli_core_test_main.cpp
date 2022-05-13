@@ -187,8 +187,9 @@ int main(int argc, char *argv[]) {
 
     Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
+    bool Cmd_Exit = false;
     bool Cmd_Quit = false;
-    Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
+    Modules.Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
 
     char C_Single = '?';
     char C_Multy = '*';
@@ -295,6 +296,11 @@ int main(int argc, char *argv[]) {
                 break;
         }
 
+        if (Cmd_Exit) {
+            Cli_Output.Output_Str("Exit - Processed");
+            Cli_Output.Output_NewLine();
+            stop = true; // Exit
+        }
         if (Cmd_Quit) {
             Cli_Output.Output_Str("Quit - Processed");
             Cli_Output.Output_NewLine();
