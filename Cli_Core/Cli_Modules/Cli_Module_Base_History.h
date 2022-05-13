@@ -46,7 +46,7 @@ public:
         {
             // show history
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_history);
-            cmd->Text_Set("history show");
+            cmd->Text_Set("history");
             cmd->Help_Set("history show");
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Word("history", "history"));
