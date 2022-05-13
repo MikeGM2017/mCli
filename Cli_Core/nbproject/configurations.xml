@@ -162,6 +162,12 @@
                      kind="TEST">
         <itemPath>tests/Test_Cmd_Item_Str.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f15"
+                     displayName="Test_Cmd_Item_Str_With_Commas"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Str_With_Commas.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f7"
                      displayName="Test_Cmd_Item_Time"
                      projectFiles="true"
@@ -504,6 +510,21 @@
           <output>${TESTDIR}/TestFiles/f14</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f15">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f15</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -641,6 +662,11 @@
       <item path="tests/Test_Cmd_Item_MAC.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Str_With_Commas.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -948,6 +974,21 @@
           <output>${TESTDIR}/TestFiles/f14</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f15">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f15</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -1085,6 +1126,11 @@
       <item path="tests/Test_Cmd_Item_MAC.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Str_With_Commas.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Time.cpp" ex="false" tool="1" flavor2="0">
       </item>
