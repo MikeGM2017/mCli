@@ -11,7 +11,7 @@ import javafx.scene.control.TextInputControl;
  *
  * @author mike
  */
-class Cli_Output_JavaFX {
+public class Cli_Output_JavaFX {
 
     TextInputControl textInputControl;
 
@@ -65,7 +65,7 @@ class Cli_Output_JavaFX {
         }
         textInputControl.positionCaret(pos);
     }
-    
+
     void Caret_Pos_Set(int input_str_len, int input_str_pos) {
         int output_text_len = textInputControl.getText().length();
         int caret_pos = output_text_len - input_str_len + input_str_pos;

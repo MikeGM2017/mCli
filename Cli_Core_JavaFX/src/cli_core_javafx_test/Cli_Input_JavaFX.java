@@ -296,39 +296,6 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
         return Wait_Count;
     }
 
-//    public void Input_Print() {
-//        if (Input_Str_Pos == Input_Str.length()) {
-//
-//            Cli_Output.Output_Return();
-//            Invitation_Print();
-//            Cli_Output.Output_Str(Input_Str);
-//
-//        } else {
-//
-//            Cli_Output.Output_Return();
-//            Invitation_Print();
-//            Cli_Output.Output_Str(Input_Str);
-//
-//            Cli_Output.Output_Return();
-//            Invitation_Print();
-//            if (Input_Str_Pos > 0) {
-//                String s = Input_Str.substring(0, Input_Str_Pos - 1);
-//                Cli_Output.Output_Str(s);
-//            }
-//
-//        }
-//    }
-//
-//    public void Input_Print_Clear() {
-//        Cli_Output.Output_Return();
-//        Invitation_Print();
-//        String s = "";
-//        char[] data = new char[1];
-//        data[0] = ' ';
-//        String copyValueOf = s.copyValueOf(data, 0, Input_Str_Pos);
-//        Cli_Output.Output_Str(s);
-//    }
-//
     public void Input_Add_Char_To_End(String s) {
         Input_Str += s;
         Input_Str_Pos = Input_Str.length();

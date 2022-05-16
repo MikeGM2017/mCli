@@ -6,6 +6,8 @@
 package cli_core_javafx_test;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -21,10 +23,26 @@ import javafx.scene.input.KeyEvent;
 public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
     @FXML
-    private TextArea Cli_Input_TextArea;
+    protected TextArea Cli_Input_TextArea;
 
-    private Cli_Output_JavaFX Cli_Output;
-    private Cli_Input_JavaFX Cli_Input;
+    protected Cli_Output_JavaFX Cli_Output;
+    protected Cli_Input_JavaFX Cli_Input;
+
+    protected List<Level_Description> Levels;
+
+    protected Cmd_Token_Parser Token_Parser;
+
+    protected String Str_Rem_DEF;
+
+    protected Cli_Cmd_Privilege_ID User_Privilege;
+
+    protected Cli_Modules Modules;
+
+    protected Cli_CMD_Processor CMD_Processor;
+    protected Cli_TAB_Processor TAB_Processor;
+
+    protected Boolean_Ref Cmd_Exit = new Boolean_Ref(false);
+    protected Boolean_Ref Cmd_Quit = new Boolean_Ref(false);
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -43,6 +61,23 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         Cli_Input.Input_Init();
 
         Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+
+        Levels = new ArrayList<>();
+
+        Token_Parser = new Cmd_Token_Parser();
+
+        Str_Rem_DEF = "$";
+
+        User_Privilege = Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_ROOT_DEF;
+
+        Modules = new Cli_Modules();
+
+        boolean tab_log_is_active = false;//!Arg_TAB_Log_Output_File_Name.empty();
+
+        CMD_Processor = new Cli_CMD_Processor(User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
+        TAB_Processor = new Cli_TAB_Processor(User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF, tab_log_is_active);
+
+        Modules.Module_Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
     }
 
     @FXML
@@ -56,54 +91,35 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
             Cli_Output.Caret_Pos_Set(Cli_Input.Input_Str_Get().length(), Cli_Input.Input_Str_Pos_Get());
 
-            Cli_Input_Item item = Cli_Input.On_Key_Pressed(event);
+            Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(event);
 
-            if (item != null) {
+            if (input_item != null) {
 
-                switch (item.Type_Get()) {
+                switch (input_item.Type_Get()) {
                     case INPUT_CMD_ENTER:
 
                         if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_NORMAL) {
 
-                            Cli_Output.Output_NewLine();
+                            if (input_item.Type == Input_Cmd_Type.INPUT_CMD_ENTER) {
 
-                            if (item.Text_Get().equals("Q") || item.Text_Get().equals("quit")) {
-                                System.out.println("Quit - Processed");
-                                Platform.exit();
-                                System.exit(0);
-                            } else if (item.Text_Get().equals("C") || item.Text_Get().equals("clear")) {
-                                Cli_Output.Output_Clear();
-                                Cli_Output.Output_Str("Clear - Processed");
-                                Cli_Output.Output_NewLine();
-                            } else if (item.Text_Get().equals("A") || item.Text_Get().equals("ask")) {
-                                Cli_Output.Output_Str("Is it right?(yes/no)");
-                                Cli_Input.Input_Str_Set_Empty();
-                                Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_PROMPT);
-                                break;
-                            } else if (item.Text_Get().equals("P") || item.Text_Get().equals("passwd")) {
-                                Cli_Output.Output_Str("Password:");
-                                Cli_Input.Input_Str_Set_Empty();
-                                Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_PASSWD);
-                                break;
-                            } else if (item.Text_Get().equals("W") || item.Text_Get().equals("wait")) {
-                                Cli_Output.Output_Str("Wait (Press Enter to stop):");
-                                Cli_Output.Output_NewLine();
-                                Cli_Input.Input_Str_Set_Empty();
-                                Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_WAIT);
-                                Cli_Input.Wait_Count_Set(10);
-                                break;
-                            } else if (item.Text_Get().equals("H") || item.Text_Get().equals("help")) {
-                                Help_Print();
-                                Cli_Output.Output_NewLine();
-                            } else if (item.Text_Get().length() > 0) {
-                                Cli_Output.Output_Str(item.Text_Get() + " - Not Processed");
+                                boolean is_no_history = false;
+                                boolean is_debug = false;
+
+                                String s_trim = input_item.Text_Get().trim();
+
+                                if (!is_no_history && !is_debug) {
+                                    //    History.History_Put(s_trim);
+                                }
+
+                                boolean debug_res = false;
+                                CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                                 Cli_Output.Output_NewLine();
                             }
 
                         } else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_PROMPT) {
                             Cli_Output.Output_NewLine();
-                            if (item.Text_Get().equals("Y") || item.Text_Get().equals("y")
-                                    || item.Text_Get().equals("YES") || item.Text_Get().equals("Yes") || item.Text_Get().equals("yes")) {
+                            if (input_item.Text_Get().equals("Y") || input_item.Text_Get().equals("y")
+                                    || input_item.Text_Get().equals("YES") || input_item.Text_Get().equals("Yes") || input_item.Text_Get().equals("yes")) {
                                 Cli_Output.Output_Str("Answer: Yes");
                             } else {
                                 Cli_Output.Output_Str("Answer: No");
@@ -112,7 +128,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
                         } else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_PASSWD) {
                             Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str("Password:" + item.Text_Get());
+                            Cli_Output.Output_Str("Password:" + input_item.Text_Get());
                             Cli_Output.Output_NewLine();
 
                         } else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
@@ -136,14 +152,14 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
                         break;
                     case INPUT_CMD_UP:
                         Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str("UP: \"" + item.Text_Get() + "\" - Not Processed");
+                        Cli_Output.Output_Str("UP: \"" + input_item.Text_Get() + "\" - Not Processed");
                         Cli_Output.Output_NewLine();
                         Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                         Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
                         break;
                     case INPUT_CMD_DOWN:
                         Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str("DOWN: \"" + item.Text_Get() + "\" - Not Processed");
+                        Cli_Output.Output_Str("DOWN: \"" + input_item.Text_Get() + "\" - Not Processed");
                         Cli_Output.Output_NewLine();
                         Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                         Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
@@ -171,9 +187,22 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
                         }
                         break;
                     default:
-                        String s = item.Type_Get().toString() + ":\"" + item.Text_Get() + "\"";
+                        String s = input_item.Type_Get().toString() + ":\"" + input_item.Text_Get() + "\"";
                         System.out.println(s);
                         break;
+                }
+
+                if (Cmd_Exit.Value) {
+                    Cli_Output.Output_Str("Exit - Processed");
+                    Cli_Output.Output_NewLine();
+                    Platform.exit();
+                    System.exit(0);
+                }
+                if (Cmd_Quit.Value) {
+                    Cli_Output.Output_Str("Quit - Processed");
+                    Cli_Output.Output_NewLine();
+                    Platform.exit();
+                    System.exit(0);
                 }
 
             }
@@ -187,7 +216,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
     }
 
     protected void Help_Print() {
-        Cli_Output.Output_Str("Help: Q - quit, C - clear, H - help, A - prompt(y/n), P - password(no echo), W - wait");
+        Cli_Output.Output_Str("Help: E/exit - exit, Q/quit - quit");
     }
 
 }
