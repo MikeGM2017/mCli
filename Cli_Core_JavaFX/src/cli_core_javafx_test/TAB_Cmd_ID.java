@@ -9,12 +9,9 @@ package cli_core_javafx_test;
  *
  * @author mike
  */
-public class Ref_Boolean {
-
-    public boolean Value;
-
-    public Ref_Boolean(boolean v) {
-        Value = v;
-    }
-
+public enum TAB_Cmd_ID {
+    TAB_CMD_ID_NO,
+    TAB_CMD_ID_LOG_PRINT,
+    TAB_CMD_ID_INPUT_ADD,
+    TAB_CMD_ID_INPUT_CHECK_SPACE
 }

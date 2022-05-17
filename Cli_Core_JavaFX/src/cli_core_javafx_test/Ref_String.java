@@ -9,11 +9,11 @@ package cli_core_javafx_test;
  *
  * @author mike
  */
-public class Ref_Boolean {
+public class Ref_String {
 
-    public boolean Value;
+    public String Value;
 
-    public Ref_Boolean(boolean v) {
+    public Ref_String(String v) {
         Value = v;
     }
 

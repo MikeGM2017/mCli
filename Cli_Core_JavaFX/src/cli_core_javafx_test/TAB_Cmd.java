@@ -9,12 +9,14 @@ package cli_core_javafx_test;
  *
  * @author mike
  */
-public class Ref_Boolean {
+public class TAB_Cmd {
 
-    public boolean Value;
+    public TAB_Cmd_ID ID;
+    public String Text;
 
-    public Ref_Boolean(boolean v) {
-        Value = v;
+    public TAB_Cmd(TAB_Cmd_ID id, String text) {
+        ID = id;
+        Text = text;
     }
 
 }

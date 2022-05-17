@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class Cli_Module_Base_Quit extends Cli_Module {
 
-    protected Boolean_Ref Cmd_Exit;
-    protected Boolean_Ref Cmd_Quit;
+    protected Ref_Boolean Cmd_Exit;
+    protected Ref_Boolean Cmd_Quit;
 
     //enum Local_Cmd_ID {
     private final int CMD_ID_NO = 0;
@@ -31,11 +31,11 @@ public class Cli_Module_Base_Quit extends Cli_Module {
     //};
 
     @Override
-    int Cmd_ID_Count_Get() {
+    public int Cmd_ID_Count_Get() {
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    public Cli_Module_Base_Quit(Boolean_Ref cmd_exit, Boolean_Ref cmd_quit) {
+    public Cli_Module_Base_Quit(Ref_Boolean cmd_exit, Ref_Boolean cmd_quit) {
         super("Base Quit");
         Cmd_Exit = cmd_exit;
         Cmd_Quit = cmd_quit;

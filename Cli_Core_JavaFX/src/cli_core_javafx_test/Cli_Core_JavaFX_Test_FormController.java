@@ -41,8 +41,8 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
     protected Cli_CMD_Processor CMD_Processor;
     protected Cli_TAB_Processor TAB_Processor;
 
-    protected Boolean_Ref Cmd_Exit = new Boolean_Ref(false);
-    protected Boolean_Ref Cmd_Quit = new Boolean_Ref(false);
+    protected Ref_Boolean Cmd_Exit = new Ref_Boolean(false);
+    protected Ref_Boolean Cmd_Quit = new Ref_Boolean(false);
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -143,12 +143,15 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
                         break;
                     case INPUT_CMD_TAB:
-                        Cli_Output.Output_NewLine();
-                        //Cli_Output.Output_Str("TAB: \"" + item.Text_Get() + "\" - Not Processed");
-                        Help_Print();
-                        Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                        Ref_Boolean is_invitation_print = new Ref_Boolean(true);
+                        TAB_Processor.Process_Input_Item(input_item, is_invitation_print);
+
+                        Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str.length());
+
+                        if (is_invitation_print.Value) {
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                        }
                         break;
                     case INPUT_CMD_UP:
                         Cli_Output.Output_NewLine();
@@ -213,10 +216,6 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
             event.consume();
         }
 
-    }
-
-    protected void Help_Print() {
-        Cli_Output.Output_Str("Help: E/exit - exit, Q/quit - quit");
     }
 
 }
