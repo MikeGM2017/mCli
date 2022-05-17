@@ -130,6 +130,9 @@ public class Cli_Input_JavaFX_TestController implements Initializable {
                         Cli_Output.Output_NewLine();
                         //Cli_Output.Output_Str("TAB: \"" + item.Text_Get() + "\" - Not Processed");
                         Help_Print();
+
+                        Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str.length());
+
                         Cli_Output.Output_NewLine();
                         Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                         Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
