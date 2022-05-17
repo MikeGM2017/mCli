@@ -17,6 +17,10 @@ Projects:
 
   - Cli_Core - Cli Core Test Project (C++, Linux/termios)
 
+  - Cli_Core_Qt - Cli Core Test Project for Qt (C++, Qt/QPlainTextEdit)
+
+  - Cli_Core_JavaFX - Cli Core Test Project for JavaFX (Java, JavaFX/TextArea)
+
 Test Projects:
 
 - getting key codes + Ctrl+C / Ctrl+Z:
