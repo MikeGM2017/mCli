@@ -139,6 +139,7 @@ public class Cli_TAB_Processor {
 
         // <editor-fold defaultstate="collapsed" desc="TAB: last cmd item - full/partial -> cmd_tab_list">
         boolean is_enter = false;
+        List<String> s_log_list = new ArrayList<>();
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module module_ptr = modules.Get(module);
 
@@ -163,9 +164,24 @@ public class Cli_TAB_Processor {
                                 s_add.Value = cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length());
 
                             } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK) {
-                                s_log.Value += " " + cmd_ptr.Items.get(token + 1).Text;
+                                String s_log_new = cmd_ptr.Items.get(token + 1).Text;
+
+                                // String List Add Unique - Beg
+                                boolean is_found = false;
+                                for (int i = 0; i < s_log_list.size(); i++) {
+                                    if (s_log_list.get(i).equals(s_log_new)) {
+                                        is_found = true;
+                                        break;
+                                    }
+                                }
+                                if (!is_found) {
+                                    s_log_list.add(s_log_new);
+                                }
+                                // String List Add Unique - End
+
                                 Is_Space_After.Value = true;
                             } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE) {
+                                s_add.Value = cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length());
                                 Is_Space_After.Value = true;
 
                             } else if (is_cmd_token_last) {
@@ -180,6 +196,10 @@ public class Cli_TAB_Processor {
 
             }
 
+        }
+        // s_log_list -> s_log
+        for (int i = 0; i < s_log_list.size(); i++) {
+            s_log.Value += " " + s_log_list.get(i);
         }
         // Postprocessing: Add <Enter>
         if (is_enter) {

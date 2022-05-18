@@ -85,6 +85,8 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
         Modules.Module_Add(new Cli_Module_Base_History(History, Cli_Output));
 
+        Modules.Module_Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
+
     }
 
     @FXML
