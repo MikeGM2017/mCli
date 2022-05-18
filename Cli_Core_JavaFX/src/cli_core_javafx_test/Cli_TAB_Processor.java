@@ -24,6 +24,7 @@ public class Cli_TAB_Processor {
 
     protected String Str_Rem;
 
+    protected List<String> Log;
     protected boolean Log_Is_Active;
 
     public Cli_TAB_Processor(Cli_Cmd_Privilege_ID user_privilege,
@@ -40,7 +41,7 @@ public class Cli_TAB_Processor {
         Log_Is_Active = log_is_active;
     }
 
-    Level_Description Level_Get() {
+    protected Level_Description Level_Get() {
         if (Levels.size() > 0) {
             return Levels.get(Levels.size() - 1);
         }
@@ -48,7 +49,18 @@ public class Cli_TAB_Processor {
         return level_top;
     }
 
-    boolean TAB_Cmd_Ptr_Check_By_Level(Cli_Cmd cmd_ptr, Cli_Cmd_Privilege_ID user_privilege, String level) {
+    public int Log_Size_Get() {
+        return Log.size();
+    }
+
+    public String Log_Item_Get(int index) {
+        if (index >= 0 && index < Log.size()) {
+            return Log.get(index);
+        }
+        return "";
+    }
+
+    protected boolean TAB_Cmd_Ptr_Check_By_Level(Cli_Cmd cmd_ptr, Cli_Cmd_Privilege_ID user_privilege, String level) {
         if (cmd_ptr != null && user_privilege.ordinal() <= cmd_ptr.Privilege_Get()) {
             if (cmd_ptr.Is_Global_Get()) {
                 return true;
@@ -60,7 +72,7 @@ public class Cli_TAB_Processor {
         return false;
     }
 
-    void TAB_Cmd_Add_By_Level(Cli_Cmd cmd_ptr, String level, List<String> str_list) {
+    protected void TAB_Cmd_Add_By_Level(Cli_Cmd cmd_ptr, String level, List<String> str_list) {
         boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
         if (is_cmd_prt_valid) {
             String s = cmd_ptr.Items.get(0).Text_Get();
@@ -73,7 +85,7 @@ public class Cli_TAB_Processor {
         }
     }
 
-    String TAB_Help_Get(String level, Cli_Modules modules) {
+    protected String TAB_Help_Get(String level, Cli_Modules modules) {
         List<String> str_list = new ArrayList<>();
 
         for (int module = 0; module < modules.Get_Size(); module++) {
@@ -99,7 +111,7 @@ public class Cli_TAB_Processor {
     }
 
 // <editor-fold defaultstate="collapsed" desc="TAB: s_cmd_in + tokens -> s_log + s_add + is_space_after - All Functions">
-    void TAB_Cmd_List_Get_With_Flags(
+    protected void TAB_Cmd_List_Get_With_Flags(
             // in
             Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
             String level, String s_cmd_in, String s_cmd_in_trim, List<Cmd_Token> tokens,
@@ -188,7 +200,7 @@ public class Cli_TAB_Processor {
     }
 
 // </editor-fold>
-    List<TAB_Cmd> TAB_Cmd_List_Get(
+    protected List<TAB_Cmd> TAB_Cmd_List_Get(
             // in
             Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
             String level, String s_cmd_in, String s_cmd_in_trim, List<Cmd_Token> tokens) {
@@ -221,7 +233,7 @@ public class Cli_TAB_Processor {
         return tab_cmd_list;
     }
 
-    void Process_Input_Item(Cli_Input_Item input_item, Ref_Boolean is_invitation_print) {
+    public void Process_Input_Item(Cli_Input_Item input_item, Ref_Boolean is_invitation_print) {
         List<TAB_Cmd> tab_cmd_list = new ArrayList<>();
         String s_trim = input_item.Text_Get().trim();
         Level_Description level_description = Level_Get();
@@ -253,7 +265,7 @@ public class Cli_TAB_Processor {
                             Cli_Output.Output_NewLine();
                             is_invitation_print.Value = true;
                             if (Log_Is_Active) {
-//                                Log.push_back(tab_cmd_ptr.Text);
+                                Log.add(tab_cmd_ptr.Text);
                             }
                             Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().length());
                             is_prev_newline = true;
@@ -271,7 +283,7 @@ public class Cli_TAB_Processor {
                             }
                             is_invitation_print.Value = false;
                             if (Log_Is_Active) {
-//                                Log.push_back(tab_cmd_ptr.Text);
+                                Log.add(tab_cmd_ptr.Text);
                             }
                             is_prev_newline = false;
                         }
@@ -284,7 +296,7 @@ public class Cli_TAB_Processor {
                                 Cli_Input.Input_Str_Set(s_prev + " ");
                                 is_changed = true;
                                 if (Log_Is_Active) {
-//                                    Log.push_back(" ");
+                                    Log.add(" ");
                                 }
                             }
                             if (is_changed && s_pos_prev == s_prev.length() && !is_prev_newline) {
@@ -293,7 +305,7 @@ public class Cli_TAB_Processor {
                             } else {
                                 Cli_Input.Input_End();
                             }
-                            is_invitation_print.Value = false;
+                            //is_invitation_print.Value = false;
                             is_prev_newline = false;
                         }
                         break;
@@ -304,7 +316,6 @@ public class Cli_TAB_Processor {
             //for (int i = 0; i < tab_cmd_list.size(); i++)
             //    delete tab_cmd_list[i];
             //tab_cmd_list.clear();
-
         } else {
             Cli_Output.Output_NewLine();
         }

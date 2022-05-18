@@ -44,6 +44,10 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
     protected Ref_Boolean Cmd_Exit = new Ref_Boolean(false);
     protected Ref_Boolean Cmd_Quit = new Ref_Boolean(false);
 
+    protected Cli_History History = new Cli_History();
+
+    protected boolean is_invitation_print = false;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Cli_Input_TextArea.appendText("\nCli Core JavaFX Test started\n");
@@ -78,6 +82,9 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         TAB_Processor = new Cli_TAB_Processor(User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF, tab_log_is_active);
 
         Modules.Module_Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
+
+        Modules.Module_Add(new Cli_Module_Base_History(History, Cli_Output));
+
     }
 
     @FXML
@@ -108,7 +115,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
                                 String s_trim = input_item.Text_Get().trim();
 
                                 if (!is_no_history && !is_debug) {
-                                    //    History.History_Put(s_trim);
+                                    History.History_Put(s_trim);
                                 }
 
                                 boolean debug_res = false;
@@ -143,29 +150,31 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
                         break;
                     case INPUT_CMD_TAB:
-                        Ref_Boolean is_invitation_print = new Ref_Boolean(true);
-                        TAB_Processor.Process_Input_Item(input_item, is_invitation_print);
+                        Ref_Boolean is_invitation_print_tab = new Ref_Boolean(true);
+                        TAB_Processor.Process_Input_Item(input_item, is_invitation_print_tab);
+                        is_invitation_print = is_invitation_print_tab.Value;
 
-                        Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str.length());
-
-                        if (is_invitation_print.Value) {
+                        if (is_invitation_print) {
                             Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                             Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
                         }
+
+                        Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str.length());
+                        Cli_Output.Caret_Pos_Set(Cli_Input.Input_Str_Get().length(), Cli_Input.Input_Str_Pos_Get());
                         break;
                     case INPUT_CMD_UP:
-                        Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str("UP: \"" + input_item.Text_Get() + "\" - Not Processed");
-                        Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                        String s_prev_up = Cli_Input.Input_Str_Get();
+                        Cli_Input.Input_Str_Set(History.History_Up());
+                        Cli_Input.Input_Str_Modified_To_Output(s_prev_up);
+                        Cli_Input.Input_End();
+                        is_invitation_print = false;
                         break;
                     case INPUT_CMD_DOWN:
-                        Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str("DOWN: \"" + input_item.Text_Get() + "\" - Not Processed");
-                        Cli_Output.Output_NewLine();
-                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                        String s_prev_down = Cli_Input.Input_Str_Get();
+                        Cli_Input.Input_Str_Set(History.History_Down());
+                        Cli_Input.Input_Str_Modified_To_Output(s_prev_down);
+                        Cli_Input.Input_End();
+                        is_invitation_print = false;
                         break;
                     case INPUT_CMD_BACK:
                         is_cmd_back = true;
