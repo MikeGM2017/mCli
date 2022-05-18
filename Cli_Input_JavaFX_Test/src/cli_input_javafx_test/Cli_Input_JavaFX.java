@@ -367,9 +367,17 @@ class Cli_Input_JavaFX extends Cli_Input_JavaFX_Test {
         }
     }
 
+    public void Input_Str_Modified_To_Output(String s_prev) {
+        if (Is_Echo_Get()) {
+            int text_len = Cli_Output.textInputControl.getLength();
+            Cli_Output.textInputControl.replaceText(text_len - s_prev.length(), text_len, Input_Str);
+            Cli_Output.Caret_Pos_Set(Input_Str.length(), Input_Str_Pos);
+        }
+    }
+
     public void Input_End() {
         Input_Str_Pos = Input_Str.length();
-        Input_Str_To_Output();
+        //Input_Str_To_Output();
         Cli_Output.Caret_Pos_Set(Input_Str.length(), Input_Str_Pos);
     }
 
