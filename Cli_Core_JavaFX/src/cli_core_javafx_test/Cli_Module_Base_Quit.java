@@ -27,7 +27,7 @@ public class Cli_Module_Base_Quit extends Cli_Module {
     private final int CMD_ID_exit_E = 5;
     private final int CMD_ID_exit_force = 6;
 
-    private final int CMD_ID_LAST = 8;
+    private final int CMD_ID_LAST = 7;
     //};
 
     @Override
