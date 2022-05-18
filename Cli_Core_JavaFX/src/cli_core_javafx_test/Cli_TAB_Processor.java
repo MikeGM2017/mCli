@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Cli_TAB_Processor {
 
-    protected Cli_Cmd_Privilege_ID User_Privilege;
+    protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
     protected Cli_Modules Modules;
     protected List<Level_Description> Levels;
     protected Cmd_Token_Parser Token_Parser;
@@ -27,7 +27,7 @@ public class Cli_TAB_Processor {
     protected List<String> Log;
     protected boolean Log_Is_Active;
 
-    public Cli_TAB_Processor(Cli_Cmd_Privilege_ID user_privilege,
+    public Cli_TAB_Processor(Ref_Cli_Cmd_Privilege_ID user_privilege,
             Cli_Modules modules, List<Level_Description> levels, Cmd_Token_Parser token_parser,
             Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output, String str_rem,
             boolean log_is_active) {
@@ -73,7 +73,7 @@ public class Cli_TAB_Processor {
     }
 
     protected void TAB_Cmd_Add_By_Level(Cli_Cmd cmd_ptr, String level, List<String> str_list) {
-        boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+        boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
         if (is_cmd_prt_valid) {
             String s = cmd_ptr.Items.get(0).Text_Get();
             //if (find(str_list.begin(), str_list.end(), s) == str_list.end()) {
@@ -93,7 +93,7 @@ public class Cli_TAB_Processor {
             if (module_ptr != null) {
                 for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++) {
                     Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
-                    boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+                    boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
                     if (is_cmd_prt_valid) {
                         TAB_Cmd_Add_By_Level(cmd_ptr, level, str_list);
                     }
@@ -145,7 +145,7 @@ public class Cli_TAB_Processor {
             for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++) {
                 Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
 
-                boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+                boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
                 if (is_cmd_prt_valid) {
                     if (tokens.size() <= cmd_ptr.Items.size()) {
                         for (int token = 0; token < tokens.size(); token++) {
@@ -246,7 +246,7 @@ public class Cli_TAB_Processor {
             Cmd_Token_Parser_Result parse_res = Cmd_Token_Parser_Result.CMD_TOKEN_PARSER_ERROR;
             List<Cmd_Token> tokens = Token_Parser.Parse(s_trim, Str_Rem, parse_res);
 
-            tab_cmd_list = TAB_Cmd_List_Get(User_Privilege, Modules, level, input_item.Text_Get(), s_trim, tokens);
+            tab_cmd_list = TAB_Cmd_List_Get(User_Privilege.Value, Modules, level, input_item.Text_Get(), s_trim, tokens);
 
             //for (int i = 0; i < tokens.size(); i++)
             //    delete tokens[i];

@@ -34,7 +34,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
     protected String Str_Rem_DEF;
 
-    protected Cli_Cmd_Privilege_ID User_Privilege;
+    protected Ref_Cli_Cmd_Privilege_ID User_Privilege = new Ref_Cli_Cmd_Privilege_ID(Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
 
     protected Cli_Modules Modules;
 
@@ -72,7 +72,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
         Str_Rem_DEF = "$";
 
-        User_Privilege = Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_ROOT_DEF;
+        User_Privilege.Value = Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_ROOT_DEF;
 
         Modules = new Cli_Modules();
 
@@ -118,7 +118,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
                                     History.History_Put(s_trim);
                                 }
 
-                                boolean debug_res = false;
+                                Ref_Boolean debug_res = new Ref_Boolean(false);
                                 CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                                 Cli_Output.Output_NewLine();
                             }

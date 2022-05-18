@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Cli_CMD_Processor {
 
-    protected Cli_Cmd_Privilege_ID User_Privilege;
+    protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
     protected Cli_Modules Modules;
 
     protected List<Level_Description> Levels;
@@ -24,7 +24,7 @@ public class Cli_CMD_Processor {
 
     protected String Str_Rem;
 
-    public Cli_CMD_Processor(Cli_Cmd_Privilege_ID user_privilege,
+    public Cli_CMD_Processor(Ref_Cli_Cmd_Privilege_ID user_privilege,
             Cli_Modules modules, List<Level_Description> levels, Cmd_Token_Parser token_parser,
             Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output, String str_rem) {
         User_Privilege = user_privilege;
@@ -56,7 +56,7 @@ public class Cli_CMD_Processor {
         return false;
     }
 
-    public boolean Process_Input_Item(Cli_Input_Item input_item, boolean is_debug, boolean debug_res) {
+    public boolean Process_Input_Item(Cli_Input_Item input_item, boolean is_debug, Ref_Boolean debug_res) {
 
         String s_trim = input_item.Text_Get().trim();
 
@@ -78,7 +78,7 @@ public class Cli_CMD_Processor {
                 if (module_ptr != null) {
                     for (int cmd = 0; cmd < module_ptr.Module_Cmd_List.size() && !stop; cmd++) {
                         Cli_Cmd cmd_ptr = module_ptr.Module_Cmd_List.get(cmd);
-                        boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
+                        boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
                         if (is_cmd_prt_valid) {
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr.Is_Valid(tokens);
                             switch (res_cmd_valid) {
@@ -96,7 +96,7 @@ public class Cli_CMD_Processor {
                                             Cli_Output.Output_NewLine();
                                         }
                                     } else {
-                                        debug_res = true;
+                                        debug_res.Value = true;
                                     }
                                     is_processed = true;
                                     stop = true;
