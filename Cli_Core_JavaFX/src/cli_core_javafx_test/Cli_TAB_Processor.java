@@ -111,6 +111,19 @@ public class Cli_TAB_Processor {
     }
 
 // <editor-fold defaultstate="collapsed" desc="TAB: s_cmd_in + tokens -> s_log + s_add + is_space_after - All Functions">
+    protected void String_List_Add_Unique(List<String> s_list, String s) {
+        boolean found = false;
+        for (int i = 0; i < s_list.size(); i++) {
+            if (s_list.get(i).equals(s)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            s_list.add(s);
+        }
+    }
+
     protected void TAB_Cmd_List_Get_With_Flags(
             // in
             Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
@@ -165,23 +178,17 @@ public class Cli_TAB_Processor {
 
                             } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK) {
                                 String s_log_new = cmd_ptr.Items.get(token + 1).Text;
-
-                                // String List Add Unique - Beg
-                                boolean is_found = false;
-                                for (int i = 0; i < s_log_list.size(); i++) {
-                                    if (s_log_list.get(i).equals(s_log_new)) {
-                                        is_found = true;
-                                        break;
-                                    }
-                                }
-                                if (!is_found) {
-                                    s_log_list.add(s_log_new);
-                                }
-                                // String List Add Unique - End
-
+                                String_List_Add_Unique(s_log_list, s_log_new);
                                 Is_Space_After.Value = true;
                             } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE) {
                                 s_add.Value = cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length());
+                                Is_Space_After.Value = true;
+
+                            } else if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
+                                is_enter = true;
+                            } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
+                                String s_log_new = cmd_ptr.Items.get(token + 1).Text;
+                                String_List_Add_Unique(s_log_list, s_log_new);
                                 Is_Space_After.Value = true;
 
                             } else if (is_cmd_token_last) {
@@ -204,6 +211,10 @@ public class Cli_TAB_Processor {
         // Postprocessing: Add <Enter>
         if (is_enter) {
             s_log.Value += " <Enter>";
+        }
+        // "Add" blocks "Log"
+        if(!s_add.Value.isEmpty()) {
+            s_log.Value = "";
         }
         // Postprocessing: Set flags
         Is_Log.Value = !s_log.Value.isEmpty();
