@@ -255,7 +255,7 @@ int main(int argc, char *argv[]) {
 
                 string s_trim = Cli.Str_Trim(input_item.Text_Get());
 
-                if (!is_no_history && !is_debug) {
+                if (!is_no_history && !is_debug && !s_trim.empty()) {
                     History.History_Put(s_trim);
                 }
 
