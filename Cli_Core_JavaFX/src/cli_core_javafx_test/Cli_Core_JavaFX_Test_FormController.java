@@ -123,7 +123,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
                                 String s_trim = input_item.Text_Get().trim();
 
-                                if (!is_no_history && !is_debug) {
+                                if (!is_no_history && !is_debug && !s_trim.isEmpty()) {
                                     History.History_Put(s_trim);
                                 }
 
