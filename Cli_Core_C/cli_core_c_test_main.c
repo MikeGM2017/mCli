@@ -287,7 +287,7 @@ int main(int argc, char** argv) {
                 char s_trim[CLI_INPUT_C_ITEM_TEXT_SIZE];
                 Cli.Str_Trim(Cli_Input_C_Item_Text_Get(&input_item), s_trim, CLI_INPUT_C_ITEM_TEXT_SIZE);
 
-                if (!is_no_history && !is_debug) {
+                if (!is_no_history && !is_debug && s_trim[0] != '\0') {
                     History.History_Put(&History, s_trim);
                 }
 
