@@ -6,6 +6,7 @@
 package cli_core_javafx_test;
 
 import java.util.function.UnaryOperator;
+import javafx.application.Platform;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -212,27 +213,61 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
         Cli_Output.textInputControl.setTextFormatter(new TextFormatter<String>(filter));
 
-        Wait_Runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (Wait_Count >= 0) {
-                        if (Wait_Count > 0) {
-                            Cli_Output.Output_Str("Wait " + Integer.toString(Wait_Count) + "...");
-                            Cli_Output.Output_NewLine();
-                        } else if (Wait_Count <= 0) {
-                            Cli_Output.Output_Str(Invitation_Full_Get());
-                        }
-                        Input_Str_Set_Empty();
-                        Wait_Count--;
-                    }
-                    Input_sleep(1);
-                }
-            }
-        };
+        if (Wait_Thread == null) {
+            Wait_Thread = new Thread(new Runnable() {
 
-        Wait_Thread = new Thread(Wait_Runnable);
-        Wait_Thread.start();
+                @Override
+                public void run() {
+                    Runnable updater = new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            Cli_Output.Output_Str("Wait " + Integer.toString(Wait_Count));
+                            Cli_Output.Output_NewLine();
+
+                        }
+                    };
+
+                    while (true) {
+
+                        if (Wait_Count > 0) {
+                            Platform.runLater(updater);
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                            }
+
+                            Wait_Count--;
+
+                            if (Wait_Count <= 0) {
+                                Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                                if (Wait_Count == 0) {
+                                    //Cli_Output.Output_NewLine();
+                                    Cli_Output.Output_Str(Invitation_Full_Get());
+                                }
+                            }
+
+                        } else {
+
+                            try {
+                                Thread.sleep(1); // ms
+                            } catch (InterruptedException ex) {
+                            }
+
+                        }
+
+                        // UI update is run on the Application thread
+                    }
+
+                }
+
+            });
+            // don't let thread prevent JVM shutdown
+            Wait_Thread.setDaemon(true);
+            Wait_Thread.start();
+        }
 
         return cli_ouput_init_res;
     }

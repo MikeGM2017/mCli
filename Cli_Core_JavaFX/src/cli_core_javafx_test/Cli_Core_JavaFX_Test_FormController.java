@@ -44,6 +44,9 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
     protected Ref_Boolean Cmd_Exit = new Ref_Boolean(false);
     protected Ref_Boolean Cmd_Quit = new Ref_Boolean(false);
+    protected Ref_Boolean Cmd_Script_Stop = new Ref_Boolean(false);
+    protected Ref_Boolean Cmd_Wait_Stop = new Ref_Boolean(false);
+    protected Ref_Boolean Log_Wait_Enable = new Ref_Boolean(true);
 
     protected Cli_History History = new Cli_History();
 
@@ -54,7 +57,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         Cli_Input_TextArea.setFont(Font.font("monospace"));
         Cli_Input_TextArea.appendText("\nCli Core JavaFX Test started\n");
 
-        Cli_Output = new Cli_Output_JavaFX(Cli_Input_TextArea);
+        Cli_Output = new Cli_Output_JavaFX_Threaded(Cli_Input_TextArea);
         String Chars_Not_Allowed_Str = "@`|";
         Cli_Input = new Cli_Input_JavaFX(Cli_Output, Chars_Not_Allowed_Str);
 
@@ -97,11 +100,11 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
         Modules.Module_Add(new Cli_Module_Base_Log(Cli_Input));
 
-        Ref_Boolean Cmd_Script_Stop = new Ref_Boolean(false);
-        Modules.Module_Add(new Cli_Module_Base_Script(History, Cli_Output,
+        Modules.Module_Add(new Cli_Module_Base_Script_Threaded(History, Cli_Input, Cli_Output,
                 Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit,
                 CMD_Processor));
         Modules.Module_Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
+        Modules.Module_Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
     }
 
@@ -138,7 +141,13 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
                                 Ref_Boolean debug_res = new Ref_Boolean(false);
                                 CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
-                                Cli_Output.Output_NewLine();
+
+                                if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_NORMAL) {
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                    Cli_Input.Input_Str_Set_Empty();
+                                }
+
                             }
 
                         } else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_PROMPT) {
@@ -157,14 +166,13 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
                             Cli_Output.Output_NewLine();
 
                         } else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
+                            Cmd_Wait_Stop.Value = true;
                             Cli_Input.Wait_Count_Set(-1);
                             Cli_Output.Output_Str("Wait stopped");
                             Cli_Output.Output_NewLine();
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Input.Input_Str_Set_Empty();
                         }
-
-                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                        Cli_Input.Input_Str_Set_Empty();
-                        Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
 
                         break;
                     case INPUT_CMD_TAB:
@@ -204,6 +212,8 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
                     case INPUT_CMD_CTRL_Z:
                     case INPUT_CMD_CTRL_BACKSLASH:
                         if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
+                            Cmd_Script_Stop.Value = true;
+                            Cmd_Wait_Stop.Value = true;
                             Cli_Input.Wait_Count_Set(-1);
                             Cli_Output.Output_Str("Wait stopped");
                             Cli_Output.Output_NewLine();

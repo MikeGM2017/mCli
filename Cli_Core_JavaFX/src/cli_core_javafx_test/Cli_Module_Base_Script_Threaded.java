@@ -19,10 +19,11 @@ import java.util.logging.Logger;
  *
  * @author mike
  */
-public class Cli_Module_Base_Script extends Cli_Module {
+public class Cli_Module_Base_Script_Threaded extends Cli_Module {
 
     protected Cli_History History;
 
+    protected Cli_Input_JavaFX Cli_Input;
     protected Cli_Output_JavaFX Cli_Output;
 
     protected Ref_Boolean Cmd_Script_Stop;
@@ -43,16 +44,22 @@ public class Cli_Module_Base_Script extends Cli_Module {
     private final int CMD_ID_LAST = 5;
     //};
 
+    protected Runnable Script_Runnable;
+    protected Thread Script_Thread;
+    protected String Script_Thread_FileName;
+    protected boolean Script_Thread_Is_No_History;
+
     @Override
     public int Cmd_ID_Count_Get() {
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    public Cli_Module_Base_Script(Cli_History history, Cli_Output_JavaFX cli_output,
+    public Cli_Module_Base_Script_Threaded(Cli_History history, Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output,
             String str_rem, Ref_Boolean cmd_script_stop, Ref_Boolean cmd_quit,
             Cli_CMD_Processor cli_command_processor) {
         super("Base Script");
         History = history;
+        Cli_Input = cli_input;
         Cli_Output = cli_output;
         Str_Rem = str_rem;
         Cmd_Script_Stop = cmd_script_stop;
@@ -108,6 +115,81 @@ public class Cli_Module_Base_Script extends Cli_Module {
             Cmd_Add(cmd);
         }
 
+        Script_Runnable = new Runnable() {
+            @Override
+            public void run() {
+                Script_Thread_FileName = "";
+                Script_Thread_Is_No_History = false;
+                while (true) {
+                    if (!Script_Thread_FileName.isEmpty()) {
+                        String filename = Script_Thread_FileName;
+                        boolean is_no_history = Script_Thread_Is_No_History;
+                        BufferedReader reader = null;
+                        try {
+                            reader = new BufferedReader(new FileReader(filename));
+                            Cli_Output.Output_NewLine();
+                            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Begin");
+                            Cli_Output.Output_NewLine();
+                            boolean is_debug = false;
+                            Ref_Boolean debug_res = new Ref_Boolean(false);
+                            String s;
+                            Cmd_Script_Stop.Value = false;
+                            Cmd_Quit.Value = false;
+                            do {
+                                s = reader.readLine();
+                                if (s != null && !s.isEmpty()) {
+                                    String s_trim = s.trim();
+                                    if (!is_no_history && !is_debug && !s_trim.isEmpty()) {
+                                        History.History_Put(s_trim);
+                                    }
+                                    Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
+                                    Cli_Output.Output_Str(s_trim);
+                                    Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                                    while (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
+                                        Cli_Input.Input_sleep(1);
+                                    }
+                                }
+                            } while (s != null && !Cmd_Script_Stop.Value && !Cmd_Quit.Value);
+                            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                            Cli_Output.Output_NewLine();
+                            Cli_Output.Output_NewLine();
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Input.Input_Str_Set_Empty();
+                        } catch (FileNotFoundException ex) {
+                            Cli_Output.Output_Str("File \"" + filename + "\" - not found");
+                            Cli_Output.Output_NewLine();
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Input.Input_Str_Set_Empty();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                            Cli_Output.Output_Str("File \"" + filename + "\" - read error");
+                        } catch (Exception ex) {
+                            Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                        } finally {
+                            try {
+                                if (reader != null) {
+                                    reader.close();
+                                    ///Cli_Output.Output_Str("File \"" + filename + "\" - Ok");
+                                }
+                            } catch (IOException ex) {
+                                Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                                Cli_Output.Output_Str("File \"" + filename + "\" - close error");
+                            } catch (Exception ex) {
+                                Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        Script_Thread_FileName = "";
+                        Script_Thread_Is_No_History = false;
+                    } else {
+                        Cli_Input.Input_sleep(1);
+                    }
+                }
+            }
+        };
+
+        Script_Thread = new Thread(Script_Runnable);
+        Script_Thread.start();
+
     }
 
     boolean save_history_as_script(String filename) {
@@ -121,7 +203,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
                 writer.write(ls);
             }
         } catch (IOException ex) {
-            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
             Cli_Output.Output_Str("ERROR: file \"" + filename + "\" - write error");
         } finally {
             try {
@@ -136,7 +218,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
                     Cli_Output.Output_NewLine();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
                 Cli_Output.Output_Str("ERROR: file \"" + filename + "\" - close error");
             }
         }
@@ -144,46 +226,10 @@ public class Cli_Module_Base_Script extends Cli_Module {
     }
 
     boolean do_script(String filename, boolean is_no_history) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(filename));
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Begin");
-            Cli_Output.Output_NewLine();
-            boolean is_debug = false;
-            Ref_Boolean debug_res = new Ref_Boolean(false);
-            String s;
-            Cmd_Script_Stop.Value = false;
-            Cmd_Quit.Value = false;
-            do {
-                s = reader.readLine();
-                if (s != null && !s.isEmpty()) {
-                    String s_trim = s.trim();
-                    if (!is_no_history && !is_debug && !s_trim.isEmpty()) {
-                        History.History_Put(s_trim);
-                    }
-                    Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
-                    Cli_Output.Output_Str(s_trim);
-                    Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
-                }
-            } while (s != null && !Cmd_Script_Stop.Value && !Cmd_Quit.Value);
-            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop.Value ? "Stopped" : "End"));
-            Cli_Output.Output_NewLine();
-        } catch (FileNotFoundException ex) {
-            Cli_Output.Output_Str("File \"" + filename + "\" - not found");
-        } catch (IOException ex) {
-            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
-            Cli_Output.Output_Str("File \"" + filename + "\" - read error");
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
-                Cli_Output.Output_Str("File \"" + filename + "\" - close error");
-            }
-        }
+        //Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_WAIT);
+        Cmd_Script_Stop.Value = false;
+        Script_Thread_FileName = filename;
+        Script_Thread_Is_No_History = is_no_history;
         return true;
     }
 
