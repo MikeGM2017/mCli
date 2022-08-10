@@ -7,6 +7,7 @@ package cli_core_javafx_test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import javafx.application.Platform;
 import javafx.scene.control.TextInputControl;
 
@@ -61,6 +62,7 @@ public class Cli_Output_JavaFX_Threaded extends Cli_Output_JavaFX {
 
     protected Runnable Output_Runnable;
     protected Thread Output_Thread;
+    protected ReentrantLock Output_Lock = new ReentrantLock();
 
     Cli_Output_JavaFX_Threaded(TextInputControl object) {
         super(object);
@@ -117,14 +119,19 @@ public class Cli_Output_JavaFX_Threaded extends Cli_Output_JavaFX {
 
                     @Override
                     public void run() {
-                        if (!Output_Cmd_List.isEmpty()) {
-                            for (int i = 0; i < Output_Cmd_List.size(); i++) {
-                                Output_Cmd_Item cmd = new Output_Cmd_Item(Output_Cmd_List.get(i));
-                                Platform.runLater(() -> {
-                                    Output_Cmd_Item_Execute(cmd);
-                                });
+                        Output_Lock.lock();
+                        try {
+                            if (!Output_Cmd_List.isEmpty()) {
+                                for (int i = 0; i < Output_Cmd_List.size(); i++) {
+                                    Output_Cmd_Item cmd = new Output_Cmd_Item(Output_Cmd_List.get(i));
+                                    Platform.runLater(() -> {
+                                        Output_Cmd_Item_Execute(cmd);
+                                    });
+                                }
+                                Output_Cmd_List.clear();
                             }
-                            Output_Cmd_List.clear();
+                        } finally {
+                            Output_Lock.unlock();
                         }
                     }
                 };
@@ -148,6 +155,15 @@ public class Cli_Output_JavaFX_Threaded extends Cli_Output_JavaFX {
         return false;
     }
 
+    protected void Output_Cmd_List_Add(Output_Cmd_Item item) {
+        Output_Lock.lock();
+        try {
+            Output_Cmd_List.add(item);
+        } finally {
+            Output_Lock.unlock();
+        }
+    }
+
     @Override
     boolean Output_Close() {
         Output_Cmd_List.clear();
@@ -156,42 +172,42 @@ public class Cli_Output_JavaFX_Threaded extends Cli_Output_JavaFX {
 
     @Override
     boolean Output_Clear() {
-        Output_Cmd_List.add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_CLEAR));
+        Output_Cmd_List_Add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_CLEAR));
         return true;
     }
 
     @Override
     void Output_NewLine() {
-        Output_Cmd_List.add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, "\n"));
+        Output_Cmd_List_Add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, "\n"));
     }
 
     @Override
     void Output_Char(char c) {
         String s = "";
         s += c;
-        Output_Cmd_List.add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, s));
+        Output_Cmd_List_Add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, s));
     }
 
     @Override
     void Output_Char(String c) {
         String s = "";
         s += c;
-        Output_Cmd_List.add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, s));
+        Output_Cmd_List_Add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, s));
     }
 
     @Override
     void Output_Str(String s) {
-        Output_Cmd_List.add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, s));
+        Output_Cmd_List_Add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_ADD, s));
     }
 
     @Override
     void Output_Return() {
-        Output_Cmd_List.add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_RETURN));
+        Output_Cmd_List_Add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_RETURN));
     }
 
     @Override
     void Caret_Pos_Set(int input_str_len, int input_str_pos) {
-        Output_Cmd_List.add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_CARET_POS_SET, input_str_len, input_str_pos));
+        Output_Cmd_List_Add(new Output_Cmd_Item(Output_Cmd_ID.OUTPUT_CMD_ID_CARET_POS_SET, input_str_len, input_str_pos));
     }
 
 }
