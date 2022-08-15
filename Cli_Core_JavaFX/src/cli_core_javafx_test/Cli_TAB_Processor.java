@@ -153,6 +153,8 @@ public class Cli_TAB_Processor {
         // <editor-fold defaultstate="collapsed" desc="TAB: last cmd item - full/partial -> cmd_tab_list">
         boolean is_enter = false;
         List<String> s_log_list = new ArrayList<>();
+        List<String> s_add_list = new ArrayList<>();
+        List<String> s_add_list_full = new ArrayList<>();
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module module_ptr = modules.Get(module);
 
@@ -174,14 +176,16 @@ public class Cli_TAB_Processor {
                             if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK) {
                                 is_enter = true;
                             } else if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE) {
-                                s_add.Value = cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length());
+                                String_List_Add_Unique(s_add_list, cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length()));
+                                String_List_Add_Unique(s_add_list_full, cmd_ptr.Items.get(token).Text_Get());
 
                             } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK) {
                                 String s_log_new = cmd_ptr.Items.get(token + 1).Text;
                                 String_List_Add_Unique(s_log_list, s_log_new);
                                 Is_Space_After.Value = true;
                             } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE) {
-                                s_add.Value = cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length());
+                                String_List_Add_Unique(s_add_list, cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length()));
+                                String_List_Add_Unique(s_add_list_full, cmd_ptr.Items.get(token).Text_Get());
                                 Is_Space_After.Value = true;
 
                             } else if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
@@ -204,6 +208,52 @@ public class Cli_TAB_Processor {
             }
 
         }
+        // s_add_list -> s_add (one variant) / s_log_list (many variants)
+        if (s_add_list.size() > 0) {
+            if (s_add_list.size() == 1) {
+                if (!is_enter) {
+                    s_add.Value = s_add_list.get(0);
+                } else {
+                    String_List_Add_Unique(s_log_list, s_add_list_full.get(0));
+                }
+            } else {
+                String s_common = "";
+                int j = 0;
+                boolean is_diff = false;
+                do {
+                    char c = '\0';
+                    for (int i = 0; i < s_add_list.size(); i++) {
+                        if (j < s_add_list.get(i).length()) {
+                            if (i == 0) {
+                                c = s_add_list.get(i).charAt(j);
+                            } else if (c != s_add_list.get(i).charAt(j)) {
+                                is_diff = true;
+                                break;
+                            }
+                        } else {
+                            if (i > 0) {
+                                is_diff = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (!is_diff) {
+                        s_common += c;
+                        j++;
+                    }
+                } while (!is_diff);
+                if (!s_common.isEmpty() && !is_enter) {
+                    s_add.Value = s_common;
+                    Is_Space_After.Value = false; // "Add" blocks "Is_Space_After"
+                } else {
+                    // s_add_list_full -> s_log_list
+                    for (int i = 0; i < s_add_list_full.size(); i++) {
+                        String_List_Add_Unique(s_log_list, s_add_list_full.get(i));
+                    }
+                    Is_Space_After.Value = false; // "Add Full" blocks "Is_Space_After"
+                }
+            }
+        }
         // s_log_list -> s_log
         for (int i = 0; i < s_log_list.size(); i++) {
             s_log.Value += " " + s_log_list.get(i);
@@ -213,7 +263,7 @@ public class Cli_TAB_Processor {
             s_log.Value += " <Enter>";
         }
         // "Add" blocks "Log"
-        if(!s_add.Value.isEmpty()) {
+        if (!s_add.Value.isEmpty()) {
             s_log.Value = "";
         }
         // Postprocessing: Set flags
