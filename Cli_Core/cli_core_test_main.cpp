@@ -50,6 +50,7 @@ using namespace std;
 #include "Cli_Module_Check.h"
 #include "Cli_Module_Vars.h"
 #include "Cli_Module_Base_Level.h"
+#include "Cli_Module_Lua.h"
 
 const string Version = "0.01";
 
@@ -227,6 +228,8 @@ int main(int argc, char *argv[]) {
     Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
 
     Modules.Add(new Cli_Module_Base_Level(Cli_Input, level_root));
+
+    Modules.Add(new Cli_Module_Lua(Values_Map, str_filter, Cli_Input, Cli_Output));
 
     // Modules Add - End
 

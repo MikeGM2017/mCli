@@ -38,6 +38,7 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Script.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Wait.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Check.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Lua.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Tab_Min_Max.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Terminal.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Vars.h</itemPath>
@@ -316,6 +317,8 @@
       <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Check.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Lua.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
             ex="false"
@@ -785,6 +788,8 @@
       <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Check.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Lua.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
             ex="false"
