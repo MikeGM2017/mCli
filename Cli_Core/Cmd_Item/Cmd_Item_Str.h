@@ -107,7 +107,15 @@ public:
         //else if (s.size() >= 2 && s[0] == '\'' && s[s.size() - 1] == '\'')
         //    s = s.substr(1, s.size() - 2);
 
-        Value_Str = s; // @Attention: s is not decoded with escapes
+        //Value_Str = s; // @Attention: s is not decoded with escapes
+
+        if (s.length() == 2 && s.at(0) == '"' && s.at(1) == '"') {
+            Value_Str = "";
+        } else if (s.length() == 2 && s.at(0) == '\'' && s.at(1) == '\'') {
+            Value_Str = "";
+        } else {
+            Value_Str = s; // @Attention: s is not decoded with escapes
+        }
 
         if (s.size() == 0) return CMD_ITEM_OK_STR_WITHOUT_COMMAS; // @Attention
 
