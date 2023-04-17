@@ -39,10 +39,12 @@ protected:
     bool Is_Echo;
     int Input_Str_Pos;
 
+    bool Is_Ctrl_C_Pressed;
+
 public:
 
     Cli_Input_Abstract(Cli_Output_Abstract &cli_output) : Divider_L("["), Divider_R("]"), Cli_Output(cli_output),
-    Is_Echo(true), Input_Str_Pos(0) {
+    Is_Echo(true), Input_Str_Pos(0), Is_Ctrl_C_Pressed(false) {
     }
 
     virtual ~Cli_Input_Abstract() {
@@ -264,6 +266,18 @@ public:
     virtual bool Input_sleep(int sleep_sec) = 0;
 
     virtual bool Input_kbhit() = 0; // Attention: Not Blocked
+
+    virtual bool Is_Ctrl_C_Pressed_Get() {
+        return Is_Ctrl_C_Pressed;
+    }
+
+    virtual void Is_Ctrl_C_Pressed_Set() {
+        Is_Ctrl_C_Pressed = true;
+    }
+
+    virtual void Is_Ctrl_C_Pressed_Clear() {
+        Is_Ctrl_C_Pressed = false;
+    }
 
 };
 

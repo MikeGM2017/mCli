@@ -12,6 +12,7 @@ Cli_Output_Abstract *Cli_Input_termios::Cli_Output_Object = NULL;
 void Cli_Input_termios::SIGINT_Handler(int sig) { // Ctrl+C
     if (Cli_Input_Object) {
         Cli_Input_Object->Input_Str_Clear();
+        Cli_Input_Object->Is_Ctrl_C_Pressed_Set();
     }
     if (Cli_Output_Object) {
         Cli_Output_Object->Output_NewLine();
