@@ -49,6 +49,7 @@ using namespace std;
 
 #include "Cli_Module_Check.h"
 #include "Cli_Module_Vars.h"
+#include "Cli_Module_Base_Level.h"
 
 const string Version = "0.01";
 
@@ -185,6 +186,8 @@ int main(int argc, char *argv[]) {
 
     // Modules Add - Begin
 
+    string level_root = "top level";
+
     Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
     bool Cmd_Exit = false;
@@ -221,11 +224,13 @@ int main(int argc, char *argv[]) {
 
     Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
 
+    Modules.Add(new Cli_Module_Base_Level(Cli_Input, level_root));
+
     // Modules Add - End
 
     Cli_Input.Title_Set("Cli Core Test");
     Cli_Input.User_Set("root");
-    Cli_Input.Level_Set("top level");
+    Cli_Input.Level_Set(level_root);
     Cli_Input.Invitation_Set("> ");
     Cli_Input.Divider_L_Set("[");
     Cli_Input.Divider_R_Set("]");
