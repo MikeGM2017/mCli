@@ -2315,7 +2315,7 @@ public:
                 string var_left = cmd->Items[2]->Value_Str;
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
-                string label1 = cmd->Items[8]->Value_Str;
+                string label1 = cmd->Items[6]->Value_Str;
                 bool is_label2;
                 string label2;
                 return check_var_by_int_goto_label(var_left, s_compare, var_right_value, label1, is_label2 = false, label2);
@@ -2326,9 +2326,9 @@ public:
                 string var_left = cmd->Items[2]->Value_Str;
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
-                string label1 = cmd->Items[8]->Value_Str;
+                string label1 = cmd->Items[6]->Value_Str;
                 bool is_label2;
-                string label2 = cmd->Items[11]->Value_Str;
+                string label2 = cmd->Items[9]->Value_Str;
                 return check_var_by_int_goto_label(var_left, s_compare, var_right_value, label1, is_label2 = true, label2);
             }
 
