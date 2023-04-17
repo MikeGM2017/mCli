@@ -15,6 +15,7 @@
 #define CLI_MODULE_BASE_SCRIPT_H
 
 #include <stdio.h>
+#include <string.h>
 
 #include "Cli_Module.h"
 
@@ -22,6 +23,7 @@
 
 #include "Cli_History.h"
 
+#include "Cli_Input_Abstract.h"
 #include "Cli_Output_Abstract.h"
 
 class Cli_Module_Base_Script : public Cli_Module {
@@ -29,6 +31,7 @@ protected:
 
     Cli_History &History;
 
+    Cli_Input_Abstract &Cli_Input;
     Cli_Output_Abstract &Cli_Output;
 
     bool &Cmd_Script_Stop;
@@ -40,6 +43,9 @@ protected:
     Cli_CMD_Processor_Abstract &Cli_Command_Processor;
 
     string Str_Rem;
+
+    string &Script_Command_Str;
+    string &Script_Label_Str;
 
 public:
 
@@ -58,13 +64,16 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Script(Cli_History &history, Cli_Output_Abstract &cli_output,
+    Cli_Module_Base_Script(Cli_History &history,
+            Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             string str_rem, bool &cmd_script_stop, bool &cmd_quit, int script_buf_size,
-            Cli_CMD_Processor_Abstract &cli_command_processor) : Cli_Module("Base Script"),
-    History(history), Cli_Output(cli_output),
+            Cli_CMD_Processor_Abstract &cli_command_processor,
+            string &script_command_str, string &script_label_str) : Cli_Module("Base Script"),
+    History(history), Cli_Input(cli_input), Cli_Output(cli_output),
     Str_Rem(str_rem),
     Cmd_Script_Stop(cmd_script_stop), Cmd_Quit(cmd_quit), Script_Buf_Size(script_buf_size),
-    Cli_Command_Processor(cli_command_processor) {
+    Cli_Command_Processor(cli_command_processor),
+    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str) {
 
         Script_Buf = new char[Script_Buf_Size];
 
@@ -149,8 +158,61 @@ public:
         return s_trim;
     }
 
+    bool Execute_Command_check_goto_label(FILE *h, string &label_str) {
+        bool stop = false;
+        bool found = false;
+        char *s;
+        fseek(h, 0, SEEK_SET);
+        do {
+            s = fgets(Script_Buf, Script_Buf_Size, h);
+            if (s) {
+                char *s1 = strstr(s, "check");
+                if (s1) {
+                    char *s2 = strstr(s1, "label");
+                    if (s2) {
+                        char *s3 = strstr(s2, label_str.c_str());
+                        if (s3) {
+                            found = true;
+                            stop = true; // Ok - Label Found
+                        }
+                    }
+                }
+            } else {
+                stop = true; // Failed - Label Not Found
+            }
+        } while (!stop);
+        return found;
+    }
+
+    void Execute_Script_Command(bool is_debug, bool &debug_res) {
+        string Script_Command_Str_Trim1 = Str_Trim(Script_Command_Str);
+        bool is_commas_found = false;
+        if (Script_Command_Str_Trim1.size() >= 2
+                && Script_Command_Str_Trim1[0] == '\"'
+                && Script_Command_Str_Trim1[Script_Command_Str_Trim1.size() - 1] == '\"') {
+            is_commas_found = true;
+        }
+        if (Script_Command_Str_Trim1.size() >= 2
+                && Script_Command_Str_Trim1[0] == '\''
+                && Script_Command_Str_Trim1[Script_Command_Str_Trim1.size() - 1] == '\'') {
+            is_commas_found = true;
+        }
+        string Script_Command_Str_Trim2;
+        if (is_commas_found) {
+            Script_Command_Str_Trim2 = Script_Command_Str_Trim1.substr(1, Script_Command_Str_Trim1.size() - 2);
+        } else {
+            Script_Command_Str_Trim2 = Script_Command_Str_Trim1;
+        }
+        Cli_Input_Item input_item2(CLI_INPUT_ITEM_TYPE_STR, Script_Command_Str_Trim2);
+        Script_Command_Str.clear();
+        Cli_Command_Processor.Process_Input_Item(input_item2, is_debug, debug_res);
+    }
+
     bool do_script(Cli_Cmd *cmd, bool is_no_history) {
         string filename = cmd->Items[2]->Value_Str;
+
+        Cli_Input.Is_Ctrl_C_Pressed_Clear(); // Before starting script - clear stop flag
+
         FILE *h = fopen(filename.c_str(), "rt");
         if (h) {
             Cli_Output.Output_NewLine();
@@ -161,18 +223,48 @@ public:
             char *s;
             Cmd_Script_Stop = false;
             do {
-                s = fgets(Script_Buf, Script_Buf_Size, h);
-                if (s) {
-                    string s_trim = Str_Trim(s);
-                    if (!is_no_history && !is_debug) {
-                        History.History_Put(s_trim);
+                if (!Cli_Input.Is_Ctrl_C_Pressed_Get()) {
+                    s = fgets(Script_Buf, Script_Buf_Size, h);
+                    if (s) {
+                        string s_trim = Str_Trim(s);
+                        if (!is_no_history && !is_debug) {
+                            History.History_Put(s_trim);
+                        }
+                        Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
+                        Cli_Output.Output_Str(s_trim);
+
+                        Script_Command_Str.clear();
+                        Script_Label_Str.clear();
+                        Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+
+                        if (Script_Command_Str.size()) {
+                            Execute_Script_Command(is_debug, debug_res);
+                            Script_Command_Str.clear();
+                        }
+
+                        //@Warning: Command "check goto <label>" - special case: is moves file position
+                        if (Script_Label_Str.size()) {
+                            bool label_found = Execute_Command_check_goto_label(h, Script_Label_Str);
+                            if (!label_found) {
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str("ERROR: label \"" + Script_Label_Str + "\" - not found, script stopped");
+                                Cli_Output.Output_NewLine();
+                                Cmd_Script_Stop = true; // Stop - label not found
+                            }
+                            Script_Label_Str.clear();
+                        }
+
                     }
-                    Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
-                    Cli_Output.Output_Str(s_trim);
-                    Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                } else {
+                    Cmd_Script_Stop = true; // Stop By Ctrl+C
                 }
             } while (s && !Cmd_Script_Stop && !Cmd_Quit);
-            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop ? "Stopped" : "End"));
+            if (Cli_Input.Is_Ctrl_C_Pressed_Get()) {
+                Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
+                Cli_Input.Is_Ctrl_C_Pressed_Clear();
+            } else {
+                Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop ? "Stopped" : "End"));
+            }
             Cli_Output.Output_NewLine();
         } else {
             Cli_Output.Output_NewLine();

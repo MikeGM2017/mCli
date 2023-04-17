@@ -30,6 +30,7 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Debug.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Help.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_History.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Level.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Log.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
@@ -229,10 +230,17 @@
             <pElem>Cli_CMD_Processor</pElem>
             <pElem>Cli_TAB_Processor</pElem>
             <pElem>Cli_Module_Test</pElem>
+            <pElem>../lua-5.3.5/src</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_test</output>
+          <linkerAddLib>
+            <pElem>../lua-5.3.5/src</pElem>
+          </linkerAddLib>
+          <linkerLibItems>
+            <linkerLibLibItem>lua</linkerLibLibItem>
+          </linkerLibItems>
         </linkerTool>
       </compileType>
       <item path="Cli_CMD_Processor/Cli_CMD_Processor.h"
@@ -280,6 +288,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Level.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -744,6 +757,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Level.h"
             ex="false"
             tool="3"
             flavor2="0">

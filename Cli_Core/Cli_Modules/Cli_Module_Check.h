@@ -41,6 +41,9 @@ protected:
 
     bool &Cmd_Script_Stop;
 
+    string &Script_Command_Str;
+    string &Script_Label_Str;
+
     int Count_Total;
     int Count_Passed;
     int Count_Failed;
@@ -123,10 +126,12 @@ public:
 
     Cli_Module_Check(Cli_Modules &modules, map<string, string> &values_map,
             Str_Filter_Abstract &str_filter, Cli_Output_Abstract &cli_output,
-            bool &cmd_script_stop) : Cli_Module("Check"),
+            bool &cmd_script_stop,
+            string &script_command_str, string &script_label_str) : Cli_Module("Check"),
     Modules(modules), Values_Map(values_map),
     Str_Filter(str_filter), Cli_Output(cli_output),
-    Cmd_Script_Stop(cmd_script_stop) {
+    Cmd_Script_Stop(cmd_script_stop),
+    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str) {
 
         // <editor-fold defaultstate="collapsed" desc="Decl: cmp_int_str/words, cmp_str_str/words">
         string cmp_int_str = "== != < > <= >= & | && ||";
@@ -1506,19 +1511,35 @@ public:
     // </editor-fold>
 
     bool Do_Script_From_File(string filename, bool is_no_history) {
-        return false;
+        bool is_filename_spaces = false;
+        if (filename.find(' ') != std::string::npos) is_filename_spaces = true;
+        if (filename.find('\t') != std::string::npos) is_filename_spaces = true;
+        if (is_filename_spaces) {
+            Script_Command_Str = "do script \"" + filename + "\"";
+        } else {
+            Script_Command_Str = "do script " + filename;
+        }
+        if (is_no_history) {
+            Script_Command_Str += " no history";
+        }
+        return true;
     }
 
     bool Do_Command(string command) {
-        return false;
+        Script_Command_Str = command;
+        return true;
     }
 
     bool Do_Label(string label) {
-        return false;
+        //@Warning: Command "check goto <label>" - special case: is moves file position
+        // no action
+        return true;
     }
 
     bool Do_Goto_Label(string label) {
-        return false;
+        //Script_Command_Str = "check goto " + label;
+        Script_Label_Str = label;
+        return true;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Check if: int/str as value/as var do">

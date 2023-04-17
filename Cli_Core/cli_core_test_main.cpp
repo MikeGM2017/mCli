@@ -207,9 +207,11 @@ int main(int argc, char *argv[]) {
 
     bool Cmd_Script_Stop = false;
     int Script_Buf_Size = 1024;
-    Modules.Add(new Cli_Module_Base_Script(History, Cli_Output,
+    string Script_Command_Str;
+    string Script_Label_Str;
+    Modules.Add(new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
             Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
-            CMD_Processor));
+            CMD_Processor, Script_Command_Str, Script_Label_Str));
 
     bool Log_Wait_Enable = true;
     bool Cmd_Wait_Stop = false;
@@ -220,7 +222,7 @@ int main(int argc, char *argv[]) {
 
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
-    Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop)));
+    Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str)));
 
     Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
 
