@@ -53,6 +53,8 @@ Test Projects:
 
   - Cli_Output_CPP_printf_Test
 
+  - Cli_Output_CPP_telnet_Test
+
   - Cli_Output_CPP_file_Test (for test/debug)
 
   - Cli_Output_CPP_ofstream_Test (for test/debug)
@@ -82,6 +84,8 @@ Test Projects:
   - Cli_Input_CPP_pdcurses
 
   - Cli_Input_CPP_termios
+
+  - Cli_Input_CPP_telnet
 
   - Cli_Input_CPP_file (for test/debug)
 
