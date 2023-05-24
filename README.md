@@ -33,6 +33,8 @@ Test Projects:
 
   - Cli_Input_Test_Key_Codes_termios
 
+  - Cli_Input_Test_Key_Codes_telnet
+
   - Cli_Input_Test_Key_Codes_Ruby_curses
 
   - Cli_Input_Test_Key_Codes_JavaFX
