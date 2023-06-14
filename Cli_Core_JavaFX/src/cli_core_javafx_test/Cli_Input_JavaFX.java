@@ -5,6 +5,7 @@
  */
 package cli_core_javafx_test;
 
+import java.util.Locale;
 import java.util.function.UnaryOperator;
 import javafx.application.Platform;
 import javafx.scene.control.TextFormatter;
@@ -468,10 +469,8 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
     public boolean Is_Char_Valid(String char_str) {
         if (!Chars_Not_Allowed_Str.isEmpty()) {
-            for (int i = 0; i < char_str.length(); i++) {
-                if (Chars_Not_Allowed_Str.contains(char_str)) {
-                    return false;
-                }
+            if (Chars_Not_Allowed_Str.contains(char_str)) {
+                return false;
             }
         }
         return true;
@@ -541,8 +540,33 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
                     item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_DELETE, Input_Str_Get());
                     break;
                 default:
-                    if (!On_Key_Any(event.getText())) {
-                        //item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_INVALID_CHAR, Input_Str_Get());
+                    boolean is_linux = false;
+                    String os = System.getProperty("os.name", "generic").toLowerCase(Locale.US);
+                    if (os.contains("linux")) {
+                        is_linux = true;
+                    }
+                    if (is_linux) {
+
+                        if (!On_Key_Any(event.getText())) {
+                            //item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_INVALID_CHAR, Input_Str_Get());
+                        }
+
+                    } else {
+
+                        // Windows only
+                        String s = event.getText();
+                        if (s.length() > 0) {
+                            char c = s.charAt(0);
+                            if (Character.isUpperCase(c) && event.isShiftDown()) {
+                                s = event.getText().toLowerCase();
+                            } else if (event.isShiftDown()) {
+                                s = event.getText().toUpperCase();
+                            }
+                            if (!On_Key_Any(s)) {
+                                //item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_INVALID_CHAR, Input_Str_Get());
+                            }
+                        }
+
                     }
                     break;
             }
