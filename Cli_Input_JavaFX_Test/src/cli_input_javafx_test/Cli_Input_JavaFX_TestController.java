@@ -190,7 +190,7 @@ public class Cli_Input_JavaFX_TestController implements Initializable {
     }
 
     protected void Help_Print() {
-        Cli_Output.Output_Str("Help: Q - quit, C - clear, H - help, A - prompt(y/n), P - password(no echo), W - wait");
+        Cli_Output.Output_Str("Help: Q - quit, C - clear, H - help, A - ask(y/n), P - passwd(no echo), W - wait");
     }
 
 }
