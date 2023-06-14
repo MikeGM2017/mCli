@@ -433,10 +433,8 @@ class Cli_Input_JavaFX extends Cli_Input_JavaFX_Test {
 
     public boolean Is_Char_Valid(String char_str) {
         if (!Chars_Not_Allowed_Str.isEmpty()) {
-            for (int i = 0; i < char_str.length(); i++) {
-                if (Chars_Not_Allowed_Str.contains(char_str)) {
-                    return false;
-                }
+            if (Chars_Not_Allowed_Str.contains(char_str)) {
+                return false;
             }
         }
         return true;
