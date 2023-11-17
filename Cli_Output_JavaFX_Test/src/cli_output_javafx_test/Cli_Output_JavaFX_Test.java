@@ -24,6 +24,7 @@ public class Cli_Output_JavaFX_Test extends Application {
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
+        stage.setTitle("Cli Output JavaFX Test");
         stage.show();
     }
 
