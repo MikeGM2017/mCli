@@ -13,15 +13,15 @@
 
 #include <stdio.h>
 
-#include "Cli_Input_CPP_telnet.h"
+#include "Cli_Input_telnet.h"
 
-#include "Cli_Output_CPP_telnet.h"
+#include "Cli_Output_telnet.h"
 
 int main(int argc, char *argv[]) {
 
     int telnet_session_sock = -1;
 
-    Cli_Output_CPP_telnet Cli_Output(telnet_session_sock);
+    Cli_Output_telnet Cli_Output(telnet_session_sock);
 
     int local_ip = INADDR_ANY;
     unsigned short local_port = 30002;
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     printf("Cli_Input_CPP_telnet:\n");
     printf("Connect with Telnet on port %d\n", local_port);
 
-    Cli_Input_CPP_telnet Cli_Input(local_ip, local_port, buf_size, telnet_session_sock, Cli_Output);
+    Cli_Input_telnet Cli_Input(local_ip, local_port, buf_size, telnet_session_sock, Cli_Output);
 
     Cli_Input.Title_Set("cli demo");
     Cli_Input.User_Set("root");

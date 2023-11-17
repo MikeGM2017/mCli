@@ -5,14 +5,14 @@
  */
 
 /* 
- * File:   Cli_Input_CPP_telnet.h
+ * File:   Cli_Input_telnet.h
  * Author: mike
  *
  * Created on May 23, 2023, 11:25 AM
  */
 
-#ifndef CLI_INPUT_CPP_TELNET_H
-#define CLI_INPUT_CPP_TELNET_H
+#ifndef CLI_INPUT_TELNET_H
+#define CLI_INPUT_TELNET_H
 
 #include <netinet/in.h>
 #include <stdio.h>
@@ -25,7 +25,7 @@
 
 #include "Cli_Input_Abstract.h"
 
-class Cli_Input_CPP_telnet : public Cli_Input_Abstract {
+class Cli_Input_telnet : public Cli_Input_Abstract {
 protected:
 
     Cli_Output_Abstract &Cli_Output;
@@ -44,7 +44,7 @@ protected:
 
 public:
 
-    Cli_Input_CPP_telnet(int local_ip, unsigned short local_port, int buf_size,
+    Cli_Input_telnet(int local_ip, unsigned short local_port, int buf_size,
             int &telnet_session_sock,
             Cli_Output_Abstract &cli_output) :
     Cli_Input_Abstract(cli_output),
@@ -259,4 +259,4 @@ public:
 
 };
 
-#endif /* CLI_INPUT_CPP_TELNET_H */
+#endif /* CLI_INPUT_TELNET_H */

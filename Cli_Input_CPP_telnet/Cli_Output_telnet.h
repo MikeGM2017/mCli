@@ -5,14 +5,14 @@
  */
 
 /* 
- * File:   Cli_Output_CPP_telnet.h
+ * File:   Cli_Output_telnet.h
  * Author: mike
  *
  * Created on May 22, 2023, 4:57 PM
  */
 
-#ifndef CLI_OUTPUT_CPP_TELNET_H
-#define CLI_OUTPUT_CPP_TELNET_H
+#ifndef CLI_OUTPUT_TELNET_H
+#define CLI_OUTPUT_TELNET_H
 
 #include <unistd.h>
 
@@ -22,14 +22,14 @@ using namespace std;
 
 #include "Cli_Output_Abstract.h"
 
-class Cli_Output_CPP_telnet : public Cli_Output_Abstract {
+class Cli_Output_telnet : public Cli_Output_Abstract {
 protected:
 
     int &Telnet_Sock;
 
 public:
 
-    Cli_Output_CPP_telnet(int &telnet_sock) :
+    Cli_Output_telnet(int &telnet_sock) :
     Telnet_Sock(telnet_sock) {
     }
 
@@ -71,4 +71,4 @@ public:
 
 };
 
-#endif /* CLI_OUTPUT_CPP_TELNET_H */
+#endif /* CLI_OUTPUT_TELNET_H */
