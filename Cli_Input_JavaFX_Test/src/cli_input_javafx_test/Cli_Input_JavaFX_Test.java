@@ -27,6 +27,7 @@ public class Cli_Input_JavaFX_Test extends Application {
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
+        stage.setTitle("Cli Input JavaFX Test");
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

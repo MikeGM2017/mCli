@@ -35,8 +35,6 @@ class Cli_Input_JavaFX extends Cli_Input_JavaFX_Test {
 
     protected int Input_Str_Pos;
 
-    protected boolean Is_Quit;
-
     protected Cli_Output_JavaFX Cli_Output;
 
     protected String Chars_Not_Allowed_Str;
@@ -54,7 +52,6 @@ class Cli_Input_JavaFX extends Cli_Input_JavaFX_Test {
         Chars_Not_Allowed_Str = chars_not_allowed_str;
 
         Is_Echo = true;
-        Is_Quit = false;
         Input_Str = "";
         Input_Str_Pos = 0;
         Prompt_Str = "";
