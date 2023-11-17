@@ -321,6 +321,13 @@ moc_Cli_Input_Qt.cpp: Cli_Input_Abstract.h \
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_Qt_QPlainTextEdit_Test/nbproject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Cli_Input_Qt.h -o moc_Cli_Input_Qt.cpp
 
 moc_Cli_Output_Form_QPlainTextEdit.cpp: ui_Cli_Output_Form_QPlainTextEdit.h \
+		cli_qplaintextedit.h \
+		Cli_Key_Processor_Abstract.h \
+		Cli_Input_Abstract.h \
+		Cli_Input_Item.h \
+		Cli_Input_Item_Type.h \
+		Cli_Output_Abstract.h \
+		Input_Mode_Type.h \
 		Cli_Output_Form_QPlainTextEdit.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/mike/NetBeansProjects7_Cli/Git/Cli_Input_Qt_QPlainTextEdit_Test/nbproject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Cli_Output_Form_QPlainTextEdit.h -o moc_Cli_Output_Form_QPlainTextEdit.cpp
 
@@ -344,19 +351,27 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 
 build/Debug/GNU-Linux/Cli_Input_Qt_QPlainTextEdit_Test_main.o: Cli_Input_Qt_QPlainTextEdit_Test_main.cpp Cli_Output_Form_QPlainTextEdit.h \
 		ui_Cli_Output_Form_QPlainTextEdit.h \
-		Cli_Output_QPlainTextEdit.h \
-		Cli_Output_Abstract.h \
-		Cli_Input_Test_Key_Processor.h \
+		cli_qplaintextedit.h \
 		Cli_Key_Processor_Abstract.h \
 		Cli_Input_Abstract.h \
 		Cli_Input_Item.h \
 		Cli_Input_Item_Type.h \
+		Cli_Output_Abstract.h \
 		Input_Mode_Type.h \
+		Cli_Output_QPlainTextEdit.h \
+		Cli_Input_Test_Key_Processor.h \
 		Cli_Input_Qt.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/Cli_Input_Qt_QPlainTextEdit_Test_main.o Cli_Input_Qt_QPlainTextEdit_Test_main.cpp
 
 build/Debug/GNU-Linux/Cli_Output_Form_QPlainTextEdit.cpp.o: Cli_Output_Form_QPlainTextEdit.cpp.cc Cli_Output_Form_QPlainTextEdit.h \
-		ui_Cli_Output_Form_QPlainTextEdit.h
+		ui_Cli_Output_Form_QPlainTextEdit.h \
+		cli_qplaintextedit.h \
+		Cli_Key_Processor_Abstract.h \
+		Cli_Input_Abstract.h \
+		Cli_Input_Item.h \
+		Cli_Input_Item_Type.h \
+		Cli_Output_Abstract.h \
+		Input_Mode_Type.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/Cli_Output_Form_QPlainTextEdit.cpp.o Cli_Output_Form_QPlainTextEdit.cpp.cc
 
 build/Debug/GNU-Linux/moc_Cli_Input_Qt.o: moc_Cli_Input_Qt.cpp 
