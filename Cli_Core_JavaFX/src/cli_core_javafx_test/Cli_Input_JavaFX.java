@@ -55,7 +55,6 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
         Chars_Not_Allowed_Str = chars_not_allowed_str;
 
         Is_Echo = true;
-        Is_Quit = false;
         Input_Str = "";
         Input_Str_Pos = 0;
         Prompt_Str = "";

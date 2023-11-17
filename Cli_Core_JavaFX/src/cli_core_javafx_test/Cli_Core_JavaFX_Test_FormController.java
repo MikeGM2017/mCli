@@ -107,6 +107,8 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         Modules.Module_Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
         Modules.Module_Add(new Cli_Module_Test_Tab_Min_Max());
+
+        Modules.Module_Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
     }
 
     @FXML

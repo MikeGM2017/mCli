@@ -27,6 +27,7 @@ public class Cli_Core_JavaFX_Test extends Application {
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
+        stage.setTitle("Cli Core JavaFX Test");
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
