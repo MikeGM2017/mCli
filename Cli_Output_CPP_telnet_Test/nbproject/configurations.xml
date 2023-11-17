@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Cli_Output_telnet.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -41,6 +42,8 @@
             tool="1"
             flavor2="0">
       </item>
+      <item path="Cli_Output_telnet.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -66,6 +69,8 @@
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="Cli_Output_telnet.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

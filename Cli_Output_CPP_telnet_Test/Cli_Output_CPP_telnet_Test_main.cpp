@@ -20,7 +20,7 @@
 #include <ctype.h>
 #include <arpa/inet.h>
 
-#include "Cli_Output_CPP_telnet.h"
+#include "Cli_Output_telnet.h"
 
 int telnet_getchar(int &Session_Sock) {
     const int Buf_Size = 4096;
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 
     int Session_Sock = -1;
 
-    Cli_Output_CPP_telnet Cli_Output(Session_Sock);
+    Cli_Output_telnet Cli_Output(Session_Sock);
 
     Cli_Output.Output_Init();
 
