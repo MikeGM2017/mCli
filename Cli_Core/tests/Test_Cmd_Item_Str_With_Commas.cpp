@@ -40,8 +40,8 @@ public:
 
 static const Cmd_Item_Str_Test_Item TestVector[] = {
     Cmd_Item_Str_Test_Item("", "", CMD_ITEM_EMPTY),
-    Cmd_Item_Str_Test_Item("\"<str>\"", "<str>", CMD_ITEM_OK),
-    Cmd_Item_Str_Test_Item("\"  <str1>   <str2>    \"", "  <str1>   <str2>    ", CMD_ITEM_OK),
+    Cmd_Item_Str_Test_Item("\"<str>\"", "\"<str>\"", CMD_ITEM_OK),
+    Cmd_Item_Str_Test_Item("\"  <str1>   <str2>    \"", "\"  <str1>   <str2>    \"", CMD_ITEM_OK),
     Cmd_Item_Str_Test_Item("\"\"", "", CMD_ITEM_OK),
     Cmd_Item_Str_Test_Item("\"", "\"", CMD_ITEM_INCOMPLETE_STR),
     Cmd_Item_Str_Test_Item("\"<str>", "\"<str>", CMD_ITEM_INCOMPLETE_STR),
