@@ -5,6 +5,10 @@
  */
 package cli_core_javafx_test;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  *
  * @author mike
@@ -30,6 +34,15 @@ public class Cmd_Item_IP4 extends Cmd_Item_Base {
     @Override
     public String Debug_Value_Get() {
         return "1.2.3.4";
+    }
+
+    protected static boolean isIPv4(String input) {
+        try {
+            InetAddress inetAddress = InetAddress.getByName(input);
+            return (inetAddress instanceof Inet4Address) && inetAddress.getHostAddress().equals(input);
+        } catch (UnknownHostException ex) {
+            return false;
+        }
     }
 
     @Override
@@ -95,6 +108,11 @@ public class Cmd_Item_IP4 extends Cmd_Item_Base {
             return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
         }
         if (nCount > 4) {
+            return Cmd_Item_Valid_Result.CMD_ITEM_ERROR;
+        }
+
+        boolean res_ipv4 = isIPv4(s);
+        if (!res_ipv4) {
             return Cmd_Item_Valid_Result.CMD_ITEM_ERROR;
         }
 
