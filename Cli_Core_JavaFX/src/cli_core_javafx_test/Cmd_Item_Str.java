@@ -102,11 +102,19 @@ public class Cmd_Item_Str extends Cmd_Item_Base {
         //    s = s.substr(1, s.length() - 2);
         //else if (s.length() >= 2 && s.charAt(0) == '\'' && s.charAt(s.length() - 1) == '\'')
         //    s = s.substr(1, s.length() - 2);
-        Value_Str = s; // @Attention: s is not decoded with escapes
+        //Value_Str = s; // @Attention: s is not decoded with escapes
+        if (s.length() == 2 && s.charAt(0) == '"' && s.charAt(1) == '"') {
+            Value_Str = "";
+        } else if (s.length() == 2 && s.charAt(0) == '\'' && s.charAt(1) == '\'') {
+            Value_Str = "";
+        } else {
+            Value_Str = s; // @Attention: s is not decoded with escapes
+        }
 
         if (s.length() == 0) {
             return Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS; // @Attention
         }
+
         if (s.length() == 1) {
             if (s.charAt(0) == '\n') {
                 return Cmd_Item_Valid_Result.CMD_ITEM_ERROR;
@@ -166,7 +174,6 @@ public class Cmd_Item_Str extends Cmd_Item_Base {
         //if (s.charAt(0) == '"' && s.charAt(s.length() - 1) != '"') return INPUT_INCOMPLETE;
         //if (s.charAt(0) != '"' && s.charAt(s.length() - 1) == '"') return INPUT_ERROR;
         //return INPUT_OK;
-
         Ref_String s_dst = new Ref_String(Value_Str);
         Cmd_Item_Valid_Result decode_res = Decode(s, s_dst); // @Attention: s is decoded with escapes
         Value_Str = s_dst.Value;
