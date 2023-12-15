@@ -9,7 +9,7 @@ package cli_core_javafx_test;
  *
  * @author mike
  */
-public class Cmd_Item_Date extends Cmd_Item_Base {
+public class Cmd_Item_Date extends Cmd_Item_Str {
 
     @Override
     protected boolean Is_Char_Valid(char c, int pos, int len) {
