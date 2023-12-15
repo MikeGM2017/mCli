@@ -121,12 +121,10 @@ public class Cmd_Item_Int_List extends Cmd_Item_Int_Range {
         }
         // Последнее значение
         if (prev_is_minus) {
-            //return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
-            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_SHOW_HINT;
+            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
         }
         if (!prev_is_digit) {
-            //return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
-            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_SHOW_HINT;
+            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
         }
         // Повтор для последнего значения - Beg
         if (n_beg_Valid && prev_is_digit) {
@@ -156,12 +154,10 @@ public class Cmd_Item_Int_List extends Cmd_Item_Int_Range {
         // Повтор для последнего значения - End
 
         if (s.charAt(s.length() - 1) == ',') {
-            //return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
-            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_SHOW_HINT;
+            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
         }
         if (s.charAt(s.length() - 1) == '-') {
-            //return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
-            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_SHOW_HINT;
+            return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR;
         }
 
         return Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE;
