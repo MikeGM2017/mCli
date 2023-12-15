@@ -28,6 +28,7 @@ public class Cmd_Item_Base {
         Type = "Base";
         Text = text;
         Help = help;
+        Value_Str = "";
     }
 
     public String Debug_Value_Get() {
