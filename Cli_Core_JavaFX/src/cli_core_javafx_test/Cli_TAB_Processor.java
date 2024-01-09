@@ -6,7 +6,9 @@
 package cli_core_javafx_test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -27,14 +29,14 @@ public class Cli_TAB_Processor {
     protected List<String> Log;
     protected boolean Log_Is_Active;
 
-    public Cli_TAB_Processor(Ref_Cli_Cmd_Privilege_ID user_privilege,
-            Cli_Modules modules, List<Level_Description> levels, Cmd_Token_Parser token_parser,
-            Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output, String str_rem,
-            boolean log_is_active) {
+    public Cli_TAB_Processor(Ref_Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
+            List<Level_Description> levels, Cmd_Token_Parser parser,
+            Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output,
+            String str_rem, boolean log_is_active) {
         User_Privilege = user_privilege;
         Modules = modules;
         Levels = levels;
-        Token_Parser = token_parser;
+        Token_Parser = parser;
         Cli_Input = cli_input;
         Cli_Output = cli_output;
         Str_Rem = str_rem;
@@ -110,17 +112,324 @@ public class Cli_TAB_Processor {
         return sb.toString();
     }
 
-// <editor-fold defaultstate="collapsed" desc="TAB: s_cmd_in + tokens -> s_log + s_add + is_space_after - All Functions">
-    protected void String_List_Add_Unique(List<String> s_list, String s) {
-        boolean found = false;
-        for (int i = 0; i < s_list.size(); i++) {
-            if (s_list.get(i).equals(s)) {
-                found = true;
-                break;
+    protected void TAB_On_OK_CAN_CONTINUE(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr) {
+        Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+        tab_result_ptr.cmd_ptr = cmd_ptr;
+        tab_result_ptr.Is_Enter = true;
+        tab_result_ptr.s_log = ",";
+        tab_result_ptr.is_space_after_add = false;
+        tab_result_list.add(tab_result_ptr);
+    }
+
+    protected void TAB_On_OK_STR_WITHOUT_COMMAS_not_last_space(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr) {
+        Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+        tab_result_ptr.cmd_ptr = cmd_ptr;
+        tab_result_ptr.Is_Enter = true;
+        //is_incomplete_str = true;
+        tab_result_ptr.s_log = cmd_item_ptr.Text_Get();
+        tab_result_ptr.is_space_after_add = false;
+        tab_result_list.add(tab_result_ptr);
+    }
+
+    protected void TAB_On_OK_not_last_token(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, int token, Cmd_Item_Base cmd_item_ptr) {
+        Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+        tab_result_ptr.cmd_ptr = cmd_ptr;
+
+        //cmd_tab_ptr.is_space_after_add =
+        //        cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+        if (token + 1 < cmd_ptr.Items.size() - 1) {
+            tab_result_ptr.is_space_after_add
+                    = cmd_item_ptr.Is_Space_After_Add(cmd_ptr.Items.get(token + 1).Text_Get());
+        } else {
+            tab_result_ptr.is_space_after_add = false; // Next token - last token in cmd list
+        }
+
+        //if (is_last_space) {
+        tab_result_ptr.s_log = cmd_ptr.Items.get(token + 1).Text_Get();
+        //cmd_tab_ptr.s_log_or_add = cmd_ptr.Items[token + 1].Text_Get();
+        //} else {
+        //    cmd_tab_ptr.s_log = cmd_item_ptr.Text_Get();
+        //    cmd_tab_ptr.s_log_or_add = cmd_item_ptr.Text_Get();
+        //}
+
+        tab_result_list.add(tab_result_ptr);
+    }
+
+    protected void TAB_On_OK_last_token(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr) {
+        Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+        tab_result_ptr.cmd_ptr = cmd_ptr;
+        tab_result_ptr.Is_Enter = true;
+        ////cmd_tab_ptr.s_log = cmd_item_ptr.Text_Get();
+
+        //if (cmd_item_ptr.Type_Get() == "Str") {
+        //    cmd_tab_ptr.s_log = cmd_item_ptr.Text_Get();
+        //}
+        //cmd_tab_ptr.s_log_or_add = cmd_item_ptr.Text_Get();
+        tab_result_ptr.is_space_after_add
+                = cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+        //cmd_tab_ptr.is_space_after_add = false;
+        tab_result_list.add(tab_result_ptr);
+    }
+
+    protected void TAB_On_INCOMPLETE_STR(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr) {
+        Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+        tab_result_ptr.cmd_ptr = cmd_ptr;
+
+        tab_result_ptr.s_log = cmd_item_ptr.Text_Get() + " - Incomplete";
+        tab_result_ptr.is_space_after_add = false;
+        tab_result_list.add(tab_result_ptr);
+    }
+
+    protected void TAB_On_incomplete_tail_list(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, int token, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr, String token_str, List<String> s_incomplete_tail_list) {
+        Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+        tab_result_ptr.cmd_ptr = cmd_ptr;
+        tab_result_ptr.s_add_list = s_incomplete_tail_list;
+
+        String s_beg = "";
+        if (!token_str.isEmpty()) {
+            int pos = token_str.lastIndexOf(','); // @Magic: for Cmd_Item_Word_List
+            if (pos < 0) {
+                s_beg = token_str;
+            } else {
+                s_beg = token_str.substring(pos + 1); // @Magic: for Cmd_Item_Word_List
             }
         }
-        if (!found) {
-            s_list.add(s);
+
+        for (int s_add_index = 0; s_add_index < tab_result_ptr.s_add_list.size(); s_add_index++) {
+            String s_add_item = tab_result_ptr.s_add_list.get(s_add_index);
+            tab_result_ptr.s_full_list.add(s_beg + s_add_item);
+        }
+
+        tab_result_ptr.is_space_after_add
+                = cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+
+        if (token == cmd_ptr.Items.size() - 1) { // Last token in cmd list
+            //cmd_tab_ptr.Is_Enter = true;
+            tab_result_ptr.is_space_after_add = false;
+        }
+
+        tab_result_list.add(tab_result_ptr);
+    }
+
+    protected void TAB_On_incomplete_tail_list_empty(List<Cli_TAB_Result> tab_result_list, boolean is_last_char_space, boolean is_last_char_comma, boolean is_last_char_commas, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr, String token_str, String cmd_item_str) {
+        Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+        tab_result_ptr.cmd_ptr = cmd_ptr;
+        char last_token_char = (token_str.isEmpty() ? 0 : token_str.charAt(token_str.length() - 1));
+        if (!is_last_char_space || last_token_char == ' ' || last_token_char == '\t') {
+            tab_result_ptr.s_log = cmd_item_str + " - Incomplete";
+        }
+        if (!is_last_char_comma && !is_last_char_commas) {
+            tab_result_ptr.is_space_after_add
+                    = cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+        } else {
+            tab_result_ptr.is_space_after_add = false;
+        }
+        tab_result_list.add(tab_result_ptr);
+    }
+
+    protected void TAB_On_INCOMPLETE(List<Cmd_Token> tokens, List<Cli_TAB_Result> tab_result_list,
+            boolean is_last_char_space, boolean is_last_char_comma, boolean is_last_char_commas,
+            Cli_Cmd cmd_ptr, int token, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr) {
+        String token_str = tokens.get(token).Text_Get();
+        String cmd_item_str = cmd_item_ptr.Text_Get();
+        List<String> s_incomplete_tail_list = new ArrayList<>();
+        if (!is_last_char_space) {
+            s_incomplete_tail_list = cmd_item_ptr.Incomplete_Tail_List_Get(token_str);
+        }
+        if (!s_incomplete_tail_list.isEmpty()) {
+            TAB_On_incomplete_tail_list(tab_result_list, cmd_ptr, token, cmd_item_ptr, token_ptr, token_str, s_incomplete_tail_list);
+        } else if (s_incomplete_tail_list.isEmpty()) {
+            TAB_On_incomplete_tail_list_empty(tab_result_list, is_last_char_space,
+                    is_last_char_comma, is_last_char_commas,
+                    cmd_ptr, cmd_item_ptr, token_ptr, token_str, cmd_item_str);
+        }
+    }
+
+    protected void TAB_Result_List_Parse_To_Flags(List<Cmd_Token> tokens, Ref_String s_log, Ref_String s_add,
+            Ref_Boolean Is_Log, Ref_Boolean Is_Add, Ref_Boolean Is_Space_After,
+            List<Cli_TAB_Result> tab_result_list,
+            boolean is_incomplete_str, boolean is_last_char_space, boolean is_last_char_comma, boolean is_last_char_commas) {
+        {
+
+            boolean Is_Enter = false;
+            Set<String> s_add_set = new HashSet<>();
+            Set<String> s_log_set = new HashSet<>();
+            String s_add_1 = "";
+            String s_log_1 = "";
+            boolean is_space_after_add_1 = false;
+            boolean is_space_after_log_1 = false;
+            List<String> s_add_vector = new ArrayList<>();
+            List<String> s_log_vector = new ArrayList<>();
+            String s_add_full_1 = "";
+
+            for (int i = 0; i < tab_result_list.size(); i++) {
+                Cli_TAB_Result tab_result_ptr = tab_result_list.get(i);
+                if (tab_result_ptr.Is_Enter) {
+                    Is_Enter = true;
+                }
+            }
+
+            for (int i = 0; i < tab_result_list.size(); i++) {
+                Cli_TAB_Result tab_result_ptr = tab_result_list.get(i);
+                if (!tab_result_ptr.s_add_list.isEmpty()) {
+                    for (int s_add_index = 0; s_add_index < tab_result_ptr.s_add_list.size(); s_add_index++) {
+                        String s_add_item = tab_result_ptr.s_add_list.get(s_add_index);
+                        if (!s_add_set.contains(s_add_item)) {
+                            s_add_set.add(s_add_item);
+                            s_add_1 = s_add_item;
+                            s_add_vector.add(tab_result_ptr.s_full_list.get(s_add_index));
+                            s_add_full_1 = tab_result_ptr.s_full_list.get(s_add_index);
+                        }
+                    }
+                }
+                if (tab_result_ptr.is_space_after_add) {
+                    is_space_after_add_1 = true;
+                }
+            }
+
+            for (int i = 0; i < tab_result_list.size(); i++) {
+                Cli_TAB_Result tab_result_ptr = tab_result_list.get(i);
+                if (!tab_result_ptr.s_log.isEmpty()) {
+                    if (!s_log_set.contains(tab_result_ptr.s_log)) {
+                        s_log_set.add(tab_result_ptr.s_log);
+                        s_log_1 = tab_result_ptr.s_log;
+                        s_log_vector.add(tab_result_ptr.s_log);
+                    }
+                }
+                if (tab_result_ptr.is_space_after_add) {
+                    is_space_after_log_1 = true;
+                }
+            }
+
+            Is_Log.Value = false;
+            s_log.Value = "";
+            Is_Add.Value = false;
+            s_add.Value = "";
+            Is_Space_After.Value = false;
+
+            if (s_add_vector.size() == 0 && s_log_vector.size() == 0) {
+                s_log.Value = (Is_Enter ? " <Enter>" : " <Error>");
+            } else if (!Is_Enter && s_add_vector.size() == 1 && s_log_vector.size() == 0) {
+                s_add.Value = s_add_1;
+                if (is_space_after_add_1) {
+                    Is_Space_After.Value = true;
+                } else {
+                    Is_Space_After.Value = false;
+                }
+            } else if (!Is_Enter && s_add_vector.size() == 0 && s_log_vector.size() == 1) {
+                if (!s_log_1.isEmpty() && s_log_1.charAt(0) != '<' && s_log_1.charAt(0) != '\"' && s_log_1.charAt(0) != '\'' && s_log_1.charAt(0) != '[') {
+                    if (!is_last_char_space) {
+                        s_add.Value = " " + s_log_1;
+                    } else {
+                        s_add.Value = s_log_1;
+                    }
+
+                    if (is_space_after_log_1) {
+                        Is_Space_After.Value = true;
+                    } else {
+                        Is_Space_After.Value = false;
+                    }
+                } else {
+                    s_log.Value = " " + s_log_1;
+                    if (!is_last_char_comma && !is_last_char_commas) {
+                        Is_Space_After.Value = true;
+                    }
+                }
+            } else if (Is_Enter && s_add_vector.size() == 0 && s_log_vector.size() == 1) {
+                s_log.Value = " " + s_log_1 + " <Enter>";
+                if (is_space_after_log_1) {
+                    Is_Space_After.Value = true;
+                } else {
+                    Is_Space_After.Value = false;
+                }
+            } else if (!Is_Enter && s_add_vector.size() == 1 && s_log_vector.size() == 1) {
+                s_log.Value = " " + s_log_1 + " " + s_add_full_1;
+            } else if (Is_Enter && s_add_vector.size() == 1 && s_log_vector.size() == 1) {
+                s_add.Value = s_add_1;
+                Is_Space_After.Value = true;
+            } else if (s_add_vector.size() == 0 && s_log_vector.size() >= 2) {
+                s_log.Value = "";
+                for (int i = 0; i < s_log_vector.size(); i++) {
+                    s_log.Value += " " + s_log_vector.get(i);
+                }
+                if (Is_Enter) {
+                    s_log.Value += " <Enter>";
+                }
+                Is_Space_After.Value = true;
+            } else if (!Is_Enter && s_add_vector.size() >= 2 && s_log_vector.size() == 0) {
+                {
+                    // Add minimal common part or log full variants
+                    int len_min = s_add_vector.get(0).length();
+                    for (int i = 0; i < s_add_vector.size(); i++) {
+                        if (len_min > s_add_vector.get(i).length()) {
+                            len_min = s_add_vector.get(i).length();
+                        }
+                    }
+                    String s_common = "";
+                    for (int pos = 0; pos < len_min; pos++) {
+                        char c = s_add_vector.get(0).charAt(pos);
+                        boolean is_diff = false;
+                        for (int i = 0; i < s_add_vector.size(); i++) {
+                            if (s_add_vector.get(i).charAt(pos) != c) {
+                                is_diff = true;
+                                break;
+                            }
+                        }
+                        if (!is_diff) {
+                            s_common += c;
+                        } else {
+                            break;
+                        }
+                    }
+                    String s_last_token1 = tokens.get(tokens.size() - 1).Text_Get();
+                    String s_last_token;
+                    int pos = s_last_token1.lastIndexOf(','); // @Magic: for Cmd_Item_Word_List
+                    if (pos < 0) {
+                        s_last_token = s_last_token1;
+                    } else {
+                        s_last_token = s_last_token1.substring(pos + 1); // @Magic: for Cmd_Item_Word_List
+                    }
+                    String s_common_part = "";
+                    if (!s_common.isEmpty()) {
+                        s_common_part = s_common.substring(s_last_token.length());
+                    }
+                    if (!s_common_part.isEmpty()) {
+                        s_add.Value = s_common_part;
+                    } else {
+                        s_log.Value = "";
+                        for (int i = 0; i < s_add_vector.size(); i++) {
+                            s_log.Value += " ";
+                            s_log.Value += s_add_vector.get(i);
+                        }
+                    }
+                }
+            } else if (s_add_vector.size() >= 2 || s_log_vector.size() >= 2) {
+                s_log.Value = "";
+                for (int i = 0; i < s_log_vector.size(); i++) {
+                    s_log.Value += " ";
+                    s_log.Value += s_log_vector.get(i);
+                }
+                for (int i = 0; i < s_add_vector.size(); i++) {
+                    s_log.Value += " ";
+                    s_log.Value += s_add_vector.get(i);
+                }
+                if (Is_Enter) {
+                    s_log.Value += " <Enter>";
+                }
+            } else {
+                s_log.Value = " <Error>";
+            }
+
+            Is_Add.Value = !s_add.Value.isEmpty();
+            Is_Log.Value = !s_log.Value.isEmpty();
+
+            if (is_incomplete_str) {
+                Is_Space_After.Value = false;
+            }
+            if (is_last_char_space) {
+                Is_Space_After.Value = false;
+            }
+
         }
     }
 
@@ -133,7 +442,6 @@ public class Cli_TAB_Processor {
             Ref_Boolean Is_Log, Ref_Boolean Is_Add, Ref_Boolean Is_Space_After) {
 
         List<Cli_TAB_Result> tab_result_list = new ArrayList<>();
-
         boolean is_incomplete_str = false;
         char last_char = 0;
         boolean is_last_char_space = false;
@@ -150,137 +458,68 @@ public class Cli_TAB_Processor {
             }
         }
 
-        // <editor-fold defaultstate="collapsed" desc="TAB: last cmd item - full/partial -> cmd_tab_list">
-        boolean is_enter = false;
-        List<String> s_log_list = new ArrayList<>();
-        List<String> s_add_list = new ArrayList<>();
-        List<String> s_add_list_full = new ArrayList<>();
+        // <editor-fold defaultstate="collapsed" desc="TAB: last cmd item - full/partial . cmd_tab_list">
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module module_ptr = modules.Get(module);
+            if (module_ptr != null) {
+                for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++) {
+                    Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
+                    boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
+                    if (is_cmd_prt_valid) {
+                        if (tokens.size() <= cmd_ptr.Items.size()) {
+                            for (int token = 0; token < tokens.size(); token++) {
+                                Cmd_Item_Base cmd_item_ptr = cmd_ptr.Items.get(token);
+                                Cmd_Token token_ptr = tokens.get(token);
+                                Cmd_Item_Valid_Result res_parse = cmd_item_ptr.Parse(token_ptr.Text_Get());
 
-            for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++) {
-                Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
+                                if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE && is_last_char_space) {
+                                    res_parse = Cmd_Item_Valid_Result.CMD_ITEM_OK;
+                                }
+                                if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE && (token < tokens.size() - 1)) {
+                                    res_parse = Cmd_Item_Valid_Result.CMD_ITEM_OK;
+                                }
 
-                boolean is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
-                if (is_cmd_prt_valid) {
-                    if (tokens.size() <= cmd_ptr.Items.size()) {
-                        for (int token = 0; token < tokens.size(); token++) {
-                            Cmd_Item_Base cmd_item_ptr = cmd_ptr.Items.get(token);
-                            Cmd_Token token_ptr = tokens.get(token);
-                            Cmd_Item_Valid_Result res_parse = cmd_item_ptr.Parse(token_ptr.Text_Get());
-                            int token_index_last = tokens.size() - 1;
-                            boolean is_token_last = (token == token_index_last);
-                            int cmd_token_index_last = cmd_ptr.Items.size() - 1;
-                            boolean is_cmd_token_last = (token == cmd_token_index_last);
-
-                            if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK) {
-                                is_enter = true;
-                            } else if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE) {
-                                String_List_Add_Unique(s_add_list, cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length()));
-                                String_List_Add_Unique(s_add_list_full, cmd_ptr.Items.get(token).Text_Get());
-
-                            } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK) {
-                                String s_log_new = cmd_ptr.Items.get(token + 1).Text;
-                                String_List_Add_Unique(s_log_list, s_log_new);
-                                Is_Space_After.Value = true;
-                            } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE) {
-                                String_List_Add_Unique(s_add_list, cmd_ptr.Items.get(token).Text_Get().substring(token_ptr.Text_Get().length()));
-                                String_List_Add_Unique(s_add_list_full, cmd_ptr.Items.get(token).Text_Get());
-                                Is_Space_After.Value = true;
-
-                            } else if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
-                                is_enter = true;
-                            } else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
-                                String s_log_new = cmd_ptr.Items.get(token + 1).Text;
-                                String_List_Add_Unique(s_log_list, s_log_new);
-                                Is_Space_After.Value = true;
-
-                            } else if (is_cmd_token_last) {
-                                break; // Cmd not match
-                            } else if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_ERROR) {
-                                break; // Cmd not match
+                                if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE) {
+                                    TAB_On_OK_CAN_CONTINUE(tab_result_list, cmd_ptr);
+                                } else if (token < tokens.size() - 1) { // Not last token in token list, but not OK . not valid
+                                    if (res_parse != Cmd_Item_Valid_Result.CMD_ITEM_OK
+                                            && res_parse != Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE
+                                            && res_parse != Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
+                                        break;
+                                    }
+                                } else if (token == tokens.size() - 1) { // Last token in token list
+                                    if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK || res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS) {
+                                        if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS && !is_last_char_space) {
+                                            TAB_On_OK_STR_WITHOUT_COMMAS_not_last_space(tab_result_list, cmd_ptr, cmd_item_ptr);
+                                        } else if (token < cmd_ptr.Items.size() - 1) { // Not last token in cmd list
+                                            TAB_On_OK_not_last_token(tab_result_list, cmd_ptr, token, cmd_item_ptr);
+                                        } else if (token == cmd_ptr.Items.size() - 1) { // Last token in cmd list
+                                            TAB_On_OK_last_token(tab_result_list, cmd_ptr, cmd_item_ptr, token_ptr);
+                                        }
+                                    } else if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE || res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR) {
+                                        if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR) {
+                                            TAB_On_INCOMPLETE_STR(tab_result_list, cmd_ptr, cmd_item_ptr);
+                                            is_incomplete_str = true;
+                                        } else {
+                                            TAB_On_INCOMPLETE(tokens, tab_result_list, is_last_char_space, is_last_char_comma, is_last_char_commas, cmd_ptr, token, cmd_item_ptr, token_ptr);
+                                        }
+                                    } else {
+                                        break;
+                                    }
+                                }
                             }
-
                         }
                     }
                 }
-
             }
-
-        }
-        // s_add_list -> s_add (one variant) / s_log_list (many variants)
-        if (s_add_list.size() > 0) {
-            if (s_add_list.size() == 1) {
-                if (!is_enter) {
-                    s_add.Value = s_add_list.get(0);
-                } else {
-                    String_List_Add_Unique(s_log_list, s_add_list_full.get(0));
-                }
-            } else {
-                String s_common = "";
-                int j = 0;
-                boolean is_diff = false;
-                do {
-                    char c = '\0';
-                    for (int i = 0; i < s_add_list.size(); i++) {
-                        if (j < s_add_list.get(i).length()) {
-                            if (i == 0) {
-                                c = s_add_list.get(i).charAt(j);
-                            } else if (c != s_add_list.get(i).charAt(j)) {
-                                is_diff = true;
-                                break;
-                            }
-                        } else {
-                            if (i > 0) {
-                                is_diff = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (!is_diff) {
-                        s_common += c;
-                        j++;
-                    }
-                } while (!is_diff);
-                if (!s_common.isEmpty() && !is_enter) {
-                    s_add.Value = s_common;
-                    Is_Space_After.Value = false; // "Add" blocks "Is_Space_After"
-                } else {
-                    // s_add_list_full -> s_log_list
-                    for (int i = 0; i < s_add_list_full.size(); i++) {
-                        String_List_Add_Unique(s_log_list, s_add_list_full.get(i));
-                    }
-                    Is_Space_After.Value = false; // "Add Full" blocks "Is_Space_After"
-                }
-            }
-        }
-        // s_log_list -> s_log
-        for (int i = 0; i < s_log_list.size(); i++) {
-            s_log.Value += " " + s_log_list.get(i);
-        }
-        // Postprocessing: Add <Enter>
-        if (is_enter) {
-            s_log.Value += " <Enter>";
-        }
-        // "Add" blocks "Log"
-        if (!s_add.Value.isEmpty()) {
-            s_log.Value = "";
-        }
-        // Postprocessing: Set flags
-        Is_Log.Value = !s_log.Value.isEmpty();
-        Is_Add.Value = !s_add.Value.isEmpty();
-        // Postprocessing: Check for Error
-        if (!Is_Log.Value && !Is_Add.Value && !Is_Space_After.Value) {
-            s_log.Value += " <Error>";
-            Is_Log.Value = true;
-            s_add.Value = "";
-            Is_Add.Value = false;
         }
         // </editor-fold>
 
+        TAB_Result_List_Parse_To_Flags(tokens, s_log, s_add, Is_Log, Is_Add, Is_Space_After,
+                tab_result_list, is_incomplete_str, is_last_char_space, is_last_char_comma, is_last_char_commas);
+
     }
 
-// </editor-fold>
     protected List<TAB_Cmd> TAB_Cmd_List_Get(
             // in
             Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
@@ -326,12 +565,7 @@ public class Cli_TAB_Processor {
         } else {
             Cmd_Token_Parser_Result parse_res = Cmd_Token_Parser_Result.CMD_TOKEN_PARSER_ERROR;
             List<Cmd_Token> tokens = Token_Parser.Parse(s_trim, Str_Rem, parse_res);
-
             tab_cmd_list = TAB_Cmd_List_Get(User_Privilege.Value, Modules, level, input_item.Text_Get(), s_trim, tokens);
-
-            //for (int i = 0; i < tokens.size(); i++)
-            //    delete tokens[i];
-            //tokens.clear();
         }
 
         if (tab_cmd_list.size() > 0) {
@@ -386,7 +620,7 @@ public class Cli_TAB_Processor {
                             } else {
                                 Cli_Input.Input_End();
                             }
-                            //is_invitation_print.Value = false;
+                            //is_invitation_print.Value = false; //@Warning
                             is_prev_newline = false;
                         }
                         break;
@@ -394,9 +628,6 @@ public class Cli_TAB_Processor {
                 }
             }
 
-            //for (int i = 0; i < tab_cmd_list.size(); i++)
-            //    delete tab_cmd_list[i];
-            //tab_cmd_list.clear();
         } else {
             Cli_Output.Output_NewLine();
         }
