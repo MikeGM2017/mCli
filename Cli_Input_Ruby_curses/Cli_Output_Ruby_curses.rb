@@ -27,18 +27,22 @@ class Cli_Output_Ruby_curses
 
 	def Output_Char(c)
 		printf("%c", c)
+		STDOUT.flush
 	end
 
 	def Output_NewLine()
 		printf("\n\r")
+		STDOUT.flush
 	end
 
 	def Output_Str(s)
 		printf("%s", s)
+		STDOUT.flush
 	end
 
 	def Output_Return()
 		printf("\r")
+		STDOUT.flush
 	end
 
 end

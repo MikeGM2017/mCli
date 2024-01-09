@@ -76,6 +76,7 @@ public:
     virtual void Output_Return() {
         if (File_Out) {
             fprintf(File_Out, "\r");
+            fflush(File_Out);
         }
     }
 

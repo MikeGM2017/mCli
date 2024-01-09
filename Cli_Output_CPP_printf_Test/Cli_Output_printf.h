@@ -49,6 +49,7 @@ public:
 
     virtual void Output_Return() {
         printf("\r");
+        fflush(stdout);
     }
 
 };

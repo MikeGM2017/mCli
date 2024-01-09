@@ -34,6 +34,7 @@ static void Cli_Output_Str_printf(struct Cli_Output_C *obj, char *s) {
 
 static void Cli_Output_Return_printf(struct Cli_Output_C *obj) {
     printf("\r");
+    fflush(stdout);
 }
 
 struct Cli_Output_C Cli_Output_C_printf(void) {

@@ -61,6 +61,7 @@ static void Cli_Output_Return(struct Cli_Output_C *obj) {
     struct Cli_Output_C_file *obj_file = (struct Cli_Output_C_file *)obj;
     if (obj_file->File_Out) {
         fprintf(obj_file->File_Out, "\r");
+        fflush(obj_file->File_Out);
     }
 }
 

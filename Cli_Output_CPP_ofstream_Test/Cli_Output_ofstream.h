@@ -78,6 +78,7 @@ public:
     virtual void Output_Return() {
         if (File_Out.is_open()) {
             File_Out << '\r';
+            File_Out.flush();
         }
     }
 

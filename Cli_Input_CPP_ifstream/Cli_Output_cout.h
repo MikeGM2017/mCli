@@ -51,6 +51,7 @@ public:
 
     virtual void Output_Return() {
         cout << '\r';
+        cout.flush();
     }
 
 };
