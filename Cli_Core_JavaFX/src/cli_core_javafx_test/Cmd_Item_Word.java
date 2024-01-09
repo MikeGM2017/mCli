@@ -71,7 +71,7 @@ public class Cmd_Item_Word extends Cmd_Item_Base {
         List<String> tail_list = new ArrayList<>();
         if (s.length()< Text.length()) {
             if (Text.substring(0, s.length()).equals(s)) {
-                tail_list.add(Text.substring(0, s.length()));
+                tail_list.add(Text.substring(s.length()));
             }
         }
         return tail_list;
