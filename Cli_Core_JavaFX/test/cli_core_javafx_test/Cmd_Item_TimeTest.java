@@ -51,7 +51,8 @@ public class Cmd_Item_TimeTest {
         new Cmd_Item_Test_Pair("\"23-59-59\"", Cmd_Item_Valid_Result.CMD_ITEM_OK), // TIME MAX
         new Cmd_Item_Test_Pair("\"24-59-59\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
         new Cmd_Item_Test_Pair("\"23-60-59\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
-        new Cmd_Item_Test_Pair("\"23-59-60\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE)
+        new Cmd_Item_Test_Pair("\"23-59-60\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
+        new Cmd_Item_Test_Pair("\"23:59:59\"", Cmd_Item_Valid_Result.CMD_ITEM_OK)
     };
 
     @Test

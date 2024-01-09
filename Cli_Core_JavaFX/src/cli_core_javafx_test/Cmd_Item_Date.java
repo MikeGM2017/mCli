@@ -19,7 +19,7 @@ public class Cmd_Item_Date extends Cmd_Item_Str {
                 return (c == '"');
             case 5:
             case 8:
-                return (c == '-');
+                return (c == '-' || c == ':');
         }
         return (c >= '0' && c <= '9');
     }

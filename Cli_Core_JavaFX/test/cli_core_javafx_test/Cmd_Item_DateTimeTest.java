@@ -114,7 +114,9 @@ public class Cmd_Item_DateTimeTest {
         new Cmd_Item_Test_Pair("\"9999-12-32 23-59-59\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
         new Cmd_Item_Test_Pair("\"9999-12-31 24-59-59\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
         new Cmd_Item_Test_Pair("\"9999-12-31 23-60-59\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
-        new Cmd_Item_Test_Pair("\"9999-12-31 23-59-60\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE)
+        new Cmd_Item_Test_Pair("\"9999-12-31 23-59-60\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
+        new Cmd_Item_Test_Pair("\"2020-01-01 23:59:59\"", Cmd_Item_Valid_Result.CMD_ITEM_OK),
+        new Cmd_Item_Test_Pair("\"2020:01:01 23:59:59\"", Cmd_Item_Valid_Result.CMD_ITEM_OK)
     };
 
     @Test

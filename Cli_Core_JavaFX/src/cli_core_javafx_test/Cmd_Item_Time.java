@@ -22,7 +22,7 @@ public class Cmd_Item_Time extends Cmd_Item_Date {
                 return (c == '"');
             case 3:
             case 6:
-                return (c == '-');
+                return (c == '-' || c == ':');
         }
         return (c >= '0' && c <= '9');
     }

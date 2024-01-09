@@ -56,7 +56,8 @@ public class Cmd_Item_DateTest {
         new Cmd_Item_Test_Pair("\"9999-00-31\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
         new Cmd_Item_Test_Pair("\"9999-12-32\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
         new Cmd_Item_Test_Pair("\"9999-13-31\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
-        new Cmd_Item_Test_Pair("\"9999-12-32\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE)
+        new Cmd_Item_Test_Pair("\"9999-12-32\"", Cmd_Item_Valid_Result.CMD_ITEM_OUT_OF_RANGE),
+        new Cmd_Item_Test_Pair("\"2018:01:18\"", Cmd_Item_Valid_Result.CMD_ITEM_OK)
     };
 
     @Test
