@@ -58,7 +58,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         Cli_Input_TextArea.appendText("\nCli Core JavaFX Test started\n");
 
         Cli_Output = new Cli_Output_JavaFX_Threaded(Cli_Input_TextArea);
-        String Chars_Not_Allowed_Str = "@`|";
+        String Chars_Not_Allowed_Str = "@`";
         Cli_Input = new Cli_Input_JavaFX(Cli_Output, Chars_Not_Allowed_Str);
 
         Cli_Input.Title_Set("cli demo");
