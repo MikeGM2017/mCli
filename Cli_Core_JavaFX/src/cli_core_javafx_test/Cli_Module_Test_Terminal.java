@@ -197,94 +197,95 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             Cmd_Add(cmd);
         }
 
-//        {
-//            // test set date
-//            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_date);
-//            cmd.Text_Set("set date \"yyyy-mm-dd\"");
-//            cmd.Help_Set("test: set date");
-//            cmd.Is_Global_Set(false);
-//            cmd.Level_Set("test terminal");
-//            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
-//            cmd.Item_Add(new Cmd_Item_Word("date", "test: set date"));
-//            cmd.Item_Add(new Cmd_Item_Date("\"yyyy-mm-dd\"", "test: set date \"yyyy-mm-dd\""));
-//            Cmd_Add(cmd);
-//        }
-//        {
-//            // test set time
-//            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_time);
-//            cmd.Text_Set("set time \"HH-MM-SS\"");
-//            cmd.Help_Set("test: set time");
-//            cmd.Is_Global_Set(false);
-//            cmd.Level_Set("test terminal");
-//            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
-//            cmd.Item_Add(new Cmd_Item_Word("time", "test: time"));
-//            cmd.Item_Add(new Cmd_Item_Time("\"HH-MM-SS\"", "test: set date \"HH-MM-SS\""));
-//            Cmd_Add(cmd);
-//        }
-//        {
-//            // test set datetime
-//            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_datetime);
-//            cmd.Text_Set("set datetime \"yyyy-mm-dd HH-MM-SS\"");
-//            cmd.Help_Set("test: set datetime");
-//            cmd.Is_Global_Set(false);
-//            cmd.Level_Set("test terminal");
-//            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
-//            cmd.Item_Add(new Cmd_Item_Word("datetime", "test: set datetime"));
-//            cmd.Item_Add(new Cmd_Item_DateTime("\"yyyy-mm-dd HH-MM-SS\"", "test: set datetime \"yyyy-mm-dd HH-MM-SS\""));
-//            Cmd_Add(cmd);
-//        }
-//
-//        {
-//            // test set ip4
-//            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_ip4);
-//            cmd.Text_Set("set ip4 <ip4-address>");
-//            cmd.Help_Set("test: set ip4");
-//            cmd.Is_Global_Set(false);
-//            cmd.Level_Set("test terminal");
-//            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
-//            cmd.Item_Add(new Cmd_Item_Word("ip4", "test: set ip4"));
-//            cmd.Item_Add(new Cmd_Item_IP4("<ip4-address>", "test: set ip4 <ip4-address>"));
-//            Cmd_Add(cmd);
-//        }
-//
-//        {
-//            // test set mask
-//            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_mask);
-//            cmd.Text_Set("set mask <mask>");
-//            cmd.Help_Set("test: set mask");
-//            cmd.Is_Global_Set(false);
-//            cmd.Level_Set("test terminal");
-//            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
-//            cmd.Item_Add(new Cmd_Item_Word("mask", "test: set mask"));
-//            cmd.Item_Add(new Cmd_Item_IP4("<mask>", "test: set mask <mask>"));
-//            Cmd_Add(cmd);
-//        }
-//
-//        {
-//            // test set ip6
-//            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_ip6);
-//            cmd.Text_Set("set ip6 <ip6-address>");
-//            cmd.Help_Set("test: set ip6");
-//            cmd.Is_Global_Set(false);
-//            cmd.Level_Set("test terminal");
-//            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
-//            cmd.Item_Add(new Cmd_Item_Word("ip6", "test: set ip6"));
-//            cmd.Item_Add(new Cmd_Item_IP6("<ip6-address>", "test: set ip6 <ip6-address>"));
-//            Cmd_Add(cmd);
-//        }
-//
-//        {
-//            // test set mac
-//            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_mac);
-//            cmd.Text_Set("set mac <mac-address>");
-//            cmd.Help_Set("test: set mac");
-//            cmd.Is_Global_Set(false);
-//            cmd.Level_Set("test terminal");
-//            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
-//            cmd.Item_Add(new Cmd_Item_Word("mac", "test: set mac"));
-//            cmd.Item_Add(new Cmd_Item_MAC("<mac-address>", "test: set mac <mac-address>"));
-//            Cmd_Add(cmd);
-//        }
+        {
+            // test set date
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_date);
+            cmd.Text_Set("set date \"yyyy-mm-dd\"");
+            cmd.Help_Set("test: set date");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("date", "test: set date"));
+            cmd.Item_Add(new Cmd_Item_Date("\"yyyy-mm-dd\"", "test: set date \"yyyy-mm-dd\""));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set time
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_time);
+            cmd.Text_Set("set time \"HH-MM-SS\"");
+            cmd.Help_Set("test: set time");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("time", "test: time"));
+            cmd.Item_Add(new Cmd_Item_Time("\"HH-MM-SS\"", "test: set date \"HH-MM-SS\""));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set datetime
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_datetime);
+            cmd.Text_Set("set datetime \"yyyy-mm-dd HH-MM-SS\"");
+            cmd.Help_Set("test: set datetime");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("datetime", "test: set datetime"));
+            cmd.Item_Add(new Cmd_Item_DateTime("\"yyyy-mm-dd HH-MM-SS\"", "test: set datetime \"yyyy-mm-dd HH-MM-SS\""));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set ip4
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_ip4);
+            cmd.Text_Set("set ip4 <ip4-address>");
+            cmd.Help_Set("test: set ip4");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("ip4", "test: set ip4"));
+            cmd.Item_Add(new Cmd_Item_IP4("<ip4-address>", "test: set ip4 <ip4-address>"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set mask
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_mask);
+            cmd.Text_Set("set mask <mask>");
+            cmd.Help_Set("test: set mask");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("mask", "test: set mask"));
+            cmd.Item_Add(new Cmd_Item_IP4("<mask>", "test: set mask <mask>"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set ip6
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_ip6);
+            cmd.Text_Set("set ip6 <ip6-address>");
+            cmd.Help_Set("test: set ip6");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("ip6", "test: set ip6"));
+            cmd.Item_Add(new Cmd_Item_IP6("<ip6-address>", "test: set ip6 <ip6-address>"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set mac
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_mac);
+            cmd.Text_Set("set mac <mac-address>");
+            cmd.Help_Set("test: set mac");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("mac", "test: set mac"));
+            cmd.Item_Add(new Cmd_Item_MAC("<mac-address>", "test: set mac <mac-address>"));
+            Cmd_Add(cmd);
+        }
+
         {
             // test set enable
             List<String> words = new ArrayList<>();
@@ -421,13 +422,14 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
         boolean is_repeating = true;
         cmd_items.add(new Cmd_Item_Word_List("TestWord3", "", words, is_repeating));
 
-//        cmd_items.add(new Cmd_Item_IP4("192.168.1.1", ""));
-//        cmd_items.add(new Cmd_Item_IP6("::192.168.1.1", ""));
-//        cmd_items.add(new Cmd_Item_MAC("AA:BB:CC:DD:EE:FF", ""));
-//
-//        cmd_items.add(new Cmd_Item_Date("\"2020-01-01\"", ""));
-//        cmd_items.add(new Cmd_Item_DateTime("\"2020-01-01 23:59:59\"", ""));
-//        cmd_items.add(new Cmd_Item_Time("\"23:59:59\"", ""));
+        cmd_items.add(new Cmd_Item_IP4("192.168.1.1", ""));
+        cmd_items.add(new Cmd_Item_IP6("::192.168.1.1", ""));
+        cmd_items.add(new Cmd_Item_MAC("AA:BB:CC:DD:EE:FF", ""));
+
+        cmd_items.add(new Cmd_Item_Date("\"2020-01-01\"", ""));
+        cmd_items.add(new Cmd_Item_DateTime("\"2020-01-01 23:59:59\"", ""));
+        cmd_items.add(new Cmd_Item_Time("\"23:59:59\"", ""));
+
         int w_type_max = 0;
         int w_text_max = 0;
         for (int i = 0; i < cmd_items.size(); i++) {
