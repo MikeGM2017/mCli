@@ -423,49 +423,49 @@ public:
     }
 
     bool test() {
-        vector<Cmd_Item_Base> cmd_items;
+        vector<Cmd_Item_Base *> cmd_items;
 
-        cmd_items.push_back(Cmd_Item_Base("TestBase", ""));
+        cmd_items.push_back(new Cmd_Item_Base("TestBase", ""));
 
-        cmd_items.push_back(Cmd_Item_Rem("$", ""));
+        cmd_items.push_back(new Cmd_Item_Rem("$", ""));
 
-        cmd_items.push_back(Cmd_Item_Int("7", ""));
-        cmd_items.push_back(Cmd_Item_Int_Range(1, 4095, "2000", ""));
-        cmd_items.push_back(Cmd_Item_Int_List(1, 4095, "2,7,2000,3000-4000", ""));
-        cmd_items.push_back(Cmd_Item_Str("\"TestStr\"", ""));
-        cmd_items.push_back(Cmd_Item_Word("TestWord1", ""));
+        cmd_items.push_back(new Cmd_Item_Int("7", ""));
+        cmd_items.push_back(new Cmd_Item_Int_Range(1, 4095, "2000", ""));
+        cmd_items.push_back(new Cmd_Item_Int_List(1, 4095, "2,7,2000,3000-4000", ""));
+        cmd_items.push_back(new Cmd_Item_Str("\"TestStr\"", ""));
+        cmd_items.push_back(new Cmd_Item_Word("TestWord1", ""));
 
         vector<string> words;
         words.push_back("TestWord1");
         words.push_back("TestWord2");
         words.push_back("TestWord3");
-        cmd_items.push_back(Cmd_Item_Word_Range("TestWord2", "", words));
-        cmd_items.push_back(Cmd_Item_Word_List("TestWord3", "", words));
+        cmd_items.push_back(new Cmd_Item_Word_Range("TestWord2", "", words));
+        cmd_items.push_back(new Cmd_Item_Word_List("TestWord3", "", words));
 
-        cmd_items.push_back(Cmd_Item_IP4("192.168.1.1", ""));
-        cmd_items.push_back(Cmd_Item_IP6("::192.168.1.1", ""));
-        cmd_items.push_back(Cmd_Item_MAC("AA:BB:CC:DD:EE:FF", ""));
+        cmd_items.push_back(new Cmd_Item_IP4("192.168.1.1", ""));
+        cmd_items.push_back(new Cmd_Item_IP6("::192.168.1.1", ""));
+        cmd_items.push_back(new Cmd_Item_MAC("AA:BB:CC:DD:EE:FF", ""));
 
-        cmd_items.push_back(Cmd_Item_Date("\"2020-01-01\"", ""));
-        cmd_items.push_back(Cmd_Item_DateTime("\"2020-01-01 23:59:59\"", ""));
-        cmd_items.push_back(Cmd_Item_Time("\"23:59:59\"", ""));
+        cmd_items.push_back(new Cmd_Item_Date("\"2020-01-01\"", ""));
+        cmd_items.push_back(new Cmd_Item_DateTime("\"2020-01-01 23:59:59\"", ""));
+        cmd_items.push_back(new Cmd_Item_Time("\"23:59:59\"", ""));
 
         int w_type_max = 0;
         int w_text_max = 0;
         for (int i = 0; i < cmd_items.size(); i++) {
-            Cmd_Item_Base &cmd_item = cmd_items[i];
-            if (w_type_max < cmd_item.Type_Get().size()) w_type_max = cmd_item.Type_Get().size();
-            if (w_text_max < cmd_item.Text_Get().size()) w_text_max = cmd_item.Text_Get().size();
+            Cmd_Item_Base *cmd_item = cmd_items[i];
+            if (w_type_max < cmd_item->Type_Get().size()) w_type_max = cmd_item->Type_Get().size();
+            if (w_text_max < cmd_item->Text_Get().size()) w_text_max = cmd_item->Text_Get().size();
         }
 
         Cli_Output.Output_NewLine();
         for (int i = 0; i < cmd_items.size(); i++) {
             stringstream s_str;
-            Cmd_Item_Base &cmd_item = cmd_items[i];
-            s_str << setw(w_type_max) << right << cmd_item.Type_Get()
+            Cmd_Item_Base *cmd_item = cmd_items[i];
+            s_str << setw(w_type_max) << right << cmd_item->Type_Get()
                     << setw(0) << ": "
-                    << setw(w_text_max) << left << cmd_item.Text_Get();
-            Cmd_Item_Valid_Result res_parse = cmd_item.Parse(cmd_item.Text_Get());
+                    << setw(w_text_max) << left << cmd_item->Text_Get();
+            Cmd_Item_Valid_Result res_parse = cmd_item->Parse(cmd_item->Text_Get());
             s_str << setw(0) << " Parse: " << Cmd_Item_Valid_Result_Func::To_String(res_parse);
             Cli_Output.Output_Str(s_str.str());
             Cli_Output.Output_NewLine();
