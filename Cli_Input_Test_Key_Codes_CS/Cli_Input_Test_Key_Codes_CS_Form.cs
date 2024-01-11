@@ -102,7 +102,7 @@ namespace Cli_Input_Test_Key_Codes_CS
                 key_text = "BACK";
             }
 
-            String s = "0x" + key_code.ToString("X");
+            String s = "0x" + key_code.ToString("X02");
             if(key_text.Length > 0)
             {
                 s += " " + key_text;
