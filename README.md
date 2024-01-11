@@ -77,6 +77,8 @@ Test Projects:
 
   - Cli_Output_Qt_QPlainTextEdit_Test
 
+  - Cli_Output_CS_Test
+
 - test input methods:
 
   - Cli_Input_CPP_conio
