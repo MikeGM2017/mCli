@@ -111,3 +111,4 @@ Test Projects:
 
   - Cli_Input_Qt_QPlainTextEdit_Test
 
+  - Cli_Input_CS_Test
