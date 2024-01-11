@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Cli_Input_Test_Key_Codes_CS
 {
     public partial class Cli_Input_Test_Key_Codes_CS_Form : Form
     {
+
+        private Keys Key_Code;
+        private bool Is_Ctrl = false;
+        private bool Is_Processed_In_PreviewKeyDown = false;
+
         public Cli_Input_Test_Key_Codes_CS_Form()
         {
             InitializeComponent();
@@ -22,28 +22,16 @@ namespace Cli_Input_Test_Key_Codes_CS
 
         private void Cli_Input_textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (!Is_Ctrl && !Is_Processed_In_PreviewKeyDown)
+            {
+                Cli_Input_textBox.AppendText(" Char: '" + e.KeyChar + "'\r\n");
+            }
             e.Handled = true;
         }
 
-        private void Cli_Input_textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        String Key_Text_Get(Keys key, bool Is_Ctrl)
         {
-
-            Keys key = e.KeyCode;
-
-            if (key == Keys.ControlKey)
-            {
-                return;
-            }
-
-            Int32 key_code = e.KeyValue;
-
             String key_text = "";
-
-            bool Is_Ctrl = false;
-            if (e.Modifiers == Keys.Control)
-            {
-                Is_Ctrl = true;
-            }
 
             if (Is_Ctrl && key == Keys.C)
             {
@@ -102,11 +90,30 @@ namespace Cli_Input_Test_Key_Codes_CS
                 key_text = "BACK";
             }
 
-            String s = "0x" + key_code.ToString("X02");
-            if(key_text.Length > 0)
+            return key_text;
+        }
+
+        private void Cli_Input_textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            Is_Processed_In_PreviewKeyDown = false;
+
+            Is_Ctrl = (e.Modifiers == Keys.Control);
+
+            Key_Code = e.KeyCode;
+            if (Key_Code == Keys.ControlKey)
+            {
+                return;
+            }
+
+            Int32 key_value = e.KeyValue;
+            String s = "0x" + key_value.ToString("X02");
+            String key_text = Key_Text_Get(Key_Code, Is_Ctrl);
+            if (key_text.Length > 0)
             {
                 s += " " + key_text;
+                Is_Processed_In_PreviewKeyDown = true;
             }
+
             Cli_Input_textBox.AppendText(s + "\r\n");
 
         }
