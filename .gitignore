@@ -9,3 +9,7 @@
 /mCli_CPP_conio_printf/
 /mCli_CPP_conio_printf_Test_TAB/
 /mCli_CPP_termios_printf_Test_TAB/
+
+**/bin
+**/obj
+**/.vs
