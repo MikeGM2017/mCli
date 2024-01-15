@@ -69,6 +69,7 @@ public:
         CMD_ID_test,
         CMD_ID_test_get,
         CMD_ID_test_get_all,
+        CMD_ID_test_get_list,
         CMD_ID_test_set_int,
         CMD_ID_test_set_range,
         CMD_ID_test_set_list,
@@ -162,6 +163,18 @@ public:
             cmd->Level_Set(New_Level);
             cmd->Item_Add(new Cmd_Item_Word("get", "test: get"));
             cmd->Item_Add(new Cmd_Item_Word("all", "test: get all"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test get list
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_get_list);
+            cmd->Text_Set("get list");
+            cmd->Help_Set("test: get list");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set(New_Level);
+            cmd->Item_Add(new Cmd_Item_Word("get", "test: get"));
+            cmd->Item_Add(new Cmd_Item_Word("list", "test: get list"));
             Cmd_Add(cmd);
         }
 
@@ -513,6 +526,35 @@ public:
         return true;
     }
 
+    bool test_get_list() {
+
+        if (Values_Int_List_Items.size()) {
+
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Int List:");
+            Cli_Output.Output_NewLine();
+
+            for (int i = 0; i < Values_Int_List_Items.size(); i++) {
+                Cmd_Item_Int_List_Item &item = Values_Int_List_Items[i];
+                for (int j = item.Min; j <= item.Max; j++) {
+                    stringstream s_str;
+                    s_str << j;
+                    Cli_Output.Output_Str(s_str.str());
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            Cli_Output.Output_NewLine();
+
+        } else {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Int List: <empty>");
+            Cli_Output.Output_NewLine();
+        }
+
+        return true;
+    }
+
     bool test_set_int(string value) {
         Value_Int = atoi(value.c_str());
         Cli_Output.Output_NewLine();
@@ -700,6 +742,10 @@ public:
             case CMD_ID_test_get_all:
                 if (is_debug) return true;
                 return test_get_all();
+
+            case CMD_ID_test_get_list:
+                if (is_debug) return true;
+                return test_get_list();
 
             case CMD_ID_test_set_int:
                 if (is_debug) return true;
