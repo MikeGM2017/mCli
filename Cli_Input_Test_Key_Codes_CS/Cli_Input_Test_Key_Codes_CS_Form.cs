@@ -5,9 +5,8 @@ namespace Cli_Input_Test_Key_Codes_CS
 {
     public partial class Cli_Input_Test_Key_Codes_CS_Form : Form
     {
-
-        private Keys Key_Code;
-        private bool Is_Ctrl = false;
+        private Keys KeyCode;
+        private int KeyValue = 0;
         private bool Is_Processed_In_PreviewKeyDown = false;
 
         public Cli_Input_Test_Key_Codes_CS_Form()
@@ -22,9 +21,11 @@ namespace Cli_Input_Test_Key_Codes_CS
 
         private void Cli_Input_textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
+            bool Is_Ctrl = (Control.ModifierKeys & Keys.Control) == Keys.Control;
             if (!Is_Ctrl && !Is_Processed_In_PreviewKeyDown)
             {
-                Cli_Input_textBox.AppendText(" Char: '" + e.KeyChar + "'\r\n");
+                String keyvalue_s = "0x" + KeyValue.ToString("X2");
+                Cli_Input_textBox.AppendText("KeyPress: " + keyvalue_s + " Char: '" + e.KeyChar + "'\r\n");
             }
             e.Handled = true;
         }
@@ -97,24 +98,23 @@ namespace Cli_Input_Test_Key_Codes_CS
         {
             Is_Processed_In_PreviewKeyDown = false;
 
-            Is_Ctrl = (e.Modifiers == Keys.Control);
-
-            Key_Code = e.KeyCode;
-            if (Key_Code == Keys.ControlKey)
+            if (e.KeyCode == Keys.ControlKey)
             {
                 return;
             }
 
-            Int32 key_value = e.KeyValue;
-            String s = "0x" + key_value.ToString("X02");
-            String key_text = Key_Text_Get(Key_Code, Is_Ctrl);
-            if (key_text.Length > 0)
+            KeyCode = e.KeyCode;
+            KeyValue = e.KeyValue;
+
+            bool Is_Ctrl = (e.Modifiers == Keys.Control);
+
+            String keycode_s = Key_Text_Get(KeyCode, Is_Ctrl);
+            if (keycode_s.Length > 0)
             {
-                s += " " + key_text;
+                String keyvalue_s = "0x" + KeyValue.ToString("X2");
+                Cli_Input_textBox.AppendText("PreviewKeyDown: " + keyvalue_s + " " + keycode_s + "\r\n");
                 Is_Processed_In_PreviewKeyDown = true;
             }
-
-            Cli_Input_textBox.AppendText(s + "\r\n");
 
         }
     }
