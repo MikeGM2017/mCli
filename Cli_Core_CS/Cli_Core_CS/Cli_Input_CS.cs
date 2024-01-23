@@ -214,6 +214,7 @@ namespace Cli_Core_CS
             bool cli_ouput_init_res = Cli_Output.Output_Init();
 
             Wait_Thread = new Thread(Wait_Thread_Func);
+            Wait_Thread.IsBackground = true; //@Warning
             Wait_Thread.Start(this);
 
             return cli_ouput_init_res;
@@ -482,6 +483,36 @@ namespace Cli_Core_CS
             return false;
         }
 
+        protected virtual void Input_Str_Clear()
+        {
+            Input_Str_Pos = 0;
+            Input_Str = "";
+        }
+
+        protected bool On_Key_CTRL_C()
+        {
+            Input_Str_Clear();
+
+            if (Cli_Output != null)
+            {
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str(Invitation_Full_Get());
+            }
+            return true;
+        }
+
+        protected bool On_Key_CTRL_Z()
+        {
+            Input_Str_Clear();
+
+            if (Cli_Output != null)
+            {
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str(Invitation_Full_Get());
+            }
+            return true;
+        }
+
         public Cli_Input_Item On_Key_Pressed(Keys Key_Code, bool Is_Ctrl, char input_char)
         {
             Cli_Input_Item item = null;
@@ -499,7 +530,7 @@ namespace Cli_Core_CS
             else if (Is_Ctrl && Key_Code == Keys.OemPipe) // BACKSLASH
             {
                 //On_Key_CTRL_Backslash();
-                item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_BACKSLASH, Input_Str_Get());
+                //item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_BACKSLASH, Input_Str_Get());
             }
             else
             {
@@ -532,14 +563,14 @@ namespace Cli_Core_CS
                         break;
                     case Keys.Back:
                         On_Key_BACK();
-                        if (!Is_Input_Str_Pos_Too_Left)
-                        {
-                            item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_BACK, Input_Str_Get());
-                        }
+                        //if (!Is_Input_Str_Pos_Too_Left)
+                        //{
+                        //    item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_BACK, Input_Str_Get());
+                        //}
                         break;
                     case Keys.Delete:
                         On_Key_DELETE();
-                        item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_DELETE, Input_Str_Get());
+                        //item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_DELETE, Input_Str_Get());
                         break;
                     default:
                         if (input_char != '\0')

@@ -4,8 +4,8 @@ namespace Cli_Core_CS
 {
     class Cli_Input_Item
     {
-        protected Input_Cmd_Type Type;
-        protected String Text;
+        Input_Cmd_Type Type;
+        String Text;
 
         public Cli_Input_Item(Input_Cmd_Type type, String text)
         {
