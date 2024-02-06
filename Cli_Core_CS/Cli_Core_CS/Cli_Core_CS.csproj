@@ -50,10 +50,12 @@
       <DependentUpon>Cli_Core_CS_Test.cs</DependentUpon>
     </Compile>
     <Compile Include="Cli_Core_Main.cs" />
+    <Compile Include="Cli_History.cs" />
     <Compile Include="Cli_Input_CS.cs" />
     <Compile Include="Cli_Input_Item.cs" />
     <Compile Include="Cli_Module.cs" />
     <Compile Include="Cli_Modules.cs" />
+    <Compile Include="Cli_Module_Base_History.cs" />
     <Compile Include="Cli_Module_Base_Quit.cs" />
     <Compile Include="Cli_Output_CS.cs" />
     <Compile Include="Cli_TAB_Processor.cs" />

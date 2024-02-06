@@ -29,6 +29,8 @@ namespace Cli_Core_CS
         Cli_CMD_Processor CMD_Processor;
         Cli_TAB_Processor TAB_Processor;
 
+        Cli_History History = new Cli_History();
+
         bool is_invitation_print = true;
 
         public Cli_Core_CS_Test()
@@ -81,6 +83,7 @@ namespace Cli_Core_CS
             // Modules Add - Begin
 
             Modules.Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
+            Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
 
         }
 
@@ -117,7 +120,7 @@ namespace Cli_Core_CS
 
                                 if (!is_no_history && !is_debug && s_trim.Length != 0)
                                 {
-                                    //History.History_Put(s_trim);
+                                    History.History_Put(s_trim);
                                 }
 
                                 Ref_Boolean debug_res = new Ref_Boolean(false);
@@ -185,14 +188,14 @@ namespace Cli_Core_CS
                         break;
                     case Input_Cmd_Type.INPUT_CMD_UP:
                         String s_prev_up = Cli_Input.Input_Str_Get();
-                        //Cli_Input.Input_Str_Set(History.History_Up());
+                        Cli_Input.Input_Str_Set(History.History_Up());
                         Cli_Input.Input_Str_Modified_To_Output(s_prev_up);
                         Cli_Input.Input_End();
                         is_invitation_print = false;
                         break;
                     case Input_Cmd_Type.INPUT_CMD_DOWN:
                         String s_prev_down = Cli_Input.Input_Str_Get();
-                        //Cli_Input.Input_Str_Set(History.History_Down());
+                        Cli_Input.Input_Str_Set(History.History_Down());
                         Cli_Input.Input_Str_Modified_To_Output(s_prev_down);
                         Cli_Input.Input_End();
                         is_invitation_print = false;
