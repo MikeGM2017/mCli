@@ -84,6 +84,7 @@ namespace Cli_Core_CS
 
             Modules.Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
             Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
+            Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
         }
 

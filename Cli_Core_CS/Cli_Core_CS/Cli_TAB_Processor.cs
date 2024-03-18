@@ -8,23 +8,21 @@ namespace Cli_Core_CS
     {
         protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
         protected Cli_Modules Modules;
-
         protected List<Level_Description> Levels;
         protected Cmd_Token_Parser Token_Parser;
 
-        Cli_Input_CS Cli_Input;
+        protected Cli_Input_CS Cli_Input;
         protected Cli_Output_CS Cli_Output;
 
-        protected string Str_Rem;
+        protected String Str_Rem;
 
-        protected List<String> Log = new List<string>();
+        protected List<String> Log = new List<String>();
         protected bool Log_Is_Active;
 
         public Cli_TAB_Processor(Ref_Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
-               List<Level_Description> levels, Cmd_Token_Parser parser,
-               Cli_Input_CS cli_input, Cli_Output_CS cli_output,
-               string str_rem,
-            bool log_is_active)
+                List<Level_Description> levels, Cmd_Token_Parser parser,
+                Cli_Input_CS cli_input, Cli_Output_CS cli_output,
+                String str_rem, bool log_is_active)
         {
             User_Privilege = user_privilege;
             Modules = modules;
@@ -123,20 +121,419 @@ namespace Cli_Core_CS
             return sb.ToString();
         }
 
-        protected void String_List_Add_Unique(List<String> s_list, String s)
+        protected void TAB_On_OK_CAN_CONTINUE(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr)
         {
-            bool found = false;
-            for (int i = 0; i < s_list.Count; i++)
+            Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+            tab_result_ptr.cmd_ptr = cmd_ptr;
+            tab_result_ptr.Is_Enter = true;
+            tab_result_ptr.s_log = ",";
+            tab_result_ptr.is_space_after_add = false;
+            tab_result_list.Add(tab_result_ptr);
+        }
+
+        protected void TAB_On_OK_STR_WITHOUT_COMMAS_not_last_space(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr)
+        {
+            Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+            tab_result_ptr.cmd_ptr = cmd_ptr;
+            tab_result_ptr.Is_Enter = true;
+            //is_incomplete_str = true;
+            tab_result_ptr.s_log = cmd_item_ptr.Text_Get();
+            tab_result_ptr.is_space_after_add = false;
+            tab_result_list.Add(tab_result_ptr);
+        }
+
+        protected void TAB_On_OK_not_last_token(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, int token, Cmd_Item_Base cmd_item_ptr)
+        {
+            Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+            tab_result_ptr.cmd_ptr = cmd_ptr;
+
+            //cmd_tab_ptr.is_space_after_add =
+            //        cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+            if (token + 1 < cmd_ptr.Items.Count - 1)
             {
-                if (s_list[i].Equals(s))
+                tab_result_ptr.is_space_after_add
+                        = cmd_item_ptr.Is_Space_After_Add(cmd_ptr.Items[token + 1].Text_Get());
+            }
+            else
+            {
+                tab_result_ptr.is_space_after_add = false; // Next token - last token in cmd list
+            }
+
+            //if (is_last_space) {
+            tab_result_ptr.s_log = cmd_ptr.Items[token + 1].Text_Get();
+            //cmd_tab_ptr.s_log_or_add = cmd_ptr.Items[token + 1].Text_Get();
+            //} else {
+            //    cmd_tab_ptr.s_log = cmd_item_ptr.Text_Get();
+            //    cmd_tab_ptr.s_log_or_add = cmd_item_ptr.Text_Get();
+            //}
+
+            tab_result_list.Add(tab_result_ptr);
+        }
+
+        protected void TAB_On_OK_last_token(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr)
+        {
+            Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+            tab_result_ptr.cmd_ptr = cmd_ptr;
+            tab_result_ptr.Is_Enter = true;
+            ////cmd_tab_ptr.s_log = cmd_item_ptr.Text_Get();
+
+            //if (cmd_item_ptr.Type_Get() == "Str") {
+            //    cmd_tab_ptr.s_log = cmd_item_ptr.Text_Get();
+            //}
+            //cmd_tab_ptr.s_log_or_add = cmd_item_ptr.Text_Get();
+            tab_result_ptr.is_space_after_add
+                    = cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+            //cmd_tab_ptr.is_space_after_add = false;
+            tab_result_list.Add(tab_result_ptr);
+        }
+
+        protected void TAB_On_INCOMPLETE_STR(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr)
+        {
+            Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+            tab_result_ptr.cmd_ptr = cmd_ptr;
+
+            tab_result_ptr.s_log = cmd_item_ptr.Text_Get() + " - Incomplete";
+            tab_result_ptr.is_space_after_add = false;
+            tab_result_list.Add(tab_result_ptr);
+        }
+
+        protected void TAB_On_incomplete_tail_list(List<Cli_TAB_Result> tab_result_list, Cli_Cmd cmd_ptr, int token, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr, String token_str, List<String> s_incomplete_tail_list)
+        {
+            Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+            tab_result_ptr.cmd_ptr = cmd_ptr;
+            tab_result_ptr.s_add_list = s_incomplete_tail_list;
+
+            String s_beg = "";
+            if (token_str.Length > 0)
+            {
+                int pos = token_str.LastIndexOf(','); // @Magic: for Cmd_Item_Word_List
+                if (pos < 0)
                 {
-                    found = true;
-                    break;
+                    s_beg = token_str;
+                }
+                else
+                {
+                    s_beg = token_str.Substring(pos + 1); // @Magic: for Cmd_Item_Word_List
                 }
             }
-            if (!found)
+
+            for (int s_add_index = 0; s_add_index < tab_result_ptr.s_add_list.Count; s_add_index++)
             {
-                s_list.Add(s);
+                String s_add_item = tab_result_ptr.s_add_list[s_add_index];
+                tab_result_ptr.s_full_list.Add(s_beg + s_add_item);
+            }
+
+            tab_result_ptr.is_space_after_add
+                    = cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+
+            if (token == cmd_ptr.Items.Count - 1)
+            { // Last token in cmd list
+              //cmd_tab_ptr.Is_Enter = true;
+                tab_result_ptr.is_space_after_add = false;
+            }
+
+            tab_result_list.Add(tab_result_ptr);
+        }
+
+        protected void TAB_On_incomplete_tail_list_empty(List<Cli_TAB_Result> tab_result_list, bool is_last_char_space, bool is_last_char_comma, bool is_last_char_commas, Cli_Cmd cmd_ptr, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr, String token_str, String cmd_item_str)
+        {
+            Cli_TAB_Result tab_result_ptr = new Cli_TAB_Result();
+            tab_result_ptr.cmd_ptr = cmd_ptr;
+            char last_token_char = ((token_str.Length == 0) ? '\0' : token_str[token_str.Length - 1]);
+            if (!is_last_char_space || last_token_char == ' ' || last_token_char == '\t')
+            {
+                tab_result_ptr.s_log = cmd_item_str + " - Incomplete";
+            }
+            if (!is_last_char_comma && !is_last_char_commas)
+            {
+                tab_result_ptr.is_space_after_add
+                        = cmd_item_ptr.Is_Space_After_Add(token_ptr.Text_Get());
+            }
+            else
+            {
+                tab_result_ptr.is_space_after_add = false;
+            }
+            tab_result_list.Add(tab_result_ptr);
+        }
+
+        protected void TAB_On_INCOMPLETE(List<Cmd_Token> tokens, List<Cli_TAB_Result> tab_result_list,
+                bool is_last_char_space, bool is_last_char_comma, bool is_last_char_commas,
+                Cli_Cmd cmd_ptr, int token, Cmd_Item_Base cmd_item_ptr, Cmd_Token token_ptr)
+        {
+            String token_str = tokens[token].Text_Get();
+            String cmd_item_str = cmd_item_ptr.Text_Get();
+            List<String> s_incomplete_tail_list = new List<String>();
+            if (!is_last_char_space)
+            {
+                s_incomplete_tail_list = cmd_item_ptr.Incomplete_Tail_List_Get(token_str);
+            }
+            if (s_incomplete_tail_list.Count > 0)
+            {
+                TAB_On_incomplete_tail_list(tab_result_list, cmd_ptr, token, cmd_item_ptr, token_ptr, token_str, s_incomplete_tail_list);
+            }
+            else if (s_incomplete_tail_list.Count == 0)
+            {
+                TAB_On_incomplete_tail_list_empty(tab_result_list, is_last_char_space,
+                        is_last_char_comma, is_last_char_commas,
+                        cmd_ptr, cmd_item_ptr, token_ptr, token_str, cmd_item_str);
+            }
+        }
+
+        protected void TAB_Result_List_Parse_To_Flags(List<Cmd_Token> tokens, Ref_String s_log, Ref_String s_add,
+                Ref_Boolean Is_Log, Ref_Boolean Is_Add, Ref_Boolean Is_Space_After,
+                List<Cli_TAB_Result> tab_result_list,
+                bool is_incomplete_str, bool is_last_char_space, bool is_last_char_comma, bool is_last_char_commas)
+        {
+            {
+
+                bool Is_Enter = false;
+                List<String> s_add_set = new List<String>();
+                List<String> s_log_set = new List<String>();
+                String s_add_1 = "";
+                String s_log_1 = "";
+                bool is_space_after_add_1 = false;
+                bool is_space_after_log_1 = false;
+                List<String> s_add_vector = new List<String>();
+                List<String> s_log_vector = new List<String>();
+                String s_add_full_1 = "";
+
+                for (int i = 0; i < tab_result_list.Count; i++)
+                {
+                    Cli_TAB_Result tab_result_ptr = tab_result_list[i];
+                    if (tab_result_ptr.Is_Enter)
+                    {
+                        Is_Enter = true;
+                    }
+                }
+
+                for (int i = 0; i < tab_result_list.Count; i++)
+                {
+                    Cli_TAB_Result tab_result_ptr = tab_result_list[i];
+                    if (tab_result_ptr.s_add_list.Count > 0)
+                    {
+                        for (int s_add_index = 0; s_add_index < tab_result_ptr.s_add_list.Count; s_add_index++)
+                        {
+                            String s_add_item = tab_result_ptr.s_add_list[s_add_index];
+                            if (!s_add_set.Contains(s_add_item))
+                            {
+                                s_add_set.Add(s_add_item);
+                                s_add_1 = s_add_item;
+                                s_add_vector.Add(tab_result_ptr.s_full_list[s_add_index]);
+                                s_add_full_1 = tab_result_ptr.s_full_list[s_add_index];
+                            }
+                        }
+                    }
+                    if (tab_result_ptr.is_space_after_add)
+                    {
+                        is_space_after_add_1 = true;
+                    }
+                }
+
+                for (int i = 0; i < tab_result_list.Count; i++)
+                {
+                    Cli_TAB_Result tab_result_ptr = tab_result_list[i];
+                    if (tab_result_ptr.s_log.Length != 0)
+                    {
+                        if (!s_log_set.Contains(tab_result_ptr.s_log))
+                        {
+                            s_log_set.Add(tab_result_ptr.s_log);
+                            s_log_1 = tab_result_ptr.s_log;
+                            s_log_vector.Add(tab_result_ptr.s_log);
+                        }
+                    }
+                    if (tab_result_ptr.is_space_after_add)
+                    {
+                        is_space_after_log_1 = true;
+                    }
+                }
+
+                Is_Log.Value = false;
+                s_log.Value = "";
+                Is_Add.Value = false;
+                s_add.Value = "";
+                Is_Space_After.Value = false;
+
+                if (s_add_vector.Count == 0 && s_log_vector.Count == 0)
+                {
+                    s_log.Value = (Is_Enter ? " <Enter>" : " <Error>");
+                }
+                else if (!Is_Enter && s_add_vector.Count == 1 && s_log_vector.Count == 0)
+                {
+                    s_add.Value = s_add_1;
+                    if (is_space_after_add_1)
+                    {
+                        Is_Space_After.Value = true;
+                    }
+                    else
+                    {
+                        Is_Space_After.Value = false;
+                    }
+                }
+                else if (!Is_Enter && s_add_vector.Count == 0 && s_log_vector.Count == 1)
+                {
+                    if (s_log_1.Length != 0 && s_log_1[0] != '<' && s_log_1[0] != '\"' && s_log_1[0] != '\'' && s_log_1[0] != '[')
+                    {
+                        if (!is_last_char_space)
+                        {
+                            s_add.Value = " " + s_log_1;
+                        }
+                        else
+                        {
+                            s_add.Value = s_log_1;
+                        }
+
+                        if (is_space_after_log_1)
+                        {
+                            Is_Space_After.Value = true;
+                        }
+                        else
+                        {
+                            Is_Space_After.Value = false;
+                        }
+                    }
+                    else
+                    {
+                        s_log.Value = " " + s_log_1;
+                        if (!is_last_char_comma && !is_last_char_commas)
+                        {
+                            Is_Space_After.Value = true;
+                        }
+                    }
+                }
+                else if (Is_Enter && s_add_vector.Count == 0 && s_log_vector.Count == 1)
+                {
+                    s_log.Value = " " + s_log_1 + " <Enter>";
+                    if (is_space_after_log_1)
+                    {
+                        Is_Space_After.Value = true;
+                    }
+                    else
+                    {
+                        Is_Space_After.Value = false;
+                    }
+                }
+                else if (!Is_Enter && s_add_vector.Count == 1 && s_log_vector.Count == 1)
+                {
+                    s_log.Value = " " + s_log_1 + " " + s_add_full_1;
+                }
+                else if (Is_Enter && s_add_vector.Count == 1 && s_log_vector.Count == 1)
+                {
+                    s_add.Value = s_add_1;
+                    Is_Space_After.Value = true;
+                }
+                else if (s_add_vector.Count == 0 && s_log_vector.Count >= 2)
+                {
+                    s_log.Value = "";
+                    for (int i = 0; i < s_log_vector.Count; i++)
+                    {
+                        s_log.Value += " " + s_log_vector[i];
+                    }
+                    if (Is_Enter)
+                    {
+                        s_log.Value += " <Enter>";
+                    }
+                    Is_Space_After.Value = true;
+                }
+                else if (!Is_Enter && s_add_vector.Count >= 2 && s_log_vector.Count == 0)
+                {
+                    {
+                        // Add minimal common part or log full variants
+                        int len_min = s_add_vector[0].Length;
+                        for (int i = 0; i < s_add_vector.Count; i++)
+                        {
+                            if (len_min > s_add_vector[i].Length)
+                            {
+                                len_min = s_add_vector[i].Length;
+                            }
+                        }
+                        String s_common = "";
+                        for (int pos = 0; pos < len_min; pos++)
+                        {
+                            char c = s_add_vector[0][pos];
+                            bool is_diff = false;
+                            for (int i = 0; i < s_add_vector.Count; i++)
+                            {
+                                if (s_add_vector[i][pos] != c)
+                                {
+                                    is_diff = true;
+                                    break;
+                                }
+                            }
+                            if (!is_diff)
+                            {
+                                s_common += c;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        String s_last_token1 = tokens[tokens.Count - 1].Text_Get();
+                        String s_last_token;
+                        int comma_pos = s_last_token1.LastIndexOf(','); // @Magic: for Cmd_Item_Word_List
+                        if (comma_pos < 0)
+                        {
+                            s_last_token = s_last_token1;
+                        }
+                        else
+                        {
+                            s_last_token = s_last_token1.Substring(comma_pos + 1); // @Magic: for Cmd_Item_Word_List
+                        }
+                        String s_common_part = "";
+                        if (s_common.Length != 0)
+                        {
+                            s_common_part = s_common.Substring(s_last_token.Length);
+                        }
+                        if (s_common_part.Length != 0)
+                        {
+                            s_add.Value = s_common_part;
+                        }
+                        else
+                        {
+                            s_log.Value = "";
+                            for (int i = 0; i < s_add_vector.Count; i++)
+                            {
+                                s_log.Value += " ";
+                                s_log.Value += s_add_vector[i];
+                            }
+                        }
+                    }
+                }
+                else if (s_add_vector.Count >= 2 || s_log_vector.Count >= 2)
+                {
+                    s_log.Value = "";
+                    for (int i = 0; i < s_log_vector.Count; i++)
+                    {
+                        s_log.Value += " ";
+                        s_log.Value += s_log_vector[i];
+                    }
+                    for (int i = 0; i < s_add_vector.Count; i++)
+                    {
+                        s_log.Value += " ";
+                        s_log.Value += s_add_vector[i];
+                    }
+                    if (Is_Enter)
+                    {
+                        s_log.Value += " <Enter>";
+                    }
+                }
+                else
+                {
+                    s_log.Value = " <Error>";
+                }
+
+                Is_Add.Value = (s_add.Value.Length != 0);
+                Is_Log.Value = (s_log.Value.Length != 0);
+
+                if (is_incomplete_str)
+                {
+                    Is_Space_After.Value = false;
+                }
+                if (is_last_char_space)
+                {
+                    Is_Space_After.Value = false;
+                }
+
             }
         }
 
@@ -150,13 +547,12 @@ namespace Cli_Core_CS
         {
 
             List<Cli_TAB_Result> tab_result_list = new List<Cli_TAB_Result>();
-
             bool is_incomplete_str = false;
             char last_char = '\0';
             bool is_last_char_space = false;
             bool is_last_char_comma = false;
             bool is_last_char_commas = false;
-            if (!String.IsNullOrEmpty(s_cmd_in))
+            if (s_cmd_in.Length != 0)
             {
                 last_char = s_cmd_in[s_cmd_in.Length - 1];
                 if (last_char == ' ' || last_char == '\t')
@@ -173,176 +569,92 @@ namespace Cli_Core_CS
                 }
             }
 
-            bool is_enter = false;
-            List<String> s_log_list = new List<String>();
-            List<String> s_add_list = new List<String>();
-            List<String> s_add_list_full = new List<String>();
+            // <editor-fold defaultstate="collapsed" desc="TAB: last cmd item - full/partial . cmd_tab_list">
             for (int module = 0; module < modules.Get_Size(); module++)
             {
                 Cli_Module module_ptr = modules.Get(module);
-
-                for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++)
+                if (module_ptr != null)
                 {
-                    Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
-
-                    bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
-                    if (is_cmd_prt_valid)
+                    for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++)
                     {
-                        if (tokens.Count <= cmd_ptr.Items.Count)
+                        Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
+                        bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
+                        if (is_cmd_prt_valid)
                         {
-                            for (int token = 0; token < tokens.Count; token++)
+                            if (tokens.Count <= cmd_ptr.Items.Count)
                             {
-                                Cmd_Item_Base cmd_item_ptr = cmd_ptr.Items[token];
-                                Cmd_Token token_ptr = tokens[token];
-                                Cmd_Item_Valid_Result res_parse = cmd_item_ptr.Parse(token_ptr.Text_Get());
-                                int token_index_last = tokens.Count - 1;
-                                bool is_token_last = (token == token_index_last);
-                                int cmd_token_index_last = cmd_ptr.Items.Count - 1;
-                                bool is_cmd_token_last = (token == cmd_token_index_last);
+                                for (int token = 0; token < tokens.Count; token++)
+                                {
+                                    Cmd_Item_Base cmd_item_ptr = cmd_ptr.Items[token];
+                                    Cmd_Token token_ptr = tokens[token];
+                                    Cmd_Item_Valid_Result res_parse = cmd_item_ptr.Parse(token_ptr.Text_Get());
 
-                                if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK)
-                                {
-                                    is_enter = true;
-                                }
-                                else if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE)
-                                {
-                                    String_List_Add_Unique(s_add_list, cmd_ptr.Items[token].Text_Get().Substring(token_ptr.Text_Get().Length));
-                                    String_List_Add_Unique(s_add_list_full, cmd_ptr.Items[token].Text_Get());
+                                    if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE && is_last_char_space)
+                                    {
+                                        res_parse = Cmd_Item_Valid_Result.CMD_ITEM_OK;
+                                    }
+                                    if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE && (token < tokens.Count - 1))
+                                    {
+                                        res_parse = Cmd_Item_Valid_Result.CMD_ITEM_OK;
+                                    }
 
+                                    if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE)
+                                    {
+                                        TAB_On_OK_CAN_CONTINUE(tab_result_list, cmd_ptr);
+                                    }
+                                    else if (token < tokens.Count - 1)
+                                    { // Not last token in token list, but not OK . not valid
+                                        if (res_parse != Cmd_Item_Valid_Result.CMD_ITEM_OK
+                                                && res_parse != Cmd_Item_Valid_Result.CMD_ITEM_OK_CAN_CONTINUE
+                                                && res_parse != Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else if (token == tokens.Count - 1)
+                                    { // Last token in token list
+                                        if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK || res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS)
+                                        {
+                                            if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS && !is_last_char_space)
+                                            {
+                                                TAB_On_OK_STR_WITHOUT_COMMAS_not_last_space(tab_result_list, cmd_ptr, cmd_item_ptr);
+                                            }
+                                            else if (token < cmd_ptr.Items.Count - 1)
+                                            { // Not last token in cmd list
+                                                TAB_On_OK_not_last_token(tab_result_list, cmd_ptr, token, cmd_item_ptr);
+                                            }
+                                            else if (token == cmd_ptr.Items.Count - 1)
+                                            { // Last token in cmd list
+                                                TAB_On_OK_last_token(tab_result_list, cmd_ptr, cmd_item_ptr, token_ptr);
+                                            }
+                                        }
+                                        else if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE || res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR)
+                                        {
+                                            if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE_STR)
+                                            {
+                                                TAB_On_INCOMPLETE_STR(tab_result_list, cmd_ptr, cmd_item_ptr);
+                                                is_incomplete_str = true;
+                                            }
+                                            else
+                                            {
+                                                TAB_On_INCOMPLETE(tokens, tab_result_list, is_last_char_space, is_last_char_comma, is_last_char_commas, cmd_ptr, token, cmd_item_ptr, token_ptr);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
                                 }
-                                else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK)
-                                {
-                                    String s_log_new = cmd_ptr.Items[token + 1].Text_Get();
-                                    String_List_Add_Unique(s_log_list, s_log_new);
-                                    Is_Space_After.Value = true;
-                                }
-                                else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE)
-                                {
-                                    String_List_Add_Unique(s_add_list, cmd_ptr.Items[token].Text_Get().Substring(token_ptr.Text_Get().Length));
-                                    String_List_Add_Unique(s_add_list_full, cmd_ptr.Items[token].Text_Get());
-                                    Is_Space_After.Value = true;
-
-                                }
-                                else if (is_token_last && is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS)
-                                {
-                                    is_enter = true;
-                                }
-                                else if (is_token_last && !is_cmd_token_last && res_parse == Cmd_Item_Valid_Result.CMD_ITEM_OK_STR_WITHOUT_COMMAS)
-                                {
-                                    String s_log_new = cmd_ptr.Items[token + 1].Text_Get();
-                                    String_List_Add_Unique(s_log_list, s_log_new);
-                                    Is_Space_After.Value = true;
-
-                                }
-                                else if (is_cmd_token_last)
-                                {
-                                    break; // Cmd not match
-                                }
-                                else if (res_parse == Cmd_Item_Valid_Result.CMD_ITEM_ERROR)
-                                {
-                                    break; // Cmd not match
-                                }
-
                             }
                         }
                     }
+                }
+            }
+            // </editor-fold>
 
-                }
-
-            }
-            // s_add_list -> s_add (one variant) / s_log_list (many variants)
-            if (s_add_list.Count > 0)
-            {
-                if (s_add_list.Count == 1)
-                {
-                    if (!is_enter)
-                    {
-                        s_add.Value = s_add_list[0];
-                    }
-                    else
-                    {
-                        String_List_Add_Unique(s_log_list, s_add_list_full[0]);
-                    }
-                }
-                else
-                {
-                    String s_common = "";
-                    int j = 0;
-                    bool is_diff = false;
-                    do
-                    {
-                        char c = '\0';
-                        for (int i = 0; i < s_add_list.Count; i++)
-                        {
-                            if (j < s_add_list[i].Length)
-                            {
-                                if (i == 0)
-                                {
-                                    c = s_add_list[i][j];
-                                }
-                                else if (c != s_add_list[i][j])
-                                {
-                                    is_diff = true;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                if (i > 0)
-                                {
-                                    is_diff = true;
-                                }
-                                break;
-                            }
-                        }
-                        if (!is_diff)
-                        {
-                            s_common += c;
-                            j++;
-                        }
-                    } while (!is_diff);
-                    if (!String.IsNullOrEmpty(s_common) && !is_enter)
-                    {
-                        s_add.Value = s_common;
-                        Is_Space_After.Value = false; // "Add" blocks "Is_Space_After"
-                    }
-                    else
-                    {
-                        // s_add_list_full -> s_log_list
-                        for (int i = 0; i < s_add_list_full.Count; i++)
-                        {
-                            String_List_Add_Unique(s_log_list, s_add_list_full[i]);
-                        }
-                        Is_Space_After.Value = false; // "Add Full" blocks "Is_Space_After"
-                    }
-                }
-            }
-            // s_log_list -> s_log
-            for (int i = 0; i < s_log_list.Count; i++)
-            {
-                s_log.Value += " " + s_log_list[i];
-            }
-            // Postprocessing: Add <Enter>
-            if (is_enter)
-            {
-                s_log.Value += " <Enter>";
-            }
-            // "Add" blocks "Log"
-            if (!String.IsNullOrEmpty(s_add.Value))
-            {
-                s_log.Value = "";
-            }
-            // Postprocessing: Set flags
-            Is_Log.Value = !String.IsNullOrEmpty(s_log.Value);
-            Is_Add.Value = !String.IsNullOrEmpty(s_add.Value);
-            // Postprocessing: Check for Error
-            if (!Is_Log.Value && !Is_Add.Value && !Is_Space_After.Value)
-            {
-                s_log.Value += " <Error>";
-                Is_Log.Value = true;
-                s_add.Value = "";
-                Is_Add.Value = false;
-            }
+            TAB_Result_List_Parse_To_Flags(tokens, s_log, s_add, Is_Log, Is_Add, Is_Space_After,
+                    tab_result_list, is_incomplete_str, is_last_char_space, is_last_char_comma, is_last_char_commas);
 
         }
 
@@ -399,12 +711,7 @@ namespace Cli_Core_CS
             {
                 Cmd_Token_Parser_Result parse_res = Cmd_Token_Parser_Result.CMD_TOKEN_PARSER_ERROR;
                 List<Cmd_Token> tokens = Token_Parser.Parse(s_trim, Str_Rem, out parse_res);
-
                 tab_cmd_list = TAB_Cmd_List_Get(User_Privilege.Value, Modules, level, input_item.Text_Get(), s_trim, tokens);
-
-                //for (int i = 0; i < tokens.Count; i++)
-                //    delete tokens[i];
-                //tokens.clear();
             }
 
             if (tab_cmd_list.Count > 0)
@@ -457,7 +764,7 @@ namespace Cli_Core_CS
                                     String s_prev = Cli_Input.Input_Str_Get();
                                     int s_pos_prev = Cli_Input.Input_Str_Pos_Get();
                                     bool is_changed = false;
-                                    if (String.IsNullOrEmpty(s_prev) || s_prev[s_prev.Length - 1] != ' ')
+                                    if (s_prev.Length == 0 || s_prev[s_prev.Length - 1] != ' ')
                                     {
                                         Cli_Input.Input_Str_Set(s_prev + " ");
                                         is_changed = true;
@@ -475,7 +782,7 @@ namespace Cli_Core_CS
                                     {
                                         Cli_Input.Input_End();
                                     }
-                                    //is_invitation_print.Value = false;
+                                    //is_invitation_print.Value = false; //@Warning
                                     is_prev_newline = false;
                                 }
                                 break;
@@ -483,9 +790,6 @@ namespace Cli_Core_CS
                     }
                 }
 
-                //for (int i = 0; i < tab_cmd_list.Count; i++)
-                //    delete tab_cmd_list[i];
-                //tab_cmd_list.clear();
             }
             else
             {
@@ -495,4 +799,5 @@ namespace Cli_Core_CS
         }
 
     }
+
 }

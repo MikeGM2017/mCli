@@ -55,6 +55,7 @@
     <Compile Include="Cli_Input_Item.cs" />
     <Compile Include="Cli_Module.cs" />
     <Compile Include="Cli_Modules.cs" />
+    <Compile Include="Cli_Module_Base_Debug.cs" />
     <Compile Include="Cli_Module_Base_History.cs" />
     <Compile Include="Cli_Module_Base_Quit.cs" />
     <Compile Include="Cli_Output_CS.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ref_Boolean.cs" />
     <Compile Include="Ref_Cli_Cmd_Privilege_ID.cs" />
+    <Compile Include="Ref_Int.cs" />
     <Compile Include="Ref_String.cs" />
     <Compile Include="TAB_Cmd.cs" />
     <Compile Include="TAB_Cmd_ID.cs" />

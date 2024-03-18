@@ -5,15 +5,15 @@ namespace Cli_Core_CS
     class Cli_Cmd
     {
 
-        protected int ID;
-        protected int Privilege;
-        protected string Text;
-        protected string Level;
-        protected string Help;
-        protected bool Is_Global;
-        protected bool Is_Set;
-        protected int Min;
-        protected int Max;
+        protected int ID = 0;
+        protected int Privilege = (int)Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_ROOT_DEF;
+        protected string Text = "";
+        protected string Level = "";
+        protected string Help = "";
+        protected bool Is_Global = false;
+        protected bool Is_Set = false;
+        protected int Min = 0;
+        protected int Max = 0;
 
         public List<Cmd_Item_Base> Items = new List<Cmd_Item_Base>();
 

@@ -12,7 +12,7 @@ namespace Cli_Core_CS
         public bool Is_Enter = false;
         public bool is_space_after_add = false;
 
-        Cli_TAB_Result()
+        public Cli_TAB_Result()
         {
         }
     }
