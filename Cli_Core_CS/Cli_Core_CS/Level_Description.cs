@@ -6,8 +6,8 @@ namespace Cli_Core_CS
 {
     class Level_Description
     {
-        public String Level;
-        public string Parameter;
+        public String Level = "";
+        public string Parameter = "";
 
         public Level_Description() { }
 
