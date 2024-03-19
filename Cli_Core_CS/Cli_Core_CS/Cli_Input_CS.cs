@@ -305,7 +305,7 @@ namespace Cli_Core_CS
             String s2 = "";
             if (Input_Str_Pos < Input_Str.Length)
             {
-                s2 = Input_Str.Substring(Input_Str_Pos, Input_Str.Length);
+                s2 = Input_Str.Substring(Input_Str_Pos, Input_Str.Length - Input_Str_Pos);
             }
 
             Input_Str = s1 + s + s2;
@@ -476,7 +476,12 @@ namespace Cli_Core_CS
                 }
                 else
                 {
+                    String s_prev = Input_Str_Get();
                     Input_Add_Char_Middle(s);
+                    if (Is_Echo_Get())
+                    {
+                        Input_Str_Modified_To_Output(s_prev);
+                    }
                 }
                 return true;
             }
