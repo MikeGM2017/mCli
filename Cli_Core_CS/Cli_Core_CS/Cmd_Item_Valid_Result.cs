@@ -1,6 +1,6 @@
 ﻿namespace Cli_Core_CS
 {
-    enum Cmd_Item_Valid_Result
+    public enum Cmd_Item_Valid_Result
     {
         CMD_ITEM_OK,
         CMD_ITEM_OK_CAN_CONTINUE,
