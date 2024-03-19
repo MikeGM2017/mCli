@@ -2,7 +2,7 @@
 
 namespace Cli_Core_CS
 {
-    class Ref_String
+    public class Ref_String
     {
         public String Value;
 

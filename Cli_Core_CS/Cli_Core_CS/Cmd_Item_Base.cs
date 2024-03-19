@@ -2,7 +2,7 @@
 
 namespace Cli_Core_CS
 {
-    class Cmd_Item_Base
+    public class Cmd_Item_Base
     {
         protected string Type;
         protected string Text;

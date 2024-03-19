@@ -578,6 +578,13 @@ namespace Cli_Core_CS
                     for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++)
                     {
                         Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
+
+                        bool debug_found = false;
+                        if (cmd_ptr.Text_Get() == "help module \"<module_name>\" verbose")
+                        {
+                            debug_found = true;
+                        }
+
                         bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege.Value, level);
                         if (is_cmd_prt_valid)
                         {
