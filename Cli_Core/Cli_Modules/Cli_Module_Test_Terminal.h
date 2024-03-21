@@ -27,6 +27,7 @@ using namespace std;
 #include "Cmd_Item_Word_Range.h"
 #include "Cmd_Item_Word_List.h"
 #include "Cmd_Item_Str.h"
+#include "Cmd_Item_Str_Esc.h"
 #include "Cmd_Item_Date.h"
 #include "Cmd_Item_Time.h"
 #include "Cmd_Item_DateTime.h"
@@ -78,6 +79,9 @@ public:
         CMD_ID_test_set_ip6,
         CMD_ID_test_set_mac,
         CMD_ID_test_set_str,
+        CMD_ID_test_set_str_verbose,
+        CMD_ID_test_set_esc_str,
+        CMD_ID_test_set_esc_str_verbose,
         CMD_ID_test_set_date,
         CMD_ID_test_set_time,
         CMD_ID_test_set_datetime,
@@ -225,6 +229,45 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
             cmd->Item_Add(new Cmd_Item_Word("str", "test: set str"));
             cmd->Item_Add(new Cmd_Item_Str("<str>", "test: set str <str>"));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set str verbose
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_str_verbose);
+            cmd->Text_Set("set str <str> verbose");
+            cmd->Help_Set("test: set str verbose");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("str", "test: set str"));
+            cmd->Item_Add(new Cmd_Item_Str("<str>", "test: set str <str>"));
+            cmd->Item_Add(new Cmd_Item_Word("verbose", "test: set str <str> verbose"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set esc_str
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_esc_str);
+            cmd->Text_Set("set esc_str <esc_str>");
+            cmd->Help_Set("test: set esc_str");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("esc_str", "test: set esc_str"));
+            cmd->Item_Add(new Cmd_Item_Str_Esc("<esc_str>", "test: set esc_str <esc_str>"));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set esc_str verbose
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_esc_str_verbose);
+            cmd->Text_Set("set esc_str <esc_str>");
+            cmd->Help_Set("test: set esc_str");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("esc_str", "test: set esc_str"));
+            cmd->Item_Add(new Cmd_Item_Str_Esc("<esc_str>", "test: set esc_str <esc_str>"));
+            cmd->Item_Add(new Cmd_Item_Word("verbose", "test: set esc_str <esc_str> verbose"));
             Cmd_Add(cmd);
         }
 
@@ -600,10 +643,14 @@ public:
         return true;
     }
 
-    bool test_set_str(string value) {
+    bool test_set_str(string value, bool is_verbose) {
         Value_Str = value;
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+        if (!is_verbose) {
+            Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+        } else {
+            Cli_Output.Output_Str("Str=\"" + Value_Str + "\" verbose");
+        }
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -764,10 +811,15 @@ public:
                 return test_set_list(cmd);
 
             case CMD_ID_test_set_str:
+            case CMD_ID_test_set_str_verbose:
+            case CMD_ID_test_set_esc_str:
+            case CMD_ID_test_set_esc_str_verbose:
                 if (is_debug) return true;
             {
                 string value = cmd->Items[2]->Value_Str;
-                return test_set_str(value);
+                bool is_verbose = ((cmd_id == CMD_ID_test_set_str_verbose)
+                        || (cmd_id == CMD_ID_test_set_esc_str_verbose));
+                return test_set_str(value, is_verbose);
             }
 
             case CMD_ID_test_set_date:
