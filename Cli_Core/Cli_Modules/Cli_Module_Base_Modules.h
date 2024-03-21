@@ -111,8 +111,8 @@ public:
         {
             // modules <module_name> print verbose
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_modules_by_filter_print_verbose);
-            cmd->Text_Set("modules <module_name> print");
-            cmd->Help_Set("modules print (by filter)");
+            cmd->Text_Set("modules <module_name> print verbose");
+            cmd->Help_Set("modules print (by filter) verbose");
             cmd->Is_Global_Set(true);
             cmd->Level_Set("");
             cmd->Item_Add(new Cmd_Item_Word("modules", "modules"));
