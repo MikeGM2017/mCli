@@ -53,6 +53,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f2 \
+	${TESTDIR}/TestFiles/f16 \
 	${TESTDIR}/TestFiles/f15 \
 	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f10 \
@@ -71,6 +72,7 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/Test_Cmd_Item_Int_Range.o \
 	${TESTDIR}/tests/Test_Cmd_Item_MAC.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Str.o \
+	${TESTDIR}/tests/Test_Cmd_Item_Str_Esc.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Str_With_Commas.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Time.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Word.o \
@@ -160,6 +162,10 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/Test_Cmd_Item_Str.o ${OBJECTFILES:%.o=
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f16: ${TESTDIR}/tests/Test_Cmd_Item_Str_Esc.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f16 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f15: ${TESTDIR}/tests/Test_Cmd_Item_Str_With_Commas.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f15 $^ ${LDLIBSOPTIONS} 
@@ -237,6 +243,12 @@ ${TESTDIR}/tests/Test_Cmd_Item_Str.o: tests/Test_Cmd_Item_Str.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I. -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -ICli_Module_Test -I../lua-5.3.5/src -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Str.o tests/Test_Cmd_Item_Str.cpp
+
+
+${TESTDIR}/tests/Test_Cmd_Item_Str_Esc.o: tests/Test_Cmd_Item_Str_Esc.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I. -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -ICli_Module_Test -I../lua-5.3.5/src -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Str_Esc.o tests/Test_Cmd_Item_Str_Esc.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Str_With_Commas.o: tests/Test_Cmd_Item_Str_With_Commas.cpp 
@@ -327,6 +339,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
+	    ${TESTDIR}/TestFiles/f16 || true; \
 	    ${TESTDIR}/TestFiles/f15 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f10 || true; \

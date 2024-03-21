@@ -19,7 +19,7 @@
 class Cmd_Item_Str : public Cmd_Item_Base {
 protected:
 
-    Cmd_Item_Valid_Result Decode(string s_src, string &s_dst) {
+    virtual Cmd_Item_Valid_Result Decode(string s_src, string &s_dst) {
         Cmd_Item_Valid_Result decode_res = CMD_ITEM_OK;
         bool is_in_commas = false;
         char c_commas = '\0';

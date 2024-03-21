@@ -74,6 +74,7 @@
         <itemPath>Cmd_Item/Cmd_Item_Point_Var_Name.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Str.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Str_Esc.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Time.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result_Func.h</itemPath>
@@ -163,6 +164,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/Test_Cmd_Item_Str.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f16"
+                     displayName="Test_Cmd_Item_Str_Esc"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Str_Esc.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f15"
                      displayName="Test_Cmd_Item_Str_With_Commas"
@@ -393,6 +400,8 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Str_Esc.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
@@ -541,6 +550,21 @@
           <output>${TESTDIR}/TestFiles/f15</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f16">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f16</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -678,6 +702,8 @@
       <item path="tests/Test_Cmd_Item_MAC.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Str_Esc.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str_With_Commas.cpp"
             ex="false"
@@ -864,6 +890,8 @@
       </item>
       <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cmd_Item/Cmd_Item_Str_Esc.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
@@ -1012,6 +1040,21 @@
           <output>${TESTDIR}/TestFiles/f15</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f16">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f16</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -1149,6 +1192,8 @@
       <item path="tests/Test_Cmd_Item_MAC.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/Test_Cmd_Item_Str_Esc.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_Str_With_Commas.cpp"
             ex="false"
