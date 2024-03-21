@@ -14,10 +14,29 @@
 #ifndef CLI_MODULE_BASE_MODULES_H
 #define CLI_MODULE_BASE_MODULES_H
 
+#include <sstream>
+
+using namespace std;
+
 #include "Cli_Module.h"
 
-#include "Cmd_Item_Word.h"
+#include "Cmd_Item_Date.h"
+#include "Cmd_Item_DateTime.h"
+#include "Cmd_Item_Time.h"
+#include "Cmd_Item_EQU.h"
+#include "Cmd_Item_EQU_Range.h"
+#include "Cmd_Item_IP4.h"
+#include "Cmd_Item_IP6.h"
+#include "Cmd_Item_Int_List.h"
+#include "Cmd_Item_Int_Range.h"
+#include "Cmd_Item_MAC.h"
+#include "Cmd_Item_Point_Var_Name.h"
+#include "Cmd_Item_Rem.h"
 #include "Cmd_Item_Str.h"
+#include "Cmd_Item_Str_Esc.h"
+#include "Cmd_Item_Word.h"
+#include "Cmd_Item_Word_List.h"
+#include "Cmd_Item_Word_Range.h"
 
 #include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Modules.h"
@@ -42,6 +61,7 @@ public:
         CMD_ID_modules,
         CMD_ID_modules_by_filter,
         CMD_ID_modules_by_filter_print,
+        CMD_ID_modules_by_filter_print_verbose,
 
         CMD_ID_LAST
     };
@@ -54,6 +74,7 @@ public:
             Str_Filter_Abstract &str_filter, Cli_Output_Abstract &cli_output) : Cli_Module("Base Modules"),
     User_Privilege(user_privilege), Modules(modules),
     Str_Filter(str_filter), Cli_Output(cli_output) {
+        Version = "0.02";
         {
             // modules
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_modules);
@@ -87,14 +108,71 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("print", "modules print (by filter)"));
             Cmd_Add(cmd);
         }
+        {
+            // modules <module_name> print verbose
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_modules_by_filter_print_verbose);
+            cmd->Text_Set("modules <module_name> print");
+            cmd->Help_Set("modules print (by filter)");
+            cmd->Is_Global_Set(true);
+            cmd->Level_Set("");
+            cmd->Item_Add(new Cmd_Item_Word("modules", "modules"));
+            cmd->Item_Add(new Cmd_Item_Str("<module_name>", "modules (by filter)"));
+            cmd->Item_Add(new Cmd_Item_Word("print", "modules print (by filter)"));
+            cmd->Item_Add(new Cmd_Item_Word("verbose", "modules print (by filter) verbose"));
+            Cmd_Add(cmd);
+        }
     }
 
     virtual ~Cli_Module_Base_Modules() {
     }
 
-    bool modules_by_filter_print(string module_filter, Str_Filter_Abstract &str_filter) {
+    void cmd_items_print() {
+        vector<Cmd_Item_Base *> items;
+        vector<string> words;
+        items.push_back(new Cmd_Item_Date("", ""));
+        items.push_back(new Cmd_Item_DateTime("", ""));
+        items.push_back(new Cmd_Item_Time("", ""));
+        items.push_back(new Cmd_Item_EQU("", ""));
+        items.push_back(new Cmd_Item_EQU_Range("", "", words));
+        items.push_back(new Cmd_Item_IP4("", ""));
+        items.push_back(new Cmd_Item_IP6("", ""));
+        items.push_back(new Cmd_Item_Int_List(1, 8, "", ""));
+        items.push_back(new Cmd_Item_Int_Range(1, 8, "", ""));
+        items.push_back(new Cmd_Item_MAC("", ""));
+        items.push_back(new Cmd_Item_Point_Var_Name("", ""));
+        items.push_back(new Cmd_Item_Rem("", ""));
+        items.push_back(new Cmd_Item_Str("", ""));
+        items.push_back(new Cmd_Item_Str_Esc("", ""));
+        items.push_back(new Cmd_Item_Word("", ""));
+        items.push_back(new Cmd_Item_Word_List("", "", words));
+        items.push_back(new Cmd_Item_Word_Range("", "", words));
+
+        stringstream s_str;
+        s_str << "Cmd Items[" << items.size() << "]:";
+        Cli_Output.Output_Str(s_str.str());
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_NewLine();
+        for (int i = 0; i < items.size(); i++) {
+            Cmd_Item_Base *item = items[i];
+            string type = item->Type_Get();
+            string version = item->Version_Get();
+            Cli_Output.Output_Str(type);
+            Cli_Output.Output_Str(" V");
+            Cli_Output.Output_Str(version);
+            Cli_Output.Output_NewLine();
+        }
+    }
+
+    bool modules_by_filter_print(string module_filter, Str_Filter_Abstract &str_filter, bool is_verbose) {
         Cli_Output.Output_NewLine();
         bool found = false;
+        if (is_verbose) {
+            stringstream s_str;
+            s_str << "Modules[" << Modules.Get_Size() << "]:";
+            Cli_Output.Output_Str(s_str.str());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine();
+        }
         for (int module = 0; module < Modules.Get_Size(); module++) {
             Cli_Module *module_ptr = Modules.Get(module);
             if (module_ptr) {
@@ -102,7 +180,11 @@ public:
                 string module_name_with_commas = "\"" + module_ptr->Name_Get() + "\"";
                 if (str_filter.Is_Match(module_filter, module_name)
                         || str_filter.Is_Match(module_filter, module_name_with_commas)) {
-                    Cli_Output.Output_Str(module_name);
+                    if (!is_verbose) {
+                        Cli_Output.Output_Str(module_name);
+                    } else {
+                        Cli_Output.Output_Str(module_name + " V" + module_ptr->Version_Get());
+                    }
                     Cli_Output.Output_NewLine();
                     found = true;
                 }
@@ -123,19 +205,31 @@ public:
                 if (is_debug) return true;
             {
                 string module_filter = "*";
-                return modules_by_filter_print(module_filter, Str_Filter);
+                bool is_verbose;
+                return modules_by_filter_print(module_filter, Str_Filter, is_verbose = false);
             }
             case CMD_ID_modules_by_filter:
                 if (is_debug) return true;
             {
                 string module_filter = cmd->Items[1]->Value_Str;
-                return modules_by_filter_print(module_filter, Str_Filter);
+                bool is_verbose;
+                return modules_by_filter_print(module_filter, Str_Filter, is_verbose = false);
             }
             case CMD_ID_modules_by_filter_print:
                 if (is_debug) return true;
             {
                 string module_filter = cmd->Items[1]->Value_Str;
-                return modules_by_filter_print(module_filter, Str_Filter);
+                bool is_verbose;
+                return modules_by_filter_print(module_filter, Str_Filter, is_verbose = false);
+            }
+            case CMD_ID_modules_by_filter_print_verbose:
+                if (is_debug) return true;
+            {
+                string module_filter = cmd->Items[1]->Value_Str;
+                bool is_verbose;
+                Cli_Output.Output_NewLine();
+                cmd_items_print();
+                return modules_by_filter_print(module_filter, Str_Filter, is_verbose = true);
             }
 
             default:

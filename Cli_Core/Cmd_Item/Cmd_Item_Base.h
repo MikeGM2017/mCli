@@ -29,6 +29,7 @@ protected:
     string Type;
     string Text;
     string Help;
+    string Version;
 
     virtual bool Is_Char_Valid(char c, int pos, int len) {
         return true; // Допустимы любые символы в любой позиции
@@ -40,6 +41,7 @@ public:
 
     Cmd_Item_Base(string text, string help) : Text(text), Help(help) {
         Type = "Base";
+        Version = "0.01"; //@Warning: Dummy value - Version is not set
     }
 
     virtual ~Cmd_Item_Base() {
@@ -59,6 +61,10 @@ public:
 
     string Help_Get() const {
         return Help;
+    }
+
+    string Version_Get() const {
+        return Version;
     }
 
     virtual bool Is_Str_Valid(string s) {
