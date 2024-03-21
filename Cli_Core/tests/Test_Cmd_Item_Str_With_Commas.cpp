@@ -51,7 +51,7 @@ static const Cmd_Item_Str_Test_Item TestVector[] = {
     Cmd_Item_Str_Test_Item("<str>'", "<str>'", CMD_ITEM_ERROR),
 
     // Escaped:
-    Cmd_Item_Str_Test_Item("\\\"Str\\\"", "\\\"Str\\\"", CMD_ITEM_OK_STR_WITHOUT_COMMAS),
+    Cmd_Item_Str_Test_Item("\\\"Str\\\"", "\"Str\"", CMD_ITEM_OK_STR_WITHOUT_COMMAS),
 };
 
 void test1() {
@@ -61,21 +61,32 @@ void test1() {
 
     int test_vector_size = sizeof (TestVector) / sizeof (Cmd_Item_Str_Test_Item);
 
+    int test_count_total = 0;
+    int test_count_passed = 0;
+    int test_count_failed = 0;
+
     for (int i = 0; i < test_vector_size; i++) {
         Cmd_Item_Valid_Result res = v.Parse(TestVector[i].S_in);
         string s_out = v.Value_Str;
-        if (res != TestVector[i].Res_out || s_out != TestVector[i].S_out)
+        if (res != TestVector[i].Res_out || s_out != TestVector[i].S_out) {
             std::cout << "%TEST_FAILED% time=0 testname=test1 (Test_Cmd_Item_Str_With_Commas) message="
-                << v.To_String() << " res=" << Cmd_Item_Valid_Result_Func::To_String(res)
-            << " (must be " << Cmd_Item_Valid_Result_Func::To_String(TestVector[i].Res_out) << ")"
-            << " " << s_out
-                << " (must be " << TestVector[i].S_out << ")"
-                << std::endl;
-        else
-            std::cout << "\"" << v.Value_Str << "\": " << Cmd_Item_Valid_Result_Func::To_String(res)
-            << " -> " << s_out
-                << " - Passed" << std::endl;
+                    << "[" << i << "]"
+                    << v.To_String() << " res=" << Cmd_Item_Valid_Result_Func::To_String(res)
+                    << " must be " << Cmd_Item_Valid_Result_Func::To_String(TestVector[i].Res_out)
+                    << " " << s_out
+                    << " must be " << TestVector[i].S_out
+                    << std::endl;
+            test_count_failed++;
+        } else {
+            std::cout << "[" << i << "]"
+                    << "\"" << v.Value_Str << "\": " << Cmd_Item_Valid_Result_Func::To_String(res)
+                    << " -> " << s_out
+                    << " - Passed" << std::endl;
+            test_count_passed++;
+        }
+        test_count_total++;
     }
+    std::cout << "Result: Total: " << test_count_total << " Passed: " << test_count_passed << " Failed: " << test_count_failed << endl;
 }
 
 int main(int argc, char** argv) {
@@ -90,4 +101,3 @@ int main(int argc, char** argv) {
 
     return (EXIT_SUCCESS);
 }
-
