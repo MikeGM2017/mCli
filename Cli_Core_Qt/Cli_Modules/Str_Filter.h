@@ -117,7 +117,7 @@ public:
 
         }
 
-        if (is_match && filter_pos == filter.size() && filter[filter_pos - 1] != C_Multy && s_pos < s.size()) {
+        if (is_match && filter_pos == filter.size() && filter.size() >= 1 && filter[filter_pos - 1] != C_Multy && s_pos < s.size()) {
             is_match = false;
         }
 
