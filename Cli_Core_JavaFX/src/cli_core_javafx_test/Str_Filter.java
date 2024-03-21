@@ -115,7 +115,7 @@ public class Str_Filter {
 
         }
 
-        if (is_match && filter_pos == filter.length() && filter.charAt(filter_pos - 1) != C_Multy && s_pos < s.length()) {
+        if (is_match && filter_pos == filter.length() && filter.length() >= 1 && filter.charAt(filter_pos - 1) != C_Multy && s_pos < s.length()) {
             is_match = false;
         }
 
