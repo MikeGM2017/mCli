@@ -214,6 +214,7 @@ namespace Cli_Input_CS_Test
             bool cli_ouput_init_res = Cli_Output.Output_Init();
 
             Wait_Thread = new Thread(Wait_Thread_Func);
+            Wait_Thread.IsBackground = true; //@Warning
             Wait_Thread.Start(this);
 
             return cli_ouput_init_res;
