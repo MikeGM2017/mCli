@@ -64,6 +64,7 @@
     <Compile Include="Cli_Module_Base_Rem.cs" />
     <Compile Include="Cli_Module_Base_Script.cs" />
     <Compile Include="Cli_Module_Base_Wait.cs" />
+    <Compile Include="Cli_Module_Test_Tab_Min_Max.cs" />
     <Compile Include="Cli_Output_CS.cs" />
     <Compile Include="Cli_TAB_Processor.cs" />
     <Compile Include="Cli_TAB_Result.cs" />
