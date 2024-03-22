@@ -7,6 +7,7 @@ namespace Cli_Core_CS
         protected string Type;
         protected string Text;
         protected string Help;
+        protected string Version;
 
         protected virtual bool Is_Char_Valid(char c, int pos, int len)
         {
@@ -20,6 +21,7 @@ namespace Cli_Core_CS
             Type = "Base";
             Text = text;
             Help = help;
+            Version = "0.01"; //@Warning: Dummy value - Version is not set
         }
 
         public virtual string Debug_Value_Get()
@@ -40,6 +42,11 @@ namespace Cli_Core_CS
         public string Help_Get()
         {
             return Help;
+        }
+
+        public string Version_Get()
+        {
+            return Version;
         }
 
         public virtual bool Is_Str_Valid(string s)

@@ -5,12 +5,14 @@ namespace Cli_Core_CS
     abstract class Cli_Module
     {
         protected string Name;
+        protected string Version;
 
         protected List<Cli_Cmd> Module_Cmd_List = new List<Cli_Cmd>();
 
         public Cli_Module(string name)
         {
             Name = name;
+            Version = "0.01"; //@Warning: Dummy value - Version is not set
         }
 
         public string Name_Get()
@@ -50,6 +52,11 @@ namespace Cli_Core_CS
                 return Module_Cmd_List[cmd_index];
             }
             return null;
+        }
+
+        public string Version_Get()
+        {
+            return Version;
         }
 
         abstract public void To_Map(Dictionary<string, string> values_map);
