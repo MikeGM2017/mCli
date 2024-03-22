@@ -91,6 +91,7 @@ namespace Cli_Core_CS
             Modules.Add(new Cli_Module_Base_Modules(User_Privilege, Modules, str_filter, Cli_Output));
 
             Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
+            Modules.Add(new Cli_Module_Base_Log(Cli_Input));
             Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
         }

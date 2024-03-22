@@ -58,6 +58,7 @@
     <Compile Include="Cli_Module_Base_Debug.cs" />
     <Compile Include="Cli_Module_Base_Help.cs" />
     <Compile Include="Cli_Module_Base_History.cs" />
+    <Compile Include="Cli_Module_Base_Log.cs" />
     <Compile Include="Cli_Module_Base_Modules.cs" />
     <Compile Include="Cli_Module_Base_Quit.cs" />
     <Compile Include="Cli_Output_CS.cs" />
