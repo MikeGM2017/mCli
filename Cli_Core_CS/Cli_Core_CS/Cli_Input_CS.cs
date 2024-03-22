@@ -65,6 +65,10 @@ namespace Cli_Core_CS
                         main_obj.Wait_Count--;
                         main_obj.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
                     }
+                    else
+                    {
+                        main_obj.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                    }
                 }
                 System.Threading.Thread.Sleep(1000);
             }
@@ -601,6 +605,11 @@ namespace Cli_Core_CS
             }
 
             return item;
+        }
+
+        public void Input_sleep(int sleep_sec)
+        {
+            Thread.Sleep(sleep_sec * 1000);
         }
 
     }

@@ -61,10 +61,16 @@
     <Compile Include="Cli_Module_Base_Log.cs" />
     <Compile Include="Cli_Module_Base_Modules.cs" />
     <Compile Include="Cli_Module_Base_Quit.cs" />
+    <Compile Include="Cli_Module_Base_Rem.cs" />
+    <Compile Include="Cli_Module_Base_Script.cs" />
+    <Compile Include="Cli_Module_Base_Wait.cs" />
     <Compile Include="Cli_Output_CS.cs" />
     <Compile Include="Cli_TAB_Processor.cs" />
     <Compile Include="Cli_TAB_Result.cs" />
     <Compile Include="Cmd_Item_Base.cs" />
+    <Compile Include="Cmd_Item_Int.cs" />
+    <Compile Include="Cmd_Item_Int_Range.cs" />
+    <Compile Include="Cmd_Item_Rem.cs" />
     <Compile Include="Cmd_Item_Str.cs" />
     <Compile Include="Cmd_Item_Valid_Result.cs" />
     <Compile Include="Cmd_Item_Word.cs" />
