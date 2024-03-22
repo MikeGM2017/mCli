@@ -171,7 +171,7 @@ namespace Cli_Core_CS
             {
                 for (int i = 0; i < s.Length; i++)
                 {
-                    String s_substr = s.Substring(i, s.Length);
+                    String s_substr = s.Substring(i, s.Length - i);
                     bool is_match = Is_Match_Internal(filter, s_substr);
                     if (is_match)
                     {
