@@ -88,6 +88,7 @@ namespace Cli_Core_CS
             char C_Multy = '*';
             Str_Filter str_filter = new Str_Filter(C_Single, C_Multy);
             Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
+            Modules.Add(new Cli_Module_Base_Modules(User_Privilege, Modules, str_filter, Cli_Output));
 
             Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
             Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
