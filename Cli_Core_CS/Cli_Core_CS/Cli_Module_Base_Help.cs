@@ -433,10 +433,6 @@ namespace Cli_Core_CS
                         help(level.Level, is_full, is_verbose, is_module_full, module_filter, command_filter, Cli_Output);
                     }
                     return true;
-
-                default:
-                    return false; // Not Implemented
-
             }
             return false; // Not Implemented
         }
