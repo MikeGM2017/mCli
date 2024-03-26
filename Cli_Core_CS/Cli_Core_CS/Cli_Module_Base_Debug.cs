@@ -176,6 +176,8 @@ namespace Cli_Core_CS
 
         bool debug_cli(bool is_counts, bool is_verbose, bool is_failed_only)
         {
+            List<Level_Description> Levels_Prev = new List<Level_Description>(Levels); // @Warning: Save Levels
+
             Ref_Int total_count_cmd_id = new Ref_Int(0);
             Ref_Int total_count = new Ref_Int(0);
             Ref_Int total_count_checked = new Ref_Int(0);
@@ -197,7 +199,8 @@ namespace Cli_Core_CS
             s_str.Append(" failed:" + total_count_failed.Value.ToString());
             Cli_Output.Output_Str(s_str.ToString());
             Cli_Output.Output_NewLine();
-            Levels.Clear();
+
+            Levels = new List<Level_Description>(Levels_Prev); // @Warning: Restore Levels
 
             return true;
         }
