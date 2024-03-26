@@ -6,6 +6,7 @@
 package cli_core_javafx_test;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -170,6 +171,9 @@ public class Cli_Module_Base_Debug extends Cli_Module {
     }
 
     boolean debug_cli(boolean is_counts, boolean is_verbose, boolean is_failed_only) {
+
+        List<Level_Description> Levels_Prev = new ArrayList<>(Levels);
+
         Ref_Int total_count_cmd_id = new Ref_Int(0);
         Ref_Int total_count = new Ref_Int(0);
         Ref_Int total_count_checked = new Ref_Int(0);
@@ -196,7 +200,8 @@ public class Cli_Module_Base_Debug extends Cli_Module {
         sb.append(total_count_failed.Value);
         Cli_Output.Output_Str(sb.toString());
         Cli_Output.Output_NewLine();
-        Levels.clear();
+
+        Levels = new ArrayList<>(Levels_Prev);
 
         return true;
     }
