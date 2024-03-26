@@ -91,23 +91,23 @@ namespace Cli_Core_CS
         {
             List<Cmd_Item_Base> items = new List<Cmd_Item_Base>();
             List<string> words = new List<String>();
-            //items.Add(new Cmd_Item_Date("", ""));
-            //items.Add(new Cmd_Item_DateTime("", ""));
-            //items.Add(new Cmd_Item_Time("", ""));
+            items.Add(new Cmd_Item_Date("", ""));
+            items.Add(new Cmd_Item_DateTime("", ""));
+            items.Add(new Cmd_Item_Time("", ""));
             //items.Add(new Cmd_Item_EQU("", ""));
             //items.Add(new Cmd_Item_EQU_Range("", "", words));
-            //items.Add(new Cmd_Item_IP4("", ""));
-            //items.Add(new Cmd_Item_IP6("", ""));
-            //items.Add(new Cmd_Item_Int_List(1, 8, "", ""));
-            //items.Add(new Cmd_Item_Int_Range(1, 8, "", ""));
-            //items.Add(new Cmd_Item_MAC("", ""));
+            items.Add(new Cmd_Item_IP4("", ""));
+            items.Add(new Cmd_Item_IP6("", ""));
+            items.Add(new Cmd_Item_Int_List(1, 8, "", ""));
+            items.Add(new Cmd_Item_Int_Range(1, 8, "", ""));
+            items.Add(new Cmd_Item_MAC("", ""));
             //items.Add(new Cmd_Item_Point_Var_Name("", ""));
-            //items.Add(new Cmd_Item_Rem("", ""));
+            items.Add(new Cmd_Item_Rem("", ""));
             items.Add(new Cmd_Item_Str("", ""));
             //items.Add(new Cmd_Item_Str_Esc("", ""));
             items.Add(new Cmd_Item_Word("", ""));
-            //items.Add(new Cmd_Item_Word_List("", "", words));
-            //items.Add(new Cmd_Item_Word_Range("", "", words));
+            items.Add(new Cmd_Item_Word_List("", "", words));
+            items.Add(new Cmd_Item_Word_Range("", "", words));
 
             StringBuilder sb = new StringBuilder();
             sb.Append("Cmd Items[").Append(items.Count).Append("]:");
