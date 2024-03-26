@@ -172,7 +172,7 @@ public class Cli_Module_Base_Debug extends Cli_Module {
 
     boolean debug_cli(boolean is_counts, boolean is_verbose, boolean is_failed_only) {
 
-        List<Level_Description> Levels_Prev = new ArrayList<>(Levels);
+        List<Level_Description> Levels_Prev = new ArrayList<>(Levels); // @Warning: Save Levels
 
         Ref_Int total_count_cmd_id = new Ref_Int(0);
         Ref_Int total_count = new Ref_Int(0);
@@ -201,7 +201,7 @@ public class Cli_Module_Base_Debug extends Cli_Module {
         Cli_Output.Output_Str(sb.toString());
         Cli_Output.Output_NewLine();
 
-        Levels = new ArrayList<>(Levels_Prev);
+        Levels = new ArrayList<>(Levels_Prev); // @Warning: Restore Levels
 
         return true;
     }
