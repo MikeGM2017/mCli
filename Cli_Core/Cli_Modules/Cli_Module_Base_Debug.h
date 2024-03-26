@@ -186,6 +186,9 @@ public:
     }
 
     bool debug_cli(bool is_counts, bool is_verbose, bool is_failed_only) {
+
+        vector<Level_Description> Levels_Prev = Levels; // @Warning: Save Levels
+
         int total_count_cmd_id = 0;
         int total_count = 0;
         int total_count_checked = 0;
@@ -207,7 +210,8 @@ public:
                 << " failed:" << total_count_failed;
         Cli_Output.Output_Str(s_str.str());
         Cli_Output.Output_NewLine();
-        Levels.clear();
+
+        Levels = Levels_Prev; // @Warning: Restore Levels
 
         return true;
     }
