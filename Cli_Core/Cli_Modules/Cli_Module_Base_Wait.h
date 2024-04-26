@@ -117,7 +117,11 @@ public:
                 Cli_Output.Output_Str(s_str.str());
                 Cli_Output.Output_NewLine();
             }
-            if (Cli_Input.Input_kbhit()) {
+            if (Cli_Input.Input_kbhit()) { //@Warning: Ctrl+C - not processed
+                Cmd_Wait_Stop = true;
+                break;
+            }
+            if (Cli_Input.Is_Ctrl_C_Pressed_Get()) { //@Warning: Ctrl+C - processed here
                 Cmd_Wait_Stop = true;
                 break;
             }
