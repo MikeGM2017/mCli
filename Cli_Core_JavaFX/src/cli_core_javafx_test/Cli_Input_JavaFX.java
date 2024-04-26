@@ -50,6 +50,8 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
     protected Thread Wait_Thread;
     protected int Wait_Count;
 
+    protected boolean Is_Ctrl_C_Pressed;
+
     public Cli_Input_JavaFX(Cli_Output_JavaFX cli_output, String chars_not_allowed_str) {
         Cli_Output = cli_output;
         Chars_Not_Allowed_Str = chars_not_allowed_str;
@@ -63,6 +65,8 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
         Input_Mode = Input_Mode_Type.INPUT_MODE_NORMAL;
         Wait_Count = -1;
+
+        Is_Ctrl_C_Pressed = false;
     }
 
     public void Title_Set(String s) {
@@ -495,6 +499,7 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
         if (event.isControlDown() && keyCode == KeyCode.C) {
             //On_Key_CTRL_C();
             item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_C, Input_Str_Get());
+            Is_Ctrl_C_Pressed_Set();
         } else if (event.isControlDown() && keyCode == KeyCode.Z) {
             //On_Key_CTRL_Z();
             item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_Z, Input_Str_Get());
@@ -581,6 +586,18 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
         } catch (InterruptedException ex) {
             System.out.println("Input_sleep() - Failed");
         }
+    }
+
+    public boolean Is_Ctrl_C_Pressed_Get() {
+        return Is_Ctrl_C_Pressed;
+    }
+
+    public void Is_Ctrl_C_Pressed_Set() {
+        Is_Ctrl_C_Pressed = true;
+    }
+
+    public void Is_Ctrl_C_Pressed_Clear() {
+        Is_Ctrl_C_Pressed = false;
     }
 
 }

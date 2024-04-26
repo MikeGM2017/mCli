@@ -122,6 +122,9 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
                 Script_Thread_Is_No_History = false;
                 while (true) {
                     if (!Script_Thread_FileName.isEmpty()) {
+
+                        Cli_Input.Is_Ctrl_C_Pressed_Clear(); // Before starting script - clear stop flag
+
                         String filename = Script_Thread_FileName;
                         boolean is_no_history = Script_Thread_Is_No_History;
                         BufferedReader reader = null;
@@ -132,25 +135,34 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
                             Cli_Output.Output_NewLine();
                             boolean is_debug = false;
                             Ref_Boolean debug_res = new Ref_Boolean(false);
-                            String s;
+                            String s = "";
                             Cmd_Script_Stop.Value = false;
                             Cmd_Quit.Value = false;
                             do {
-                                s = reader.readLine();
-                                if (s != null && !s.isEmpty()) {
-                                    String s_trim = s.trim();
-                                    if (!is_no_history && !is_debug && !s_trim.isEmpty()) {
-                                        History.History_Put(s_trim);
+                                if (!Cli_Input.Is_Ctrl_C_Pressed_Get()) {
+                                    s = reader.readLine();
+                                    if (s != null && !s.isEmpty()) {
+                                        String s_trim = s.trim();
+                                        if (!is_no_history && !is_debug && !s_trim.isEmpty()) {
+                                            History.History_Put(s_trim);
+                                        }
+                                        Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
+                                        Cli_Output.Output_Str(s_trim);
+                                        Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                                        while (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
+                                            Cli_Input.Input_sleep(1);
+                                        }
                                     }
-                                    Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
-                                    Cli_Output.Output_Str(s_trim);
-                                    Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
-                                    while (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
-                                        Cli_Input.Input_sleep(1);
-                                    }
+                                } else {
+                                    Cmd_Script_Stop.Value = true; // Stop By Ctrl+C
                                 }
                             } while (s != null && !Cmd_Script_Stop.Value && !Cmd_Quit.Value);
-                            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                            if (Cli_Input.Is_Ctrl_C_Pressed_Get()) {
+                                Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
+                                Cli_Input.Is_Ctrl_C_Pressed_Clear();
+                            } else {
+                                Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                            }
                             Cli_Output.Output_NewLine();
                             Cli_Output.Output_NewLine();
                             Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
