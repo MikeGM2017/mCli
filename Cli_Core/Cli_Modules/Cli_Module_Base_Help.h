@@ -32,7 +32,7 @@ using namespace std;
 class Cli_Module_Base_Help : public Cli_Module {
 protected:
 
-    Cli_Cmd_Privilege_ID User_Privilege;
+    Cli_Cmd_Privilege_ID &User_Privilege;
     Cli_Modules &Modules;
 
     Str_Filter_Abstract &Help_Str_Filter;
@@ -61,12 +61,15 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Help(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
+    Cli_Module_Base_Help(Cli_Cmd_Privilege_ID &user_privilege, Cli_Modules &modules,
             Str_Filter_Abstract &help_str_filter,
             Cli_Output_Abstract &cli_output) : Cli_Module("Base Help"),
     User_Privilege(user_privilege), Modules(modules),
     Help_Str_Filter(help_str_filter),
     Cli_Output(cli_output) {
+
+        Version = "0.02";
+
         {
             // H - help
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_help_H);

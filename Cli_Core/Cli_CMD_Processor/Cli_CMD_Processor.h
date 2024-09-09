@@ -31,7 +31,7 @@ using namespace std;
 class Cli_CMD_Processor : public Cli_CMD_Processor_Abstract {
 protected:
 
-    Cli_Cmd_Privilege_ID User_Privilege;
+    Cli_Cmd_Privilege_ID &User_Privilege;
     Cli_Modules &Modules;
 
     vector<Level_Description> &Levels;
@@ -44,7 +44,7 @@ protected:
 
 public:
 
-    Cli_CMD_Processor(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
+    Cli_CMD_Processor(Cli_Cmd_Privilege_ID &user_privilege, Cli_Modules &modules,
             vector<Level_Description> &levels, Cmd_Token_Parser &parser,
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             string str_rem) :
