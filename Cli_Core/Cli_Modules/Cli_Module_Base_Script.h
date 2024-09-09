@@ -17,7 +17,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "Cli_Module.h"
+
+#include "Cmd_Item_Word.h"
+#include "Cmd_Item_Str.h"
 
 #include "Cli_CMD_Processor_Abstract.h"
 
@@ -47,6 +54,8 @@ protected:
     string &Script_Command_Str;
     string &Script_Label_Str;
 
+    string &Script_Dir_Str;
+
 public:
 
     enum Local_Cmd_ID {
@@ -68,18 +77,26 @@ public:
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             string str_rem, bool &cmd_script_stop, bool &cmd_quit, int script_buf_size,
             Cli_CMD_Processor_Abstract &cli_command_processor,
-            string &script_command_str, string &script_label_str) : Cli_Module("Base Script"),
+            string &script_command_str, string &script_label_str, string &script_dir_str) : Cli_Module("Base Script"),
     History(history), Cli_Input(cli_input), Cli_Output(cli_output),
     Str_Rem(str_rem),
     Cmd_Script_Stop(cmd_script_stop), Cmd_Quit(cmd_quit), Script_Buf_Size(script_buf_size),
     Cli_Command_Processor(cli_command_processor),
-    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str) {
+    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str), Script_Dir_Str(script_dir_str) {
+
+        Version = "0.02";
 
         Script_Buf = new char[Script_Buf_Size];
 
+        struct stat st = {0};
+
+        if (stat(Script_Dir_Str.c_str(), &st) == -1) {
+            mkdir(Script_Dir_Str.c_str(), 0700);
+        }
+
         {
             // do script stop // @Attention: Must be before do script "file"
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_do_script_stop);
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_do_script_stop, CMD_PRIVILEGE_USER_DEF);
             cmd->Text_Set("do script stop");
             cmd->Help_Set("stop execute script");
             cmd->Is_Global_Set(true);
@@ -90,7 +107,7 @@ public:
         }
         {
             // do script "<file>"
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_do_script);
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_do_script, CMD_PRIVILEGE_USER_DEF);
             cmd->Text_Set("do script \"<file>\"");
             cmd->Help_Set("execute script from file");
             cmd->Is_Global_Set(true);
@@ -101,7 +118,7 @@ public:
         }
         {
             // do script "<file>" no history
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_do_script_no_history);
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_do_script_no_history, CMD_PRIVILEGE_USER_DEF);
             cmd->Text_Set("do script \"<file>\" no history");
             cmd->Help_Set("execute script from file, not save to history");
             cmd->Is_Global_Set(true);
@@ -131,8 +148,32 @@ public:
         delete[] Script_Buf;
     }
 
+    bool script_filename_check(string s) {
+        if (s.length() == 0) return false; // Failed
+        for (int i = 0; i < s.length(); i++) {
+            char c = s[i];
+            if (c >= 'a' && c <= 'z') continue; // Ok
+            if (c >= 'A' && c <= 'Z') continue; // Ok
+            if (c >= '0' && c <= '9') continue; // Ok
+            if (c == '_') continue; // Ok
+            return false; // Failed
+        }
+        return true; // Ok
+    }
+
     bool save_history_as_script(Cli_Cmd *cmd) {
-        string filename = cmd->Items[4]->Value_Str;
+
+        string cmd_filename = cmd->Items[4]->Value_Str;
+
+        bool res_filename_check = script_filename_check(cmd_filename);
+        if (!res_filename_check) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("ERROR: can not process file " + cmd_filename + " - incorrect script file name");
+            Cli_Output.Output_NewLine();
+            return true;
+        }
+
+        string filename = Script_Dir_Str + "/" + cmd_filename;
         FILE *h = fopen(filename.c_str(), "wt");
         if (h) {
             for (int i = 0; i < History.History_Size_Get() - 1; i++) // @Attention : Last cmd not saved!
@@ -209,7 +250,18 @@ public:
     }
 
     bool do_script(Cli_Cmd *cmd, bool is_no_history) {
-        string filename = cmd->Items[2]->Value_Str;
+
+        string cmd_filename = cmd->Items[2]->Value_Str;
+
+        bool res_filename_check = script_filename_check(cmd_filename);
+        if (!res_filename_check) {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("ERROR: can not process file " + cmd_filename + " - incorrect script file name");
+            Cli_Output.Output_NewLine();
+            return true;
+        }
+
+        string filename = Script_Dir_Str + "/" + cmd_filename;
 
         Cli_Input.Is_Ctrl_C_Pressed_Clear(); // Before starting script - clear stop flag
 

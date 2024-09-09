@@ -210,9 +210,10 @@ int main(int argc, char *argv[]) {
     int Script_Buf_Size = 1024;
     string Script_Command_Str;
     string Script_Label_Str;
+    string Script_Dir_Str = "./scripts";
     Modules.Add(new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
             Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
-            CMD_Processor, Script_Command_Str, Script_Label_Str));
+            CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str));
 
     bool Log_Wait_Enable = true;
     bool Cmd_Wait_Stop = false;
