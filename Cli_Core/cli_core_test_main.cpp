@@ -193,7 +193,7 @@ int main(int argc, char *argv[]) {
 
     bool Cmd_Exit = false;
     bool Cmd_Quit = false;
-    Modules.Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
+    Modules.Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
 
     char C_Single = '?';
     char C_Multy = '*';
