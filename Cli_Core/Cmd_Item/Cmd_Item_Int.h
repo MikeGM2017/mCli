@@ -24,6 +24,10 @@ class Cmd_Item_Int : public Cmd_Item_Base {
 protected:
 
     virtual bool Is_Char_Valid(char c, int pos, int len) {
+        if (pos == 0) {
+            if (c == '+') return true;
+            if (c == '-') return true;
+        }
         return (c >= '0' && c <= '9');
     }
 
@@ -39,6 +43,7 @@ public:
 
     Cmd_Item_Int(string text, string help) : Cmd_Item_Base(text, help), Value_Int(0) {
         Type = "Int";
+        Version = "0.02";
     }
 
     virtual string Debug_Value_Get() {
