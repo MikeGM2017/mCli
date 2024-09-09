@@ -86,7 +86,7 @@ public:
         CMD_ID_test_set_time,
         CMD_ID_test_set_datetime,
         CMD_ID_test_set_enable,
-        CMD_ID_test_set_loopback,
+        CMD_ID_test_set_loopback_local_remote_enable_disable,
         CMD_ID_test_set_loopback_disable,
         CMD_ID_test_set_loopback_repeating,
         CMD_ID_test_set_loopback_repeating_disable,
@@ -115,6 +115,7 @@ public:
 
     Cli_Module_Test_Terminal(Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output)
     : Cli_Module("Test Terminal"), Cli_Input(cli_input), Cli_Output(cli_output), New_Level("test terminal") {
+        Version = "0.02";
         {
             // test terminal
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_terminal);
@@ -377,20 +378,27 @@ public:
         }
 
         {
-            // test set loopback [raw,net,local,remote]
-            vector<string> words;
-            words.push_back("raw");
-            words.push_back("net");
-            words.push_back("local");
-            words.push_back("remote");
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback);
-            cmd->Text_Set("set loopback [raw,net,local,remote]");
-            cmd->Help_Set("test: set loopback [raw,net,local,remote]");
+            // test set loopback [raw,net,local,remote] <enable|disable>
+
+            vector<string> words_loopback;
+            words_loopback.push_back("raw");
+            words_loopback.push_back("net");
+            words_loopback.push_back("local");
+            words_loopback.push_back("remote");
+
+            vector<string> words_enable_disable;
+            words_enable_disable.push_back("enable");
+            words_enable_disable.push_back("disable");
+
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_loopback_local_remote_enable_disable);
+            cmd->Text_Set("set loopback [raw,net,local,remote] <enable|disable>");
+            cmd->Help_Set("test: set loopback [raw,net,local,remote] <enable|disable>");
             cmd->Is_Global_Set(false);
             cmd->Level_Set("test terminal");
             cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
             cmd->Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
-            cmd->Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback [raw,net,local,remote]", words));
+            cmd->Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback [raw,net,local,remote]", words_loopback));
+            cmd->Item_Add(new Cmd_Item_Word_Range("<enable|disable>", "test: set loopback <enable|disable>", words_enable_disable));
             Cmd_Add(cmd);
         }
         {
@@ -722,6 +730,8 @@ public:
     bool test_set_loopback(Cli_Cmd *cmd) {
 
         Cmd_Item_Word_List *word_list = (Cmd_Item_Word_List *) cmd->Items[2];
+        Cmd_Item_Word_Range *word_range = (Cmd_Item_Word_Range *) cmd->Items[3];
+
         Value_Loopback = "";
         for (int i = 0; i < word_list->Values_Str.size(); i++) {
             if (i == 0)
@@ -729,6 +739,8 @@ public:
             else
                 Value_Loopback += " " + word_list->Values_Str[i];
         }
+
+        Value_Loopback += " " + word_range->Value_Str;
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str("Loopback=" + Value_Loopback);
@@ -876,7 +888,7 @@ public:
                 return test_set_enable(value);
             }
 
-            case CMD_ID_test_set_loopback:
+            case CMD_ID_test_set_loopback_local_remote_enable_disable:
                 if (is_debug) return true;
                 return test_set_loopback(cmd);
             case CMD_ID_test_set_loopback_disable:
