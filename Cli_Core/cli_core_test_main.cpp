@@ -54,7 +54,7 @@ using namespace std;
 #include "Cli_Module_Base_Level.h"
 #include "Cli_Module_Lua.h"
 
-const string Version = "0.01";
+const string Version = "0.03";
 
 void Version_Print() {
     cout << "V" << Version << endl;
