@@ -23,6 +23,8 @@ protected:
 public:
 
     Str_Filter(char c_single, char c_multy) : C_Single(c_single), C_Multy(c_multy) {
+        Type = "Str_Filter";
+        Version = "0.02";
     }
 
     virtual bool Is_Match_Internal(string filter, string s) {
