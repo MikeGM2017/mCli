@@ -19,14 +19,19 @@
 using namespace std;
 
 #include "Cli_Module.h"
-#include "Cli_Output_Abstract.h"
-#include "Cmd_Item_Str.h"
+
 #include "Cmd_Item_Word.h"
+#include "Cmd_Item_Str.h"
 #include "Cmd_Item_Int.h"
 #include "Cmd_Item_EQU_Range.h"
+
+#include "Cli_Output_Abstract.h"
+
 #include "Cli_Modules.h"
+
 #include "Str_Filter_Abstract.h"
-#include "Str_Filter.h"
+
+#include "Str_Get_Without_Commas.h"
 
 class Cli_Module_Check : public Cli_Module {
 protected:
@@ -36,6 +41,8 @@ protected:
     map<string, string> &Values_Map;
 
     Str_Filter_Abstract &Str_Filter;
+
+    Str_Get_Without_Commas &Str_Without_Commas;
 
     Cli_Output_Abstract &Cli_Output;
 
@@ -125,13 +132,19 @@ public:
     };
 
     Cli_Module_Check(Cli_Modules &modules, map<string, string> &values_map,
-            Str_Filter_Abstract &str_filter, Cli_Output_Abstract &cli_output,
+            Str_Filter_Abstract &str_filter,
+            Str_Get_Without_Commas &str_without_commas,
+            Cli_Output_Abstract &cli_output,
             bool &cmd_script_stop,
             string &script_command_str, string &script_label_str) : Cli_Module("Check"),
     Modules(modules), Values_Map(values_map),
-    Str_Filter(str_filter), Cli_Output(cli_output),
+    Str_Filter(str_filter),
+    Str_Without_Commas(str_without_commas),
+    Cli_Output(cli_output),
     Cmd_Script_Stop(cmd_script_stop),
     Script_Command_Str(script_command_str), Script_Label_Str(script_label_str) {
+
+        Version = "0.02";
 
         // <editor-fold defaultstate="collapsed" desc="Decl: cmp_int_str/words, cmp_str_str/words">
         string cmp_int_str = "== != < > <= >= & | && ||";
@@ -1305,7 +1318,7 @@ public:
 
         if (var_left_iter != Values_Map.end()) {
             string var_left_value = var_left_iter->second;
-            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
             if (cmp_res == CMP_TRUE) {
                 Cli_Output.Output_Str(s_msg1);
                 Cli_Output.Output_NewLine();
@@ -1414,7 +1427,7 @@ public:
             int var2_value = atoi(var2_inc_iter->second.c_str());
 
             string var_left_value = var_left_iter->second;
-            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
             if (cmp_res == CMP_TRUE) {
                 var1_value++;
                 stringstream s_str;
@@ -1592,7 +1605,7 @@ public:
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
         if (var_left_iter != Values_Map.end()) {
             string var_left_value = var_left_iter->second;
-            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
             if (cmp_res == CMP_TRUE) {
                 Cmd_Script_Stop = true;
             } else if (cmp_res == CMP_FALSE) {
@@ -1615,7 +1628,7 @@ public:
         if (var_left_iter != Values_Map.end()) {
             //int var_left_value = atoi(var_left_iter->second.c_str());
             string var_left_value = var_left_iter->second;
-            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
             if (cmp_res == CMP_TRUE) {
                 Do_Script_From_File(filename, is_no_history);
             } else if (cmp_res == CMP_FALSE) {
@@ -1736,7 +1749,7 @@ public:
             //int var_left_value = atoi(var_left_iter->second.c_str());
             string var_left_value = var_left_iter->second;
             //string var_right_value = var_right_iter->second;
-            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
             if (cmp_res == CMP_TRUE) {
                 Do_Command(command1);
             } else if (cmp_res == CMP_FALSE && is_command2) {
@@ -1846,7 +1859,7 @@ public:
             //int var_left_value = atoi(var_left_iter->second.c_str());
             string var_left_value = var_left_iter->second;
             //string var_right_value = var_right_iter->second;
-            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+            Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
             if (cmp_res == CMP_TRUE) {
                 check_goto_label(label1);
             } else if (cmp_res == CMP_FALSE && is_label2) {

@@ -16,11 +16,16 @@
 
 #include "Cli_Module.h"
 
+#include "Cmd_Item_Word.h"
+#include "Cmd_Item_Str.h"
 #include "Cmd_Item_Point_Var_Name.h"
 #include "Cmd_Item_Assignment_Mark.h"
+
 #include "Cli_Output_Abstract.h"
+
 #include "Str_Filter_Abstract.h"
-#include "Cmd_Item_Str.h"
+
+#include "Str_Get_Without_Commas.h"
 
 class Cli_Module_Vars : public Cli_Module {
 protected:
@@ -28,6 +33,7 @@ protected:
     Cli_Modules &Modules;
     map<string, string> &Values_Map;
     Str_Filter_Abstract &Str_Filter;
+    Str_Get_Without_Commas &Str_Without_Commas;
     Cli_Output_Abstract &Cli_Output;
 
     char C_Single;
@@ -54,10 +60,14 @@ public:
     }
 
     Cli_Module_Vars(Cli_Modules &modules, map<string, string> &values_map, Str_Filter_Abstract &str_filter,
+            Str_Get_Without_Commas &str_without_commas,
             Cli_Output_Abstract &cli_output,
             char c_single = '?', char c_multy = '*') :
     Cli_Module("Vars"), Modules(modules), Values_Map(values_map), Str_Filter(str_filter),
+    Str_Without_Commas(str_without_commas),
     Cli_Output(cli_output), C_Single(c_single), C_Multy(c_multy) {
+
+        Version = "0.02";
 
         // <editor-fold defaultstate="collapsed" desc="Vars: get/set">
         {
@@ -158,23 +168,10 @@ public:
         return Values_Map.end();
     }
 
-    string Str_Get_Without_Commas(string value_str) {
-        string s = value_str;
-        if (value_str.size() >= 2) {
-            if (
-                    (value_str[0] == '\"' && value_str[value_str.size() - 1] == '\"')
-                    || (value_str[0] == '\'' && value_str[value_str.size() - 1] == '\'')
-                    ) {
-                s = value_str.substr(1, value_str.size() - 2);
-            }
-        }
-        return s;
-    }
-
     bool var_set_str(string point_var_name_str, string value_str) {
         Cli_Output.Output_NewLine();
         string var_name = point_var_name_str.substr(1);
-        string value_str_without_commas = Str_Get_Without_Commas(value_str);
+        string value_str_without_commas = Str_Without_Commas.Get(value_str);
         Values_Map[var_name] = value_str_without_commas;
         Cli_Output.Output_Str(var_name + " = \"" + value_str_without_commas + "\"");
         Cli_Output.Output_NewLine();
