@@ -59,9 +59,10 @@ public:
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output) : Cli_Module("Base Wait"),
     Log_Wait_Enable(log_wait_enable), Cmd_Wait_Stop(cmd_wait_stop),
     Cli_Input(cli_input), Cli_Output(cli_output) {
+        Version = "0.02";
         {
             // wait <sec>
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_wait);
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_wait, CMD_PRIVILEGE_USER_DEF);
             cmd->Text_Set("wait <sec>");
             cmd->Help_Set("wait <sec:1..60> (for use in scripts)");
             cmd->Is_Global_Set(true);
@@ -71,7 +72,7 @@ public:
         }
         {
             // log wait enable
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_wait_log_enable);
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_wait_log_enable, CMD_PRIVILEGE_USER_DEF);
             cmd->Text_Set("wait log enable");
             cmd->Help_Set("wait logging enable");
             cmd->Is_Global_Set(true);
@@ -82,7 +83,7 @@ public:
         }
         {
             // log wait disable
-            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_wait_log_disable);
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_wait_log_disable, CMD_PRIVILEGE_USER_DEF);
             cmd->Text_Set("wait log disable");
             cmd->Help_Set("wait logging disable");
             cmd->Is_Global_Set(true);
@@ -101,6 +102,7 @@ public:
         int wait_sec = atoi(token_value.c_str());
 
         Cmd_Wait_Stop = false;
+        Cli_Input.Is_Ctrl_C_Pressed_Clear();
 
         if (log_wait_enable) {
             Cli_Output.Output_Str("Wait (Press Enter to stop):");
