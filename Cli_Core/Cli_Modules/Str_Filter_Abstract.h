@@ -19,9 +19,27 @@
 using namespace std;
 
 class Str_Filter_Abstract {
+protected:
+
+    string Type;
+    string Version;
+
 public:
 
+    Str_Filter_Abstract() {
+        Type = "Str_Filter_Abstract";
+        Version = "0.01";
+    }
+
     virtual bool Is_Match(string filter, string s) = 0;
+
+    string Type_Get() {
+        return Type;
+    }
+
+    string Version_Get() {
+        return Version;
+    }
 
 };
 
