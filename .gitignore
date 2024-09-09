@@ -13,3 +13,6 @@
 **/bin
 **/obj
 **/.vs
+
+msg.txt
+msg.txt~
