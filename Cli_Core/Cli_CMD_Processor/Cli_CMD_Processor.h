@@ -52,6 +52,8 @@ public:
     Levels(levels), Token_Parser(parser),
     Cli_Input(cli_input), Cli_Output(cli_output),
     Str_Rem(str_rem) {
+        Type = "Cli_CMD_Processor";
+        Version = "0.02";
     }
 
     virtual ~Cli_CMD_Processor() {
