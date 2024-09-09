@@ -60,6 +60,8 @@ public:
     Levels(levels), Token_Parser(parser),
     Cli_Input(cli_input), Cli_Output(cli_output),
     Str_Rem(str_rem), Log_Is_Active(log_is_active) {
+        Type = "Cli_TAB_Processor";
+        Version = "0.02";
     }
 
     virtual Level_Description Level_Get() {
