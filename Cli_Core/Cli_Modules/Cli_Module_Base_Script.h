@@ -84,14 +84,18 @@ public:
     Cli_Command_Processor(cli_command_processor),
     Script_Command_Str(script_command_str), Script_Label_Str(script_label_str), Script_Dir_Str(script_dir_str) {
 
-        Version = "0.02";
+        Version = "0.03";
 
         Script_Buf = new char[Script_Buf_Size];
 
         struct stat st = {0};
 
         if (stat(Script_Dir_Str.c_str(), &st) == -1) {
+#ifdef _WIN32
+            mkdir(Script_Dir_Str.c_str());
+#else
             mkdir(Script_Dir_Str.c_str(), 0700);
+#endif
         }
 
         {
