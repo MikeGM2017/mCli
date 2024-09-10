@@ -3,7 +3,7 @@
     public class Cmd_Item_Str : Cmd_Item_Base
     {
 
-        protected Cmd_Item_Valid_Result Decode(string s_src, Ref_String s_dst)
+        protected virtual Cmd_Item_Valid_Result Decode(string s_src, Ref_String s_dst)
         {
             Cmd_Item_Valid_Result decode_res = Cmd_Item_Valid_Result.CMD_ITEM_OK;
             bool is_in_commas = false;

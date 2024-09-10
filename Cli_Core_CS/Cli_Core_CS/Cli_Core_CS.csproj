@@ -66,7 +66,6 @@
     <Compile Include="Cli_Module_Base_Script.cs" />
     <Compile Include="Cli_Module_Base_Wait.cs" />
     <Compile Include="Cli_Module_Check.cs" />
-    <None Include="Cli_Module_Check_Add.cs" />
     <Compile Include="Cli_Module_Test_Tab_Min_Max.cs" />
     <Compile Include="Cli_Module_Test_Terminal.cs" />
     <Compile Include="Cli_Module_Vars.cs" />
@@ -89,6 +88,7 @@
     <Compile Include="Cmd_Item_Point_Var_Name.cs" />
     <Compile Include="Cmd_Item_Rem.cs" />
     <Compile Include="Cmd_Item_Str.cs" />
+    <Compile Include="Cmd_Item_Str_Esc.cs" />
     <Compile Include="Cmd_Item_Time.cs" />
     <Compile Include="Cmd_Item_Valid_Result.cs" />
     <Compile Include="Cmd_Item_Word.cs" />

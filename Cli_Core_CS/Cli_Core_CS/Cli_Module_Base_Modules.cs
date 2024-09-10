@@ -6,11 +6,12 @@ namespace Cli_Core_CS
 {
     class Cli_Module_Base_Modules : Cli_Module
     {
-        protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
 
         protected Cli_Modules Modules;
 
         protected Str_Filter Str_Filter;
+
+        protected Cli_Input_CS Cli_Input;
 
         protected Cli_Output_CS Cli_Output;
 
@@ -31,17 +32,18 @@ namespace Cli_Core_CS
             return Local_Cmd_ID.CMD_ID_LAST - Local_Cmd_ID.CMD_ID_NO - 1;
         }
 
-        public Cli_Module_Base_Modules(Ref_Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
-                Str_Filter str_filter, Cli_Output_CS cli_output) : base("Base Modules")
+        public Cli_Module_Base_Modules(Cli_Modules modules,
+            Str_Filter str_filter,
+            Cli_Input_CS cli_input, Cli_Output_CS cli_output) : base("Base Modules")
         {
-            User_Privilege = user_privilege;
             Modules = modules;
             Str_Filter = str_filter;
+            Cli_Input = cli_input;
             Cli_Output = cli_output;
-            Version = "0.02";
+            Version = "0.03";
             {
                 // modules
-                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules);
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
                 cmd.Text_Set("modules");
                 cmd.Help_Set("modules print (all)");
                 cmd.Is_Global_Set(true);
@@ -51,7 +53,7 @@ namespace Cli_Core_CS
             }
             {
                 // modules <module_name>
-                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules_by_filter);
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules_by_filter, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
                 cmd.Text_Set("modules <module_name>");
                 cmd.Help_Set("modules print (by filter)");
                 cmd.Is_Global_Set(true);
@@ -62,7 +64,7 @@ namespace Cli_Core_CS
             }
             {
                 // modules <module_name> print
-                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules_by_filter_print);
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules_by_filter_print, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
                 cmd.Text_Set("modules <module_name> print");
                 cmd.Help_Set("modules print (by filter)");
                 cmd.Is_Global_Set(true);
@@ -74,7 +76,7 @@ namespace Cli_Core_CS
             }
             {
                 // modules <module_name> print verbose
-                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules_by_filter_print_verbose);
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules_by_filter_print_verbose, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
                 cmd.Text_Set("modules <module_name> print verbose");
                 cmd.Help_Set("modules print (by filter) verbose");
                 cmd.Is_Global_Set(true);
@@ -87,10 +89,60 @@ namespace Cli_Core_CS
             }
         }
 
-        void cmd_items_print()
+        void processors_print()
+        {
+            Ref_Cli_Cmd_Privilege_ID user_privilege = new Ref_Cli_Cmd_Privilege_ID(Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_ROOT_DEF);
+            Cli_Modules modules = new Cli_Modules();
+            //vector<Level_Description> levels;
+            List<Level_Description> levels = new List<Level_Description>();
+            Cmd_Token_Parser parser = new Cmd_Token_Parser();
+            string str_rem = "$";
+            Cli_CMD_Processor CMD_Processor = new Cli_CMD_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem);
+            bool log_is_active = false;
+            Cli_TAB_Processor TAB_Processor = new Cli_TAB_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem, log_is_active);
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Processors[").Append(2).Append("]:");
+            Cli_Output.Output_Str(sb.ToString());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine();
+
+            {
+                string type = CMD_Processor.Type_Get();
+                string version = CMD_Processor.Version_Get();
+                Cli_Output.Output_Str(type);
+                Cli_Output.Output_Str(" V");
+                Cli_Output.Output_Str(version);
+                Cli_Output.Output_NewLine();
+            }
+
+            {
+                string type = TAB_Processor.Type_Get();
+                string version = TAB_Processor.Version_Get();
+                Cli_Output.Output_Str(type);
+                Cli_Output.Output_Str(" V");
+                Cli_Output.Output_Str(version);
+                Cli_Output.Output_NewLine();
+            }
+
+            Cli_Output.Output_NewLine();
+        }
+
+        void filters_print()
+        {
+            string type = Str_Filter.Type_Get();
+            string version = Str_Filter.Version_Get();
+            Cli_Output.Output_Str(type);
+            Cli_Output.Output_Str(" V");
+            Cli_Output.Output_Str(version);
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine();
+        }
+
+        void cmd_items_print(string module_filter, Str_Filter str_filter)
         {
             List<Cmd_Item_Base> items = new List<Cmd_Item_Base>();
             List<string> words = new List<String>();
+            items.Add(new Cmd_Item_Base("", ""));
             items.Add(new Cmd_Item_Date("", ""));
             items.Add(new Cmd_Item_DateTime("", ""));
             items.Add(new Cmd_Item_Time("", ""));
@@ -98,31 +150,51 @@ namespace Cli_Core_CS
             items.Add(new Cmd_Item_EQU_Range("", "", words));
             items.Add(new Cmd_Item_IP4("", ""));
             items.Add(new Cmd_Item_IP6("", ""));
+            items.Add(new Cmd_Item_Int("", ""));
             items.Add(new Cmd_Item_Int_List(1, 8, "", ""));
             items.Add(new Cmd_Item_Int_Range(1, 8, "", ""));
             items.Add(new Cmd_Item_MAC("", ""));
             items.Add(new Cmd_Item_Point_Var_Name("", ""));
             items.Add(new Cmd_Item_Rem("", ""));
             items.Add(new Cmd_Item_Str("", ""));
-            //items.Add(new Cmd_Item_Str_Esc("", ""));
+            items.Add(new Cmd_Item_Str_Esc("", ""));
             items.Add(new Cmd_Item_Word("", ""));
             items.Add(new Cmd_Item_Word_List("", "", words));
             items.Add(new Cmd_Item_Word_Range("", "", words));
+            items.Add(new Cmd_Item_Assignment_Mark("", ""));
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Cmd Items[").Append(items.Count).Append("]:");
-            Cli_Output.Output_Str(sb.ToString());
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_NewLine();
+            bool found = false;
             for (int i = 0; i < items.Count; i++)
             {
                 Cmd_Item_Base item = items[i];
                 string type = item.Type_Get();
-                string version = item.Version_Get();
-                Cli_Output.Output_Str(type);
-                Cli_Output.Output_Str(" V");
-                Cli_Output.Output_Str(version);
+                if (str_filter.Is_Match(module_filter, type))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Cmd Items[").Append(items.Count).Append("]:");
+                Cli_Output.Output_Str(sb.ToString());
                 Cli_Output.Output_NewLine();
+                Cli_Output.Output_NewLine();
+                for (int i = 0; i < items.Count; i++)
+                {
+                    Cmd_Item_Base item = items[i];
+                    string type = item.Type_Get();
+                    if (str_filter.Is_Match(module_filter, type))
+                    {
+                        string version = item.Version_Get();
+                        Cli_Output.Output_Str(type);
+                        Cli_Output.Output_Str(" V");
+                        Cli_Output.Output_Str(version);
+                        Cli_Output.Output_NewLine();
+                    }
+                }
             }
         }
 
@@ -173,13 +245,6 @@ namespace Cli_Core_CS
         public override bool Execute(Cli_Cmd cmd, List<Level_Description> Levels, bool is_debug)
         {
             Local_Cmd_ID cmd_id = (Local_Cmd_ID)cmd.ID_Get();
-            Level_Description level = new Level_Description();
-            string parameter;
-            if (Levels.Count > 0)
-            {
-                level = Levels[Levels.Count - 1];
-                parameter = level.Parameter;
-            }
             switch (cmd_id)
             {
                 case Local_Cmd_ID.CMD_ID_modules:
@@ -209,7 +274,9 @@ namespace Cli_Core_CS
                         string module_filter = cmd.Items[1].Value_Str;
                         bool is_verbose;
                         Cli_Output.Output_NewLine();
-                        cmd_items_print();
+                        processors_print();
+                        filters_print();
+                        cmd_items_print(module_filter, Str_Filter);
                         return modules_by_filter_print(module_filter, Str_Filter, is_verbose = true);
                     }
             }
@@ -220,5 +287,6 @@ namespace Cli_Core_CS
         {
             // Nothing
         }
-    }
+
+    };
 }

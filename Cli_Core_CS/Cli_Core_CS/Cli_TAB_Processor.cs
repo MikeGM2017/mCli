@@ -6,6 +6,10 @@ namespace Cli_Core_CS
 {
     class Cli_TAB_Processor
     {
+
+        protected string Type;
+        protected string Version;
+
         protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
         protected Cli_Modules Modules;
         protected List<Level_Description> Levels;
@@ -24,6 +28,9 @@ namespace Cli_Core_CS
                 Cli_Input_CS cli_input, Cli_Output_CS cli_output,
                 String str_rem, bool log_is_active)
         {
+            Type = "Cli_TAB_Processor";
+            Version = "0.02";
+
             User_Privilege = user_privilege;
             Modules = modules;
             Levels = levels;
@@ -32,6 +39,16 @@ namespace Cli_Core_CS
             Cli_Output = cli_output;
             Str_Rem = str_rem;
             Log_Is_Active = log_is_active;
+        }
+
+        public string Type_Get()
+        {
+            return Type;
+        }
+
+        public string Version_Get()
+        {
+            return Version;
         }
 
         protected Level_Description Level_Get()

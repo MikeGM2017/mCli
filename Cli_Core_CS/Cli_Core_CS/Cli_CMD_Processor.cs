@@ -5,6 +5,9 @@ namespace Cli_Core_CS
     class Cli_CMD_Processor
     {
 
+        protected string Type;
+        protected string Version;
+
         protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
         protected Cli_Modules Modules;
 
@@ -21,6 +24,9 @@ namespace Cli_Core_CS
             Cli_Input_CS cli_input, Cli_Output_CS cli_output,
             string str_rem)
         {
+            Type = "Cli_CMD_Processor";
+            Version = "0.02";
+
             User_Privilege = user_privilege;
             Modules = modules;
             Levels = levels;
@@ -28,6 +34,16 @@ namespace Cli_Core_CS
             Cli_Input = cli_input;
             Cli_Output = cli_output;
             Str_Rem = str_rem;
+        }
+
+        public string Type_Get()
+        {
+            return Type;
+        }
+
+        public string Version_Get()
+        {
+            return Version;
         }
 
         public virtual Level_Description Level_Get()

@@ -6,13 +6,29 @@ namespace Cli_Core_CS
 {
     class Str_Filter
     {
+
+        protected string Type;
+        protected string Version;
+
         protected char C_Single; // @Example: '.' or '?'
         protected char C_Multy; // @Example: '*'
 
         public Str_Filter(char c_single, char c_multy)
         {
+            Type = "Str_Filter";
+            Version = "0.02";
             C_Single = c_single;
             C_Multy = c_multy;
+        }
+
+        public string Type_Get()
+        {
+            return Type;
+        }
+
+        public string Version_Get()
+        {
+            return Version;
         }
 
         protected bool Is_Match_Internal(String filter, String s)

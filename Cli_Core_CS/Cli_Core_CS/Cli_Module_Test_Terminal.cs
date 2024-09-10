@@ -45,11 +45,14 @@ namespace Cli_Core_CS
             CMD_ID_test_set_ip6,
             CMD_ID_test_set_mac,
             CMD_ID_test_set_str,
+            CMD_ID_test_set_str_verbose,
+            CMD_ID_test_set_esc_str,
+            CMD_ID_test_set_esc_str_verbose,
             CMD_ID_test_set_date,
             CMD_ID_test_set_time,
             CMD_ID_test_set_datetime,
             CMD_ID_test_set_enable,
-            CMD_ID_test_set_loopback,
+            CMD_ID_test_set_loopback_local_remote_enable_disable,
             CMD_ID_test_set_loopback_disable,
             CMD_ID_test_set_loopback_repeating,
             CMD_ID_test_set_loopback_repeating_disable,
@@ -82,6 +85,7 @@ namespace Cli_Core_CS
         public Cli_Module_Test_Terminal(Cli_Input_CS cli_input, Cli_Output_CS cli_output)
         : base("Test Terminal")
         {
+            Version = "0.02";
             Cli_Input = cli_input;
             Cli_Output = cli_output;
             New_Level = "test terminal";
@@ -201,6 +205,45 @@ namespace Cli_Core_CS
                 cmd.Item_Add(new Cmd_Item_Str("<str>", "test: set str <str>"));
                 Cmd_Add(cmd);
             }
+            {
+                // test set str verbose
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_test_set_str_verbose);
+                cmd.Text_Set("set str <str> verbose");
+                cmd.Help_Set("test: set str verbose");
+                cmd.Is_Global_Set(false);
+                cmd.Level_Set("test terminal");
+                cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+                cmd.Item_Add(new Cmd_Item_Word("str", "test: set str"));
+                cmd.Item_Add(new Cmd_Item_Str("<str>", "test: set str <str>"));
+                cmd.Item_Add(new Cmd_Item_Word("verbose", "test: set str <str> verbose"));
+                Cmd_Add(cmd);
+            }
+
+            {
+                // test set esc_str
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_test_set_esc_str);
+                cmd.Text_Set("set esc_str <esc_str>");
+                cmd.Help_Set("test: set esc_str");
+                cmd.Is_Global_Set(false);
+                cmd.Level_Set("test terminal");
+                cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+                cmd.Item_Add(new Cmd_Item_Word("esc_str", "test: set esc_str"));
+                cmd.Item_Add(new Cmd_Item_Str_Esc("<esc_str>", "test: set esc_str <esc_str>"));
+                Cmd_Add(cmd);
+            }
+            {
+                // test set esc_str verbose
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_test_set_esc_str_verbose);
+                cmd.Text_Set("set esc_str <esc_str>");
+                cmd.Help_Set("test: set esc_str");
+                cmd.Is_Global_Set(false);
+                cmd.Level_Set("test terminal");
+                cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+                cmd.Item_Add(new Cmd_Item_Word("esc_str", "test: set esc_str"));
+                cmd.Item_Add(new Cmd_Item_Str_Esc("<esc_str>", "test: set esc_str <esc_str>"));
+                cmd.Item_Add(new Cmd_Item_Word("verbose", "test: set esc_str <esc_str> verbose"));
+                Cmd_Add(cmd);
+            }
 
             {
                 // test set date
@@ -308,20 +351,27 @@ namespace Cli_Core_CS
             }
 
             {
-                // test set loopback [raw,net,local,remote]
-                List<string> words = new List<string>();
-                words.Add("raw");
-                words.Add("net");
-                words.Add("local");
-                words.Add("remote");
-                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_test_set_loopback);
-                cmd.Text_Set("set loopback [raw,net,local,remote]");
-                cmd.Help_Set("test: set loopback [raw,net,local,remote]");
+                // test set loopback [raw,net,local,remote] <enable|disable>
+
+                List<string> words_loopback = new List<string>();
+                words_loopback.Add("raw");
+                words_loopback.Add("net");
+                words_loopback.Add("local");
+                words_loopback.Add("remote");
+
+                List<string> words_enable_disable = new List<string>();
+                words_enable_disable.Add("enable");
+                words_enable_disable.Add("disable");
+
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_test_set_loopback_local_remote_enable_disable);
+                cmd.Text_Set("set loopback [raw,net,local,remote] <enable|disable>");
+                cmd.Help_Set("test: set loopback [raw,net,local,remote] <enable|disable>");
                 cmd.Is_Global_Set(false);
                 cmd.Level_Set("test terminal");
                 cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
                 cmd.Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
-                cmd.Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback [raw,net,local,remote]", words));
+                cmd.Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback [raw,net,local,remote]", words_loopback));
+                cmd.Item_Add(new Cmd_Item_Word_Range("<enable|disable>", "test: set loopback <enable|disable>", words_enable_disable));
                 Cmd_Add(cmd);
             }
             {
@@ -613,11 +663,18 @@ namespace Cli_Core_CS
             return true;
         }
 
-        bool test_set_str(string value)
+        bool test_set_str(string value, bool is_verbose)
         {
             Value_Str = value;
             Cli_Output.Output_NewLine();
-            Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+            if (!is_verbose)
+            {
+                Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+            }
+            else
+            {
+                Cli_Output.Output_Str("Str=\"" + Value_Str + "\" verbose");
+            }
             Cli_Output.Output_NewLine();
             return true;
         }
@@ -696,7 +753,10 @@ namespace Cli_Core_CS
 
         bool test_set_loopback(Cli_Cmd cmd)
         {
+
             Cmd_Item_Word_List word_list = (Cmd_Item_Word_List)cmd.Items[2];
+            Cmd_Item_Word_Range word_range = (Cmd_Item_Word_Range)cmd.Items[3];
+
             Value_Loopback = "";
             for (int i = 0; i < word_list.Values_Str.Count; i++)
             {
@@ -705,6 +765,8 @@ namespace Cli_Core_CS
                 else
                     Value_Loopback += " " + word_list.Values_Str[i];
             }
+
+            Value_Loopback += " " + word_range.Value_Str;
 
             Cli_Output.Output_NewLine();
             Cli_Output.Output_Str("Loopback=" + Value_Loopback);
@@ -792,10 +854,15 @@ namespace Cli_Core_CS
                     return test_set_list(cmd);
 
                 case Local_Cmd_ID.CMD_ID_test_set_str:
+                case Local_Cmd_ID.CMD_ID_test_set_str_verbose:
+                case Local_Cmd_ID.CMD_ID_test_set_esc_str:
+                case Local_Cmd_ID.CMD_ID_test_set_esc_str_verbose:
                     if (is_debug) return true;
                     {
                         string value = cmd.Items[2].Value_Str;
-                        return test_set_str(value);
+                        bool is_verbose = ((cmd_id == Local_Cmd_ID.CMD_ID_test_set_str_verbose)
+                                || (cmd_id == Local_Cmd_ID.CMD_ID_test_set_esc_str_verbose));
+                        return test_set_str(value, is_verbose);
                     }
 
                 case Local_Cmd_ID.CMD_ID_test_set_date:
@@ -852,7 +919,7 @@ namespace Cli_Core_CS
                         return test_set_enable(value);
                     }
 
-                case Local_Cmd_ID.CMD_ID_test_set_loopback:
+                case Local_Cmd_ID.CMD_ID_test_set_loopback_local_remote_enable_disable:
                     if (is_debug) return true;
                     return test_set_loopback(cmd);
                 case Local_Cmd_ID.CMD_ID_test_set_loopback_disable:
