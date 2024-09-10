@@ -8,6 +8,11 @@ namespace Cli_Core_CS
     {
         override protected bool Is_Char_Valid(char c, int pos, int len)
         {
+            if (pos == 0)
+            {
+                if (c == '+') return true;
+                if (c == '-') return true;
+            }
             return (c >= '0' && c <= '9');
         }
 
@@ -26,6 +31,7 @@ namespace Cli_Core_CS
         {
             Value_Int = 0;
             Type = "Int";
+            Version = "0.02";
         }
 
         override public String Debug_Value_Get()
