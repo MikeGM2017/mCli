@@ -36,6 +36,8 @@ namespace Cli_Core_CS
         static Thread Wait_Thread = null;
         protected int Wait_Count = -1;
 
+        protected bool Is_Ctrl_C_Pressed;
+
         public void Wait_Count_Set(int v)
         {
             Wait_Count = v;
@@ -88,6 +90,8 @@ namespace Cli_Core_CS
 
             Input_Mode = Input_Mode_Type.INPUT_MODE_NORMAL;
             Wait_Count = -1;
+
+            Is_Ctrl_C_Pressed = false;
         }
 
         ~Cli_Input_CS()
@@ -530,6 +534,7 @@ namespace Cli_Core_CS
             {
                 //On_Key_CTRL_C();
                 item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_CTRL_C, Input_Str_Get());
+                Is_Ctrl_C_Pressed_Set();
             }
             else if (Is_Ctrl && Key_Code == Keys.Z)
             {
@@ -610,6 +615,21 @@ namespace Cli_Core_CS
         public void Input_sleep(int sleep_sec)
         {
             Thread.Sleep(sleep_sec * 1000);
+        }
+
+        public bool Is_Ctrl_C_Pressed_Get()
+        {
+            return Is_Ctrl_C_Pressed;
+        }
+
+        public void Is_Ctrl_C_Pressed_Set()
+        {
+            Is_Ctrl_C_Pressed = true;
+        }
+
+        public void Is_Ctrl_C_Pressed_Clear()
+        {
+            Is_Ctrl_C_Pressed = false;
         }
 
     }

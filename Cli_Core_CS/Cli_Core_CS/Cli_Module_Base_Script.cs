@@ -23,6 +23,9 @@ namespace Cli_Core_CS
         protected String Script_Thread_FileName = "";
         protected bool Script_Thread_Is_No_History = false;
 
+        Ref_String Script_Command_Str;
+        Ref_String Script_Label_Str;
+
         static Thread Script_Thread = null;
 
         enum Local_Cmd_ID
@@ -71,28 +74,43 @@ namespace Cli_Core_CS
                                 String s = null;
                                 do
                                 {
-                                    s = inputFile.ReadLine();
-                                    if (!inputFile.EndOfStream)
+                                    if (!main_obj.Cli_Input.Is_Ctrl_C_Pressed_Get())
                                     {
-                                        if (!String.IsNullOrEmpty(s))
+                                        s = inputFile.ReadLine();
+                                        if (!inputFile.EndOfStream)
                                         {
-                                            String s_trim = s.Trim();
-                                            if (!is_no_history && !is_debug && !String.IsNullOrEmpty(s_trim))
+                                            if (!String.IsNullOrEmpty(s))
                                             {
-                                                main_obj.History.History_Put(s_trim);
-                                            }
-                                            Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
-                                            main_obj.Cli_Output.Output_Str(s_trim);
-                                            main_obj.Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
-                                            while (main_obj.Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT)
-                                            {
-                                                main_obj.Cli_Input.Input_sleep(1);
+                                                String s_trim = s.Trim();
+                                                if (!is_no_history && !is_debug && !String.IsNullOrEmpty(s_trim))
+                                                {
+                                                    main_obj.History.History_Put(s_trim);
+                                                }
+                                                Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
+                                                main_obj.Cli_Output.Output_Str(s_trim);
+                                                main_obj.Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                                                while (main_obj.Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT)
+                                                {
+                                                    main_obj.Cli_Input.Input_sleep(1);
+                                                }
                                             }
                                         }
                                     }
+                                    else
+                                    {
+                                        main_obj.Cmd_Script_Stop.Value = true; // Stop By Ctrl+C
+                                    }
                                 } while (!inputFile.EndOfStream && s != null && !main_obj.Cmd_Script_Stop.Value && !main_obj.Cmd_Quit.Value);
 
-                                main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - " + (main_obj.Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                                if (main_obj.Cli_Input.Is_Ctrl_C_Pressed_Get())
+                                {
+                                    main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
+                                    main_obj.Cli_Input.Is_Ctrl_C_Pressed_Clear();
+                                }
+                                else
+                                {
+                                    main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - " + (main_obj.Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                                }
                                 main_obj.Cli_Output.Output_NewLine();
                                 main_obj.Cli_Output.Output_NewLine();
                                 main_obj.Cli_Output.Output_Str(main_obj.Cli_Input.Invitation_Full_Get());
@@ -145,8 +163,11 @@ namespace Cli_Core_CS
 
         public Cli_Module_Base_Script(Cli_History history, Cli_Input_CS cli_input, Cli_Output_CS cli_output,
             String str_rem, Ref_Boolean cmd_script_stop, Ref_Boolean cmd_quit,
-            Cli_CMD_Processor cli_command_processor) : base("Base Script")
+            Cli_CMD_Processor cli_command_processor,
+            Ref_String script_command_str, Ref_String script_label_str) : base("Base Script")
         {
+            Version = "0.02";
+
             History = history;
             Cli_Input = cli_input;
             Cli_Output = cli_output;
@@ -154,6 +175,8 @@ namespace Cli_Core_CS
             Cmd_Script_Stop = cmd_script_stop;
             Cmd_Quit = cmd_quit;
             Cli_Command_Processor = cli_command_processor;
+            Script_Command_Str = script_command_str;
+            Script_Label_Str = script_label_str;
 
             {
                 // do script stop // @Attention: Must be before do script "file"
@@ -224,8 +247,84 @@ namespace Cli_Core_CS
                     outputFile.WriteLine(History.History_Item_Get(i));
                 }
                 outputFile.Close();
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("Script saved from history as " + filename);
+                Cli_Output.Output_NewLine();
+            }
+            else
+            {
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("ERROR: can not open file " + filename + " for write");
+                Cli_Output.Output_NewLine();
             }
             return true;
+        }
+
+        bool Execute_Command_check_goto_label(StreamReader inputFile, string label_str)
+        {
+            bool stop = false;
+            bool found = false;
+            inputFile.DiscardBufferedData();
+            inputFile.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);
+            do
+            {
+                string s = inputFile.ReadLine();
+                if (s != null && !inputFile.EndOfStream)
+                {
+                    string kw_check = "check";
+                    int kw_check_index = s.IndexOf(kw_check, 0);
+                    if (kw_check_index >= 0)
+                    {
+                        string kw_label = "label";
+                        int kw_label_index = s.IndexOf(kw_label, kw_check_index + kw_check.Length + 1);
+                        if (kw_label_index > 0)
+                        {
+                            int label_str_index = s.IndexOf(label_str, kw_label_index + kw_label.Length + 1);
+                            if (label_str_index > 0)
+                            {
+                                found = true;
+                                stop = true; // Ok - Label Found
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    stop = true; // Failed - Label Not Found
+                }
+            } while (!stop);
+
+            return found;
+        }
+
+        void Execute_Script_Command(bool is_debug, Ref_Boolean debug_res)
+        {
+            string Script_Command_Str_Trim1 = Script_Command_Str.Value.Trim();
+            bool is_commas_found = false;
+            if (Script_Command_Str_Trim1.Length >= 2
+                    && Script_Command_Str_Trim1[0] == '\"'
+                    && Script_Command_Str_Trim1[Script_Command_Str_Trim1.Length - 1] == '\"')
+            {
+                is_commas_found = true;
+            }
+            if (Script_Command_Str_Trim1.Length >= 2
+                    && Script_Command_Str_Trim1[0] == '\''
+                    && Script_Command_Str_Trim1[Script_Command_Str_Trim1.Length - 1] == '\'')
+            {
+                is_commas_found = true;
+            }
+            string Script_Command_Str_Trim2;
+            if (is_commas_found)
+            {
+                Script_Command_Str_Trim2 = Script_Command_Str_Trim1.Substring(1, Script_Command_Str_Trim1.Length - 2);
+            }
+            else
+            {
+                Script_Command_Str_Trim2 = Script_Command_Str_Trim1;
+            }
+            Cli_Input_Item input_item2 = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, Script_Command_Str_Trim2);
+            Script_Command_Str.Value = "";
+            Cli_Command_Processor.Process_Input_Item(input_item2, is_debug, debug_res);
         }
 
         bool do_script(string filename, bool is_no_history)

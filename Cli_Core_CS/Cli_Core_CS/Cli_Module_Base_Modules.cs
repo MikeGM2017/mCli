@@ -94,14 +94,14 @@ namespace Cli_Core_CS
             items.Add(new Cmd_Item_Date("", ""));
             items.Add(new Cmd_Item_DateTime("", ""));
             items.Add(new Cmd_Item_Time("", ""));
-            //items.Add(new Cmd_Item_EQU("", ""));
-            //items.Add(new Cmd_Item_EQU_Range("", "", words));
+            items.Add(new Cmd_Item_EQU("", ""));
+            items.Add(new Cmd_Item_EQU_Range("", "", words));
             items.Add(new Cmd_Item_IP4("", ""));
             items.Add(new Cmd_Item_IP6("", ""));
             items.Add(new Cmd_Item_Int_List(1, 8, "", ""));
             items.Add(new Cmd_Item_Int_Range(1, 8, "", ""));
             items.Add(new Cmd_Item_MAC("", ""));
-            //items.Add(new Cmd_Item_Point_Var_Name("", ""));
+            items.Add(new Cmd_Item_Point_Var_Name("", ""));
             items.Add(new Cmd_Item_Rem("", ""));
             items.Add(new Cmd_Item_Str("", ""));
             //items.Add(new Cmd_Item_Str_Esc("", ""));

@@ -82,6 +82,10 @@ namespace Cli_Core_CS
 
             // Modules Add - Begin
 
+            string level_root = "top level";
+
+            Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
+
             Modules.Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
 
             char C_Single = '?';
@@ -93,10 +97,11 @@ namespace Cli_Core_CS
             Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
             Modules.Add(new Cli_Module_Base_Log(Cli_Input));
 
+            Ref_String Script_Command_Str = new Ref_String("");
+            Ref_String Script_Label_Str = new Ref_String("");
             Modules.Add(new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
                     Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit,
-                    CMD_Processor));
-            Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
+                    CMD_Processor, Script_Command_Str, Script_Label_Str));
             Modules.Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
             Modules.Add(new Cli_Module_Test_Tab_Min_Max());
@@ -104,6 +109,13 @@ namespace Cli_Core_CS
 
             Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
+            Dictionary<string, string> Values_Map = new Dictionary<string, string>();
+
+            Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop)));
+
+            Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
+
+            Modules.Add((new Cli_Module_Base_Level(Cli_Input, level_root)));
         }
 
         void Cli_Input_Item_Process(Cli_Input_Item input_item)
