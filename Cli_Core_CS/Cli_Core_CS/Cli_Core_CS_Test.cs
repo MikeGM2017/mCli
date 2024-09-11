@@ -99,9 +99,10 @@ namespace Cli_Core_CS
 
             Ref_String Script_Command_Str = new Ref_String("");
             Ref_String Script_Label_Str = new Ref_String("");
+            Ref_String Script_Dir_Str = new Ref_String("./scripts");
             Modules.Add(new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
                     Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit,
-                    CMD_Processor, Script_Command_Str, Script_Label_Str));
+                    CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str));
             Modules.Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
             Modules.Add(new Cli_Module_Test_Tab_Min_Max());

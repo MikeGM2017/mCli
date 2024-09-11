@@ -28,6 +28,8 @@ namespace Cli_Core_CS
 
         static Thread Script_Thread = null;
 
+        Ref_String Script_Dir_Str;
+
         enum Local_Cmd_ID
         {
             CMD_ID_NO,
@@ -77,22 +79,19 @@ namespace Cli_Core_CS
                                     if (!main_obj.Cli_Input.Is_Ctrl_C_Pressed_Get())
                                     {
                                         s = inputFile.ReadLine();
-                                        if (!inputFile.EndOfStream)
+                                        if (!String.IsNullOrEmpty(s))
                                         {
-                                            if (!String.IsNullOrEmpty(s))
+                                            String s_trim = s.Trim();
+                                            if (!is_no_history && !is_debug && !String.IsNullOrEmpty(s_trim))
                                             {
-                                                String s_trim = s.Trim();
-                                                if (!is_no_history && !is_debug && !String.IsNullOrEmpty(s_trim))
-                                                {
-                                                    main_obj.History.History_Put(s_trim);
-                                                }
-                                                Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
-                                                main_obj.Cli_Output.Output_Str(s_trim);
-                                                main_obj.Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
-                                                while (main_obj.Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT)
-                                                {
-                                                    main_obj.Cli_Input.Input_sleep(1);
-                                                }
+                                                main_obj.History.History_Put(s_trim);
+                                            }
+                                            Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
+                                            main_obj.Cli_Output.Output_Str(s_trim);
+                                            main_obj.Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                                            while (main_obj.Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT)
+                                            {
+                                                main_obj.Cli_Input.Input_sleep(1);
                                             }
                                         }
                                     }
@@ -164,9 +163,10 @@ namespace Cli_Core_CS
         public Cli_Module_Base_Script(Cli_History history, Cli_Input_CS cli_input, Cli_Output_CS cli_output,
             String str_rem, Ref_Boolean cmd_script_stop, Ref_Boolean cmd_quit,
             Cli_CMD_Processor cli_command_processor,
-            Ref_String script_command_str, Ref_String script_label_str) : base("Base Script")
+            Ref_String script_command_str, Ref_String script_label_str, Ref_String script_dir_str) : base("Base Script")
         {
-            Version = "0.02";
+
+            Version = "0.03";
 
             History = history;
             Cli_Input = cli_input;
@@ -177,6 +177,12 @@ namespace Cli_Core_CS
             Cli_Command_Processor = cli_command_processor;
             Script_Command_Str = script_command_str;
             Script_Label_Str = script_label_str;
+            Script_Dir_Str = script_dir_str;
+
+            if (!Directory.Exists(Script_Dir_Str.Value))
+            {
+                Directory.CreateDirectory(Script_Dir_Str.Value);
+            }
 
             {
                 // do script stop // @Attention: Must be before do script "file"
@@ -237,8 +243,33 @@ namespace Cli_Core_CS
             Cli_Input.Input_Restore();
         }
 
-        bool save_history_as_script(string filename)
+        bool script_filename_check(string s)
         {
+            if (s.Length == 0) return false; // Failed
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                if (c >= 'a' && c <= 'z') continue; // Ok
+                if (c >= 'A' && c <= 'Z') continue; // Ok
+                if (c >= '0' && c <= '9') continue; // Ok
+                if (c == '_') continue; // Ok
+                return false; // Failed
+            }
+            return true; // Ok
+        }
+
+        bool save_history_as_script(string cmd_filename)
+        {
+            bool res_filename_check = script_filename_check(cmd_filename);
+            if (!res_filename_check)
+            {
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("ERROR: can not process file " + cmd_filename + " - incorrect script file name");
+                Cli_Output.Output_NewLine();
+                return true;
+            }
+
+            string filename = Script_Dir_Str.Value + "/" + cmd_filename;
             StreamWriter outputFile = new StreamWriter(filename);
             if (outputFile != null)
             {
@@ -327,8 +358,21 @@ namespace Cli_Core_CS
             Cli_Command_Processor.Process_Input_Item(input_item2, is_debug, debug_res);
         }
 
-        bool do_script(string filename, bool is_no_history)
+        bool do_script(string cmd_filename, bool is_no_history)
         {
+            bool res_filename_check = script_filename_check(cmd_filename);
+            if (!res_filename_check)
+            {
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("ERROR: can not process file " + cmd_filename + " - incorrect script file name");
+                Cli_Output.Output_NewLine();
+                return true;
+            }
+
+            string filename = Script_Dir_Str.Value + "/" + cmd_filename;
+
+            Cli_Input.Is_Ctrl_C_Pressed_Clear(); // Before starting script - clear stop flag
+
             Cmd_Script_Stop.Value = false;
             Script_Thread_FileName = filename;
             Script_Thread_Is_No_History = is_no_history;
