@@ -31,6 +31,9 @@ namespace Cli_Core_CS
         public Cli_Module_Base_Wait(Ref_Boolean log_wait_enable, Ref_Boolean cmd_wait_stop,
         Cli_Input_CS cli_input, Cli_Output_CS cli_output) : base("Base Wait")
         {
+
+            Version = "0.02";
+
             Log_Wait_Enable = log_wait_enable;
             Cmd_Wait_Stop = cmd_wait_stop;
             Cli_Input = cli_input;
@@ -75,6 +78,7 @@ namespace Cli_Core_CS
             int wait_sec = 0;
             Int32.TryParse(token_value, out wait_sec);
             Cmd_Wait_Stop.Value = false;
+            Cli_Input.Is_Ctrl_C_Pressed_Clear();
 
             if (log_wait_enable)
             {
