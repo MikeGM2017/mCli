@@ -99,6 +99,7 @@
     <Compile Include="Cmd_Token_Parser_Char_Type.cs" />
     <Compile Include="Cmd_Token_Parser_Char_Type_Func.cs" />
     <Compile Include="Cmd_Token_Parser_Result.cs" />
+    <Compile Include="Execute_Object_Abstract.cs" />
     <Compile Include="Input_Cmd_Type.cs" />
     <Compile Include="Input_Mode_Type.cs" />
     <Compile Include="Level_Description.cs" />

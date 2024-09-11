@@ -38,6 +38,8 @@ namespace Cli_Core_CS
 
         protected bool Is_Ctrl_C_Pressed;
 
+        protected Execute_Object_Abstract Execute_Object = null;
+
         public void Wait_Count_Set(int v)
         {
             Wait_Count = v;
@@ -69,7 +71,11 @@ namespace Cli_Core_CS
                     }
                     else
                     {
-                        main_obj.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                        if (main_obj.Input_Mode_Get() != Input_Mode_Type.INPUT_MODE_PROMPT
+                            && main_obj.Input_Mode_Get() != Input_Mode_Type.INPUT_MODE_NORMAL)
+                        {
+                            main_obj.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                        }
                     }
                 }
                 System.Threading.Thread.Sleep(1000);
@@ -630,6 +636,20 @@ namespace Cli_Core_CS
         public void Is_Ctrl_C_Pressed_Clear()
         {
             Is_Ctrl_C_Pressed = false;
+        }
+
+        public void Execute_Object_Set(Execute_Object_Abstract obj)
+        {
+            Execute_Object = obj;
+        }
+
+        public void Execute_Yes()
+        {
+            if(Execute_Object != null)
+            {
+                Execute_Object.Do();
+                Execute_Object = null;
+            }
         }
 
     }

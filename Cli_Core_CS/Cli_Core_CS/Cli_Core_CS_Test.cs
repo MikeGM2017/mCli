@@ -86,7 +86,7 @@ namespace Cli_Core_CS
 
             Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
-            Modules.Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
+            Modules.Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
 
             char C_Single = '?';
             char C_Multy = '*';
@@ -173,10 +173,10 @@ namespace Cli_Core_CS
                         else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_PROMPT)
                         {
                             Cli_Output.Output_NewLine();
-                            if (input_item.Text_Get().Equals("Y") || input_item.Text_Get().Equals("y")
-                                    || input_item.Text_Get().Equals("YES") || input_item.Text_Get().Equals("Yes") || input_item.Text_Get().Equals("yes"))
+                            if (input_item.Text_Get().ToLower().Equals("y") || input_item.Text_Get().ToLower().Equals("yes"))
                             {
                                 Cli_Output.Output_Str("Answer: Yes");
+                                Cli_Input.Execute_Yes();
                             }
                             else
                             {
@@ -184,6 +184,13 @@ namespace Cli_Core_CS
                             }
                             Cli_Output.Output_NewLine();
 
+                            Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                            Cli_Input.Input_Str_Set_Empty();
+
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                            Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().Length);
+                            Cli_Output.Caret_Pos_Set(Cli_Input.Input_Str_Get().Length, Cli_Input.Input_Str_Pos_Get());
                         }
                         else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_PASSWD)
                         {
