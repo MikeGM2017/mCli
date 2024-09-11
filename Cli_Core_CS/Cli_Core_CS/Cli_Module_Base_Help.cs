@@ -40,6 +40,9 @@ namespace Cli_Core_CS
                 Str_Filter help_str_filter,
                 Cli_Output_CS cli_output) : base("Base Help")
         {
+
+            Version = "0.02";
+
             User_Privilege = user_privilege;
             Modules = modules;
             Help_Str_Filter = help_str_filter;
@@ -148,17 +151,17 @@ namespace Cli_Core_CS
         }
 
         protected int Help_Cli_Modules_Get_Len(int user_privilege, Cli_Modules modules,
-                    String level,
-                    bool is_full, bool is_verbose, bool is_module_full,
-                    String module_filter, String command_filter, Str_Filter str_filter)
+                string level,
+                bool is_full, bool is_verbose, bool is_module_full,
+                string module_filter, string command_filter, Str_Filter str_filter)
         {
             int len_max = 0;
 
             for (int module = 0; module < modules.Get_Size(); module++)
             {
                 Cli_Module module_ptr = modules.Get(module);
-                String module_name = module_ptr.Name_Get();
-                String module_name_with_commas = "\"" + module_ptr.Name_Get() + "\"";
+                string module_name = module_ptr.Name_Get();
+                string module_name_with_commas = "\"" + module_ptr.Name_Get() + "\"";
                 if (is_full || str_filter.Is_Match(module_filter, module_name)
                         || str_filter.Is_Match(module_filter, module_name_with_commas))
                 {
@@ -203,11 +206,11 @@ namespace Cli_Core_CS
         }
 
         protected void Help_Cli_Modules_Print(int user_privilege, Cli_Modules modules,
-            String level,
-            bool is_full, bool is_verbose, bool is_module_full,
-            String module_filter, String command_filter, Str_Filter str_filter,
-            int len_max, Ref_Int modules_count, Ref_Int commands_count,
-            Cli_Output_CS Cli_Output)
+                string level,
+                bool is_full, bool is_verbose, bool is_module_full,
+                string module_filter, string command_filter, Str_Filter str_filter,
+                int len_max, Ref_Int modules_count, Ref_Int commands_count,
+                Cli_Output_CS Cli_Output)
         {
 
             StringBuilder sb = new StringBuilder();
@@ -218,8 +221,8 @@ namespace Cli_Core_CS
             for (int module = 0; module < modules.Get_Size(); module++)
             {
                 Cli_Module module_ptr = modules.Get(module);
-                String module_name = module_ptr.Name_Get();
-                String module_name_with_commas = "\"" + module_ptr.Name_Get() + "\"";
+                string module_name = module_ptr.Name_Get();
+                string module_name_with_commas = "\"" + module_ptr.Name_Get() + "\"";
                 if (is_full || str_filter.Is_Match(module_filter, module_name)
                         || str_filter.Is_Match(module_filter, module_name_with_commas))
                 {
@@ -227,12 +230,12 @@ namespace Cli_Core_CS
                     for (int cmd = 0; cmd < module_ptr.Cmd_Count_Get(); cmd++)
                     {
                         Cli_Cmd cmd_ptr = module_ptr.Cmd_Get(cmd);
-                        String s = "";
+                        string s = "";
                         StringBuilder sb1 = new StringBuilder();
                         StringBuilder sb2 = new StringBuilder();
                         if (level.Length == 0)
                         {
-                            String s_level = cmd_ptr.Level_Get();
+                            string s_level = cmd_ptr.Level_Get();
                             if (s_level.Length > 0)
                             {
                                 s += "[" + s_level + "] ";
