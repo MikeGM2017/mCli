@@ -47,6 +47,9 @@ public:
 
     Cli_Module_Base_Rem(string str_rem, Cli_Output_Abstract &cli_output) : Cli_Module("Base Rem"),
     Cli_Output(cli_output) {
+
+        Version = "0.02";
+
         {
             // rem
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_rem);
@@ -85,7 +88,6 @@ public:
     // Step 6: functions for CMD_ID_XXX - Begin
 
     bool rem(string s_rem) {
-        Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_rem);
         Cli_Output.Output_NewLine();
         return true;

@@ -157,7 +157,7 @@ public:
     Script_Command_Str(script_command_str), Script_Label_Str(script_label_str),
     Do_Command_Object(do_command_object) {
 
-        Version = "0.03";
+        Version = "0.04";
 
         // <editor-fold defaultstate="collapsed" desc="Decl: cmp_int_str/words, cmp_str_str/words">
         string cmp_int_str = "== != < > <= >= & | && ||";
@@ -555,7 +555,7 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
             cmd->Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
             cmd->Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-            cmd->Item_Add(new Cmd_Item_Int("<str>", "value to compare"));
+            cmd->Item_Add(new Cmd_Item_Str("<str>", "value to compare"));
             cmd->Item_Add(new Cmd_Item_Word("as", "as"));
             cmd->Item_Add(new Cmd_Item_Word("value", "as value"));
             cmd->Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -573,7 +573,7 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
             cmd->Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
             cmd->Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-            cmd->Item_Add(new Cmd_Item_Int("<str>", "value to compare"));
+            cmd->Item_Add(new Cmd_Item_Str("<str>", "value to compare"));
             cmd->Item_Add(new Cmd_Item_Word("as", "as"));
             cmd->Item_Add(new Cmd_Item_Word("value", "as value"));
             cmd->Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -698,7 +698,7 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
             cmd->Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
             cmd->Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-            cmd->Item_Add(new Cmd_Item_Int("<var2_name>", "var2 name"));
+            cmd->Item_Add(new Cmd_Item_Str("<var2_name>", "var2 name"));
             cmd->Item_Add(new Cmd_Item_Word("as", "as"));
             cmd->Item_Add(new Cmd_Item_Word("var", "as var"));
             cmd->Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -716,7 +716,7 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
             cmd->Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
             cmd->Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-            cmd->Item_Add(new Cmd_Item_Int("<var2_name>", "var2 name"));
+            cmd->Item_Add(new Cmd_Item_Str("<var2_name>", "var2 name"));
             cmd->Item_Add(new Cmd_Item_Word("as", "as"));
             cmd->Item_Add(new Cmd_Item_Word("var", "as var"));
             cmd->Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -738,7 +738,7 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
             cmd->Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
             cmd->Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-            cmd->Item_Add(new Cmd_Item_Int("<var2_name>", "var2 name"));
+            cmd->Item_Add(new Cmd_Item_Str("<var2_name>", "var2 name"));
             cmd->Item_Add(new Cmd_Item_Word("as", "as"));
             cmd->Item_Add(new Cmd_Item_Word("var", "as var"));
             cmd->Item_Add(new Cmd_Item_Word("do", "do"));
@@ -1169,9 +1169,6 @@ public:
     // <editor-fold defaultstate="collapsed" desc="Values_Map: print, clear">
 
     bool check_map_print(string var_filter, Str_Filter_Abstract &str_filter) {
-
-        Cli_Output.Output_NewLine();
-
         if (!Values_Map.empty()) {
             Cli_Output.Output_Str("Values Map:");
             Cli_Output.Output_NewLine();
@@ -1198,9 +1195,6 @@ public:
     }
 
     bool check_map_clear() {
-
-        Cli_Output.Output_NewLine();
-
         if (!Values_Map.empty()) {
             Values_Map.clear();
             Cli_Output.Output_Str("Values Map cleared");
@@ -1218,7 +1212,6 @@ public:
     // <editor-fold defaultstate="collapsed" desc="Values_Map: modules to map">
 
     bool check_modules_to_map(string module_filter, Str_Filter_Abstract &str_filter) {
-        Cli_Output.Output_NewLine();
         bool found = false;
         for (int module = 0; module < Modules.Get_Size(); module++) {
             Cli_Module *module_ptr = Modules.Get(module);
@@ -1251,12 +1244,10 @@ public:
         if (var_left_iter != Values_Map.end() || is_force) {
             Values_Map[var_left] = value;
             if (var_left_iter == Values_Map.end()) {
-                Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str("Var Created: " + var_left + " = " + value);
                 Cli_Output.Output_NewLine();
             }
         } else {
-            Cli_Output.Output_NewLine();
             Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
             Cli_Output.Output_NewLine();
         }
@@ -1271,21 +1262,18 @@ public:
             string value = var_right_iter->second;
             Values_Map[var_left] = value;
             if (var_left_iter == Values_Map.end()) {
-                Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str("Var Created: " + var_left + " = " + value);
                 Cli_Output.Output_NewLine();
             }
         } else {
-            Cli_Output.Output_NewLine();
-
             if (var_left_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
             }
             if (var_right_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                Cli_Output.Output_NewLine();
             }
-
-            Cli_Output.Output_NewLine();
         }
 
         return true;
@@ -1301,12 +1289,10 @@ public:
             string value = Expr_Calc(Values_Map, expr);
             Values_Map[var_left] = value;
             if (var_left_iter == Values_Map.end()) {
-                Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str("Var Created: " + var_left + " = " + value);
                 Cli_Output.Output_NewLine();
             }
         } else {
-            Cli_Output.Output_NewLine();
             Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
             Cli_Output.Output_NewLine();
         }
@@ -1327,7 +1313,6 @@ public:
             s_str << value;
             Values_Map[var_left] = s_str.str();
         } else {
-            Cli_Output.Output_NewLine();
             Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
             Cli_Output.Output_NewLine();
         }
@@ -1398,11 +1383,11 @@ public:
             int var_left_value = atoi(var_left_iter->second.c_str());
             Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
-                Cli_Output.Output_Str(s_msg1);
+                Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg1));
                 Cli_Output.Output_NewLine();
             } else if (cmp_res == CMP_FALSE) {
                 if (is_msg2) {
-                    Cli_Output.Output_Str(s_msg2);
+                    Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg2));
                     Cli_Output.Output_NewLine();
                 }
             } else if (cmp_res == CMP_ERROR) {
@@ -1421,18 +1406,15 @@ public:
     bool check_var_by_str_print_msg1_or_msg2(string var_left, string s_compare, string var_right_value,
             string s_msg1, bool is_msg2, string s_msg2) {
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
-
-        Cli_Output.Output_NewLine();
-
         if (var_left_iter != Values_Map.end()) {
             string var_left_value = var_left_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
             if (cmp_res == CMP_TRUE) {
-                Cli_Output.Output_Str(s_msg1);
+                Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg1));
                 Cli_Output.Output_NewLine();
             } else if (cmp_res == CMP_FALSE) {
                 if (is_msg2) {
-                    Cli_Output.Output_Str(s_msg2);
+                    Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg2));
                     Cli_Output.Output_NewLine();
                 }
             } else if (cmp_res == CMP_ERROR) {
@@ -1451,9 +1433,6 @@ public:
             string s_msg1, bool is_msg2, string s_msg2) {
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
         map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
-
-        Cli_Output.Output_NewLine();
-
         if (var_left_iter != Values_Map.end() && var_right_iter != Values_Map.end()) {
             int var_right_value = atoi(var_right_iter->second.c_str());
             return check_var_by_int_print_msg1_or_msg2(var_left, s_compare, var_right_value, s_msg1, is_msg2, s_msg2);
@@ -1476,27 +1455,27 @@ public:
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
         map<string, string>::iterator var1_inc_iter = Values_Map.find(var1_inc);
         map<string, string>::iterator var2_inc_iter = Values_Map.find(var2_inc);
-
-        Cli_Output.Output_NewLine();
-
         if (var_left_iter != Values_Map.end() && var1_inc_iter != Values_Map.end()
-                && ((is_var2_inc && var1_inc_iter != Values_Map.end()) || !is_var2_inc)) {
+                && ((is_var2_inc && var2_inc_iter != Values_Map.end()) || !is_var2_inc)) {
             int var_left_value = atoi(var_left_iter->second.c_str());
             int var1_value = atoi(var1_inc_iter->second.c_str());
-            int var2_value = atoi(var2_inc_iter->second.c_str());
+            int var2_value = 0;
+            if (is_var2_inc) {
+                var2_value = atoi(var2_inc_iter->second.c_str());
+            }
 
             Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
             if (cmp_res == CMP_TRUE) {
                 var1_value++;
                 stringstream s_str;
                 s_str << var1_value;
-                Values_Map[var_left] = s_str.str();
+                Values_Map[var1_inc] = s_str.str();
             } else if (cmp_res == CMP_FALSE) {
                 if (is_var2_inc) {
                     var2_value++;
                     stringstream s_str;
                     s_str << var2_value;
-                    Values_Map[var_left] = s_str.str();
+                    Values_Map[var2_inc] = s_str.str();
                 }
             } else if (cmp_res == CMP_ERROR) {
                 Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
@@ -1526,13 +1505,13 @@ public:
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
         map<string, string>::iterator var1_inc_iter = Values_Map.find(var1_inc);
         map<string, string>::iterator var2_inc_iter = Values_Map.find(var2_inc);
-
-        Cli_Output.Output_NewLine();
-
         if (var_left_iter != Values_Map.end() && var1_inc_iter != Values_Map.end()
-                && ((is_var2_inc && var1_inc_iter != Values_Map.end()) || !is_var2_inc)) {
+                && ((is_var2_inc && var2_inc_iter != Values_Map.end()) || !is_var2_inc)) {
             int var1_value = atoi(var1_inc_iter->second.c_str());
-            int var2_value = atoi(var2_inc_iter->second.c_str());
+            int var2_value = 0;
+            if (is_var2_inc) {
+                var2_value = atoi(var2_inc_iter->second.c_str());
+            }
 
             string var_left_value = var_left_iter->second;
             Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
@@ -1540,13 +1519,13 @@ public:
                 var1_value++;
                 stringstream s_str;
                 s_str << var1_value;
-                Values_Map[var_left] = s_str.str();
+                Values_Map[var1_inc] = s_str.str();
             } else if (cmp_res == CMP_FALSE) {
                 if (is_var2_inc) {
                     var2_value++;
                     stringstream s_str;
                     s_str << var2_value;
-                    Values_Map[var_left] = s_str.str();
+                    Values_Map[var2_inc] = s_str.str();
                 }
             } else if (cmp_res == CMP_ERROR) {
                 Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
@@ -1577,15 +1556,15 @@ public:
         map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
         map<string, string>::iterator var1_inc_iter = Values_Map.find(var1_inc);
         map<string, string>::iterator var2_inc_iter = Values_Map.find(var2_inc);
-
-        Cli_Output.Output_NewLine();
-
         if (var_left_iter != Values_Map.end()
                 && var_right_iter != Values_Map.end()
                 && var1_inc_iter != Values_Map.end()
-                && ((is_var2_inc && var1_inc_iter != Values_Map.end()) || !is_var2_inc)) {
+                && ((is_var2_inc && var2_inc_iter != Values_Map.end()) || !is_var2_inc)) {
             int var1_value = atoi(var1_inc_iter->second.c_str());
-            int var2_value = atoi(var2_inc_iter->second.c_str());
+            int var2_value = 0;
+            if (is_var2_inc) {
+                var2_value = atoi(var2_inc_iter->second.c_str());
+            }
 
             string var_left_value = var_left_iter->second;
             string var_right_value = var_right_iter->second;
@@ -1594,13 +1573,13 @@ public:
                 var1_value++;
                 stringstream s_str;
                 s_str << var1_value;
-                Values_Map[var_left] = s_str.str();
+                Values_Map[var1_inc] = s_str.str();
             } else if (cmp_res == CMP_FALSE) {
                 if (is_var2_inc) {
                     var2_value++;
                     stringstream s_str;
                     s_str << var2_value;
-                    Values_Map[var_left] = s_str.str();
+                    Values_Map[var2_inc] = s_str.str();
                 }
             } else if (cmp_res == CMP_ERROR) {
                 Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
@@ -1919,11 +1898,11 @@ public:
     bool check_var_exists_print(string var_left, string str1, bool is_str2, string str2) {
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
         if (var_left_iter != Values_Map.end()) {
-            Cli_Output.Output_Str(str1);
+            Cli_Output.Output_Str(Str_Without_Commas.Get(str1));
             Cli_Output.Output_NewLine();
         } else {
             if (is_str2) {
-                Cli_Output.Output_Str(str2);
+                Cli_Output.Output_Str(Str_Without_Commas.Get(str2));
                 Cli_Output.Output_NewLine();
             }
         }
@@ -1959,8 +1938,7 @@ public:
     // <editor-fold defaultstate="collapsed" desc="Print Str">
 
     bool check_print_str(string s) {
-        string s1 = Str_Without_Commas.Get(s);
-        Cli_Output.Output_Str(s1);
+        Cli_Output.Output_Str(Str_Without_Commas.Get(s));
         return true;
     }
 
