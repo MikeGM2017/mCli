@@ -1,0 +1,4 @@
+check if v1 exists do command ".v1 delete"
+check if v1 exists print "v1 exists - Failed" else print "v1 doesn't exist - Ok"
+.v1 = 1
+check if v1 exists print "v1 exists - Ok" else print "v1 doesn't exist - Failed"
