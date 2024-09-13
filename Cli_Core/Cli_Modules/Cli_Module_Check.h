@@ -33,6 +33,8 @@ using namespace std;
 
 #include "Str_Get_Without_Commas.h"
 
+#include "Do_Abstract.h"
+
 class Cli_Module_Check : public Cli_Module {
 protected:
 
@@ -50,6 +52,8 @@ protected:
 
     string &Script_Command_Str;
     string &Script_Label_Str;
+
+    Do_Abstract &Do_Command_Object;
 
     int Count_Total;
     int Count_Passed;
@@ -108,8 +112,15 @@ public:
         CMD_ID_check_if_str_compare_str_as_var_do_command_str,
         CMD_ID_check_if_str_compare_str_as_var_do_command_str_else_do_command_str,
 
+        CMD_ID_check_if_str_exists_print_str,
+        CMD_ID_check_if_str_exists_print_str_else_print_str,
+        CMD_ID_check_if_str_exists_do_command_str,
+        CMD_ID_check_if_str_exists_do_command_str_else_do_command_str,
+
         CMD_ID_check_label_str,
         CMD_ID_check_goto_label,
+
+        CMD_ID_check_print_str,
 
         CMD_ID_check_if_str_compare_int_goto_str,
         CMD_ID_check_if_str_compare_int_goto_str_else_goto_str,
@@ -136,15 +147,17 @@ public:
             Str_Get_Without_Commas &str_without_commas,
             Cli_Output_Abstract &cli_output,
             bool &cmd_script_stop,
-            string &script_command_str, string &script_label_str) : Cli_Module("Check"),
+            string &script_command_str, string &script_label_str,
+            Do_Abstract &do_command_object) : Cli_Module("Check"),
     Modules(modules), Values_Map(values_map),
     Str_Filter(str_filter),
     Str_Without_Commas(str_without_commas),
     Cli_Output(cli_output),
     Cmd_Script_Stop(cmd_script_stop),
-    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str) {
+    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str),
+    Do_Command_Object(do_command_object) {
 
-        Version = "0.02";
+        Version = "0.03";
 
         // <editor-fold defaultstate="collapsed" desc="Decl: cmp_int_str/words, cmp_str_str/words">
         string cmp_int_str = "== != < > <= >= & | && ||";
@@ -904,6 +917,79 @@ public:
         }
         // </editor-fold>
 
+        // <editor-fold defaultstate="collapsed" desc="Check if: var exists print/do command">
+        {
+            // check if str exists print str
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_check_if_str_exists_print_str);
+            cmd->Text_Set("check if <var_name>  exists print <str>");
+            cmd->Help_Set("check var exists and print str");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("check", "check"));
+            cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
+            cmd->Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+            cmd->Item_Add(new Cmd_Item_Word("exists", "var exists"));
+            cmd->Item_Add(new Cmd_Item_Word("print", "print"));
+            cmd->Item_Add(new Cmd_Item_Str("<str>", "str"));
+
+            Cmd_Add(cmd);
+        }
+        {
+            // check if str exists print str else print str
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_check_if_str_exists_print_str_else_print_str);
+            cmd->Text_Set("check if <var_name>  exists print <str1> else print <str2>");
+            cmd->Help_Set("check var exists and print str1 or str2");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("check", "check"));
+            cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
+            cmd->Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+            cmd->Item_Add(new Cmd_Item_Word("exists", "var exists"));
+            cmd->Item_Add(new Cmd_Item_Word("print", "print"));
+            cmd->Item_Add(new Cmd_Item_Str("<str1>", "str1"));
+            cmd->Item_Add(new Cmd_Item_Word("else", "else"));
+            cmd->Item_Add(new Cmd_Item_Word("print", "print"));
+            cmd->Item_Add(new Cmd_Item_Str("<str2>", "str2"));
+
+            Cmd_Add(cmd);
+        }
+
+        {
+            // check if str exists do command str
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_check_if_str_exists_do_command_str);
+            cmd->Text_Set("check if <var_name>  exists do command <command_str>");
+            cmd->Help_Set("check var exists and do command");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("check", "check"));
+            cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
+            cmd->Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+            cmd->Item_Add(new Cmd_Item_Word("exists", "var exists"));
+            cmd->Item_Add(new Cmd_Item_Word("do", "do"));
+            cmd->Item_Add(new Cmd_Item_Word("command", "do command"));
+            cmd->Item_Add(new Cmd_Item_Str("<command_str>", "command"));
+
+            Cmd_Add(cmd);
+        }
+        {
+            // check if str exists do command str else do command str
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_check_if_str_exists_do_command_str_else_do_command_str);
+            cmd->Text_Set("check if <var_name>  exists do command <command1_str> else do command <command2_str>");
+            cmd->Help_Set("check var exists and do command1 or do command2");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("check", "check"));
+            cmd->Item_Add(new Cmd_Item_Word("if", "check if"));
+            cmd->Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+            cmd->Item_Add(new Cmd_Item_Word("exists", "var exists"));
+            cmd->Item_Add(new Cmd_Item_Word("do", "do"));
+            cmd->Item_Add(new Cmd_Item_Word("command", "do command"));
+            cmd->Item_Add(new Cmd_Item_Str("<command1_str>", "command1"));
+            cmd->Item_Add(new Cmd_Item_Word("else", "else"));
+            cmd->Item_Add(new Cmd_Item_Word("do", "do"));
+            cmd->Item_Add(new Cmd_Item_Word("command", "do command"));
+            cmd->Item_Add(new Cmd_Item_Str("<command2_str>", "command2"));
+
+            Cmd_Add(cmd);
+        }
+        // </editor-fold>
+
         // <editor-fold defaultstate="collapsed" desc="Label: label/goto label">
         {
             // check label str
@@ -927,6 +1013,21 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("check", "check"));
             cmd->Item_Add(new Cmd_Item_Word("goto", "goto"));
             cmd->Item_Add(new Cmd_Item_Str("<label_name>", "label name"));
+
+            Cmd_Add(cmd);
+        }
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Print Str">
+        {
+            // check print str
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_check_print_str);
+            cmd->Text_Set("check print <str>");
+            cmd->Help_Set("print <str>");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("check", "check"));
+            cmd->Item_Add(new Cmd_Item_Word("print", "print"));
+            cmd->Item_Add(new Cmd_Item_Str("<str>", "str"));
 
             Cmd_Add(cmd);
         }
@@ -1056,6 +1157,13 @@ public:
     }
 
     virtual ~Cli_Module_Check() {
+    }
+
+    string Var_Name_Without_Point_Get(string s) {
+        if (s.length() > 0 && s[0] == '.') {
+            return s.substr(1);
+        }
+        return s;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Values_Map: print, clear">
@@ -1535,11 +1643,13 @@ public:
         if (is_no_history) {
             Script_Command_Str += " no history";
         }
+        Do_Command_Object.Do();
         return true;
     }
 
     bool Do_Command(string command) {
         Script_Command_Str = command;
+        Do_Command_Object.Do();
         return true;
     }
 
@@ -1694,11 +1804,11 @@ public:
             }
 
         } else {
-            if (var_left_iter != Values_Map.end()) {
+            if (var_left_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
                 Cli_Output.Output_NewLine();
             }
-            if (var_right_iter != Values_Map.end()) {
+            if (var_right_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
                 Cli_Output.Output_NewLine();
             }
@@ -1713,7 +1823,7 @@ public:
         if (var_left_iter != Values_Map.end()
                 //&& var_right_iter != Values_Map.end()
                 ) {
-            //int var_left_value = atoi(var_left_iter->second.c_str());
+            //int var_left_value = atoi(var_left_iter->second.Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str););
             int var_left_value = atoi(var_left_iter->second.c_str());
             //string var_left_value = var_left_iter->second;
             //string var_right_value = var_right_iter->second;
@@ -1728,11 +1838,11 @@ public:
             }
 
         } else {
-            //if (var_left_iter != Values_Map.end()) {
+            //if (var_left_iter == Values_Map.end()) {
             Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
             Cli_Output.Output_NewLine();
             //}
-            //if (var_right_iter != Values_Map.end()) {
+            //if (var_right_iter == Values_Map.end()) {
             //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
             //    Cli_Output.Output_NewLine();
             //}
@@ -1760,11 +1870,11 @@ public:
             }
 
         } else {
-            //if (var_left_iter != Values_Map.end()) {
+            //if (var_left_iter == Values_Map.end()) {
             Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
             Cli_Output.Output_NewLine();
             //}
-            //if (var_right_iter != Values_Map.end()) {
+            //if (var_right_iter == Values_Map.end()) {
             //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
             //    Cli_Output.Output_NewLine();
             //}
@@ -1790,13 +1900,43 @@ public:
             }
 
         } else {
-            if (var_left_iter != Values_Map.end()) {
+            if (var_left_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
                 Cli_Output.Output_NewLine();
             }
-            if (var_right_iter != Values_Map.end()) {
+            if (var_right_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
                 Cli_Output.Output_NewLine();
+            }
+        }
+        return true;
+    }
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Check if: var exists print/do command">
+
+    bool check_var_exists_print(string var_left, string str1, bool is_str2, string str2) {
+        map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+        if (var_left_iter != Values_Map.end()) {
+            Cli_Output.Output_Str(str1);
+            Cli_Output.Output_NewLine();
+        } else {
+            if (is_str2) {
+                Cli_Output.Output_Str(str2);
+                Cli_Output.Output_NewLine();
+            }
+        }
+        return true;
+    }
+
+    bool check_var_exists_do_command(string var_left, string command1, bool is_command2, string command2) {
+        map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+        if (var_left_iter != Values_Map.end()) {
+            Do_Command(command1);
+        } else {
+            if (is_command2) {
+                Do_Command(command2);
             }
         }
         return true;
@@ -1812,6 +1952,16 @@ public:
 
     bool check_goto_label(string label) {
         return Do_Goto_Label(label);
+    }
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Print Str">
+
+    bool check_print_str(string s) {
+        string s1 = Str_Without_Commas.Get(s);
+        Cli_Output.Output_Str(s1);
+        return true;
     }
 
     // </editor-fold>
@@ -1838,11 +1988,11 @@ public:
             }
 
         } else {
-            //if (var_left_iter != Values_Map.end()) {
+            //if (var_left_iter == Values_Map.end()) {
             Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
             Cli_Output.Output_NewLine();
             //}
-            //if (var_right_iter != Values_Map.end()) {
+            //if (var_right_iter == Values_Map.end()) {
             //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
             //    Cli_Output.Output_NewLine();
             //}
@@ -1870,11 +2020,11 @@ public:
             }
 
         } else {
-            //if (var_left_iter != Values_Map.end()) {
+            //if (var_left_iter == Values_Map.end()) {
             Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
             Cli_Output.Output_NewLine();
             //}
-            //if (var_right_iter != Values_Map.end()) {
+            //if (var_right_iter == Values_Map.end()) {
             //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
             //    Cli_Output.Output_NewLine();
             //}
@@ -1900,11 +2050,11 @@ public:
             }
 
         } else {
-            if (var_left_iter != Values_Map.end()) {
+            if (var_left_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
                 Cli_Output.Output_NewLine();
             }
-            if (var_right_iter != Values_Map.end()) {
+            if (var_right_iter == Values_Map.end()) {
                 Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
                 Cli_Output.Output_NewLine();
             }
@@ -1955,7 +2105,7 @@ public:
             case CMD_ID_check_var_str_set_str_as_value:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string value = cmd->Items[4]->Value_Str;
                 bool if_force;
                 return check_var_set_str_as_value(var_left, value, if_force = false);
@@ -1963,7 +2113,7 @@ public:
             case CMD_ID_check_var_str_set_str_as_value_force:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string value = cmd->Items[4]->Value_Str;
                 bool if_force;
                 return check_var_set_str_as_value(var_left, value, if_force = true);
@@ -1972,7 +2122,7 @@ public:
             case CMD_ID_check_var_str_set_str_as_var:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string value = cmd->Items[4]->Value_Str;
                 bool if_force;
                 return check_var_set_str_as_var(var_left, value, if_force = false);
@@ -1980,7 +2130,7 @@ public:
             case CMD_ID_check_var_str_set_str_as_var_force:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string value = cmd->Items[4]->Value_Str;
                 bool if_force;
                 return check_var_set_str_as_var(var_left, value, if_force = true);
@@ -1989,7 +2139,7 @@ public:
             case CMD_ID_check_var_str_set_str_as_expr:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string expr = cmd->Items[4]->Value_Str;
                 bool if_force;
                 return check_var_set_str_as_expr(var_left, expr, if_force = false);
@@ -1997,7 +2147,7 @@ public:
             case CMD_ID_check_var_str_set_str_as_expr_force:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string expr = cmd->Items[4]->Value_Str;
                 bool if_force;
                 return check_var_set_str_as_expr(var_left, expr, if_force = true);
@@ -2010,7 +2160,7 @@ public:
             case CMD_ID_check_var_str_inc:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 return check_var_inc_value(var_left);
             }
 
@@ -2021,7 +2171,7 @@ public:
             case CMD_ID_check_if_str_compare_int_print_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string s_msg1 = cmd->Items[6]->Value_Str;
@@ -2032,7 +2182,7 @@ public:
             case CMD_ID_check_if_str_compare_int_print_str_else_print_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string s_msg1 = cmd->Items[6]->Value_Str;
@@ -2044,7 +2194,7 @@ public:
             case CMD_ID_check_if_str_compare_int_inc_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string var1_inc = cmd->Items[6]->Value_Str;
@@ -2055,7 +2205,7 @@ public:
             case CMD_ID_check_if_str_compare_int_inc_str_else_inc_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string var1_inc = cmd->Items[6]->Value_Str;
@@ -2067,7 +2217,7 @@ public:
             case CMD_ID_check_if_str_compare_int_do_script_stop:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 return check_var_by_int_do_script_stop(var_left, s_compare, var_right_value);
@@ -2076,7 +2226,7 @@ public:
             case CMD_ID_check_if_str_compare_int_do_script_filename:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string filename = cmd->Items[7]->Value_Str;
@@ -2086,7 +2236,7 @@ public:
             case CMD_ID_check_if_str_compare_int_do_script_filename_no_history:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string filename = cmd->Items[7]->Value_Str;
@@ -2101,7 +2251,7 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_print_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 string value = cmd->Items[4]->Value_Str;
                 string s_msg1 = cmd->Items[8]->Value_Str;
@@ -2112,7 +2262,7 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_print_str_else_print_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 string value = cmd->Items[4]->Value_Str;
                 string s_msg1 = cmd->Items[8]->Value_Str;
@@ -2124,7 +2274,7 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_inc_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 string value = cmd->Items[4]->Value_Str;
                 string var1_inc = cmd->Items[8]->Value_Str;
@@ -2135,7 +2285,7 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_inc_str_else_inc_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 string value = cmd->Items[4]->Value_Str;
                 string var1_inc = cmd->Items[8]->Value_Str;
@@ -2147,7 +2297,7 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_do_script_stop:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 string var_right_value = cmd->Items[4]->Value_Str;
                 return check_var_by_str_do_script_stop(var_left, s_compare, var_right_value);
@@ -2156,9 +2306,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_do_script_filename:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right_value = cmd->Items[4]->Value_Str.c_str();
+                string var_right_value = cmd->Items[4]->Value_Str;
                 string filename = cmd->Items[7]->Value_Str;
                 bool is_no_history;
                 return check_var_by_str_do_script_from_file(var_left, s_compare, var_right_value, filename, is_no_history = false);
@@ -2166,9 +2316,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_do_script_filename_no_history:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right_value = cmd->Items[4]->Value_Str.c_str();
+                string var_right_value = cmd->Items[4]->Value_Str;
                 string filename = cmd->Items[7]->Value_Str;
                 bool is_no_history;
                 return check_var_by_str_do_script_from_file(var_left, s_compare, var_right_value, filename, is_no_history = true);
@@ -2181,9 +2331,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_print_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str;
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string s_msg1 = cmd->Items[8]->Value_Str;
                 bool is_msg2;
                 string s_msg2;
@@ -2192,9 +2342,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_print_str_else_print_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str;
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string s_msg1 = cmd->Items[8]->Value_Str;
                 bool is_msg2;
                 string s_msg2 = cmd->Items[11]->Value_Str;
@@ -2204,9 +2354,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_inc_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str;
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string var1_inc = cmd->Items[8]->Value_Str;
                 bool is_var2_inc;
                 string var2_inc;
@@ -2215,9 +2365,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_inc_str_else_inc_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str;
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string var1_inc = cmd->Items[8]->Value_Str;
                 bool is_var2_inc;
                 string var2_inc = cmd->Items[11]->Value_Str;
@@ -2227,18 +2377,18 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_do_script_stop:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str;
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 return check_var_by_var_do_script_stop(var_left, s_compare, var_right);
             }
 
             case CMD_ID_check_if_str_compare_str_as_var_do_script_filename:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str.c_str();
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string filename = cmd->Items[7]->Value_Str;
                 bool is_no_history;
                 return check_var_by_var_do_script_from_file(var_left, s_compare, var_right, filename, is_no_history = false);
@@ -2246,9 +2396,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_do_script_filename_no_history:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str.c_str();
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string filename = cmd->Items[7]->Value_Str;
                 bool is_no_history;
                 return check_var_by_var_do_script_from_file(var_left, s_compare, var_right, filename, is_no_history = true);
@@ -2260,7 +2410,7 @@ public:
             case CMD_ID_check_if_str_compare_int_do_command_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string command1 = cmd->Items[7]->Value_Str;
@@ -2271,21 +2421,21 @@ public:
             case CMD_ID_check_if_str_compare_int_do_command_str_else_do_command_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string command1 = cmd->Items[7]->Value_Str;
                 bool is_command2;
-                string command2 = cmd->Items[10]->Value_Str;
+                string command2 = cmd->Items[11]->Value_Str;
                 return check_var_by_int_do_command(var_left, s_compare, var_right_value, command1, is_command2 = true, command2);
             }
 
             case CMD_ID_check_if_str_compare_str_as_value_do_command_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right_value = cmd->Items[4]->Value_Str.c_str();
+                string var_right_value = cmd->Items[4]->Value_Str;
                 string command1 = cmd->Items[9]->Value_Str;
                 bool is_command2;
                 string command2;
@@ -2294,9 +2444,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_do_command_str_else_do_command_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right_value = cmd->Items[4]->Value_Str.c_str();
+                string var_right_value = cmd->Items[4]->Value_Str;
                 string command1 = cmd->Items[9]->Value_Str;
                 bool is_command2;
                 string command2 = cmd->Items[13]->Value_Str;
@@ -2306,9 +2456,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_do_command_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str.c_str();
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string command1 = cmd->Items[9]->Value_Str;
                 bool is_command2;
                 string command2;
@@ -2317,14 +2467,57 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_do_command_str_else_do_command_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str.c_str();
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string command1 = cmd->Items[9]->Value_Str;
                 bool is_command2;
                 string command2 = cmd->Items[13]->Value_Str;
                 return check_var_by_var_do_command(var_left, s_compare, var_right, command1, is_command2 = true, command2);
             }
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Check if: var exists print/do command">
+
+            case CMD_ID_check_if_str_exists_print_str:
+                if (is_debug) return true;
+                if (is_debug) return true;
+            {
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
+                string str1 = cmd->Items[5]->Value_Str;
+                bool is_str2;
+                string str2;
+                return check_var_exists_print(var_left, str1, is_str2 = false, str2);
+            }
+            case CMD_ID_check_if_str_exists_print_str_else_print_str:
+                if (is_debug) return true;
+            {
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
+                string str1 = cmd->Items[5]->Value_Str;
+                bool is_str2;
+                string str2 = cmd->Items[8]->Value_Str;
+                return check_var_exists_print(var_left, str1, is_str2 = true, str2);
+            }
+
+            case CMD_ID_check_if_str_exists_do_command_str:
+                if (is_debug) return true;
+            {
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
+                string command1 = cmd->Items[6]->Value_Str;
+                bool is_command2;
+                string command2;
+                return check_var_exists_do_command(var_left, command1, is_command2 = false, command2);
+            }
+            case CMD_ID_check_if_str_exists_do_command_str_else_do_command_str:
+                if (is_debug) return true;
+            {
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
+                string command1 = cmd->Items[6]->Value_Str;
+                bool is_command2;
+                string command2 = cmd->Items[10]->Value_Str;
+                return check_var_exists_do_command(var_left, command1, is_command2 = true, command2);
+            }
+
                 // </editor-fold>
 
                 // <editor-fold defaultstate="collapsed" desc="Label: label/goto label">
@@ -2342,11 +2535,20 @@ public:
             }
                 // </editor-fold>
 
+                // <editor-fold defaultstate="collapsed" desc="Print Str">
+            case CMD_ID_check_print_str:
+                if (is_debug) return true;
+            {
+                string str = cmd->Items[2]->Value_Str;
+                return check_print_str(str);
+            }
+                // </editor-fold>
+
                 // <editor-fold defaultstate="collapsed" desc="Check if: int/str as value/str as var goto label">
             case CMD_ID_check_if_str_compare_int_goto_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string label1 = cmd->Items[6]->Value_Str;
@@ -2357,7 +2559,7 @@ public:
             case CMD_ID_check_if_str_compare_int_goto_str_else_goto_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
                 int var_right_value = atoi(cmd->Items[4]->Value_Str.c_str());
                 string label1 = cmd->Items[6]->Value_Str;
@@ -2369,9 +2571,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_goto_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right_value = cmd->Items[4]->Value_Str.c_str();
+                string var_right_value = cmd->Items[4]->Value_Str;
                 string label1 = cmd->Items[8]->Value_Str;
                 bool is_label2;
                 string label2;
@@ -2380,9 +2582,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_value_goto_str_else_goto_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right_value = cmd->Items[4]->Value_Str.c_str();
+                string var_right_value = cmd->Items[4]->Value_Str;
                 string label1 = cmd->Items[8]->Value_Str;
                 bool is_label2;
                 string label2 = cmd->Items[11]->Value_Str;
@@ -2392,9 +2594,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_goto_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str.c_str();
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string label1 = cmd->Items[8]->Value_Str;
                 bool is_label2;
                 string label2;
@@ -2403,9 +2605,9 @@ public:
             case CMD_ID_check_if_str_compare_str_as_var_goto_str_else_goto_str:
                 if (is_debug) return true;
             {
-                string var_left = cmd->Items[2]->Value_Str;
+                string var_left = Var_Name_Without_Point_Get(cmd->Items[2]->Value_Str);
                 string s_compare = cmd->Items[3]->Value_Str;
-                string var_right = cmd->Items[4]->Value_Str.c_str();
+                string var_right = Var_Name_Without_Point_Get(cmd->Items[4]->Value_Str);
                 string label1 = cmd->Items[8]->Value_Str;
                 bool is_label2;
                 string label2 = cmd->Items[11]->Value_Str;
