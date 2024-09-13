@@ -1,0 +1,91 @@
+.total = 0
+.passed = 0
+.failed = 0
+
+.v1 delete
+.*
+
+check if v1 == 1 do command ".failed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 1 do command ".passed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 2 do command ".failed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 1 do command ".passed inc" else do command ".failed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 2 do command ".failed inc" else do command ".passed inc"
+.total inc
+.*
+
+.v1 delete
+.*
+
+check if v1 == 1 as value do command ".failed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 1 as value do command ".passed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 2 as value do command ".failed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 1 as value do command ".passed inc" else do command ".failed inc"
+.total inc
+.*
+
+.v1 = 1
+check if v1 == 2 as value do command ".failed inc" else do command ".passed inc"
+.total inc
+.*
+
+.v1 delete
+.v2 delete
+.*
+
+check if v1 == v2 as var do command ".failed inc"
+.total inc
+.*
+
+.v1 = 1
+.v2 = 1
+check if v1 == v2 as var do command ".passed inc"
+.total inc
+.*
+
+.v2 = 2
+check if v1 == v2 as var do command ".failed inc"
+.total inc
+.*
+
+.v2 = 1
+check if v1 == v2 as var do command ".passed inc" else do command ".failed inc"
+.total inc
+.*
+
+.v2 = 2
+check if v1 == v2 as var do command ".failed inc" else do command ".passed inc"
+.total inc
+.*
+
+.*
+
+check if passed == 9 print "Passed - Ok" else print "Passed - Failed"
+check if failed == 0 print "No Failed - Ok" else print "Test Failed"

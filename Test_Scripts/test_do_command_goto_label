@@ -1,0 +1,13 @@
+.count = 0
+.passed delete
+.failed delete
+check label L1
+.count inc
+.*
+wait 1
+check if count == 10 do command ".passed = Ok"
+check if count < 10 goto L1 else goto L2
+.failed = 1
+.passed delete
+check label L2
+.*

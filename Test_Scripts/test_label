@@ -1,0 +1,6 @@
+.count = 0
+check label l1
+.count inc
+check if count <= 10 goto l1
+
+.*

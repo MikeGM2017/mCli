@@ -1,0 +1,61 @@
+$ Test: check if var by int -> print
+.v1 delete
+check if v1 == 1 print "msg1 - Failed" else print "msg2 - Failed"
+.v1 = 1
+check if v1 == 1 print "msg1 - Ok" else print "msg2 - Failed"
+.v1 = 2
+check if v1 == 1 print "msg1 - Failed" else print "msg2 - Ok"
+
+$ Test: check if var by str -> print
+.v1 delete
+check if v1 == abc as value print "msg1 - Failed" else print "msg2 - Failed"
+.v1 = abc
+check if v1 == abc as value print "msg1 - Ok" else print "msg2 - Failed"
+.v1 = abcd
+check if v1 == abc as value print "msg1 - Failed" else print "msg2 - Ok"
+
+$ Test: check if var by inc -> inc
+.v1 delete
+.v2 delete
+.v3 delete
+check if v1 == 1 inc v2 else inc v3
+.v1 = 1
+check if v1 == 1 inc v2 else inc v3
+.v2 = 201
+check if v1 == 1 inc v2 else inc v3
+.v3 = 301
+
+.*
+.v1 = 1
+check if v1 == 1 inc v2 else inc v3
+.*
+.v1 = 2
+check if v1 == 1 inc v2 else inc v3
+.*
+
+check if v1 != 2 print ".v1 - Failed" else print ".v1 - Ok"
+check if v2 != 202 print ".v2 - Failed" else print ".v2 - Ok"
+check if v3 != 302 print ".v3 - Failed" else print ".v3 - Ok"
+
+$ Test: check if var by str -> inc
+.v1 delete
+.v2 delete
+.v3 delete
+check if v1 == abc as value inc v2 else inc v3
+.v1 = abc
+check if v1 == abc as value inc v2 else inc v3
+.v2 = 201
+check if v1 == abc as value inc v2 else inc v3
+.v3 = 301
+
+.*
+.v1 = abc
+check if v1 == abc as value inc v2 else inc v3
+.*
+.v1 = abcd
+check if v1 == abc as value inc v2 else inc v3
+.*
+
+check if v1 != abcd as value print ".v1 - Failed" else print ".v1 - Ok"
+check if v2 != 202 print ".v2 - Failed" else print ".v2 - Ok"
+check if v3 != 302 print ".v3 - Failed" else print ".v3 - Ok"

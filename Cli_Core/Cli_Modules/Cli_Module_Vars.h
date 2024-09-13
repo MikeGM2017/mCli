@@ -67,7 +67,7 @@ public:
     Str_Without_Commas(str_without_commas),
     Cli_Output(cli_output), C_Single(c_single), C_Multy(c_multy) {
 
-        Version = "0.02";
+        Version = "0.03";
 
         // <editor-fold defaultstate="collapsed" desc="Vars: get/set">
         {
@@ -136,8 +136,6 @@ public:
     }
 
     bool var_get(string point_var_name_str) {
-        Cli_Output.Output_NewLine();
-
         string var_name = point_var_name_str.substr(1);
         bool found = false;
         for (map<string, string>::iterator iter = Values_Map.begin();
@@ -169,7 +167,6 @@ public:
     }
 
     bool var_set_str(string point_var_name_str, string value_str) {
-        Cli_Output.Output_NewLine();
         string var_name = point_var_name_str.substr(1);
         string value_str_without_commas = Str_Without_Commas.Get(value_str);
         Values_Map[var_name] = value_str_without_commas;
@@ -179,17 +176,17 @@ public:
     }
 
     bool var_set_var(string point_var1_name_str, string point_var2_name_str) {
-        Cli_Output.Output_NewLine();
         map<string, string>::iterator iter2 = Values_Map_Find_By_Var_Name(point_var2_name_str);
         if (iter2 != Values_Map.end()) {
             string var1_name = point_var1_name_str.substr(1);
             string var2_value = iter2->second;
             Values_Map[var1_name] = var2_value;
             Cli_Output.Output_Str(var1_name + " = \"" + var2_value + "\"");
+            Cli_Output.Output_NewLine();
         } else {
             Cli_Output.Output_Str(point_var2_name_str + " - Not Found");
+            Cli_Output.Output_NewLine();
         }
-        Cli_Output.Output_NewLine();
         return true;
     }
 
@@ -209,7 +206,6 @@ public:
             }
         }
         if (!found) {
-            Cli_Output.Output_NewLine();
             Cli_Output.Output_Str(var_name + " - Not Found");
             Cli_Output.Output_NewLine();
         }
@@ -229,7 +225,6 @@ public:
             }
         }
         if (!found) {
-            Cli_Output.Output_NewLine();
             Cli_Output.Output_Str(var_name + " - Not Found");
             Cli_Output.Output_NewLine();
         }

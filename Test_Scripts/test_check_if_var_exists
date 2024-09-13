@@ -1,0 +1,4 @@
+check if v1 exists do command ".v1 delete"
+check if v1 exists do command "$ v1 exists" else do command "$ v1 does not exists"
+.v1 = 1
+check if v1 exists do command "$ v1 exists" else do command "$ v1 does not exists"

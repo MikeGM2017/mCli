@@ -54,7 +54,9 @@ using namespace std;
 #include "Cli_Module_Base_Level.h"
 #include "Cli_Module_Lua.h"
 
-const string Version = "0.03";
+#include "Do_Command.h"
+
+const string Version = "0.04";
 
 void Version_Print() {
     cout << "V" << Version << endl;
@@ -213,9 +215,11 @@ int main(int argc, char *argv[]) {
     string Script_Command_Str;
     string Script_Label_Str;
     string Script_Dir_Str = "./scripts";
-    Modules.Add(new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
+    Cli_Module_Base_Script Module_Script(History, Cli_Input, Cli_Output,
             Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
-            CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str));
+            CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str);
+    Modules.Add(&Module_Script);
+    Do_Command Do_Command_Object(Module_Script);
 
     bool Log_Wait_Enable = true;
     bool Cmd_Wait_Stop = false;
@@ -229,7 +233,8 @@ int main(int argc, char *argv[]) {
     Str_Get_Without_Commas str_without_commas;
 
     Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas,
-            Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str)));
+            Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str,
+            Do_Command_Object)));
 
     Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
             Cli_Output, C_Single, C_Multy)));
