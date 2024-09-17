@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Cli_Core_CS
 {
@@ -12,9 +11,16 @@ namespace Cli_Core_CS
 
         protected Str_Filter Str_Filter;
 
+        protected Str_Get_Without_Commas Str_Without_Commas;
+
         protected Cli_Output_CS Cli_Output;
 
         protected Ref_Boolean Cmd_Script_Stop;
+
+        protected Ref_String Script_Command_Str;
+        protected Ref_String Script_Label_Str;
+
+        protected Do_Abstract Do_Command_Object;
 
         protected int Count_Total = 0;
         protected int Count_Passed = 0;
@@ -72,8 +78,15 @@ namespace Cli_Core_CS
             CMD_ID_check_if_str_compare_str_as_var_do_command_str,
             CMD_ID_check_if_str_compare_str_as_var_do_command_str_else_do_command_str,
 
+            CMD_ID_check_if_str_exists_print_str,
+            CMD_ID_check_if_str_exists_print_str_else_print_str,
+            CMD_ID_check_if_str_exists_do_command_str,
+            CMD_ID_check_if_str_exists_do_command_str_else_do_command_str,
+
             CMD_ID_check_label_str,
             CMD_ID_check_goto_label,
+
+            CMD_ID_check_print_str,
 
             CMD_ID_check_if_str_compare_int_goto_str,
             CMD_ID_check_if_str_compare_int_goto_str_else_goto_str,
@@ -98,14 +111,25 @@ namespace Cli_Core_CS
         };
 
         public Cli_Module_Check(Cli_Modules modules, Dictionary<string, string> values_map,
-            Str_Filter str_filter, Cli_Output_CS cli_output,
-            Ref_Boolean cmd_script_stop) : base("Check")
+                Str_Filter str_filter,
+                Str_Get_Without_Commas str_without_commas,
+                Cli_Output_CS cli_output,
+                Ref_Boolean cmd_script_stop,
+                Ref_String script_command_str, Ref_String script_label_str,
+                Do_Abstract do_command_object) : base("Check")
         {
+
+            Version = "0.04";
+
             Modules = modules;
             Values_Map = values_map;
             Str_Filter = str_filter;
+            Str_Without_Commas = str_without_commas;
             Cli_Output = cli_output;
             Cmd_Script_Stop = cmd_script_stop;
+            Script_Command_Str = script_command_str;
+            Script_Label_Str = script_label_str;
+            Do_Command_Object = do_command_object;
 
             // <editor-fold defaultstate="collapsed" desc="Decl: cmp_int_str/words, cmp_str_str/words">
             string cmp_int_str = "== != < > <= >= & | && ||";
@@ -503,7 +527,7 @@ namespace Cli_Core_CS
                 cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
                 cmd.Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
                 cmd.Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-                cmd.Item_Add(new Cmd_Item_Int("<str>", "value to compare"));
+                cmd.Item_Add(new Cmd_Item_Str("<str>", "value to compare"));
                 cmd.Item_Add(new Cmd_Item_Word("as", "as"));
                 cmd.Item_Add(new Cmd_Item_Word("value", "as value"));
                 cmd.Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -521,7 +545,7 @@ namespace Cli_Core_CS
                 cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
                 cmd.Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
                 cmd.Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-                cmd.Item_Add(new Cmd_Item_Int("<str>", "value to compare"));
+                cmd.Item_Add(new Cmd_Item_Str("<str>", "value to compare"));
                 cmd.Item_Add(new Cmd_Item_Word("as", "as"));
                 cmd.Item_Add(new Cmd_Item_Word("value", "as value"));
                 cmd.Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -646,7 +670,7 @@ namespace Cli_Core_CS
                 cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
                 cmd.Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
                 cmd.Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-                cmd.Item_Add(new Cmd_Item_Int("<var2_name>", "var2 name"));
+                cmd.Item_Add(new Cmd_Item_Str("<var2_name>", "var2 name"));
                 cmd.Item_Add(new Cmd_Item_Word("as", "as"));
                 cmd.Item_Add(new Cmd_Item_Word("var", "as var"));
                 cmd.Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -664,7 +688,7 @@ namespace Cli_Core_CS
                 cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
                 cmd.Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
                 cmd.Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-                cmd.Item_Add(new Cmd_Item_Int("<var2_name>", "var2 name"));
+                cmd.Item_Add(new Cmd_Item_Str("<var2_name>", "var2 name"));
                 cmd.Item_Add(new Cmd_Item_Word("as", "as"));
                 cmd.Item_Add(new Cmd_Item_Word("var", "as var"));
                 cmd.Item_Add(new Cmd_Item_Word("inc", "check and increment"));
@@ -686,7 +710,7 @@ namespace Cli_Core_CS
                 cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
                 cmd.Item_Add(new Cmd_Item_Str("<var1_name>", "var1 name"));
                 cmd.Item_Add(new Cmd_Item_EQU_Range("<compare: " + cmp_str_str + ">", "compare function", cmp_str_words));
-                cmd.Item_Add(new Cmd_Item_Int("<var2_name>", "var2 name"));
+                cmd.Item_Add(new Cmd_Item_Str("<var2_name>", "var2 name"));
                 cmd.Item_Add(new Cmd_Item_Word("as", "as"));
                 cmd.Item_Add(new Cmd_Item_Word("var", "as var"));
                 cmd.Item_Add(new Cmd_Item_Word("do", "do"));
@@ -865,6 +889,79 @@ namespace Cli_Core_CS
             }
             // </editor-fold>
 
+            // <editor-fold defaultstate="collapsed" desc="Check if: var exists print/do command">
+            {
+                // check if str exists print str
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_check_if_str_exists_print_str);
+                cmd.Text_Set("check if <var_name>  exists print <str>");
+                cmd.Help_Set("check var exists and print str");
+                cmd.Is_Global_Set(true);
+                cmd.Item_Add(new Cmd_Item_Word("check", "check"));
+                cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
+                cmd.Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+                cmd.Item_Add(new Cmd_Item_Word("exists", "var exists"));
+                cmd.Item_Add(new Cmd_Item_Word("print", "print"));
+                cmd.Item_Add(new Cmd_Item_Str("<str>", "str"));
+
+                Cmd_Add(cmd);
+            }
+            {
+                // check if str exists print str else print str
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_check_if_str_exists_print_str_else_print_str);
+                cmd.Text_Set("check if <var_name>  exists print <str1> else print <str2>");
+                cmd.Help_Set("check var exists and print str1 or str2");
+                cmd.Is_Global_Set(true);
+                cmd.Item_Add(new Cmd_Item_Word("check", "check"));
+                cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
+                cmd.Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+                cmd.Item_Add(new Cmd_Item_Word("exists", "var exists"));
+                cmd.Item_Add(new Cmd_Item_Word("print", "print"));
+                cmd.Item_Add(new Cmd_Item_Str("<str1>", "str1"));
+                cmd.Item_Add(new Cmd_Item_Word("else", "else"));
+                cmd.Item_Add(new Cmd_Item_Word("print", "print"));
+                cmd.Item_Add(new Cmd_Item_Str("<str2>", "str2"));
+
+                Cmd_Add(cmd);
+            }
+
+            {
+                // check if str exists do command str
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_check_if_str_exists_do_command_str);
+                cmd.Text_Set("check if <var_name>  exists do command <command_str>");
+                cmd.Help_Set("check var exists and do command");
+                cmd.Is_Global_Set(true);
+                cmd.Item_Add(new Cmd_Item_Word("check", "check"));
+                cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
+                cmd.Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+                cmd.Item_Add(new Cmd_Item_Word("exists", "var exists"));
+                cmd.Item_Add(new Cmd_Item_Word("do", "do"));
+                cmd.Item_Add(new Cmd_Item_Word("command", "do command"));
+                cmd.Item_Add(new Cmd_Item_Str("<command_str>", "command"));
+
+                Cmd_Add(cmd);
+            }
+            {
+                // check if str exists do command str else do command str
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_check_if_str_exists_do_command_str_else_do_command_str);
+                cmd.Text_Set("check if <var_name>  exists do command <command1_str> else do command <command2_str>");
+                cmd.Help_Set("check var exists and do command1 or do command2");
+                cmd.Is_Global_Set(true);
+                cmd.Item_Add(new Cmd_Item_Word("check", "check"));
+                cmd.Item_Add(new Cmd_Item_Word("if", "check if"));
+                cmd.Item_Add(new Cmd_Item_Str("<var_name>", "var name"));
+                cmd.Item_Add(new Cmd_Item_Word("exists", "var exists"));
+                cmd.Item_Add(new Cmd_Item_Word("do", "do"));
+                cmd.Item_Add(new Cmd_Item_Word("command", "do command"));
+                cmd.Item_Add(new Cmd_Item_Str("<command1_str>", "command1"));
+                cmd.Item_Add(new Cmd_Item_Word("else", "else"));
+                cmd.Item_Add(new Cmd_Item_Word("do", "do"));
+                cmd.Item_Add(new Cmd_Item_Word("command", "do command"));
+                cmd.Item_Add(new Cmd_Item_Str("<command2_str>", "command2"));
+
+                Cmd_Add(cmd);
+            }
+            // </editor-fold>
+
             // <editor-fold defaultstate="collapsed" desc="Label: label/goto label">
             {
                 // check label str
@@ -888,6 +985,21 @@ namespace Cli_Core_CS
                 cmd.Item_Add(new Cmd_Item_Word("check", "check"));
                 cmd.Item_Add(new Cmd_Item_Word("goto", "goto"));
                 cmd.Item_Add(new Cmd_Item_Str("<label_name>", "label name"));
+
+                Cmd_Add(cmd);
+            }
+            // </editor-fold>
+
+            // <editor-fold defaultstate="collapsed" desc="Print Str">
+            {
+                // check print str
+                Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_check_print_str);
+                cmd.Text_Set("check print <str>");
+                cmd.Help_Set("print <str>");
+                cmd.Is_Global_Set(true);
+                cmd.Item_Add(new Cmd_Item_Word("check", "check"));
+                cmd.Item_Add(new Cmd_Item_Word("print", "print"));
+                cmd.Item_Add(new Cmd_Item_Str("<str>", "str"));
 
                 Cmd_Add(cmd);
             }
@@ -1016,14 +1128,20 @@ namespace Cli_Core_CS
 
         }
 
+        string Var_Name_Without_Point_Get(string s)
+        {
+            if (s.Length > 0 && s[0] == '.')
+            {
+                return s.Substring(1);
+            }
+            return s;
+        }
+
         // <editor-fold defaultstate="collapsed" desc="Values_Map: print, clear">
 
         bool check_map_print(string var_filter, Str_Filter str_filter)
         {
-
-            Cli_Output.Output_NewLine();
-
-            if (Values_Map.Count != 0)
+            if (Values_Map.Count > 0)
             {
                 Cli_Output.Output_Str("Values Map:");
                 Cli_Output.Output_NewLine();
@@ -1055,10 +1173,7 @@ namespace Cli_Core_CS
 
         bool check_map_clear()
         {
-
-            Cli_Output.Output_NewLine();
-
-            if (Values_Map.Count != 0)
+            if (Values_Map.Count > 0)
             {
                 Values_Map.Clear();
                 Cli_Output.Output_Str("Values Map cleared");
@@ -1079,7 +1194,6 @@ namespace Cli_Core_CS
 
         bool check_modules_to_map(string module_filter, Str_Filter str_filter)
         {
-            Cli_Output.Output_NewLine();
             bool found = false;
             for (int module = 0; module < Modules.Get_Size(); module++)
             {
@@ -1109,7 +1223,1185 @@ namespace Cli_Core_CS
 
         // </editor-fold>
 
-        override public bool Execute(Cli_Cmd cmd, List<Level_Description> Levels, bool is_debug)
+        // <editor-fold defaultstate="collapsed" desc="Var: set as value, as var, as expression, force">
+
+        bool check_var_set_str_as_value(string var_left, string value, bool is_force)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            //if (var_left_iter != Values_Map.end() || is_force)
+            if (var_left_found || is_force)
+            {
+                Values_Map[var_left] = value;
+                //if (var_left_iter == Values_Map.end())
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("Var Created: " + var_left + " = " + value);
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        bool check_var_set_str_as_var(string var_left, string var_right, bool is_force)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            //if ((var_left_iter != Values_Map.end() && var_right_iter != Values_Map.end()) || is_force)
+            if ((var_left_found && var_right_found) || (is_force && var_right_found))
+            {
+                string value = var_right_value_old;
+                Values_Map[var_left] = value;
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("Var Created: " + var_left + " = " + value);
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var_right_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            return true;
+        }
+
+        string Expr_Calc(Dictionary<string, string> values_map, string expr)
+        {
+            return "<Expr_Calc(" + expr + ")>";
+        }
+
+        bool check_var_set_str_as_expr(string var_left, string expr, bool is_force)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            //if (var_left_iter != Values_Map.end() || is_force)
+            if (var_left_found || is_force)
+            {
+                string value = Expr_Calc(Values_Map, expr);
+                Values_Map[var_left] = value;
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("Var Created: " + var_left + " = " + value);
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Var: inc">
+
+        bool check_var_inc_value(string var_left)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                int value = 0;
+                Int32.TryParse(var_left_value_old, out value);
+                value++;
+                Values_Map[var_left] = value.ToString();
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Compare_Values: int/str">
+
+        Local_Compare_Result Compare_Values_Int(int var_left_value, string s_compare, int var_right_value)
+        {
+            Local_Compare_Result cmp_res = Local_Compare_Result.CMP_FALSE;
+            if (s_compare == "==")
+            {
+                if (var_left_value == var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "!=")
+            {
+                if (var_left_value != var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "<")
+            {
+                if (var_left_value < var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == ">")
+            {
+                if (var_left_value > var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "<=")
+            {
+                if (var_left_value <= var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == ">=")
+            {
+                if (var_left_value >= var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "&")
+            {
+                if ((var_left_value & var_right_value) != 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "|")
+            {
+                if ((var_left_value | var_right_value) != 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "&&")
+            {
+                if (var_left_value != 0 && var_right_value != 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "||")
+            {
+                if (var_left_value != 0 || var_right_value != 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else
+            {
+                cmp_res = Local_Compare_Result.CMP_ERROR;
+            }
+            return cmp_res;
+        }
+
+        Local_Compare_Result Compare_Values_Str(string var_left_value, string s_compare, string var_right_value)
+        {
+            Local_Compare_Result cmp_res = Local_Compare_Result.CMP_FALSE;
+            if (s_compare == "==")
+            {
+                if (var_left_value == var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "!=")
+            {
+                if (var_left_value != var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "<")
+            {
+                //if (var_left_value < var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+                if (String.Compare(var_left_value, var_right_value, comparisonType: StringComparison.Ordinal) < 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == ">")
+            {
+                //if (var_left_value > var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+                if (String.Compare(var_left_value, var_right_value, comparisonType: StringComparison.Ordinal) > 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == "<=")
+            {
+                //if (var_left_value <= var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+                if (String.Compare(var_left_value, var_right_value, comparisonType: StringComparison.Ordinal) <= 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else if (s_compare == ">=")
+            {
+                //if (var_left_value >= var_right_value) cmp_res = Local_Compare_Result.CMP_TRUE;
+                if (String.Compare(var_left_value, var_right_value, comparisonType: StringComparison.Ordinal) >= 0) cmp_res = Local_Compare_Result.CMP_TRUE;
+            }
+            else
+            {
+                cmp_res = Local_Compare_Result.CMP_ERROR;
+            }
+            return cmp_res;
+        }
+
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Check if: int/str as value/as var print/inc">
+
+        bool check_var_by_int_print_msg1_or_msg2(string var_left, string s_compare, int var_right_value,
+                string s_msg1, bool is_msg2, string s_msg2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                int var_left_value = 0;
+                Int32.TryParse(var_left_value_old, out var_left_value);
+                Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg1));
+                    Cli_Output.Output_NewLine();
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    if (is_msg2)
+                    {
+                        Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg2));
+                        Cli_Output.Output_NewLine();
+                    }
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        bool check_var_by_str_print_msg1_or_msg2(string var_left, string s_compare, string var_right_value,
+                string s_msg1, bool is_msg2, string s_msg2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                string var_left_value = var_left_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg1));
+                    Cli_Output.Output_NewLine();
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    if (is_msg2)
+                    {
+                        Cli_Output.Output_Str(Str_Without_Commas.Get(s_msg2));
+                        Cli_Output.Output_NewLine();
+                    }
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        bool check_var_by_var_print_msg1_or_msg2(string var_left, string s_compare, string var_right,
+                string s_msg1, bool is_msg2, string s_msg2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found && var_right_found)
+            {
+                int var_right_value = 0;
+                Int32.TryParse(var_right_value_old, out var_right_value);
+                return check_var_by_int_print_msg1_or_msg2(var_left, s_compare, var_right_value, s_msg1, is_msg2, s_msg2);
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var_right_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            return true;
+        }
+
+        bool check_var_by_int_inc_var1_or_var2(string var_left, string s_compare, int var_right_value,
+                string var1_inc, bool is_var2_inc, string var2_inc)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var1_inc_iter = Values_Map.find(var1_inc);
+            //map<string, string>::iterator var2_inc_iter = Values_Map.find(var2_inc);
+            string var_left_value_old = "";
+            string var1_inc_value_old = "";
+            string var2_inc_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var1_inc_found = Values_Map.TryGetValue(var1_inc, out var1_inc_value_old);
+            bool var2_inc_found = Values_Map.TryGetValue(var2_inc, out var2_inc_value_old);
+            if (var_left_found && var1_inc_found
+                && (var2_inc_found || !is_var2_inc))
+            {
+                //int var_left_value = Int32.TryParse(var_left_iter.second);
+                //int var1_value = Int32.TryParse(var1_inc_iter.second);
+                //int var2_value = 0;
+                //if (is_var2_inc)
+                //{
+                //    var2_value = Int32.TryParse(var2_inc_iter.second);
+                //}
+
+                int var_left_value = 0;
+                Int32.TryParse(var_left_value_old, out var_left_value);
+                int var1_value = 0;
+                Int32.TryParse(var1_inc_value_old, out var1_value);
+                int var2_value = 0;
+                if (is_var2_inc)
+                {
+                    Int32.TryParse(var2_inc_value_old, out var2_value);
+                }
+
+                Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    var1_value++;
+                    Values_Map[var1_inc] = var1_value.ToString();
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    if (is_var2_inc)
+                    {
+                        var2_value++;
+                        Values_Map[var2_inc] = var2_value.ToString();
+                    }
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var1_inc_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var1_inc + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (is_var2_inc && !var2_inc_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var2_inc + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            return true;
+        }
+
+        bool check_var_by_str_inc_var1_or_var2(string var_left, string s_compare, string var_right_value,
+                string var1_inc, bool is_var2_inc, string var2_inc)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var1_inc_iter = Values_Map.find(var1_inc);
+            //map<string, string>::iterator var2_inc_iter = Values_Map.find(var2_inc);
+            string var_left_value_old = "";
+            string var1_inc_value_old = "";
+            string var2_inc_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var1_inc_found = Values_Map.TryGetValue(var1_inc, out var1_inc_value_old);
+            bool var2_inc_found = Values_Map.TryGetValue(var2_inc, out var2_inc_value_old);
+            if (var_left_found && var1_inc_found
+                && (var2_inc_found || !is_var2_inc))
+            {
+                //int var1_value = Int32.TryParse(var1_inc_iter.second);
+                //int var2_value = 0;
+                //if (is_var2_inc)
+                //{
+                //    var2_value = Int32.TryParse(var2_inc_iter.second);
+                //}
+                int var1_value = 0;
+                Int32.TryParse(var1_inc_value_old, out var1_value);
+                int var2_value = 0;
+                if (is_var2_inc)
+                {
+                    Int32.TryParse(var2_inc_value_old, out var2_value);
+                }
+
+                string var_left_value = var_left_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    var1_value++;
+                    Values_Map[var1_inc] = var1_value.ToString();
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    if (is_var2_inc)
+                    {
+                        var2_value++;
+                        Values_Map[var2_inc] = var2_value.ToString();
+                    }
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var1_inc_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var1_inc + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (is_var2_inc && !var2_inc_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var2_inc + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            return true;
+        }
+
+        bool check_var_by_var_inc_var1_or_var2(string var_left, string s_compare, string var_right,
+                string var1_inc, bool is_var2_inc, string var2_inc)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            //map<string, string>::iterator var1_inc_iter = Values_Map.find(var1_inc);
+            //map<string, string>::iterator var2_inc_iter = Values_Map.find(var2_inc);
+            string var_left_value_old = "";
+            string var_right_value_old = "";
+            string var1_inc_value_old = "";
+            string var2_inc_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            bool var1_inc_found = Values_Map.TryGetValue(var1_inc, out var1_inc_value_old);
+            bool var2_inc_found = Values_Map.TryGetValue(var2_inc, out var2_inc_value_old);
+            if (var_left_found
+                && var_right_found
+                && var1_inc_found
+                && ((is_var2_inc && var2_inc_found) || !is_var2_inc))
+            {
+                //int var1_value = Int32.TryParse(var1_inc_iter.second);
+                //int var2_value = 0;
+                //if (is_var2_inc)
+                //{
+                //    var2_value = Int32.TryParse(var2_inc_iter.second);
+                //}
+                int var1_value = 0;
+                Int32.TryParse(var1_inc_value_old, out var1_value);
+                int var2_value = 0;
+                if (is_var2_inc)
+                {
+                    Int32.TryParse(var2_inc_value_old, out var2_value);
+                }
+
+                string var_left_value = var_left_value_old;
+                string var_right_value = var_right_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    var1_value++;
+                    Values_Map[var1_inc] = var1_value.ToString();
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    if (is_var2_inc)
+                    {
+                        var2_value++;
+                        Values_Map[var2_inc] = var2_value.ToString();
+                    }
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var_right_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var1_inc_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var1_inc + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (is_var2_inc && !var2_inc_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var2_inc + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            return true;
+        }
+
+        // </editor-fold>
+
+        bool Do_Script_From_File(string filename, bool is_no_history)
+        {
+            bool is_filename_spaces = false;
+            //if (filename.find(' ') != std::string::npos) is_filename_spaces = true;
+            //if (filename.find('\t') != std::string::npos) is_filename_spaces = true;
+            if (filename.Contains(" ")) is_filename_spaces = true;
+            if (filename.Contains("\t")) is_filename_spaces = true;
+            if (is_filename_spaces)
+            {
+                Script_Command_Str.Value = "do script \"" + filename + "\"";
+            }
+            else
+            {
+                Script_Command_Str.Value = "do script " + filename;
+            }
+            if (is_no_history)
+            {
+                Script_Command_Str.Value += " no history";
+            }
+            Do_Command_Object.Do();
+            return true;
+        }
+
+        bool Do_Command(string command)
+        {
+            Script_Command_Str.Value = command;
+            Do_Command_Object.Do();
+            return true;
+        }
+
+        bool Do_Label(string label)
+        {
+            //@Warning: Command "check goto <label>" - special case: is moves file position
+            // no action
+            return true;
+        }
+
+        bool Do_Goto_Label(string label)
+        {
+            //Script_Command_Str = "check goto " + label;
+            Script_Label_Str.Value = label;
+            return true;
+        }
+
+        // <editor-fold defaultstate="collapsed" desc="Check if: int/str as value/as var do">
+
+        bool check_var_by_int_do_script_stop(string var_left, string s_compare, int var_right_value)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                int var_left_value = 0;
+                Int32.TryParse(var_left_value_old, out var_left_value);
+                Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Cmd_Script_Stop.Value = true;
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    // Nothing
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        bool check_var_by_int_do_script_from_file(string var_left, string s_compare, int var_right_value, string filename, bool is_no_history)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                int var_left_value = 0;
+                Int32.TryParse(var_left_value_old, out var_left_value);
+                Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Do_Script_From_File(filename, is_no_history);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    // Nothing
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        bool check_var_by_str_do_script_stop(string var_left, string s_compare, string var_right_value)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                string var_left_value = var_left_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Cmd_Script_Stop.Value = true;
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    // Nothing
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        bool check_var_by_str_do_script_from_file(string var_left, string s_compare, string var_right_value, string filename, bool is_no_history)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                //int var_left_value = 0;Int32.TryParse(var_left_iter.second);
+                string var_left_value = var_left_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Do_Script_From_File(filename, is_no_history);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    // Nothing
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+            }
+
+            return true;
+        }
+
+        bool check_var_by_var_do_script_stop(string var_left, string s_compare, string var_right)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found && var_right_found)
+            {
+                string var_left_value = var_left_value_old;
+                string var_right_value = var_right_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Cmd_Script_Stop.Value = true;
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    // Nothing
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var_right_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            return true;
+        }
+
+        bool check_var_by_var_do_script_from_file(string var_left, string s_compare, string var_right, string filename, bool is_no_history)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found && var_right_found)
+            {
+                //int var_left_value = 0;Int32.TryParse(var_left_iter.second);
+                string var_left_value = var_left_value_old;
+                string var_right_value = var_right_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Do_Script_From_File(filename, is_no_history);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE)
+                {
+                    // Nothing
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var_right_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            return true;
+        }
+
+        bool check_var_by_int_do_command(string var_left, string s_compare, int var_right_value, string command1, bool is_command2, string command2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            //string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            //bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found
+                //&& var_left_found
+                )
+            {
+                //int var_left_value = Int32.TryParse(var_left_iter.second.Var_Name_Without_Point_Get(cmd.Items[4].Value_Str););
+                int var_left_value = 0;
+                Int32.TryParse(var_left_value_old, out var_left_value);
+                //string var_left_value = var_left_iter.second;
+                //string var_right_value = var_right_iter.second;
+                Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Do_Command(command1);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE && is_command2)
+                {
+                    Do_Command(command2);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                //if (var_left_iter == Values_Map.end()) {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+                //}
+                //if (var_right_iter == Values_Map.end()) {
+                //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                //    Cli_Output.Output_NewLine();
+                //}
+            }
+            return true;
+        }
+
+        bool check_var_by_str_do_command(string var_left, string s_compare, string var_right_value, string command1, bool is_command2, string command2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            //string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            //bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found
+                //&& var_right_found
+                )
+            {
+                //int var_left_value = Int32.TryParse(var_left_iter.second);
+                string var_left_value = var_left_value_old;
+                //string var_right_value = var_right_iter.second;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Do_Command(command1);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE && is_command2)
+                {
+                    Do_Command(command2);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                //if (var_left_iter == Values_Map.end()) {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+                //}
+                //if (var_right_iter == Values_Map.end()) {
+                //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                //    Cli_Output.Output_NewLine();
+                //}
+            }
+            return true;
+        }
+
+        bool check_var_by_var_do_command(string var_left, string s_compare, string var_right, string command1, bool is_command2, string command2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found && var_right_found)
+            {
+                //int var_left_value = Int32.TryParse(var_left_iter.second);
+                string var_left_value = var_left_value_old;
+                string var_right_value = var_right_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    Do_Command(command1);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE && is_command2)
+                {
+                    Do_Command(command2);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var_right_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            return true;
+        }
+
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Check if: var exists print/do command">
+
+        bool check_var_exists_print(string var_left, string str1, bool is_str2, string str2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                Cli_Output.Output_Str(Str_Without_Commas.Get(str1));
+                Cli_Output.Output_NewLine();
+            }
+            else
+            {
+                if (is_str2)
+                {
+                    Cli_Output.Output_Str(Str_Without_Commas.Get(str2));
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            return true;
+        }
+
+        bool check_var_exists_do_command(string var_left, string command1, bool is_command2, string command2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            string var_left_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            if (var_left_found)
+            {
+                Do_Command(command1);
+            }
+            else
+            {
+                if (is_command2)
+                {
+                    Do_Command(command2);
+                }
+            }
+            return true;
+        }
+
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Label: label/goto label">
+
+        bool check_label(string label)
+        {
+            return Do_Label(label);
+        }
+
+        bool check_goto_label(string label)
+        {
+            return Do_Goto_Label(label);
+        }
+
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Print Str">
+
+        bool check_print_str(string s)
+        {
+            Cli_Output.Output_Str(Str_Without_Commas.Get(s));
+            return true;
+        }
+
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Check if: int/str as value/str as var goto label">
+
+        bool check_var_by_int_goto_label(string var_left, string s_compare, int var_right_value, string label1, bool is_label2, string label2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            //string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            //bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found
+                //&& var_right_found
+                )
+            {
+                //int var_left_value = Int32.TryParse(var_left_iter.second);
+                int var_left_value = 0;
+                Int32.TryParse(var_left_value_old, out var_left_value);
+                //string var_right_value = var_right_iter.second;
+                Local_Compare_Result cmp_res = Compare_Values_Int(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    check_goto_label(label1);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE && is_label2)
+                {
+                    check_goto_label(label2);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                //if (var_left_iter == Values_Map.end()) {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+                //}
+                //if (var_right_iter == Values_Map.end()) {
+                //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                //    Cli_Output.Output_NewLine();
+                //}
+            }
+            return true;
+        }
+
+        bool check_var_by_str_goto_label(string var_left, string s_compare, string var_right_value, string label1, bool is_label2, string label2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            //string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            //bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found
+                //&& var_right_found
+                )
+            {
+                //int var_left_value = Int32.TryParse(var_left_iter.second);
+                string var_left_value = var_left_value_old;
+                //string var_right_value = var_right_iter.second;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, Str_Without_Commas.Get(var_right_value));
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    check_goto_label(label1);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE && is_label2)
+                {
+                    check_goto_label(label2);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                //if (var_left_iter == Values_Map.end()) {
+                Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                Cli_Output.Output_NewLine();
+                //}
+                //if (var_right_iter == Values_Map.end()) {
+                //    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                //    Cli_Output.Output_NewLine();
+                //}
+            }
+            return true;
+        }
+
+        bool check_var_by_var_goto_label(string var_left, string s_compare, string var_right, string label1, bool is_label2, string label2)
+        {
+            //map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
+            //map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
+            string var_left_value_old = "";
+            string var_right_value_old = "";
+            bool var_left_found = Values_Map.TryGetValue(var_left, out var_left_value_old);
+            bool var_right_found = Values_Map.TryGetValue(var_right, out var_right_value_old);
+            if (var_left_found && var_right_found)
+            {
+                //int var_left_value = Int32.TryParse(var_left_iter.second);
+                string var_left_value = var_left_value_old;
+                string var_right_value = var_right_value_old;
+                Local_Compare_Result cmp_res = Compare_Values_Str(var_left_value, s_compare, var_right_value);
+                if (cmp_res == Local_Compare_Result.CMP_TRUE)
+                {
+                    check_goto_label(label1);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_FALSE && is_label2)
+                {
+                    check_goto_label(label2);
+                }
+                else if (cmp_res == Local_Compare_Result.CMP_ERROR)
+                {
+                    Cli_Output.Output_Str("ERROR: compare operation " + s_compare + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+
+            }
+            else
+            {
+                if (!var_left_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_left + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+                if (!var_right_found)
+                {
+                    Cli_Output.Output_Str("ERROR: var " + var_right + " not found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            return true;
+        }
+
+        // </editor-fold>
+
+        public override bool Execute(Cli_Cmd cmd, List<Level_Description> Levels, bool is_debug)
         {
             Local_Cmd_ID cmd_id = (Local_Cmd_ID)cmd.ID_Get();
             switch (cmd_id)
@@ -1121,7 +2413,7 @@ namespace Cli_Core_CS
                 case Local_Cmd_ID.CMD_ID_check_map_print:
                     if (is_debug) return true;
                     {
-                        string var_filter = "*";
+                        string var_filter = "";
                         return check_map_print(var_filter, Str_Filter);
                     }
                 case Local_Cmd_ID.CMD_ID_check_map_print_by_filter:
@@ -1145,14 +2437,538 @@ namespace Cli_Core_CS
                         return check_modules_to_map(module_filter, Str_Filter);
                     }
 
-                    // </editor-fold>
+                // </editor-fold>
 
+                // <editor-fold defaultstate="collapsed" desc="Var: set as value, as var, as expression, force">
 
+                case Local_Cmd_ID.CMD_ID_check_var_str_set_str_as_value:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string value = cmd.Items[4].Value_Str;
+                        bool if_force;
+                        return check_var_set_str_as_value(var_left, value, if_force = false);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_var_str_set_str_as_value_force:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string value = cmd.Items[4].Value_Str;
+                        bool if_force;
+                        return check_var_set_str_as_value(var_left, value, if_force = true);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_var_str_set_str_as_var:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string value = cmd.Items[4].Value_Str;
+                        bool if_force;
+                        return check_var_set_str_as_var(var_left, value, if_force = false);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_var_str_set_str_as_var_force:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string value = cmd.Items[4].Value_Str;
+                        bool if_force;
+                        return check_var_set_str_as_var(var_left, value, if_force = true);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_var_str_set_str_as_expr:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string expr = cmd.Items[4].Value_Str;
+                        bool if_force;
+                        return check_var_set_str_as_expr(var_left, expr, if_force = false);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_var_str_set_str_as_expr_force:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string expr = cmd.Items[4].Value_Str;
+                        bool if_force;
+                        return check_var_set_str_as_expr(var_left, expr, if_force = true);
+                    }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Var: inc">
+
+                case Local_Cmd_ID.CMD_ID_check_var_str_inc:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        return check_var_inc_value(var_left);
+                    }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Check if: int print/inc/do">
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_print_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string s_msg1 = cmd.Items[6].Value_Str;
+                        bool is_msg2;
+                        string s_msg2 = "";
+                        return check_var_by_int_print_msg1_or_msg2(var_left, s_compare, var_right_value, s_msg1, is_msg2 = false, s_msg2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_print_str_else_print_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string s_msg1 = cmd.Items[6].Value_Str;
+                        bool is_msg2;
+                        string s_msg2 = cmd.Items[9].Value_Str;
+                        return check_var_by_int_print_msg1_or_msg2(var_left, s_compare, var_right_value, s_msg1, is_msg2 = true, s_msg2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_inc_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string var1_inc = cmd.Items[6].Value_Str;
+                        bool is_var2_inc;
+                        string var2_inc = "";
+                        return check_var_by_int_inc_var1_or_var2(var_left, s_compare, var_right_value, var1_inc, is_var2_inc = false, var2_inc);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_inc_str_else_inc_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string var1_inc = cmd.Items[6].Value_Str;
+                        bool is_var2_inc;
+                        string var2_inc = cmd.Items[9].Value_Str;
+                        return check_var_by_int_inc_var1_or_var2(var_left, s_compare, var_right_value, var1_inc, is_var2_inc = true, var2_inc);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_do_script_stop:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        return check_var_by_int_do_script_stop(var_left, s_compare, var_right_value);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_do_script_filename:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string filename = cmd.Items[7].Value_Str;
+                        bool is_no_history;
+                        return check_var_by_int_do_script_from_file(var_left, s_compare, var_right_value, filename, is_no_history = false);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_do_script_filename_no_history:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string filename = cmd.Items[7].Value_Str;
+                        bool is_no_history;
+                        return check_var_by_int_do_script_from_file(var_left, s_compare, var_right_value, filename, is_no_history = true);
+                    }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Check if: str as value print/inc/do">
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_print_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string value = cmd.Items[4].Value_Str;
+                        string s_msg1 = cmd.Items[8].Value_Str;
+                        bool is_msg2;
+                        string s_msg2 = "";
+                        return check_var_by_str_print_msg1_or_msg2(var_left, s_compare, value, s_msg1, is_msg2 = false, s_msg2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_print_str_else_print_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string value = cmd.Items[4].Value_Str;
+                        string s_msg1 = cmd.Items[8].Value_Str;
+                        bool is_msg2;
+                        string s_msg2 = cmd.Items[11].Value_Str;
+                        return check_var_by_str_print_msg1_or_msg2(var_left, s_compare, value, s_msg1, is_msg2 = true, s_msg2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_inc_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string value = cmd.Items[4].Value_Str;
+                        string var1_inc = cmd.Items[8].Value_Str;
+                        bool is_var2_inc;
+                        string var2_inc = "";
+                        return check_var_by_str_inc_var1_or_var2(var_left, s_compare, value, var1_inc, is_var2_inc = false, var2_inc);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_inc_str_else_inc_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string value = cmd.Items[4].Value_Str;
+                        string var1_inc = cmd.Items[8].Value_Str;
+                        bool is_var2_inc;
+                        string var2_inc = cmd.Items[11].Value_Str;
+                        return check_var_by_str_inc_var1_or_var2(var_left, s_compare, value, var1_inc, is_var2_inc = true, var2_inc);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_do_script_stop:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right_value = cmd.Items[4].Value_Str;
+                        return check_var_by_str_do_script_stop(var_left, s_compare, var_right_value);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_do_script_filename:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right_value = cmd.Items[4].Value_Str;
+                        string filename = cmd.Items[7].Value_Str;
+                        bool is_no_history;
+                        return check_var_by_str_do_script_from_file(var_left, s_compare, var_right_value, filename, is_no_history = false);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_do_script_filename_no_history:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right_value = cmd.Items[4].Value_Str;
+                        string filename = cmd.Items[7].Value_Str;
+                        bool is_no_history;
+                        return check_var_by_str_do_script_from_file(var_left, s_compare, var_right_value, filename, is_no_history = true);
+                    }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Check if: str as var print/inc/do">
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_print_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string s_msg1 = cmd.Items[8].Value_Str;
+                        bool is_msg2;
+                        string s_msg2 = "";
+                        return check_var_by_var_print_msg1_or_msg2(var_left, s_compare, var_right, s_msg1, is_msg2 = false, s_msg2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_print_str_else_print_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string s_msg1 = cmd.Items[8].Value_Str;
+                        bool is_msg2;
+                        string s_msg2 = cmd.Items[11].Value_Str;
+                        return check_var_by_var_print_msg1_or_msg2(var_left, s_compare, var_right, s_msg1, is_msg2 = true, s_msg2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_inc_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string var1_inc = cmd.Items[8].Value_Str;
+                        bool is_var2_inc;
+                        string var2_inc = "";
+                        return check_var_by_var_inc_var1_or_var2(var_left, s_compare, var_right, var1_inc, is_var2_inc = false, var2_inc);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_inc_str_else_inc_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string var1_inc = cmd.Items[8].Value_Str;
+                        bool is_var2_inc;
+                        string var2_inc = cmd.Items[11].Value_Str;
+                        return check_var_by_var_inc_var1_or_var2(var_left, s_compare, var_right, var1_inc, is_var2_inc = true, var2_inc);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_do_script_stop:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        return check_var_by_var_do_script_stop(var_left, s_compare, var_right);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_do_script_filename:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string filename = cmd.Items[7].Value_Str;
+                        bool is_no_history;
+                        return check_var_by_var_do_script_from_file(var_left, s_compare, var_right, filename, is_no_history = false);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_do_script_filename_no_history:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string filename = cmd.Items[7].Value_Str;
+                        bool is_no_history;
+                        return check_var_by_var_do_script_from_file(var_left, s_compare, var_right, filename, is_no_history = true);
+                    }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Check if: int/str as value/str as var do command">
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string command1 = cmd.Items[7].Value_Str;
+                        bool is_command2;
+                        string command2 = "";
+                        return check_var_by_int_do_command(var_left, s_compare, var_right_value, command1, is_command2 = false, command2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_do_command_str_else_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string command1 = cmd.Items[7].Value_Str;
+                        bool is_command2;
+                        string command2 = cmd.Items[11].Value_Str;
+                        return check_var_by_int_do_command(var_left, s_compare, var_right_value, command1, is_command2 = true, command2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right_value = cmd.Items[4].Value_Str;
+                        string command1 = cmd.Items[9].Value_Str;
+                        bool is_command2;
+                        string command2 = "";
+                        return check_var_by_str_do_command(var_left, s_compare, var_right_value, command1, is_command2 = false, command2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_do_command_str_else_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right_value = cmd.Items[4].Value_Str;
+                        string command1 = cmd.Items[9].Value_Str;
+                        bool is_command2;
+                        string command2 = cmd.Items[13].Value_Str;
+                        return check_var_by_str_do_command(var_left, s_compare, var_right_value, command1, is_command2 = true, command2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string command1 = cmd.Items[9].Value_Str;
+                        bool is_command2;
+                        string command2 = "";
+                        return check_var_by_var_do_command(var_left, s_compare, var_right, command1, is_command2 = false, command2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_do_command_str_else_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string command1 = cmd.Items[9].Value_Str;
+                        bool is_command2;
+                        string command2 = cmd.Items[13].Value_Str;
+                        return check_var_by_var_do_command(var_left, s_compare, var_right, command1, is_command2 = true, command2);
+                    }
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Check if: var exists print/do command">
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_exists_print_str:
+                    if (is_debug) return true;
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string str1 = cmd.Items[5].Value_Str;
+                        bool is_str2;
+                        string str2 = "";
+                        return check_var_exists_print(var_left, str1, is_str2 = false, str2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_exists_print_str_else_print_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string str1 = cmd.Items[5].Value_Str;
+                        bool is_str2;
+                        string str2 = cmd.Items[8].Value_Str;
+                        return check_var_exists_print(var_left, str1, is_str2 = true, str2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_exists_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string command1 = cmd.Items[6].Value_Str;
+                        bool is_command2;
+                        string command2 = "";
+                        return check_var_exists_do_command(var_left, command1, is_command2 = false, command2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_exists_do_command_str_else_do_command_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string command1 = cmd.Items[6].Value_Str;
+                        bool is_command2;
+                        string command2 = cmd.Items[10].Value_Str;
+                        return check_var_exists_do_command(var_left, command1, is_command2 = true, command2);
+                    }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Label: label/goto label">
+                case Local_Cmd_ID.CMD_ID_check_label_str:
+                    if (is_debug) return true;
+                    {
+                        string label = cmd.Items[2].Value_Str;
+                        return check_label(label);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_goto_label:
+                    if (is_debug) return true;
+                    {
+                        string label = cmd.Items[2].Value_Str;
+                        return check_goto_label(label);
+                    }
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Print Str">
+                case Local_Cmd_ID.CMD_ID_check_print_str:
+                    if (is_debug) return true;
+                    {
+                        string str = cmd.Items[2].Value_Str;
+                        return check_print_str(str);
+                    }
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Check if: int/str as value/str as var goto label">
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_goto_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string label1 = cmd.Items[6].Value_Str;
+                        bool is_label2;
+                        string label2 = "";
+                        return check_var_by_int_goto_label(var_left, s_compare, var_right_value, label1, is_label2 = false, label2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_int_goto_str_else_goto_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        int var_right_value = 0;
+                        Int32.TryParse(cmd.Items[4].Value_Str, out var_right_value);
+                        string label1 = cmd.Items[6].Value_Str;
+                        bool is_label2;
+                        string label2 = cmd.Items[9].Value_Str;
+                        return check_var_by_int_goto_label(var_left, s_compare, var_right_value, label1, is_label2 = true, label2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_goto_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right_value = cmd.Items[4].Value_Str;
+                        string label1 = cmd.Items[8].Value_Str;
+                        bool is_label2;
+                        string label2 = "";
+                        return check_var_by_str_goto_label(var_left, s_compare, var_right_value, label1, is_label2 = false, label2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_value_goto_str_else_goto_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right_value = cmd.Items[4].Value_Str;
+                        string label1 = cmd.Items[8].Value_Str;
+                        bool is_label2;
+                        string label2 = cmd.Items[11].Value_Str;
+                        return check_var_by_str_goto_label(var_left, s_compare, var_right_value, label1, is_label2 = true, label2);
+                    }
+
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_goto_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string label1 = cmd.Items[8].Value_Str;
+                        bool is_label2;
+                        string label2 = "";
+                        return check_var_by_var_goto_label(var_left, s_compare, var_right, label1, is_label2 = false, label2);
+                    }
+                case Local_Cmd_ID.CMD_ID_check_if_str_compare_str_as_var_goto_str_else_goto_str:
+                    if (is_debug) return true;
+                    {
+                        string var_left = Var_Name_Without_Point_Get(cmd.Items[2].Value_Str);
+                        string s_compare = cmd.Items[3].Value_Str;
+                        string var_right = Var_Name_Without_Point_Get(cmd.Items[4].Value_Str);
+                        string label1 = cmd.Items[8].Value_Str;
+                        bool is_label2;
+                        string label2 = cmd.Items[11].Value_Str;
+                        return check_var_by_var_goto_label(var_left, s_compare, var_right, label1, is_label2 = true, label2);
+                    }
+                // </editor-fold>
             }
             return false; // Not Implemented
         }
 
-        override public void To_Map(Dictionary<string, string> values_map)
+        public override void To_Map(Dictionary<string, string> values_map)
         {
             string Prefix = "Check";
             values_map[Prefix + ".Count_Total"] = Count_Total.ToString();

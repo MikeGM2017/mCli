@@ -88,11 +88,36 @@ namespace Cli_Core_CS
                                             }
                                             Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
                                             main_obj.Cli_Output.Output_Str(s_trim);
+
+                                            main_obj.Script_Command_Str.Value = "";
+                                            main_obj.Script_Label_Str.Value = "";
+
                                             main_obj.Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                                             while (main_obj.Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT)
                                             {
                                                 main_obj.Cli_Input.Input_sleep(1);
                                             }
+
+                                            if (main_obj.Script_Command_Str.Value.Length > 0)
+                                            {
+                                                main_obj.Execute_Script_Command(is_debug, debug_res);
+                                                main_obj.Script_Command_Str.Value = "";
+                                            }
+
+                                            //@Warning: Command "check goto <label>" - special case: is moves file position
+                                            if (main_obj.Script_Label_Str.Value.Length > 0)
+                                            {
+                                                bool label_found = main_obj.Execute_Command_check_goto_label(inputFile, main_obj.Script_Label_Str.Value);
+                                                if (!label_found)
+                                                {
+                                                    main_obj.Cli_Output.Output_NewLine();
+                                                    main_obj.Cli_Output.Output_Str("ERROR: label \"" + main_obj.Script_Label_Str.Value + "\" - not found, script stopped");
+                                                    main_obj.Cli_Output.Output_NewLine();
+                                                    main_obj.Cmd_Script_Stop.Value = true; // Stop - label not found
+                                                }
+                                                main_obj.Script_Label_Str.Value = "";
+                                            }
+
                                         }
                                     }
                                     else
@@ -328,7 +353,7 @@ namespace Cli_Core_CS
             return found;
         }
 
-        void Execute_Script_Command(bool is_debug, Ref_Boolean debug_res)
+        public void Execute_Script_Command(bool is_debug, Ref_Boolean debug_res)
         {
             string Script_Command_Str_Trim1 = Script_Command_Str.Value.Trim();
             bool is_commas_found = false;

@@ -5,11 +5,11 @@ namespace Cli_Core_CS
     class Cli_Module_Base_Quit : Cli_Module
     {
 
-        protected class Execute_Object_Exit : Execute_Object_Abstract
+        protected class Do_Exit : Do_Abstract
         {
             protected Ref_Boolean Cmd_Exit;
 
-            public Execute_Object_Exit(Ref_Boolean cmd_exit)
+            public Do_Exit(Ref_Boolean cmd_exit)
             {
                 Cmd_Exit = cmd_exit;
             }
@@ -20,11 +20,11 @@ namespace Cli_Core_CS
             }
         }
 
-        protected class Execute_Object_Quit : Execute_Object_Abstract
+        protected class Do_Quit : Do_Abstract
         {
             protected Ref_Boolean Cmd_Quit;
 
-            public Execute_Object_Quit(Ref_Boolean cmd_quit)
+            public Do_Quit(Ref_Boolean cmd_quit)
             {
                 Cmd_Quit = cmd_quit;
             }
@@ -41,8 +41,8 @@ namespace Cli_Core_CS
         protected Ref_Boolean Cmd_Exit;
         protected Ref_Boolean Cmd_Quit;
 
-        protected Execute_Object_Exit Exit_Object;
-        protected Execute_Object_Quit Quit_Object;
+        protected Do_Exit Do_Exit_Object;
+        protected Do_Quit Do_Quit_Object;
 
         enum Local_Cmd_ID
         {
@@ -74,8 +74,8 @@ namespace Cli_Core_CS
             Cmd_Exit = cmd_exit;
             Cmd_Quit = cmd_quit;
 
-            Exit_Object = new Execute_Object_Exit(cmd_exit);
-            Quit_Object = new Execute_Object_Quit(cmd_quit);
+            Do_Exit_Object = new Do_Exit(cmd_exit);
+            Do_Quit_Object = new Do_Quit(cmd_quit);
 
             {
                 // E - exit
@@ -143,7 +143,7 @@ namespace Cli_Core_CS
 
             Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_PROMPT);
             Cli_Input.Input_Str_Set_Empty();
-            Cli_Input.Execute_Object_Set(Exit_Object);
+            Cli_Input.Do_Object_Set(Do_Exit_Object);
         }
 
         void Cli_Quit_Ask()
@@ -154,7 +154,7 @@ namespace Cli_Core_CS
 
             Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_PROMPT);
             Cli_Input.Input_Str_Set_Empty();
-            Cli_Input.Execute_Object_Set(Quit_Object);
+            Cli_Input.Do_Object_Set(Do_Quit_Object);
         }
 
         override public bool Execute(Cli_Cmd cmd, List<Level_Description> Levels, bool is_debug)

@@ -6,7 +6,7 @@ namespace Cli_Core_CS
 {
     class Cmd_Item_EQU_Range : Cmd_Item_EQU
     {
-        public    List<string> Words = new List<string>();
+        public List<string> Words = new List<string>();
 
         public Cmd_Item_EQU_Range(string text, string help, List<string> words) : base(text, help)
         {
@@ -36,7 +36,10 @@ namespace Cli_Core_CS
             for (int i = 0; i < Words.Count; i++)
             {
                 if (Words[i] == s) return Cmd_Item_Valid_Result.CMD_ITEM_OK;
-                if (Words[i].Substring(0, s.Length) == s) is_incomplete_found = true;
+                if (Words[i].Length >= s.Length)
+                {
+                    if (Words[i].Substring(0, s.Length) == s) is_incomplete_found = true;
+                }
             }
             if (is_incomplete_found)
                 return Cmd_Item_Valid_Result.CMD_ITEM_INCOMPLETE;

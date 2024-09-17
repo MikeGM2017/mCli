@@ -99,7 +99,8 @@
     <Compile Include="Cmd_Token_Parser_Char_Type.cs" />
     <Compile Include="Cmd_Token_Parser_Char_Type_Func.cs" />
     <Compile Include="Cmd_Token_Parser_Result.cs" />
-    <Compile Include="Execute_Object_Abstract.cs" />
+    <Compile Include="Do_Abstract.cs" />
+    <Compile Include="Do_Command.cs" />
     <Compile Include="Input_Cmd_Type.cs" />
     <Compile Include="Input_Mode_Type.cs" />
     <Compile Include="Level_Description.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Ref_Int.cs" />
     <Compile Include="Ref_String.cs" />
     <Compile Include="Str_Filter.cs" />
+    <Compile Include="Str_Get_Without_Commas.cs" />
     <Compile Include="TAB_Cmd.cs" />
     <Compile Include="TAB_Cmd_ID.cs" />
     <EmbeddedResource Include="Cli_Core_CS_Test.resx">

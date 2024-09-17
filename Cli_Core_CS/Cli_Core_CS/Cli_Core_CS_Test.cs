@@ -100,9 +100,13 @@ namespace Cli_Core_CS
             Ref_String Script_Command_Str = new Ref_String("");
             Ref_String Script_Label_Str = new Ref_String("");
             Ref_String Script_Dir_Str = new Ref_String("./scripts");
-            Modules.Add(new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
-                    Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit,
-                    CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str));
+            Cli_Module_Base_Script Module_Script = new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
+            Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str);
+            Modules.Add(Module_Script);
+            Do_Command Do_Command_Object = new Do_Command(Module_Script);
+
+            Ref_Boolean Log_Wait_Enable = new Ref_Boolean(true);
+            Ref_Boolean Cmd_Wait_Stop = new Ref_Boolean(false);
             Modules.Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
             Modules.Add(new Cli_Module_Test_Tab_Min_Max());
@@ -112,7 +116,10 @@ namespace Cli_Core_CS
 
             Dictionary<string, string> Values_Map = new Dictionary<string, string>();
 
-            Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop)));
+            Str_Get_Without_Commas str_without_commas = new Str_Get_Without_Commas();
+
+            Modules.Add(new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas,
+                Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str, Do_Command_Object));
 
             Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
 
@@ -177,7 +184,7 @@ namespace Cli_Core_CS
                             if (input_item.Text_Get().ToLower().Equals("y") || input_item.Text_Get().ToLower().Equals("yes"))
                             {
                                 Cli_Output.Output_Str("Answer: Yes");
-                                Cli_Input.Execute_Yes();
+                                Cli_Input.Do_Object_Yes();
                             }
                             else
                             {

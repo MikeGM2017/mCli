@@ -38,7 +38,7 @@ namespace Cli_Core_CS
 
         protected bool Is_Ctrl_C_Pressed;
 
-        protected Execute_Object_Abstract Execute_Object = null;
+        protected Do_Abstract Do_Object = null;
 
         public void Wait_Count_Set(int v)
         {
@@ -638,17 +638,17 @@ namespace Cli_Core_CS
             Is_Ctrl_C_Pressed = false;
         }
 
-        public void Execute_Object_Set(Execute_Object_Abstract obj)
+        public void Do_Object_Set(Do_Abstract obj)
         {
-            Execute_Object = obj;
+            Do_Object = obj;
         }
 
-        public void Execute_Yes()
+        public void Do_Object_Yes()
         {
-            if(Execute_Object != null)
+            if(Do_Object != null)
             {
-                Execute_Object.Do();
-                Execute_Object = null;
+                Do_Object.Do();
+                Do_Object = null;
             }
         }
 
