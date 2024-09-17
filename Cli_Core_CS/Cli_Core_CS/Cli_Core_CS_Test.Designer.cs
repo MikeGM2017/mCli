@@ -38,6 +38,7 @@
             this.Cli_Input_TextBox.Location = new System.Drawing.Point(0, 0);
             this.Cli_Input_TextBox.Multiline = true;
             this.Cli_Input_TextBox.Name = "Cli_Input_TextBox";
+            this.Cli_Input_TextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.Cli_Input_TextBox.Size = new System.Drawing.Size(800, 450);
             this.Cli_Input_TextBox.TabIndex = 0;
             this.Cli_Input_TextBox.Text = "Cli Core C# V0.01";
