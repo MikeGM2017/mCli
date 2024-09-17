@@ -11,7 +11,7 @@ namespace Cli_Core_CS
     public partial class Cli_Core_CS_Test : Form
     {
 
-        const string Version = "0.01";
+        const string Version = "0.04";
 
         Cli_Output_CS Cli_Output = null;
         Cli_Input_CS Cli_Input = null;
