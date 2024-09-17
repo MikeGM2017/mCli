@@ -1258,7 +1258,8 @@ public:
     bool check_var_set_str_as_var(string var_left, string var_right, bool is_force) {
         map<string, string>::iterator var_left_iter = Values_Map.find(var_left);
         map<string, string>::iterator var_right_iter = Values_Map.find(var_right);
-        if ((var_left_iter != Values_Map.end() && var_right_iter != Values_Map.end()) || is_force) {
+        if ((var_left_iter != Values_Map.end() && var_right_iter != Values_Map.end())
+                || (is_force && var_right_iter != Values_Map.end())) {
             string value = var_right_iter->second;
             Values_Map[var_left] = value;
             if (var_left_iter == Values_Map.end()) {
