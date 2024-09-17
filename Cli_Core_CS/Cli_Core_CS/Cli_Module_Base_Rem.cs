@@ -24,6 +24,9 @@ namespace Cli_Core_CS
 
         public Cli_Module_Base_Rem(string str_rem, Cli_Output_CS cli_output) : base("Base Rem")
         {
+
+            Version = "0.02";
+
             Cli_Output = cli_output;
             {
                 // rem
@@ -38,7 +41,6 @@ namespace Cli_Core_CS
 
         bool rem(string s_rem)
         {
-            Cli_Output.Output_NewLine();
             Cli_Output.Output_Str(s_rem);
             Cli_Output.Output_NewLine();
             return true;
