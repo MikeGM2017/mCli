@@ -9,6 +9,7 @@ namespace Cli_Core_CS
         protected Cli_Modules Modules;
         protected Dictionary<string, string> Values_Map;
         protected Str_Filter Str_Filter;
+        protected Str_Get_Without_Commas Str_Without_Commas;
         protected Cli_Output_CS Cli_Output;
 
         protected char C_Single;
@@ -35,12 +36,17 @@ namespace Cli_Core_CS
         }
 
         public Cli_Module_Vars(Cli_Modules modules, Dictionary<string, string> values_map, Str_Filter str_filter,
+            Str_Get_Without_Commas str_without_commas,
             Cli_Output_CS cli_output,
             char c_single = '?', char c_multy = '*') : base("Vars")
         {
+
+            Version = "0.03";
+
             Modules = modules;
             Values_Map = values_map;
             Str_Filter = str_filter;
+            Str_Without_Commas = str_without_commas;
             Cli_Output = cli_output;
             C_Single = c_single;
             C_Multy = c_multy;
@@ -104,7 +110,6 @@ namespace Cli_Core_CS
 
         bool var_get(string point_var_name_str)
         {
-            Cli_Output.Output_NewLine();
             string var_name = point_var_name_str.Substring(1);
             bool found = false;
             foreach (var item in Values_Map)
@@ -125,27 +130,23 @@ namespace Cli_Core_CS
             return true;
         }
 
-        string Str_Get_Without_Commas(string value_str)
+        KeyValuePair<string, string> Values_Map_Find_By_Var_Name(string var_name_arg)
         {
-            string s = value_str;
-            if (value_str.Length >= 2)
+            foreach (var item in Values_Map)
             {
-                if (
-                        (value_str[0] == '\"' && value_str[value_str.Length - 1] == '\"')
-                        || (value_str[0] == '\'' && value_str[value_str.Length - 1] == '\'')
-                        )
+                string item_var_name = "." + item.Key;
+                if (var_name_arg == item_var_name)
                 {
-                    s = value_str.Substring(1, value_str.Length - 2);
+                    return item;
                 }
             }
-            return s;
+            return new KeyValuePair<string, string>();
         }
 
         bool var_set_str(string point_var_name_str, string value_str)
         {
-            Cli_Output.Output_NewLine();
             string var_name = point_var_name_str.Substring(1);
-            string value_str_without_commas = Str_Get_Without_Commas(value_str);
+            string value_str_without_commas = Str_Without_Commas.Get(value_str);
             Values_Map[var_name] = value_str_without_commas;
             Cli_Output.Output_Str(var_name + " = \"" + value_str_without_commas + "\"");
             Cli_Output.Output_NewLine();
@@ -154,26 +155,20 @@ namespace Cli_Core_CS
 
         bool var_set_var(string point_var1_name_str, string point_var2_name_str)
         {
-            Cli_Output.Output_NewLine();
-            string var2_name = point_var2_name_str.Substring(1);
-            bool var2_found = false;
-            foreach (var item in Values_Map)
+            KeyValuePair<string, string> item = Values_Map_Find_By_Var_Name(point_var2_name_str);
+            if (item.Key != null)
             {
-                if (item.Key == var2_name)
-                {
-                    string var1_name = point_var1_name_str.Substring(1);
-                    string var2_value = item.Value;
-                    Values_Map[var1_name] = var2_value;
-                    Cli_Output.Output_Str(var1_name + " = \"" + var2_value + "\"");
-                    var2_found = true;
-                    break;
-                }
+                string var1_name = point_var1_name_str.Substring(1);
+                string var2_value = item.Value;
+                Values_Map[var1_name] = var2_value;
+                Cli_Output.Output_Str(var1_name + " = \"" + var2_value + "\"");
+                Cli_Output.Output_NewLine();
             }
-            if (!var2_found)
+            else
             {
                 Cli_Output.Output_Str(point_var2_name_str + " - Not Found");
+                Cli_Output.Output_NewLine();
             }
-            Cli_Output.Output_NewLine();
             return true;
         }
 
@@ -195,7 +190,6 @@ namespace Cli_Core_CS
             }
             if (!found)
             {
-                Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str(var_name + " - Not Found");
                 Cli_Output.Output_NewLine();
             }
@@ -204,21 +198,31 @@ namespace Cli_Core_CS
 
         bool var_delete(string point_var_name_str)
         {
+            Dictionary<string, string> new_dictionary = new Dictionary<string, string>();
             string var_name = point_var_name_str.Substring(1);
-            bool found = false;
+            bool found_to_delete = false;
             foreach (var item in Values_Map)
             {
                 string item_var_name = item.Key;
-                if (Str_Filter.Is_Match(var_name, item_var_name))
+                if (!Str_Filter.Is_Match(var_name, item_var_name))
                 {
-                    Values_Map.Remove(item.Key);
-                    found = true;
-                    break;
+                    new_dictionary.Add(item.Key, item.Value);
+                }
+                else
+                {
+                    found_to_delete = true;
                 }
             }
-            if (!found)
+            if (found_to_delete)
             {
-                Cli_Output.Output_NewLine();
+                Values_Map.Clear();
+                foreach (var item in new_dictionary)
+                {
+                    Values_Map.Add(item.Key, item.Value);
+                }
+            }
+            if (!found_to_delete)
+            {
                 Cli_Output.Output_Str(var_name + " - Not Found");
                 Cli_Output.Output_NewLine();
             }

@@ -121,7 +121,7 @@ namespace Cli_Core_CS
             Modules.Add(new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas,
                 Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str, Do_Command_Object));
 
-            Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
+            Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas, Cli_Output, C_Single, C_Multy)));
 
             Modules.Add((new Cli_Module_Base_Level(Cli_Input, level_root)));
         }
