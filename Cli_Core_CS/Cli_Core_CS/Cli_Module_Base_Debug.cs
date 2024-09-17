@@ -37,6 +37,9 @@ namespace Cli_Core_CS
                 List<Level_Description> levels, Cli_CMD_Processor cmd_processor,
                 Cli_Output_CS cli_output) : base("Base Debug")
         {
+
+            Version = "0.02";
+
             User_Privilege = user_privilege;
             Modules = modules;
             Levels = levels;
