@@ -7,6 +7,8 @@ namespace Cli_Core_CS
     class Cli_Module_Base_Modules : Cli_Module
     {
 
+        protected string Cli_Version = "";
+
         protected Cli_Modules Modules;
 
         protected Str_Filter Str_Filter;
@@ -32,15 +34,18 @@ namespace Cli_Core_CS
             return Local_Cmd_ID.CMD_ID_LAST - Local_Cmd_ID.CMD_ID_NO - 1;
         }
 
-        public Cli_Module_Base_Modules(Cli_Modules modules,
+        public Cli_Module_Base_Modules(string cli_version, Cli_Modules modules,
             Str_Filter str_filter,
             Cli_Input_CS cli_input, Cli_Output_CS cli_output) : base("Base Modules")
         {
+
+            Version = "0.04";
+
+            Cli_Version = cli_version;
             Modules = modules;
             Str_Filter = str_filter;
             Cli_Input = cli_input;
             Cli_Output = cli_output;
-            Version = "0.03";
             {
                 // modules
                 Cli_Cmd cmd = new Cli_Cmd((int)Local_Cmd_ID.CMD_ID_modules, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
@@ -100,11 +105,6 @@ namespace Cli_Core_CS
             Cli_CMD_Processor CMD_Processor = new Cli_CMD_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem);
             bool log_is_active = false;
             Cli_TAB_Processor TAB_Processor = new Cli_TAB_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem, log_is_active);
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Processors[").Append(2).Append("]:");
-            Cli_Output.Output_Str(sb.ToString());
-            Cli_Output.Output_NewLine();
-            Cli_Output.Output_NewLine();
 
             {
                 string type = CMD_Processor.Type_Get();
@@ -273,6 +273,9 @@ namespace Cli_Core_CS
                     {
                         string module_filter = cmd.Items[1].Value_Str;
                         bool is_verbose;
+                        Cli_Output.Output_NewLine();
+                        Cli_Output.Output_Str("Cli V" + Cli_Version);
+                        Cli_Output.Output_NewLine();
                         Cli_Output.Output_NewLine();
                         processors_print();
                         filters_print();
