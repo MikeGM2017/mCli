@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
     char C_Multy = '*';
     Str_Filter str_filter(C_Single, C_Multy);
     Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
-    Modules.Add(new Cli_Module_Base_Modules(Modules, str_filter, Cli_Input, Cli_Output));
+    Modules.Add(new Cli_Module_Base_Modules(Version, Modules, str_filter, Cli_Input, Cli_Output));
 
     Cli_History History;
     Modules.Add(new Cli_Module_Base_History(History, Cli_Output));

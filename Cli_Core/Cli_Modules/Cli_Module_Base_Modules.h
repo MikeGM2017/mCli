@@ -52,6 +52,8 @@ using namespace std;
 class Cli_Module_Base_Modules : public Cli_Module {
 protected:
 
+    string Cli_Version;
+
     Cli_Modules &Modules;
 
     Str_Filter_Abstract &Str_Filter;
@@ -77,12 +79,14 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Modules(Cli_Modules &modules,
+    Cli_Module_Base_Modules(string cli_version, Cli_Modules &modules,
             Str_Filter_Abstract &str_filter,
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output) : Cli_Module("Base Modules"),
-    Modules(modules),
+    Cli_Version(cli_version), Modules(modules),
     Str_Filter(str_filter), Cli_Input(cli_input), Cli_Output(cli_output) {
-        Version = "0.03";
+
+        Version = "0.04";
+
         {
             // modules
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_modules, CMD_PRIVILEGE_USER_DEF);
@@ -143,11 +147,6 @@ public:
         Cli_CMD_Processor CMD_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem);
         bool log_is_active = false;
         Cli_TAB_Processor TAB_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem, log_is_active);
-        stringstream s_str;
-        s_str << "Processors[" << 2 << "]:";
-        Cli_Output.Output_Str(s_str.str());
-        Cli_Output.Output_NewLine();
-        Cli_Output.Output_NewLine();
 
         {
             string type = CMD_Processor.Type_Get();
@@ -298,6 +297,9 @@ public:
             {
                 string module_filter = cmd->Items[1]->Value_Str;
                 bool is_verbose;
+                Cli_Output.Output_NewLine();
+                Cli_Output.Output_Str("Cli V" + Cli_Version);
+                Cli_Output.Output_NewLine();
                 Cli_Output.Output_NewLine();
                 processors_print();
                 filters_print();
