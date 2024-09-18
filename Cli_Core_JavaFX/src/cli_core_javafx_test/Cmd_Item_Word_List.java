@@ -47,6 +47,10 @@ public class Cmd_Item_Word_List extends Cmd_Item_Word_Range {
         Type = "Word_List";
     }
 
+    Cmd_Item_Word_List(String text, String help, List<String> words) {
+        this(text, help, words, false);
+    }
+
     @Override
     public Cmd_Item_Valid_Result Parse(String s) {
         Value_Str = s;
@@ -74,7 +78,7 @@ public class Cmd_Item_Word_List extends Cmd_Item_Word_Range {
             s_pos_end++;
         }
         if (s_pos_beg <= s_pos_end - 1) {
-        //if (s_pos_beg < s_pos_end - 1) {
+            //if (s_pos_beg < s_pos_end - 1) {
             //Values_Str.add(s.substring(s_pos_beg, s_pos_end));
             Values_Str.add(s.substring(s_pos_beg));
         }

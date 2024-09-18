@@ -17,6 +17,7 @@ public class Cmd_Item_Base {
     protected String Type;
     protected String Text;
     protected String Help;
+    protected String Version;
 
     protected boolean Is_Char_Valid(char c, int pos, int len) {
         return true; // Допустимы любые символы в любой позиции
@@ -26,6 +27,7 @@ public class Cmd_Item_Base {
 
     public Cmd_Item_Base(String text, String help) {
         Type = "Base";
+        Version = "0.01"; //@Warning: Dummy value - Version is not set
         Text = text;
         Help = help;
         Value_Str = "";
@@ -45,6 +47,10 @@ public class Cmd_Item_Base {
 
     public String Help_Get() {
         return Help;
+    }
+
+    public String Version_Get() {
+        return Version;
     }
 
     public boolean Is_Str_Valid(String s) {

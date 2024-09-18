@@ -141,6 +141,60 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         Cli_Output.Output_NewLine();
     }
 
+    void cmd_items_print(String module_filter, Str_Filter str_filter) {
+        List<Cmd_Item_Base> items = new ArrayList<>();
+        List<String> words = new ArrayList<>();
+        items.add(new Cmd_Item_Base("", ""));
+        items.add(new Cmd_Item_Date("", ""));
+        items.add(new Cmd_Item_DateTime("", ""));
+        items.add(new Cmd_Item_Time("", ""));
+        //items.add(new Cmd_Item_EQU("", ""));
+        //items.add(new Cmd_Item_EQU_Range("", "", words));
+        items.add(new Cmd_Item_IP4("", ""));
+        items.add(new Cmd_Item_IP6("", ""));
+        items.add(new Cmd_Item_Int("", ""));
+        items.add(new Cmd_Item_Int_List(1, 8, "", ""));
+        items.add(new Cmd_Item_Int_Range(1, 8, "", ""));
+        items.add(new Cmd_Item_MAC("", ""));
+        //items.add(new Cmd_Item_Point_Var_Name("", ""));
+        items.add(new Cmd_Item_Rem("", ""));
+        items.add(new Cmd_Item_Str("", ""));
+        //items.add(new Cmd_Item_Str_Esc("", ""));
+        items.add(new Cmd_Item_Word("", ""));
+        items.add(new Cmd_Item_Word_List("", "", words));
+        items.add(new Cmd_Item_Word_Range("", "", words));
+        //items.add(new Cmd_Item_Assignment_Mark("", ""));
+
+        boolean found = false;
+        for (int i = 0; i < items.size(); i++) {
+            Cmd_Item_Base item = items.get(i);
+            String type = item.Type_Get();
+            if (str_filter.Is_Match(module_filter, type)) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            StringBuilder s_str = new StringBuilder();
+            s_str.append("Cmd Items[").append(items.size()).append("]:");
+            Cli_Output.Output_Str(s_str.toString());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine();
+            for (int i = 0; i < items.size(); i++) {
+                Cmd_Item_Base item = items.get(i);
+                String type = item.Type_Get();
+                if (str_filter.Is_Match(module_filter, type)) {
+                    String version = item.Version_Get();
+                    Cli_Output.Output_Str(type);
+                    Cli_Output.Output_Str(" V");
+                    Cli_Output.Output_Str(version);
+                    Cli_Output.Output_NewLine();
+                }
+            }
+        }
+    }
+
     protected boolean modules_by_filter_print(String module_filter, Str_Filter str_filter, boolean is_verbose) {
         Cli_Output.Output_NewLine();
         boolean found = false;
@@ -220,7 +274,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
                     Cli_Output.Output_NewLine();
                     processors_print();
                     filters_print();
-                    //cmd_items_print(module_filter, Str_Filter);
+                    cmd_items_print(module_filter, Str_Filter);
                     return modules_by_filter_print(module_filter, Str_Filter, is_verbose = true);
                 }
         }
