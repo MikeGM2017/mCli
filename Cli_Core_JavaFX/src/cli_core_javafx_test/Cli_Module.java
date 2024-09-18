@@ -16,6 +16,7 @@ import java.util.Map;
 public class Cli_Module {
 
     protected String Name;
+    protected String Version;
 
     public List<Cli_Cmd> Module_Cmd_List;
 
@@ -24,6 +25,7 @@ public class Cli_Module {
     }
 
     public Cli_Module(String name) {
+        Version = "0.01"; //@Warning: Dummy value - Version is not set
         Name = name;
         Module_Cmd_List = new ArrayList<>();
     }
@@ -49,6 +51,10 @@ public class Cli_Module {
             return Module_Cmd_List.get(cmd_index);
         }
         return null;
+    }
+
+    String Version_Get() {
+        return Version;
     }
 
     public void To_Map(Map<String, String> values_map) {

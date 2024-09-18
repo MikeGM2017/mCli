@@ -8,6 +8,6 @@
 
 <AnchorPane id="AnchorPane" prefHeight="240.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cli_core_javafx_test.Cli_Core_JavaFX_Test_FormController">
    <children>
-      <TextArea id="Cli_Input_TextArea" fx:id="Cli_Input_TextArea" layoutX="46.0" layoutY="-14.0" onKeyPressed="#On_Key_Pressed_Action" prefHeight="200.0" prefWidth="320.0" text="Cli Core JavaFX V0.01" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <TextArea id="Cli_Input_TextArea" fx:id="Cli_Input_TextArea" layoutX="46.0" layoutY="-14.0" onKeyPressed="#On_Key_Pressed_Action" prefHeight="200.0" prefWidth="320.0" text="Cli Core JavaFX Vx.xx" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

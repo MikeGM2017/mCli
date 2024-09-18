@@ -23,6 +23,8 @@ import javafx.scene.text.Font;
  */
 public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
+    protected String Version = "0.02";
+
     @FXML
     protected TextArea Cli_Input_TextArea;
 
@@ -55,6 +57,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Cli_Input_TextArea.setFont(Font.font("monospace"));
+        Cli_Input_TextArea.setText("Cli Core JavaFX V" + Version);
         Cli_Input_TextArea.appendText("\nCli Core JavaFX Test started\n");
 
         Cli_Output = new Cli_Output_JavaFX_Threaded(Cli_Input_TextArea);
@@ -96,7 +99,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         char C_Multy = '*';
         Str_Filter str_filter = new Str_Filter(C_Single, C_Multy);
         Modules.Module_Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
-        Modules.Module_Add(new Cli_Module_Base_Modules(User_Privilege, Modules, str_filter, Cli_Output));
+        Modules.Module_Add(new Cli_Module_Base_Modules(Version, Modules, str_filter, Cli_Output));
 
         Modules.Module_Add(new Cli_Module_Base_Log(Cli_Input));
 

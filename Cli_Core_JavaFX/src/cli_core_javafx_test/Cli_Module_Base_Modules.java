@@ -14,6 +14,8 @@ import java.util.Map;
  */
 public class Cli_Module_Base_Modules extends Cli_Module {
 
+    protected String Cli_Version = "";
+
     protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
     protected Cli_Modules Modules;
 
@@ -27,6 +29,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
     private final int CMD_ID_modules = 1;
     private final int CMD_ID_modules_by_filter = 2;
     private final int CMD_ID_modules_by_filter_print = 3;
+    private final int CMD_ID_modules_by_filter_print_verbose = 4;
 
     private final int CMD_ID_LAST = 4;
     //};
@@ -36,10 +39,13 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    public Cli_Module_Base_Modules(Ref_Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
+    public Cli_Module_Base_Modules(String cli_version, Cli_Modules modules,
             Str_Filter str_filter, Cli_Output_JavaFX cli_output) {
         super("Base Modules");
-        User_Privilege = user_privilege;
+
+        Version = "0.02";
+
+        Cli_Version = cli_version;
         Modules = modules;
         Str_Filter = str_filter;
         Cli_Output = cli_output;
@@ -76,11 +82,31 @@ public class Cli_Module_Base_Modules extends Cli_Module {
             cmd.Item_Add(new Cmd_Item_Word("print", "modules print (by filter)"));
             Cmd_Add(cmd);
         }
+        {
+            // modules <module_name> print verbose
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules_by_filter_print_verbose);
+            cmd.Text_Set("modules <module_name> print");
+            cmd.Help_Set("modules print (by filter)");
+            cmd.Is_Global_Set(true);
+            cmd.Level_Set("");
+            cmd.Item_Add(new Cmd_Item_Word("modules", "modules"));
+            cmd.Item_Add(new Cmd_Item_Str("<module_name>", "modules (by filter)"));
+            cmd.Item_Add(new Cmd_Item_Word("print", "modules print (by filter)"));
+            cmd.Item_Add(new Cmd_Item_Word("verbose", "modules print (by filter) verbose"));
+            Cmd_Add(cmd);
+        }
     }
-    
-    protected boolean modules_by_filter_print(String module_filter, Str_Filter str_filter) {
+
+    protected boolean modules_by_filter_print(String module_filter, Str_Filter str_filter, boolean is_verbose) {
         Cli_Output.Output_NewLine();
         boolean found = false;
+        if (is_verbose) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Modules[").append(Modules.Get_Size()).append("]:");
+            Cli_Output.Output_Str(sb.toString());
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine();
+        }
         for (int module = 0; module < Modules.Get_Size(); module++) {
             Cli_Module module_ptr = Modules.Get(module);
             if (module_ptr != null) {
@@ -88,7 +114,11 @@ public class Cli_Module_Base_Modules extends Cli_Module {
                 String module_name_with_commas = "\"" + module_ptr.Name_Get() + "\"";
                 if (str_filter.Is_Match(module_filter, module_name)
                         || str_filter.Is_Match(module_filter, module_name_with_commas)) {
-                    Cli_Output.Output_Str(module_name);
+                    if (!is_verbose) {
+                        Cli_Output.Output_Str(module_name);
+                    } else {
+                        Cli_Output.Output_Str(module_name + " V" + module_ptr.Version_Get());
+                    }
                     Cli_Output.Output_NewLine();
                     found = true;
                 }
@@ -112,7 +142,8 @@ public class Cli_Module_Base_Modules extends Cli_Module {
                 }
                  {
                     String module_filter = "*";
-                    return modules_by_filter_print(module_filter, Str_Filter);
+                    boolean is_verbose;
+                    return modules_by_filter_print(module_filter, Str_Filter, is_verbose = false);
                 }
             case CMD_ID_modules_by_filter:
                 if (is_debug) {
@@ -120,7 +151,8 @@ public class Cli_Module_Base_Modules extends Cli_Module {
                 }
                  {
                     String module_filter = cmd.Items.get(1).Value_Str;
-                    return modules_by_filter_print(module_filter, Str_Filter);
+                    boolean is_verbose;
+                    return modules_by_filter_print(module_filter, Str_Filter, is_verbose = false);
                 }
             case CMD_ID_modules_by_filter_print:
                 if (is_debug) {
@@ -128,7 +160,24 @@ public class Cli_Module_Base_Modules extends Cli_Module {
                 }
                  {
                     String module_filter = cmd.Items.get(1).Value_Str;
-                    return modules_by_filter_print(module_filter, Str_Filter);
+                    boolean is_verbose;
+                    return modules_by_filter_print(module_filter, Str_Filter, is_verbose = false);
+                }
+            case CMD_ID_modules_by_filter_print_verbose:
+                if (is_debug) {
+                    return true;
+                }
+                 {
+                    String module_filter = cmd.Items.get(1).Value_Str;
+                    boolean is_verbose;
+                    Cli_Output.Output_NewLine();
+                    Cli_Output.Output_Str("Cli V" + Cli_Version);
+                    Cli_Output.Output_NewLine();
+                    //Cli_Output.Output_NewLine();
+                    //processors_print();
+                    //filters_print();
+                    //cmd_items_print(module_filter, Str_Filter);
+                    return modules_by_filter_print(module_filter, Str_Filter, is_verbose = true);
                 }
         }
         return false; // Not Implemented
