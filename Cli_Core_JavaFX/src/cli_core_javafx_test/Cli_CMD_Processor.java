@@ -13,6 +13,9 @@ import java.util.List;
  */
 public class Cli_CMD_Processor {
 
+    protected String Type = "";
+    protected String Version = "";
+
     protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
     protected Cli_Modules Modules;
 
@@ -27,6 +30,10 @@ public class Cli_CMD_Processor {
     public Cli_CMD_Processor(Ref_Cli_Cmd_Privilege_ID user_privilege,
             Cli_Modules modules, List<Level_Description> levels, Cmd_Token_Parser token_parser,
             Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output, String str_rem) {
+
+        Type = "Cli_CMD_Processor";
+        Version = "0.02";
+
         User_Privilege = user_privilege;
         Modules = modules;
         Levels = levels;
@@ -125,6 +132,14 @@ public class Cli_CMD_Processor {
         }
 
         return true; // Ok
+    }
+
+    public String Type_Get() {
+        return Type;
+    }
+
+    public String Version_Get() {
+        return Version;
     }
 
 }

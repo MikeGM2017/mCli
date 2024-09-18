@@ -99,7 +99,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         char C_Multy = '*';
         Str_Filter str_filter = new Str_Filter(C_Single, C_Multy);
         Modules.Module_Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
-        Modules.Module_Add(new Cli_Module_Base_Modules(Version, Modules, str_filter, Cli_Output));
+        Modules.Module_Add(new Cli_Module_Base_Modules(Version, Modules, str_filter, Cli_Input, Cli_Output));
 
         Modules.Module_Add(new Cli_Module_Base_Log(Cli_Input));
 

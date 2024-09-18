@@ -11,10 +11,16 @@ package cli_core_javafx_test;
  */
 public class Str_Filter {
 
+    protected String Type = "";
+    protected String Version = "";
+
     protected char C_Single; // @Example: '.' or '?'
     protected char C_Multy; // @Example: '*'
 
     public Str_Filter(char c_single, char c_multy) {
+        Type = "Str_Filter";
+        Version = "0.02";
+
         C_Single = c_single;
         C_Multy = c_multy;
     }
@@ -149,6 +155,14 @@ public class Str_Filter {
         } else {
             return Is_Match_Internal(filter, s);
         }
+    }
+
+    String Type_Get() {
+        return Type;
+    }
+
+    String Version_Get() {
+        return Version;
     }
 
 }

@@ -16,6 +16,9 @@ import java.util.Set;
  */
 public class Cli_TAB_Processor {
 
+    protected String Type;
+    protected String Version;
+
     protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
     protected Cli_Modules Modules;
     protected List<Level_Description> Levels;
@@ -33,6 +36,10 @@ public class Cli_TAB_Processor {
             List<Level_Description> levels, Cmd_Token_Parser parser,
             Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output,
             String str_rem, boolean log_is_active) {
+
+        Type = "Cli_TAB_Processor";
+        Version = "0.02";
+
         User_Privilege = user_privilege;
         Modules = modules;
         Levels = levels;
@@ -632,6 +639,14 @@ public class Cli_TAB_Processor {
             Cli_Output.Output_NewLine();
         }
 
+    }
+
+    public String Type_Get() {
+        return Type;
+    }
+
+    public String Version_Get() {
+        return Version;
     }
 
 }

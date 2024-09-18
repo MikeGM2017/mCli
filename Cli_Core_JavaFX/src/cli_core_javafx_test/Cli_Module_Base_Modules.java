@@ -5,6 +5,7 @@
  */
 package cli_core_javafx_test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +17,11 @@ public class Cli_Module_Base_Modules extends Cli_Module {
 
     protected String Cli_Version = "";
 
-    protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
     protected Cli_Modules Modules;
 
     protected Str_Filter Str_Filter;
+
+    protected Cli_Input_JavaFX Cli_Input;
 
     protected Cli_Output_JavaFX Cli_Output;
 
@@ -40,7 +42,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
     }
 
     public Cli_Module_Base_Modules(String cli_version, Cli_Modules modules,
-            Str_Filter str_filter, Cli_Output_JavaFX cli_output) {
+            Str_Filter str_filter, Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output) {
         super("Base Modules");
 
         Version = "0.02";
@@ -48,6 +50,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         Cli_Version = cli_version;
         Modules = modules;
         Str_Filter = str_filter;
+        Cli_Input = cli_input;
         Cli_Output = cli_output;
         {
             // modules
@@ -95,6 +98,47 @@ public class Cli_Module_Base_Modules extends Cli_Module {
             cmd.Item_Add(new Cmd_Item_Word("verbose", "modules print (by filter) verbose"));
             Cmd_Add(cmd);
         }
+    }
+
+    void processors_print() {
+        Ref_Cli_Cmd_Privilege_ID user_privilege = new Ref_Cli_Cmd_Privilege_ID(Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_ROOT_DEF);
+        Cli_Modules modules = new Cli_Modules();
+        List<Level_Description> levels = new ArrayList<>();
+        Cmd_Token_Parser parser = new Cmd_Token_Parser();
+        String str_rem = "$";
+        Cli_CMD_Processor CMD_Processor = new Cli_CMD_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem);
+        boolean log_is_active = false;
+        Cli_TAB_Processor TAB_Processor = new Cli_TAB_Processor(user_privilege, modules, levels, parser, Cli_Input, Cli_Output, str_rem, log_is_active);
+
+        {
+            String type = CMD_Processor.Type_Get();
+            String version = CMD_Processor.Version_Get();
+            Cli_Output.Output_Str(type);
+            Cli_Output.Output_Str(" V");
+            Cli_Output.Output_Str(version);
+            Cli_Output.Output_NewLine();
+        }
+
+        {
+            String type = TAB_Processor.Type_Get();
+            String version = TAB_Processor.Version_Get();
+            Cli_Output.Output_Str(type);
+            Cli_Output.Output_Str(" V");
+            Cli_Output.Output_Str(version);
+            Cli_Output.Output_NewLine();
+        }
+
+        Cli_Output.Output_NewLine();
+    }
+
+    void filters_print() {
+        String type = Str_Filter.Type_Get();
+        String version = Str_Filter.Version_Get();
+        Cli_Output.Output_Str(type);
+        Cli_Output.Output_Str(" V");
+        Cli_Output.Output_Str(version);
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_NewLine();
     }
 
     protected boolean modules_by_filter_print(String module_filter, Str_Filter str_filter, boolean is_verbose) {
@@ -173,9 +217,9 @@ public class Cli_Module_Base_Modules extends Cli_Module {
                     Cli_Output.Output_NewLine();
                     Cli_Output.Output_Str("Cli V" + Cli_Version);
                     Cli_Output.Output_NewLine();
-                    //Cli_Output.Output_NewLine();
-                    //processors_print();
-                    //filters_print();
+                    Cli_Output.Output_NewLine();
+                    processors_print();
+                    filters_print();
                     //cmd_items_print(module_filter, Str_Filter);
                     return modules_by_filter_print(module_filter, Str_Filter, is_verbose = true);
                 }
