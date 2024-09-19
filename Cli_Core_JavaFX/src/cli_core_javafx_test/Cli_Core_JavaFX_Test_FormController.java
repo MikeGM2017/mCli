@@ -89,29 +89,35 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         CMD_Processor = new Cli_CMD_Processor(User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
         TAB_Processor = new Cli_TAB_Processor(User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF, tab_log_is_active);
 
+        // Modules Add - Begin
+        Modules.Module_Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
+
         Modules.Module_Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
-
-        Modules.Module_Add(new Cli_Module_Base_History(History, Cli_Output));
-
-        Modules.Module_Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
         char C_Single = '?';
         char C_Multy = '*';
         Str_Filter str_filter = new Str_Filter(C_Single, C_Multy);
         Modules.Module_Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
+
         Modules.Module_Add(new Cli_Module_Base_Modules(Version, Modules, str_filter, Cli_Input, Cli_Output));
+
+        Modules.Module_Add(new Cli_Module_Base_History(History, Cli_Output));
 
         Modules.Module_Add(new Cli_Module_Base_Log(Cli_Input));
 
         Modules.Module_Add(new Cli_Module_Base_Script_Threaded(History, Cli_Input, Cli_Output,
                 Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit,
                 CMD_Processor));
-        Modules.Module_Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
+
         Modules.Module_Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
         Modules.Module_Add(new Cli_Module_Test_Tab_Min_Max());
 
         Modules.Module_Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
+
+        Modules.Module_Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
+
+        // Modules Add - End
     }
 
     @FXML
