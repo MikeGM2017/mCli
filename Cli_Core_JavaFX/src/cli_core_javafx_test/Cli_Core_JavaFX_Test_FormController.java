@@ -92,7 +92,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         // Modules Add - Begin
         Modules.Module_Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
-        Modules.Module_Add(new Cli_Module_Base_Quit(Cmd_Exit, Cmd_Quit));
+        Modules.Module_Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
 
         char C_Single = '?';
         char C_Multy = '*';
@@ -164,13 +164,21 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
                         } else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_PROMPT) {
                             Cli_Output.Output_NewLine();
-                            if (input_item.Text_Get().equals("Y") || input_item.Text_Get().equals("y")
-                                    || input_item.Text_Get().equals("YES") || input_item.Text_Get().equals("Yes") || input_item.Text_Get().equals("yes")) {
+                            if (input_item.Text_Get().toLowerCase().equals("y") || input_item.Text_Get().toLowerCase().equals("yes")) {
                                 Cli_Output.Output_Str("Answer: Yes");
+                                Cli_Input.Do_Object_Yes();
                             } else {
                                 Cli_Output.Output_Str("Answer: No");
                             }
                             Cli_Output.Output_NewLine();
+
+                            Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                            Cli_Input.Input_Str_Set_Empty();
+
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                            Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().length());
+                            Cli_Output.Caret_Pos_Set(Cli_Input.Input_Str_Get().length(), Cli_Input.Input_Str_Pos_Get());
 
                         } else if (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_PASSWD) {
                             Cli_Output.Output_NewLine();
