@@ -42,19 +42,21 @@ public class Cli_Module_Base_Modules extends Cli_Module {
     }
 
     public Cli_Module_Base_Modules(String cli_version, Cli_Modules modules,
-            Str_Filter str_filter, Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output) {
+            Str_Filter str_filter,
+            Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output) {
         super("Base Modules");
 
-        Version = "0.02";
+        Version = "0.04";
 
         Cli_Version = cli_version;
         Modules = modules;
         Str_Filter = str_filter;
         Cli_Input = cli_input;
         Cli_Output = cli_output;
+
         {
             // modules
-            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules);
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
             cmd.Text_Set("modules");
             cmd.Help_Set("modules print (all)");
             cmd.Is_Global_Set(true);
@@ -64,7 +66,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         }
         {
             // modules <module_name>
-            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules_by_filter);
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules_by_filter, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
             cmd.Text_Set("modules <module_name>");
             cmd.Help_Set("modules print (by filter)");
             cmd.Is_Global_Set(true);
@@ -75,7 +77,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         }
         {
             // modules <module_name> print
-            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules_by_filter_print);
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules_by_filter_print, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
             cmd.Text_Set("modules <module_name> print");
             cmd.Help_Set("modules print (by filter)");
             cmd.Is_Global_Set(true);
@@ -87,9 +89,9 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         }
         {
             // modules <module_name> print verbose
-            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules_by_filter_print_verbose);
-            cmd.Text_Set("modules <module_name> print");
-            cmd.Help_Set("modules print (by filter)");
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_modules_by_filter_print_verbose, Cli_Cmd_Privilege_ID.CMD_PRIVILEGE_USER_DEF);
+            cmd.Text_Set("modules <module_name> print verbose");
+            cmd.Help_Set("modules print (by filter) verbose");
             cmd.Is_Global_Set(true);
             cmd.Level_Set("");
             cmd.Item_Add(new Cmd_Item_Word("modules", "modules"));
@@ -176,9 +178,9 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         }
 
         if (found) {
-            StringBuilder s_str = new StringBuilder();
-            s_str.append("Cmd Items[").append(items.size()).append("]:");
-            Cli_Output.Output_Str(s_str.toString());
+            StringBuilder sb = new StringBuilder();
+            sb.append("Cmd Items[").append(items.size()).append("]:");
+            Cli_Output.Output_Str(sb.toString());
             Cli_Output.Output_NewLine();
             Cli_Output.Output_NewLine();
             for (int i = 0; i < items.size(); i++) {
