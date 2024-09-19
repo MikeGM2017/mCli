@@ -13,6 +13,14 @@ public class Cmd_Item_Int extends Cmd_Item_Base {
 
     @Override
     protected boolean Is_Char_Valid(char c, int pos, int len) {
+        if (pos == 0) {
+            if (c == '+') {
+                return true;
+            }
+            if (c == '-') {
+                return true;
+            }
+        }
         return (c >= '0' && c <= '9');
     }
 
@@ -27,8 +35,11 @@ public class Cmd_Item_Int extends Cmd_Item_Base {
 
     public Cmd_Item_Int(String text, String help) {
         super(text, help);
-        Value_Int = 0;
+
         Type = "Int";
+        Version = "0.02";
+
+        Value_Int = 0;
     }
 
     @Override
@@ -74,4 +85,5 @@ public class Cmd_Item_Int extends Cmd_Item_Base {
         }
         return false;
     }
+
 }
