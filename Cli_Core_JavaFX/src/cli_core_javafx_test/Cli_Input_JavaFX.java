@@ -52,6 +52,8 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
     protected boolean Is_Ctrl_C_Pressed;
 
+    protected Do_Abstract Do_Object = null;
+
     public Cli_Input_JavaFX(Cli_Output_JavaFX cli_output, String chars_not_allowed_str) {
         Cli_Output = cli_output;
         Chars_Not_Allowed_Str = chars_not_allowed_str;
@@ -222,47 +224,33 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
                 @Override
                 public void run() {
-                    Runnable updater = new Runnable() {
 
-                        @Override
-                        public void run() {
-
-                            Cli_Output.Output_Str("Wait " + Integer.toString(Wait_Count));
-                            Cli_Output.Output_NewLine();
-
-                        }
-                    };
+                    //Runnable updater = new Runnable() {
+                    //    @Override
+                    //    public void run() {
+                    //        Cli_Output.Output_Str("Wait " + Integer.toString(Wait_Count));
+                    //        Cli_Output.Output_NewLine();
+                    //    }
+                    //};
 
                     while (true) {
-
                         if (Wait_Count > 0) {
-                            Platform.runLater(updater);
-
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException ex) {
-                            }
-
+                            //Platform.runLater(updater);
+                            Cli_Output.Output_Str("Wait " + Integer.toString(Wait_Count) + "...");
+                            Cli_Output.Output_NewLine();
                             Wait_Count--;
-
-                            if (Wait_Count <= 0) {
-                                Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
-                                if (Wait_Count == 0) {
-                                    //Cli_Output.Output_NewLine();
-                                    Cli_Output.Output_Str(Invitation_Full_Get());
-                                }
-                            }
-
-                        } else {
-
-                            try {
-                                Thread.sleep(1); // ms
-                            } catch (InterruptedException ex) {
-                            }
-
+                        } else if (Wait_Count == 0) {
+                            Cli_Output.Output_Str(Invitation_Full_Get());
+                            Wait_Count--;
+                            Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
+                        } else if (Input_Mode_Get() != Input_Mode_Type.INPUT_MODE_PROMPT
+                                && Input_Mode_Get() != Input_Mode_Type.INPUT_MODE_NORMAL) {
+                            Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
                         }
-
-                        // UI update is run on the Application thread
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                        }
                     }
 
                 }
@@ -598,6 +586,17 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
     public void Is_Ctrl_C_Pressed_Clear() {
         Is_Ctrl_C_Pressed = false;
+    }
+
+    public void Do_Object_Set(Do_Abstract obj) {
+        Do_Object = obj;
+    }
+
+    public void Do_Object_Yes() {
+        if (Do_Object != null) {
+            Do_Object.Do();
+            Do_Object = null;
+        }
     }
 
 }
