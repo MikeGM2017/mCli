@@ -29,6 +29,9 @@ public class Cli_Module_Base_Rem extends Cli_Module {
 
     public Cli_Module_Base_Rem(String str_rem, Cli_Output_JavaFX cli_output) {
         super("Base Rem");
+
+        Version = "0.02";
+
         Cli_Output = cli_output;
         {
             // rem
@@ -42,7 +45,6 @@ public class Cli_Module_Base_Rem extends Cli_Module {
     }
 
     boolean rem(String s_rem) {
-        Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_rem);
         Cli_Output.Output_NewLine();
         return true;
