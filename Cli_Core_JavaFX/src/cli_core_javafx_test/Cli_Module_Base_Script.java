@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author mike
  */
-public class Cli_Module_Base_Script_Threaded extends Cli_Module {
+public class Cli_Module_Base_Script extends Cli_Module {
 
     protected Cli_History History;
 
@@ -62,7 +62,7 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    public Cli_Module_Base_Script_Threaded(Cli_History history, Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output,
+    public Cli_Module_Base_Script(Cli_History history, Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output,
             String str_rem, Ref_Boolean cmd_script_stop, Ref_Boolean cmd_quit,
             Cli_CMD_Processor cli_command_processor,
             Ref_String script_command_str, Ref_String script_label_str, Ref_String script_dir_str) {
@@ -217,10 +217,10 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
                             Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                             Cli_Input.Input_Str_Set_Empty();
                         } catch (IOException ex) {
-                            Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
                             Cli_Output.Output_Str("File \"" + filename + "\" - read error");
                         } catch (Exception ex) {
-                            Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
                         } finally {
                             try {
                                 if (reader != null) {
@@ -228,10 +228,10 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
                                     ///Cli_Output.Output_Str("File \"" + filename + "\" - Ok");
                                 }
                             } catch (IOException ex) {
-                                Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
                                 Cli_Output.Output_Str("File \"" + filename + "\" - close error");
                             } catch (Exception ex) {
-                                Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                         Script_Thread_FileName = "";
@@ -302,7 +302,7 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
                 writer.write(ls);
             }
         } catch (IOException ex) {
-            Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
             Cli_Output.Output_Str("ERROR: file \"" + filename + "\" - write error");
         } finally {
             try {
@@ -317,7 +317,7 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
                     Cli_Output.Output_NewLine();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
                 Cli_Output.Output_Str("ERROR: file \"" + filename + "\" - close error");
             }
         }
@@ -376,7 +376,7 @@ public class Cli_Module_Base_Script_Threaded extends Cli_Module {
             } while (!stop);
 
         } catch (IOException ex) {
-            Logger.getLogger(Cli_Module_Base_Script_Threaded.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return found;

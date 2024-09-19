@@ -119,7 +119,7 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
             Script_Dir_Str = new Ref_String(".\\scripts");
         }
 
-        Cli_Module_Base_Script_Threaded Module_Script = new Cli_Module_Base_Script_Threaded(History, Cli_Input, Cli_Output,
+        Cli_Module_Base_Script Module_Script = new Cli_Module_Base_Script(History, Cli_Input, Cli_Output,
                 Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str);
         Modules.Module_Add(Module_Script);
         Do_Command Do_Command_Object = new Do_Command(Module_Script);

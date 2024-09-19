@@ -11,9 +11,9 @@ package cli_core_javafx_test;
  */
 public class Do_Command extends Do_Abstract {
 
-    protected Cli_Module_Base_Script_Threaded Module_Script;
+    protected Cli_Module_Base_Script Module_Script;
 
-    public Do_Command(Cli_Module_Base_Script_Threaded module_script) {
+    public Do_Command(Cli_Module_Base_Script module_script) {
         Module_Script = module_script;
     }
 
