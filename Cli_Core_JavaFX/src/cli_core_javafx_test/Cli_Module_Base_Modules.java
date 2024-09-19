@@ -156,7 +156,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         items.add(new Cmd_Item_Int_List(1, 8, "", ""));
         items.add(new Cmd_Item_Int_Range(1, 8, "", ""));
         items.add(new Cmd_Item_MAC("", ""));
-        //items.add(new Cmd_Item_Point_Var_Name("", ""));
+        items.add(new Cmd_Item_Point_Var_Name("", ""));
         items.add(new Cmd_Item_Rem("", ""));
         items.add(new Cmd_Item_Str("", ""));
         //items.add(new Cmd_Item_Str_Esc("", ""));
