@@ -15,6 +15,7 @@ import java.util.Map;
 public class Cli_Module_Base_Help extends Cli_Module {
 
     protected Ref_Cli_Cmd_Privilege_ID User_Privilege;
+
     protected Cli_Modules Modules;
 
     protected Str_Filter Help_Str_Filter;
@@ -45,6 +46,9 @@ public class Cli_Module_Base_Help extends Cli_Module {
     public Cli_Module_Base_Help(Ref_Cli_Cmd_Privilege_ID user_privilege, Cli_Modules modules,
             Str_Filter help_str_filter, Cli_Output_JavaFX cli_output) {
         super("Base Help");
+
+        Version = "0.02";
+
         User_Privilege = user_privilege;
         Modules = modules;
         Help_Str_Filter = help_str_filter;
