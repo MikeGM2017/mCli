@@ -149,7 +149,7 @@ public class Cli_Module_Base_Modules extends Cli_Module {
         items.add(new Cmd_Item_DateTime("", ""));
         items.add(new Cmd_Item_Time("", ""));
         items.add(new Cmd_Item_EQU("", ""));
-        //items.add(new Cmd_Item_EQU_Range("", "", words));
+        items.add(new Cmd_Item_EQU_Range("", "", words));
         items.add(new Cmd_Item_IP4("", ""));
         items.add(new Cmd_Item_IP6("", ""));
         items.add(new Cmd_Item_Int("", ""));
