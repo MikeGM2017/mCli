@@ -29,18 +29,26 @@ public class Cmd_Item_Word extends Cmd_Item_Base {
         if (c >= '0' && c <= '9') {
             return true;
         }
+        if (c == '-') {
+            return true;
+        }
         return false;
     }
 
     public Cmd_Item_Word(String text, String help) {
         super(text, help);
+
         Type = "Word";
+        Version = "0.02";
+
     }
 
+    @Override
     public String Debug_Value_Get() {
         return Text;
     }
 
+    @Override
     public Cmd_Item_Valid_Result Parse(String s) {
         Value_Str = s;
 
@@ -67,13 +75,15 @@ public class Cmd_Item_Word extends Cmd_Item_Base {
         return Cmd_Item_Valid_Result.CMD_ITEM_ERROR;
     }
 
+    @Override
     public List<String> Incomplete_Tail_List_Get(String s) {
         List<String> tail_list = new ArrayList<>();
-        if (s.length()< Text.length()) {
+        if (s.length() < Text.length()) {
             if (Text.substring(0, s.length()).equals(s)) {
                 tail_list.add(Text.substring(s.length()));
             }
         }
         return tail_list;
     }
+
 }
