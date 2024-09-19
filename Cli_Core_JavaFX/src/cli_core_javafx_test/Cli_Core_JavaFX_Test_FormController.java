@@ -8,6 +8,7 @@ package cli_core_javafx_test;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -105,9 +106,23 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
         Modules.Module_Add(new Cli_Module_Base_Log(Cli_Input));
 
-        Modules.Module_Add(new Cli_Module_Base_Script_Threaded(History, Cli_Input, Cli_Output,
-                Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit,
-                CMD_Processor));
+        boolean is_linux = false;
+        String os = System.getProperty("os.name", "generic").toLowerCase(Locale.US);
+        if (os.contains("linux")) {
+            is_linux = true;
+        }
+
+        Ref_String Script_Command_Str = new Ref_String("");
+        Ref_String Script_Label_Str = new Ref_String("");
+        Ref_String Script_Dir_Str = new Ref_String("./scripts");
+        if (!is_linux) {
+            Script_Dir_Str = new Ref_String(".\\scripts");
+        }
+
+        Cli_Module_Base_Script_Threaded Module_Script = new Cli_Module_Base_Script_Threaded(History, Cli_Input, Cli_Output,
+                Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str);
+        Modules.Module_Add(Module_Script);
+        Do_Command Do_Command_Object = new Do_Command(Module_Script);
 
         Modules.Module_Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 

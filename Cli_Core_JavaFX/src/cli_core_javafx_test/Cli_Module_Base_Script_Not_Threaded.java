@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author mike
  */
-public class Cli_Module_Base_Script extends Cli_Module {
+public class Cli_Module_Base_Script_Not_Threaded extends Cli_Module {
 
     protected Cli_History History;
 
@@ -48,7 +48,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    public Cli_Module_Base_Script(Cli_History history, Cli_Output_JavaFX cli_output,
+    public Cli_Module_Base_Script_Not_Threaded(Cli_History history, Cli_Output_JavaFX cli_output,
             String str_rem, Ref_Boolean cmd_script_stop, Ref_Boolean cmd_quit,
             Cli_CMD_Processor cli_command_processor) {
         super("Base Script");
@@ -121,7 +121,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
                 writer.write(ls);
             }
         } catch (IOException ex) {
-            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cli_Module_Base_Script_Not_Threaded.class.getName()).log(Level.SEVERE, null, ex);
             Cli_Output.Output_Str("ERROR: file \"" + filename + "\" - write error");
         } finally {
             try {
@@ -136,7 +136,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
                     Cli_Output.Output_NewLine();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Cli_Module_Base_Script_Not_Threaded.class.getName()).log(Level.SEVERE, null, ex);
                 Cli_Output.Output_Str("ERROR: file \"" + filename + "\" - close error");
             }
         }
@@ -172,7 +172,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
         } catch (FileNotFoundException ex) {
             Cli_Output.Output_Str("File \"" + filename + "\" - not found");
         } catch (IOException ex) {
-            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cli_Module_Base_Script_Not_Threaded.class.getName()).log(Level.SEVERE, null, ex);
             Cli_Output.Output_Str("File \"" + filename + "\" - read error");
         } finally {
             try {
@@ -180,7 +180,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
                     reader.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Cli_Module_Base_Script_Not_Threaded.class.getName()).log(Level.SEVERE, null, ex);
                 Cli_Output.Output_Str("File \"" + filename + "\" - close error");
             }
         }
