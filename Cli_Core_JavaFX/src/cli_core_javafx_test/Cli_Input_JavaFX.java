@@ -153,6 +153,11 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
     public void Input_Mode_Set(Input_Mode_Type input_mode) {
         Input_Mode = input_mode;
+        if (Input_Mode == Input_Mode_Type.INPUT_MODE_PASSWD) {
+            Is_Echo_Set(false);
+        } else {
+            Is_Echo_Set(true);
+        }
     }
 
     public Input_Mode_Type Input_Mode_Get() {
@@ -232,7 +237,6 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
                     //        Cli_Output.Output_NewLine();
                     //    }
                     //};
-
                     while (true) {
                         if (Wait_Count > 0) {
                             //Platform.runLater(updater);
