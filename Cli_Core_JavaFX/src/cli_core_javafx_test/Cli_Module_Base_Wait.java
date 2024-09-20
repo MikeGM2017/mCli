@@ -38,6 +38,9 @@ public class Cli_Module_Base_Wait extends Cli_Module {
     public Cli_Module_Base_Wait(Ref_Boolean log_wait_enable, Ref_Boolean cmd_wait_stop,
             Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output) {
         super("Base Wait");
+
+        Version = "0.02";
+
         Log_Wait_Enable = log_wait_enable;
         Cmd_Wait_Stop = cmd_wait_stop;
         Cli_Input = cli_input;
@@ -79,7 +82,9 @@ public class Cli_Module_Base_Wait extends Cli_Module {
     boolean wait(Cli_Cmd cmd, boolean log_wait_enable) {
         String token_value = cmd.Items.get(1).Value_Str;
         int wait_sec = Integer.valueOf(token_value);
+
         Cmd_Wait_Stop.Value = false;
+        Cli_Input.Is_Ctrl_C_Pressed_Clear();
 
         if (log_wait_enable) {
             Cli_Output.Output_Str("Wait (Press Enter to stop):");
