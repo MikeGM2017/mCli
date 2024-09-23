@@ -193,9 +193,6 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
                         }
                     }
                     change.setText(s2);
-                    if (Wait_Count <= 0) {
-                        Input_Mode_Set(Input_Mode_Type.INPUT_MODE_NORMAL);
-                    }
                 } else {
                     // remove illegal characters:
                     boolean found_not_valid = false;
