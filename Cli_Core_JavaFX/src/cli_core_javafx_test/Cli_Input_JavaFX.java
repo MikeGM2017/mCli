@@ -442,6 +442,7 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
 
     protected void On_Key_DELETE() {
         Input_Delete();
+        Cli_Output.Caret_Pos_Set(Input_Str.length(), Input_Str_Pos);
     }
 
     protected void On_Key_CTRL_C() {
