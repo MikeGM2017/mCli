@@ -7,8 +7,10 @@ package cli_core_javafx_test;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -75,6 +77,8 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
         Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
 
+        Map<String, String> Values_Map = new HashMap<>();
+
         Levels = new ArrayList<>();
 
         Token_Parser = new Cmd_Token_Parser();
@@ -131,6 +135,11 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         Modules.Module_Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
 
         Modules.Module_Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
+
+        Str_Get_Without_Commas str_without_commas = new Str_Get_Without_Commas();
+
+        Modules.Module_Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
+                Cli_Output, C_Single, C_Multy)));
 
         // Modules Add - End
     }

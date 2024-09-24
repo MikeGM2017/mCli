@@ -1,0 +1,17 @@
+.v1 = "1"
+.v2 = 2
+.v2 inc
+.v1 = .v2
+.*
+.v2 delete
+.*
+.v3 = "  1234  0"
+.*
+.v3 inc
+.*
+.* delete
+.*
+.v1 = .v10
+.v1 inc
+.v1 delete
+.* delete
