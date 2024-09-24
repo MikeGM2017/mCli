@@ -44,6 +44,9 @@ public class Cli_Module_Base_Debug extends Cli_Module {
             List<Level_Description> levels, Cli_CMD_Processor cmd_processor,
             Cli_Output_JavaFX cli_output) {
         super("Base Debug");
+
+        Version = "0.02";
+
         User_Privilege = user_privilege;
         Modules = modules;
         Levels = levels;
@@ -213,8 +216,7 @@ public class Cli_Module_Base_Debug extends Cli_Module {
             case CMD_ID_debug_cli:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     boolean is_counts = false;
                     boolean is_verbose = false;
                     boolean is_failed_only = false;
@@ -223,8 +225,7 @@ public class Cli_Module_Base_Debug extends Cli_Module {
             case CMD_ID_debug_cli_counts:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     boolean is_counts = true;
                     boolean is_verbose = false;
                     boolean is_failed_only = false;
@@ -233,8 +234,7 @@ public class Cli_Module_Base_Debug extends Cli_Module {
             case CMD_ID_debug_cli_verbose:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     boolean is_counts = false;
                     boolean is_verbose = true;
                     boolean is_failed_only = false;
@@ -243,19 +243,15 @@ public class Cli_Module_Base_Debug extends Cli_Module {
             case CMD_ID_debug_cli_verbose_failed:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     boolean is_counts = false;
                     boolean is_verbose = true;
                     boolean is_failed_only = true;
-
                     return debug_cli(is_counts, is_verbose, is_failed_only);
                 }
 
-            default:
-                return false; // Not Implemented
-
         }
+        return false; // Not Implemented
     }
 
     @Override
