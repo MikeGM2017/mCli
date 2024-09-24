@@ -44,26 +44,30 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
     private final int CMD_ID_test = 3;
     private final int CMD_ID_test_get = 4;
     private final int CMD_ID_test_get_all = 5;
-    private final int CMD_ID_test_set_int = 6;
-    private final int CMD_ID_test_set_range = 7;
-    private final int CMD_ID_test_set_list = 8;
-    private final int CMD_ID_test_set_ip4 = 9;
-    private final int CMD_ID_test_set_mask = 10;
-    private final int CMD_ID_test_set_ip6 = 11;
-    private final int CMD_ID_test_set_mac = 12;
-    private final int CMD_ID_test_set_str = 13;
-    private final int CMD_ID_test_set_date = 14;
-    private final int CMD_ID_test_set_time = 15;
-    private final int CMD_ID_test_set_datetime = 16;
-    private final int CMD_ID_test_set_enable = 17;
-    private final int CMD_ID_test_set_loopback = 18;
-    private final int CMD_ID_test_set_loopback_disable = 19;
-    private final int CMD_ID_test_set_loopback_repeating = 20;
-    private final int CMD_ID_test_set_loopback_repeating_disable = 21;
+    private final int CMD_ID_test_get_list = 6;
+    private final int CMD_ID_test_set_int = 7;
+    private final int CMD_ID_test_set_range = 8;
+    private final int CMD_ID_test_set_list = 9;
+    private final int CMD_ID_test_set_ip4 = 10;
+    private final int CMD_ID_test_set_mask = 11;
+    private final int CMD_ID_test_set_ip6 = 12;
+    private final int CMD_ID_test_set_mac = 13;
+    private final int CMD_ID_test_set_str = 14;
+    private final int CMD_ID_test_set_str_verbose = 15;
+    private final int CMD_ID_test_set_esc_str = 16;
+    private final int CMD_ID_test_set_esc_str_verbose = 17;
+    private final int CMD_ID_test_set_date = 18;
+    private final int CMD_ID_test_set_time = 19;
+    private final int CMD_ID_test_set_datetime = 20;
+    private final int CMD_ID_test_set_enable = 21;
+    private final int CMD_ID_test_set_loopback_local_remote_enable_disable = 22;
+    private final int CMD_ID_test_set_loopback_disable = 23;
+    private final int CMD_ID_test_set_loopback_repeating = 24;
+    private final int CMD_ID_test_set_loopback_repeating_disable = 25;
 
-    private final int CMD_ID_phy_phynum_set_speed_speedvalue_duplex_duplexvalue = 22;
+    private final int CMD_ID_phy_phynum_set_speed_speedvalue_duplex_duplexvalue = 26;
 
-    private final int CMD_ID_LAST = 23;
+    private final int CMD_ID_LAST = 27;
     //};
 
     @Override
@@ -88,6 +92,9 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
 
     Cli_Module_Test_Terminal(Cli_Input_JavaFX cli_input, Cli_Output_JavaFX cli_output) {
         super("Test Terminal");
+
+        Version = "0.02";
+
         Cli_Input = cli_input;
         Cli_Output = cli_output;
         New_Level = "test terminal";
@@ -148,6 +155,18 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
         }
 
         {
+            // test get list
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_get_list);
+            cmd.Text_Set("get list");
+            cmd.Help_Set("test: get list");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set(New_Level);
+            cmd.Item_Add(new Cmd_Item_Word("get", "test: get"));
+            cmd.Item_Add(new Cmd_Item_Word("list", "test: get list"));
+            Cmd_Add(cmd);
+        }
+
+        {
             // test set int
             Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_int);
             cmd.Text_Set("set int <int_value>");
@@ -194,6 +213,45 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
             cmd.Item_Add(new Cmd_Item_Word("str", "test: set str"));
             cmd.Item_Add(new Cmd_Item_Str("<str>", "test: set str <str>"));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set str verbose
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_str_verbose);
+            cmd.Text_Set("set str <str> verbose");
+            cmd.Help_Set("test: set str verbose");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("str", "test: set str"));
+            cmd.Item_Add(new Cmd_Item_Str("<str>", "test: set str <str>"));
+            cmd.Item_Add(new Cmd_Item_Word("verbose", "test: set str <str> verbose"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set esc_str
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_esc_str);
+            cmd.Text_Set("set esc_str <esc_str>");
+            cmd.Help_Set("test: set esc_str");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("esc_str", "test: set esc_str"));
+            cmd.Item_Add(new Cmd_Item_Str_Esc("<esc_str>", "test: set esc_str <esc_str>"));
+            Cmd_Add(cmd);
+        }
+        {
+            // test set esc_str verbose
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_esc_str_verbose);
+            cmd.Text_Set("set esc_str <esc_str>");
+            cmd.Help_Set("test: set esc_str");
+            cmd.Is_Global_Set(false);
+            cmd.Level_Set("test terminal");
+            cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd.Item_Add(new Cmd_Item_Word("esc_str", "test: set esc_str"));
+            cmd.Item_Add(new Cmd_Item_Str_Esc("<esc_str>", "test: set esc_str <esc_str>"));
+            cmd.Item_Add(new Cmd_Item_Word("verbose", "test: set esc_str <esc_str> verbose"));
             Cmd_Add(cmd);
         }
 
@@ -303,21 +361,26 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
         }
 
         {
-            // test set loopback [raw,net,local,remote]
-            List<String> words = new ArrayList<>();
-            words.add("raw");
-            words.add("net");
-            words.add("local");
-            words.add("remote");
-            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_loopback);
-            cmd.Text_Set("set loopback [raw,net,local,remote]");
-            cmd.Help_Set("test: set loopback [raw,net,local,remote]");
+            // test set loopback [raw,net,local,remote] <enable|disable>
+            List<String> words_loopback = new ArrayList<>();
+            words_loopback.add("raw");
+            words_loopback.add("net");
+            words_loopback.add("local");
+            words_loopback.add("remote");
+
+            List<String> words_enable_disable = new ArrayList<>();
+            words_enable_disable.add("enable");
+            words_enable_disable.add("disable");
+
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_test_set_loopback_local_remote_enable_disable);
+            cmd.Text_Set("set loopback [raw,net,local,remote] <enable|disable>");
+            cmd.Help_Set("test: set loopback [raw,net,local,remote] <enable|disable>");
             cmd.Is_Global_Set(false);
             cmd.Level_Set("test terminal");
             cmd.Item_Add(new Cmd_Item_Word("set", "test: set"));
             cmd.Item_Add(new Cmd_Item_Word("loopback", "test: set loopback"));
-            boolean is_repeating = false;
-            cmd.Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback [raw,net,local,remote]", words, is_repeating));
+            cmd.Item_Add(new Cmd_Item_Word_List("[raw,net,local,remote]", "test: set loopback [raw,net,local,remote]", words_loopback));
+            cmd.Item_Add(new Cmd_Item_Word_Range("<enable|disable>", "test: set loopback <enable|disable>", words_enable_disable));
             Cmd_Add(cmd);
         }
         {
@@ -398,6 +461,7 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
 
             Cmd_Add(cmd);
         }
+
     }
 
     boolean test() {
@@ -414,13 +478,11 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
         cmd_items.add(new Cmd_Item_Word("TestWord1", ""));
 
         List<String> words = new ArrayList<>();
-
         words.add("TestWord1");
         words.add("TestWord2");
         words.add("TestWord3");
         cmd_items.add(new Cmd_Item_Word_Range("TestWord2", "", words));
-        boolean is_repeating = true;
-        cmd_items.add(new Cmd_Item_Word_List("TestWord3", "", words, is_repeating));
+        cmd_items.add(new Cmd_Item_Word_List("TestWord3", "", words));
 
         cmd_items.add(new Cmd_Item_IP4("192.168.1.1", ""));
         cmd_items.add(new Cmd_Item_IP6("::192.168.1.1", ""));
@@ -442,65 +504,35 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             }
         }
 
+        String s_type_format = "%" + Integer.toString(w_type_max) + "s";
+        String s_text_format = "%-" + Integer.toString(w_text_max) + "s";
+
         Cli_Output.Output_NewLine();
         for (int i = 0; i < cmd_items.size(); i++) {
-            String s = "";
+            StringBuilder sb = new StringBuilder();
             Cmd_Item_Base cmd_item = cmd_items.get(i);
-            //s += String.setw(w_type_max) << right << cmd_item.Type_Get()
-            //        << setw(0) << ": "
-            //        << setw(w_text_max) << left << cmd_item.Text_Get();
-            s += cmd_item.Type_Get() + ": " + cmd_item.Text_Get();
+            sb.append(String.format(s_type_format, cmd_item.Type_Get()))
+                    .append(": ")
+                    .append(String.format(s_text_format, cmd_item.Text_Get()));
             Cmd_Item_Valid_Result res_parse = cmd_item.Parse(cmd_item.Text_Get());
-            //s_str << setw(0) << " Parse: " << Cmd_Item_Valid_Result_Func::To_String(res_parse);
-            s += " Parse: " + Cmd_Item_Valid_Result_Func.To_String(res_parse);
-            Cli_Output.Output_Str(s);
+            sb.append(" Parse: ").append(Cmd_Item_Valid_Result_Func.To_String(res_parse));
+            Cli_Output.Output_Str(sb.toString());
             Cli_Output.Output_NewLine();
         }
 
         return true;
     }
 
-//    boolean test_get_all() {
-//        StringBuilder sb = new StringBuilder();
-//        int w = 20;
-//        s_str << setw(w) << "Int: " << setw(0) << Value_Int << endl;
-//        s_str << setw(w) << "Int Range: " << setw(0) << Value_Int_Range << endl;
-//        s_str << setw(w) << "Int List: " << setw(0);
-//        for (int i = 0; i < Values_Int_List_Items.size(); i++) {
-//            Cmd_Item_Int_List_Item & item = Values_Int_List_Items[i];
-//            if (i > 0) {
-//                s_str << ",";
-//            }
-//            if (item.Min == item.Max) {
-//                s_str << item.Min;
-//            } else {
-//                s_str << item.Min << "-" << item.Max;
-//            }
-//        }
-//        s_str << endl;
-//        s_str << setw(w) << "Str: " << setw(0) << Value_Str << endl;
-//        s_str << setw(w) << "Date: " << setw(0) << Value_Date << endl;
-//        s_str << setw(w) << "Time: " << setw(0) << Value_Time << endl;
-//        s_str << setw(w) << "DateTime: " << setw(0) << Value_DateTime << endl;
-//        s_str << setw(w) << "IP4: " << setw(0) << Value_IP4 << endl;
-//        s_str << setw(w) << "Mask: " << setw(0) << Value_Mask << endl;
-//        s_str << setw(w) << "IP6: " << setw(0) << Value_IP6 << endl;
-//        s_str << setw(w) << "MAC: " << setw(0) << Value_MAC << endl;
-//        s_str << setw(w) << "Enable: " << setw(0) << Value_Enable << endl;
-//        s_str << setw(w) << "Loopback: " << setw(0) << Value_Loopback << endl;
-//        s_str << setw(w) << "Loopback Repeating: " << setw(0) << Value_Loopback_Repeating << endl;
-//
-//        Cli_Output.Output_NewLine();
-//        Cli_Output.Output_Str(sb.toString());
-//
-//        return true;
-//    }
     boolean test_get_all() {
         StringBuilder sb = new StringBuilder();
         int w = 20;
-        sb.append("Int: " + Integer.toString(Value_Int) + "\n");
-        sb.append("Int Range: " + Integer.toString(Value_Int_Range) + "\n");
-        sb.append("Int List: ");
+
+        String s_format = "%" + Integer.toString(w) + "s";
+
+        sb.append(String.format(s_format, "Int: ")).append(Integer.toString(Value_Int)).append("\n");
+        sb.append(String.format(s_format, "Int Range: ")).append(Integer.toString(Value_Int_Range)).append("\n");
+
+        sb.append(String.format(s_format, "Int List: "));
         for (int i = 0; i < Values_Int_List_Items.size(); i++) {
             Cmd_Item_Int_List_Item item = Values_Int_List_Items.get(i);
             if (i > 0) {
@@ -509,24 +541,53 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             if (item.Min == item.Max) {
                 sb.append(Integer.toString(item.Min));
             } else {
-                sb.append(Integer.toString(item.Min) + "-" + Integer.toString(item.Max));
+                sb.append(Integer.toString(item.Min)).append("-").append(Integer.toString(item.Max));
             }
         }
         sb.append("\n");
-        sb.append("Str: " + Value_Str + "\n");
-        sb.append("Date: " + Value_Date + "\n");
-        sb.append("Time: " + Value_Time + "\n");
-        sb.append("DateTime: " + Value_DateTime + "\n");
-        sb.append("IP4: " + Value_IP4 + "\n");
-        sb.append("Mask: " + Value_Mask + "\n");
-        sb.append("IP6: " + Value_IP6 + "\n");
-        sb.append("MAC: " + Value_MAC + "\n");
-        sb.append("Enable: " + Value_Enable + "\n");
-        sb.append("Loopback: " + Value_Loopback + "\n");
-        sb.append("Loopback Repeating: " + Value_Loopback_Repeating + "\n");
+
+        sb.append(String.format(s_format, "Str: ")).append(Value_Str).append("\n");
+        sb.append(String.format(s_format, "Str: ")).append(Value_Str).append("\n");
+        sb.append(String.format(s_format, "Date: ")).append(Value_Date).append("\n");
+        sb.append(String.format(s_format, "Time: ")).append(Value_Time).append("\n");
+        sb.append(String.format(s_format, "DateTime: ")).append(Value_DateTime).append("\n");
+        sb.append(String.format(s_format, "IP4: ")).append(Value_IP4).append("\n");
+        sb.append(String.format(s_format, "Mask: ")).append(Value_Mask).append("\n");
+        sb.append(String.format(s_format, "IP6: ")).append(Value_IP6).append("\n");
+        sb.append(String.format(s_format, "MAC: ")).append(Value_MAC).append("\n");
+        sb.append(String.format(s_format, "Enable: ")).append(Value_Enable).append("\n");
+        sb.append(String.format(s_format, "Loopback: ")).append(Value_Loopback).append("\n");
+        sb.append(String.format(s_format, "Loopback Repeating: ")).append(Value_Loopback_Repeating).append("\n");
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(sb.toString());
+
+        return true;
+    }
+
+    boolean test_get_list() {
+
+        if (Values_Int_List_Items.size() > 0) {
+
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Int List:");
+            Cli_Output.Output_NewLine();
+
+            for (int i = 0; i < Values_Int_List_Items.size(); i++) {
+                Cmd_Item_Int_List_Item item = Values_Int_List_Items.get(i);
+                for (int j = item.Min; j <= item.Max; j++) {
+                    Cli_Output.Output_Str(Integer.toString(j));
+                    Cli_Output.Output_NewLine();
+                }
+            }
+
+            Cli_Output.Output_NewLine();
+
+        } else {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("Int List: <empty>");
+            Cli_Output.Output_NewLine();
+        }
 
         return true;
     }
@@ -572,10 +633,14 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
         return true;
     }
 
-    boolean test_set_str(String value) {
+    boolean test_set_str(String value, boolean is_verbose) {
         Value_Str = value;
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+        if (!is_verbose) {
+            Cli_Output.Output_Str("Str=\"" + Value_Str + "\"");
+        } else {
+            Cli_Output.Output_Str("Str=\"" + Value_Str + "\" verbose");
+        }
         Cli_Output.Output_NewLine();
         return true;
     }
@@ -647,6 +712,8 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
     boolean test_set_loopback(Cli_Cmd cmd) {
 
         Cmd_Item_Word_List word_list = (Cmd_Item_Word_List) cmd.Items.get(2);
+        Cmd_Item_Word_Range word_range = (Cmd_Item_Word_Range) cmd.Items.get(3);
+
         Value_Loopback = "";
         for (int i = 0; i < word_list.Values_Str.size(); i++) {
             if (i == 0) {
@@ -655,6 +722,8 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
                 Value_Loopback += " " + word_list.Values_Str.get(i);
             }
         }
+
+        Value_Loopback += " " + word_range.Value_Str;
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str("Loopback=" + Value_Loopback);
@@ -728,19 +797,23 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
                 }
                 return test_get_all();
 
-            case CMD_ID_test_set_int:
+            case CMD_ID_test_get_list:
                 if (is_debug) {
                     return true;
                 }
-                 {
+                return test_get_list();
+
+            case CMD_ID_test_set_int:
+                if (is_debug) {
+                    return true;
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_int(value);
                 }
             case CMD_ID_test_set_range:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_range(value);
                 }
@@ -751,35 +824,36 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
                 return test_set_list(cmd);
 
             case CMD_ID_test_set_str:
+            case CMD_ID_test_set_str_verbose:
+            case CMD_ID_test_set_esc_str:
+            case CMD_ID_test_set_esc_str_verbose:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
-                    return test_set_str(value);
+                    boolean is_verbose = ((cmd_id == CMD_ID_test_set_str_verbose)
+                            || (cmd_id == CMD_ID_test_set_esc_str_verbose));
+                    return test_set_str(value, is_verbose);
                 }
 
             case CMD_ID_test_set_date:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_date(value);
                 }
             case CMD_ID_test_set_time:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_time(value);
                 }
             case CMD_ID_test_set_datetime:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_datetime(value);
                 }
@@ -787,8 +861,7 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             case CMD_ID_test_set_ip4:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_ip4(value);
                 }
@@ -796,8 +869,7 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             case CMD_ID_test_set_mask:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_mask(value);
                 }
@@ -805,8 +877,7 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             case CMD_ID_test_set_ip6:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_ip6(value);
                 }
@@ -814,8 +885,7 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             case CMD_ID_test_set_mac:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(2).Value_Str;
                     return test_set_mac(value);
                 }
@@ -823,13 +893,12 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
             case CMD_ID_test_set_enable:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String value = cmd.Items.get(1).Value_Str;
                     return test_set_enable(value);
                 }
 
-            case CMD_ID_test_set_loopback:
+            case CMD_ID_test_set_loopback_local_remote_enable_disable:
                 if (is_debug) {
                     return true;
                 }
@@ -851,11 +920,8 @@ public class Cli_Module_Test_Terminal extends Cli_Module {
                 }
                 return test_set_loopback_repeating_disable();
 
-            default:
-                return false; // Not Implemented
-
         }
-
+        return false; // Not Implemented
     }
 
     @Override
