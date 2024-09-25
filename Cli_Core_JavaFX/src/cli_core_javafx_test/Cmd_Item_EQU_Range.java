@@ -51,8 +51,11 @@ class Cmd_Item_EQU_Range extends Cmd_Item_EQU {
             if (Words.get(i).equals(s)) {
                 return Cmd_Item_Valid_Result.CMD_ITEM_OK;
             }
-            if (Words.get(i).substring(0, s.length()).equals(s)) {
-                is_incomplete_found = true;
+            String word = Words.get(i);
+            if (word.length() > s.length()) {
+                if (word.substring(0, s.length()).equals(s)) {
+                    is_incomplete_found = true;
+                }
             }
         }
         if (is_incomplete_found) {
