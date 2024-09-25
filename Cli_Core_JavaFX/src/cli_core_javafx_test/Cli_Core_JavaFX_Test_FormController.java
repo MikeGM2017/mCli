@@ -95,6 +95,8 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
         TAB_Processor = new Cli_TAB_Processor(User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF, tab_log_is_active);
 
         // Modules Add - Begin
+        String level_root = "top level";
+
         Modules.Module_Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
         Modules.Module_Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
@@ -144,6 +146,8 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
         Modules.Module_Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
                 Cli_Output, C_Single, C_Multy)));
+
+        Modules.Module_Add(new Cli_Module_Base_Level(Cli_Input, Cli_Output, level_root));
 
         // Modules Add - End
     }

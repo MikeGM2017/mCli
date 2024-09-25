@@ -1,0 +1,54 @@
+.Passed = 0
+.Failed = 0
+.Total = 0
+
+!
+check modules "Base Level" to map
+.*
+check if Level == "top level" as value do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+test terminal
+check modules "Base Level" to map
+.*
+check if Level == "test terminal" as value do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+level m
+check modules "Base Level" to map
+.*
+check if Level == "m" as value do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+level n
+check modules "Base Level" to map
+.*
+check if Level == "n" as value do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+level up
+check modules "Base Level" to map
+.*
+check if Level == "m" as value do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+level up
+check modules "Base Level" to map
+.*
+check if Level == "test terminal" as value do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+level ""
+check modules "Base Level" to map
+.*
+check if Level == "top level" as value do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+check if .Failed == 0 print "Test Level - Ok" else print "Test Level - Failed"
