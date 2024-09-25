@@ -397,7 +397,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
         }
         String Script_Command_Str_Trim2;
         if (is_commas_found) {
-            Script_Command_Str_Trim2 = Script_Command_Str_Trim1.substring(1, Script_Command_Str_Trim1.length() - 2);
+            Script_Command_Str_Trim2 = Script_Command_Str_Trim1.substring(1, Script_Command_Str_Trim1.length() - 1);
         } else {
             Script_Command_Str_Trim2 = Script_Command_Str_Trim1;
         }
