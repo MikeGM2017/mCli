@@ -123,7 +123,7 @@ namespace Cli_Core_CS
 
             Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas, Cli_Output, C_Single, C_Multy)));
 
-            Modules.Add((new Cli_Module_Base_Level(Cli_Input, level_root)));
+            Modules.Add((new Cli_Module_Base_Level(Cli_Input, Cli_Output, level_root)));
         }
 
         void Cli_Input_Item_Process(Cli_Input_Item input_item)
