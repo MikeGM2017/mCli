@@ -103,16 +103,6 @@ public:
                 if (module_ptr) {
                     for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size() && !stop; cmd++) {
                         Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
-
-                        bool cmd_level_root_quick_found = false;
-                        if (cmd_ptr->Items[0]->Text_Get() == "!") {
-                            cmd_level_root_quick_found = true;
-                        }
-                        bool cmd_level_found = false;
-                        if (cmd_ptr->Items[0]->Text_Get() == "level" && cmd_ptr->Items[1]->Text_Get() == "<str>") {
-                            cmd_level_found = true;
-                        }
-
                         bool is_cmd_prt_valid = TAB_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level);
                         if (is_cmd_prt_valid) {
                             Cmd_Item_Valid_Result res_cmd_valid = cmd_ptr->Is_Valid(tokens);

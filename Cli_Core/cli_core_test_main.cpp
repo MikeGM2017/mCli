@@ -239,7 +239,7 @@ int main(int argc, char *argv[]) {
     Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
             Cli_Output, C_Single, C_Multy)));
 
-    Modules.Add(new Cli_Module_Base_Level(Cli_Input, level_root));
+    Modules.Add(new Cli_Module_Base_Level(Cli_Input, Cli_Output, level_root));
 
     Modules.Add(new Cli_Module_Lua(Values_Map, str_filter, Cli_Input, Cli_Output));
 
