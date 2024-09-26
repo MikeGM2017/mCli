@@ -134,10 +134,10 @@ public class Cli_Module_Base_Level extends Cli_Module {
             Cli_Output.Output_NewLine();
             for (Level_Description item : Levels) {
                 String level = item.Level;
-                String paramter = item.Parameter;
+                String parameter = item.Parameter;
                 Cli_Output.Output_Str(level);
-                if (paramter.length() > 0) {
-                    Cli_Output.Output_Str(" : " + paramter);
+                if (parameter.length() > 0) {
+                    Cli_Output.Output_Str(" : " + parameter);
                 }
                 Cli_Output.Output_NewLine();
             }
