@@ -17,7 +17,6 @@
 using namespace std;
 
 #include "Cli_Input_termios.h"
-#include "Cli_Input_ifstream.h"
 
 #include "Cli_Output_printf.h"
 #include "Cli_Output_ofstream.h"
@@ -89,8 +88,8 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++) {
         string s = argv[i];
         if (s == "-h" || s == "-help" || s == "-?"
-                || s == "-h" || s == "-help" || s == "-?"
-                || s == "-h" || s == "-help" || s == "-?") {
+                || s == "--h" || s == "--help" || s == "--?"
+                || s == "/h" || s == "/help" || s == "/?") {
             Arg_Help_Print = true;
         } else if (s == "-v" || s == "--v"
                 || s == "-version" || s == "--version") {
@@ -167,9 +166,7 @@ int main(int argc, char *argv[]) {
     //    Cli_Input_Abstract *Cli_Input_File_ptr = new Cli_Input_file(Arg_Script_File_Name, Cli_Output);
     //    Cli_Input_Abstract &Cli_Input = (Arg_Script_File_Name.empty() ? *Cli_Input_Keyboard_ptr : *Cli_Input_File_ptr);
 
-    Cli_Input_termios Cli_Input_Keyboard(Cli_Output);
-    Cli_Input_ifstream Cli_Input_File(Arg_Script_File_Name, Cli_Output);
-    Cli_Input_Abstract &Cli_Input = (Arg_Script_File_Name.empty() ? (Cli_Input_Abstract &) Cli_Input_Keyboard : (Cli_Input_Abstract &) Cli_Input_File);
+    Cli_Input_termios Cli_Input(Cli_Output);
 
     vector<Level_Description> Levels;
 
@@ -259,6 +256,21 @@ int main(int argc, char *argv[]) {
     Cli_Output.Output_Str(Version);
     Cli_Output.Output_NewLine();
     Cli_Output.Output_NewLine();
+
+    if (!Arg_Script_File_Name.empty()) {
+        bool is_no_history;
+        bool res_script = Module_Script.do_script(Arg_Script_File_Name, is_no_history = true);
+        if (!res_script) {
+            Cli_Output.Output_Str("ERROR: execute script \"" + Arg_Script_File_Name + "\" - Failed");
+            Cli_Output.Output_NewLine();
+
+            error_code = 1; // Error
+        }
+
+        Cli_Input.Input_Restore();
+
+        return error_code;
+    }
 
     bool stop = false;
     bool is_invitation_print = true;
