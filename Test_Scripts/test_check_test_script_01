@@ -1,0 +1,5 @@
+check print "___NESTED_SCRIPT_BEG___\r\n"
+
+.Local_Passed inc
+
+check print "___NESTED_SCRIPT_END___\r\n"

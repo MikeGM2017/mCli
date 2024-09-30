@@ -1,0 +1,11 @@
+check print "___NESTED_SCRIPT_BEG___\r\n"
+
+check print "___TRY_CHECK_IF_VAR_COMPARE_STR_AS_VALUE_SCRIPT_STOP___\r\n"
+
+check if .v1 == 1 as value do script stop
+
+.Local_Failed inc
+
+check print "___FAILED_SCRIPT_STOP___\r\n"
+
+check print "___NESTED_SCRIPT_END___\r\n"

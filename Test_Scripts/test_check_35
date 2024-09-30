@@ -1,0 +1,167 @@
+
+
+
+$ Test "check_if_str_compare_str_as_var_do_command_str_else_do_command_str"
+.v1 = 1
+.v2 = 1
+check if .v1 == .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 & .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 | .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 && .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 || .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 & .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 | .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 && .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 || .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 & .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 | .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 && .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 || .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end

@@ -1,0 +1,33 @@
+
+
+
+$ Test "check_if_str_compare_str_as_value_inc_str_else_inc_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == 1 as value inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+check if .v1 == 1 as value inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

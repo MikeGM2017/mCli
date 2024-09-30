@@ -1,0 +1,24 @@
+
+
+
+$ Test "check_var_str_set_str_as_expr_force"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+check if .v1 exists do command ".v1 delete"
+.*
+
+check var .v1 set "1 + 2" as expr force
+check if .v1 exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

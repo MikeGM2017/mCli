@@ -1,0 +1,15 @@
+
+
+
+$ Test "check_if_str_exists_do_command_str_else_do_command_str'
+check if .v_exists exists do command ".v_exists delete"
+check if .v_exists exists do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+.v_exists = 1
+check if .v_exists exists do command ".Passed inc" else do command ".Failed inc"
+.v_exists delete
+.Total inc
+.*
+
+$check goto debug_end

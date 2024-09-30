@@ -1,0 +1,6 @@
+
+
+
+check label debug_end
+.*
+check if .Failed == 0 print "Test Check - Ok" else print "Test Check - Failed"

@@ -1,0 +1,15 @@
+
+
+
+$ Test "check_if_str_compare_str_as_var_goto_str"
+.Count = 0
+.Count_Max = 10
+check label check_if_str_compare_str_as_var_goto_str
+.Count inc
+check if .Count < .Count_Max as var goto check_if_str_compare_str_as_var_goto_str
+check label check_if_str_compare_str_as_var_goto_str_end
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end

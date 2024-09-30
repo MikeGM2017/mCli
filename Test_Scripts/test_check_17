@@ -1,0 +1,11 @@
+
+
+
+$ Test "check_if_str_compare_str_as_value_print_str_else_print_str"
+
+.v1 = 1
+
+check if .v1 == 1 as value print "___Ok___" else print "___FAILED___"
+check if .v1 != 1 as value print "___FAILED___" else print "___Ok___"
+
+$check goto debug_end

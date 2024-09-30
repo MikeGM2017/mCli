@@ -1,0 +1,11 @@
+
+
+
+$ Test "check_if_str_compare_int_print_str"
+
+.v1 = 1
+
+check if .v1 == 1 print "___Ok___"
+check if .v1 != 1 print "___FAILED___"
+
+$check goto debug_end

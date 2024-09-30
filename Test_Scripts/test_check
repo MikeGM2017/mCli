@@ -1,0 +1,2057 @@
+.Passed = 0
+.Failed = 0
+.Total = 0
+
+
+
+$ Test "check_modules_by_filter_to_map"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+check if .Check* exists do command ".Check* delete"
+
+check modules "Check" to map
+
+check if .Check.Count_Passed exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+check if .Check* exists do command ".Check* delete"
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_str_set_str_as_value"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+
+check var .v1 set 2 as value
+
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_str_set_str_as_value_force"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+check if .v1 exists do command ".v1 delete"
+.*
+
+check var .v1 set 1 as value force
+
+check if .v1 exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+check if .v1 == 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_str_set_str_as_var"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 2
+
+check var .v1 set .v2 as var
+
+check if .v1 exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_str_set_str_as_var_force"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+check if .v1 exists do command ".v1 delete"
+.*
+
+.v2 = 2
+
+check var .v1 set .v2 as var force
+check if .v1 exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_str_set_str_as_expr"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = ""
+
+check var .v1 set "1 + 2" as expr
+check if .v1 exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_str_set_str_as_expr_force"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+check if .v1 exists do command ".v1 delete"
+.*
+
+check var .v1 set "1 + 2" as expr force
+check if .v1 exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_str_inc"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+
+check var .v1 inc
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+
+check var .v1 inc
+check if .v1 == 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = "1"
+
+check var .v1 inc
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = "a"
+
+check var .v1 inc
+check if .v1 == 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_print_str"
+
+.v1 = 1
+
+check if .v1 == 1 print "___Ok___"
+check if .v1 != 1 print "___FAILED___"
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_print_str_else_print_str"
+
+.v1 = 1
+
+check if .v1 == 1 print "___Ok___" else print "___FAILED___"
+check if .v1 != 1 print "___FAILED___" else print "___Ok___"
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_inc_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == 1 inc .v1
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+
+check if .v1 == 1 inc .v1
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_inc_str_else_inc_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == 1 inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+check if .v1 == 1 inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_do_script_stop"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+do script test_check_test_script_04
+.Local_Total inc
+.*
+
+check if .Local_Failed == 0 do command ".Local_Passed inc"
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_do_script_filename"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+check if .v1 == 1 do script test_check_test_script_01
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_do_script_filename_no_history"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+check if .v1 == 1 do script test_check_test_script_01 no history
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_print_str"
+
+.v1 = 1
+
+check if .v1 == 1 as value print "___Ok___"
+check if .v1 != 1 as value print "___FAILED___"
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_print_str_else_print_str"
+
+.v1 = 1
+
+check if .v1 == 1 as value print "___Ok___" else print "___FAILED___"
+check if .v1 != 1 as value print "___FAILED___" else print "___Ok___"
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_inc_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == 1 as value inc .v1
+check if .v1 == 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+check if .v1 == 1 as value inc .v1
+check if .v1 != 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_inc_str_else_inc_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == 1 as value inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+check if .v1 == 1 as value inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_do_script_stop"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+do script test_check_test_script_03
+.Local_Total inc
+.*
+
+check if .Local_Failed == 0 do command ".Local_Passed inc"
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_do_script_filename"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+check if .v1 == 1 as value do script test_check_test_script_01
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_do_script_filename_no_history"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+check if .v1 == 1 as value do script test_check_test_script_01 no history
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_print_str"
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == .v2 as var print "___Ok___"
+check if .v1 != .v2 as var print "___FAILED___"
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_print_str_else_print_str"
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == .v2 as var print "___Ok___" else print "___FAILED___"
+check if .v1 != .v2 as var print "___FAILED___" else print "___Ok___"
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_inc_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == .v2 as var inc .v1
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+check if .v1 == .v2 as var inc .v1
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_inc_str_else_inc_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == .v2 as var inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+check if .v1 == .v2 as var inc .v1 else inc .v2
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+check if .v2 != 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_do_script_stop"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == .v2 as var do script test_check_test_script_02
+.Local_Total inc
+.*
+
+check if .Local_Failed == 0 do command ".Local_Passed inc"
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_do_script_filename"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == .v2 as var do script test_check_test_script_01
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_do_script_filename_no_history"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == .v2 as var do script test_check_test_script_01 no history
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_do_command_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_do_command_str_else_do_command_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_do_command_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == a as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != a as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > a as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < a as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= a as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= a as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == b as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != b as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > b as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < b as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= b as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= b as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == a as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != a as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > a as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < a as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= a as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= a as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+
+.v1 = 1
+.v2 = 1
+check if .v1 == "1" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == "2" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "2" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "2" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "2" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "2" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "2" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == "1" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == "a" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == "b" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "b" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "b" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "b" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "b" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "b" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == "a" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" as value do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" as value do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_do_command_str_else_do_command_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == a as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != a as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > a as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < a as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= a as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= a as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == b as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != b as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > b as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < b as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= b as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= b as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == a as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != a as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > a as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < a as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= a as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= a as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+
+.v1 = 1
+.v2 = 1
+check if .v1 == "1" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == "2" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "2" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "2" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "2" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "2" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "2" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == "1" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == "a" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == "b" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "b" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "b" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "b" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "b" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "b" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == "a" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" as value do command ".Local_Failed inc" else do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" as value do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_do_command_str"
+.v1 = 1
+.v2 = 1
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+check if .v1 == .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= .v2 as var do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= .v2 as var do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_do_command_str_else_do_command_str"
+.v1 = 1
+.v2 = 1
+check if .v1 == .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 & .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 | .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 && .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 || .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 & .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 | .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 && .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 || .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 & .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 | .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 && .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 || .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 != .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 > .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+check if .v1 < .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 <= .v2 as var do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+check if .v1 >= .v2 as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_exists_print_str"
+check if .v_exists exists do command ".v_exists delete"
+check if .v_exists exists print "___FAILED___"
+.v_exists = 1
+check if .v_exists exists print "___Ok___"
+.v_exists delete
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_exists_print_str_else_print_str"
+check if .v_exists exists do command ".v_exists delete"
+check if .v_exists exists print "___FAILED___" else print "___Ok___"
+.v_exists = 1
+check if .v_exists exists print "___Ok___" else print "___FAILED___"
+.v_exists delete
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_exists_do_command_str'
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.*
+check if .v_exists exists do command ".v_exists delete"
+check if .v_exists exists do command ".Local_Failed inc"
+.Local_Total inc
+.*
+.v_exists = 1
+check if .v_exists exists do command ".Local_Passed inc"
+.v_exists delete
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_exists_do_command_str_else_do_command_str'
+check if .v_exists exists do command ".v_exists delete"
+check if .v_exists exists do command ".Failed inc" else do command ".Passed inc"
+.Total inc
+.*
+.v_exists = 1
+check if .v_exists exists do command ".Passed inc" else do command ".Failed inc"
+.v_exists delete
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_goto_label"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.*
+
+check goto check_goto_label_end
+check print "___FAILED___"
+.Local_Failed inc
+
+check label check_goto_label_end
+.Local_Total inc
+
+check if .Local_Failed == 0 do command ".Local_Passed add .Local_Total"
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_print_str"
+check print "Message Printed: check_print_str\r\n"
+.Passed inc
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_goto_str"
+.Count = 0
+.Count_Max = 10
+check label check_if_str_compare_int_goto_str
+.Count inc
+check if .Count < 10 goto check_if_str_compare_int_goto_str
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_int_goto_str_else_goto_str"
+.Count = 0
+.Count_Max = 10
+check label check_if_str_compare_int_goto_str_else_goto_str
+.Count inc
+check if .Count == 10 goto check_if_str_compare_int_goto_str_else_goto_str_end else goto check_if_str_compare_int_goto_str_else_goto_str
+check label check_if_str_compare_int_goto_str_else_goto_str_end
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_goto_str"
+.Count = 0
+.Count_Max = 10
+check label check_if_str_compare_str_as_value_goto_str
+.Count inc
+check if .Count != "10" as value goto check_if_str_compare_str_as_value_goto_str
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_value_goto_str_else_goto_str"
+.Count = 0
+.Count_Max = 10
+check label check_if_str_compare_str_as_value_goto_str_else_goto_str
+.Count inc
+check if .Count == "10" as value goto check_if_str_compare_str_as_value_goto_str_else_goto_str_end else goto check_if_str_compare_str_as_value_goto_str_else_goto_str
+check label check_if_str_compare_str_as_value_goto_str_else_goto_str_end
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_by_var_goto_label_n_10"
+.Count = 0
+.Count_Max = 10
+check label check_var_by_var_goto_label_n_10
+.Count inc
+check if .Count < .Count_Max as var goto check_var_by_var_goto_label_n_10
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_var_by_var_goto_label_n_9"
+.Count = 0
+.Count_Max = 9
+check label check_var_by_var_goto_label_n_9
+.Count inc
+check if .Count < .Count_Max as var goto check_var_by_var_goto_label_n_9
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_goto_str"
+.Count = 0
+.Count_Max = 10
+check label check_if_str_compare_str_as_var_goto_str
+.Count inc
+check if .Count < .Count_Max as var goto check_if_str_compare_str_as_var_goto_str
+check label check_if_str_compare_str_as_var_goto_str_end
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_goto_str_else_goto_str"
+.Count = 0
+.Count_Max = 10
+check label check_if_str_compare_str_as_var_goto_str_else_goto_str
+.Count inc
+check if .Count >= .Count_Max as var goto check_if_str_compare_str_as_var_goto_str_else_goto_str_end else goto check_if_str_compare_str_as_var_goto_str_else_goto_str
+check label check_if_str_compare_str_as_var_goto_str_else_goto_str_end
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+check label debug_end
+.*
+check if .Failed == 0 print "Test Check - Ok" else print "Test Check - Failed"

@@ -1,0 +1,12 @@
+
+
+
+$ Test "check_if_str_compare_str_as_var_print_str"
+
+.v1 = 1
+.v2 = 1
+
+check if .v1 == .v2 as var print "___Ok___"
+check if .v1 != .v2 as var print "___FAILED___"
+
+$check goto debug_end

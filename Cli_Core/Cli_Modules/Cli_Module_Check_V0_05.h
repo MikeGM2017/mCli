@@ -5,14 +5,14 @@
  */
 
 /* 
- * File:   Cli_Module_Check.h
+ * File:   Cli_Module_Check_V0_05.h
  * Author: mike
  *
  * Created on December 2, 2020, 11:17 AM
  */
 
-#ifndef CLI_MODULE_CHECK_H
-#define CLI_MODULE_CHECK_H
+#ifndef CLI_MODULE_CHECK_V0_05_H
+#define CLI_MODULE_CHECK_V0_05_H
 
 #include <map>
 
@@ -35,7 +35,7 @@ using namespace std;
 
 #include "Do_Abstract.h"
 
-class Cli_Module_Check : public Cli_Module {
+class Cli_Module_Check_V0_05 : public Cli_Module {
 protected:
 
     Cli_Modules &Modules;
@@ -142,13 +142,13 @@ public:
         CMP_ERROR
     };
 
-    Cli_Module_Check(Cli_Modules &modules, map<string, string> &values_map,
+    Cli_Module_Check_V0_05(Cli_Modules &modules, map<string, string> &values_map,
             Str_Filter_Abstract &str_filter,
             Str_Get_Without_Commas &str_without_commas,
             Cli_Output_Abstract &cli_output,
             bool &cmd_script_stop,
             string &script_command_str, string &script_label_str,
-            Do_Abstract &do_command_object) : Cli_Module("Check"),
+            Do_Abstract &do_command_object) : Cli_Module("Check Max"),
     Modules(modules), Values_Map(values_map),
     Str_Filter(str_filter),
     Str_Without_Commas(str_without_commas),
@@ -1153,7 +1153,7 @@ public:
 
     }
 
-    virtual ~Cli_Module_Check() {
+    virtual ~Cli_Module_Check_V0_05() {
     }
 
     string Var_Name_Without_Point_Get(string s) {
@@ -2683,4 +2683,4 @@ public:
 
 };
 
-#endif /* CLI_MODULE_CHECK_H */
+#endif /* CLI_MODULE_CHECK_V0_05_H */

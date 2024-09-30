@@ -1,0 +1,10 @@
+
+
+
+$ Test "check_print_str"
+check print "Message Printed: check_print_str\r\n"
+.Passed inc
+.Total inc
+.*
+
+$check goto debug_end

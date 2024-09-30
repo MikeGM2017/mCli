@@ -1,0 +1,26 @@
+
+
+
+$ Test "check_if_str_exists_do_command_str'
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.*
+check if .v_exists exists do command ".v_exists delete"
+check if .v_exists exists do command ".Local_Failed inc"
+.Local_Total inc
+.*
+.v_exists = 1
+check if .v_exists exists do command ".Local_Passed inc"
+.v_exists delete
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

@@ -1,0 +1,24 @@
+
+
+
+$ Test "check_var_str_set_str_as_value"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+
+check var .v1 set 2 as value
+
+check if .v1 == 2 do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

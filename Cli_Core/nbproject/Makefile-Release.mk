@@ -35,7 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/Cli_Input/Cli_Input_ifstream.o \
 	${OBJECTDIR}/Cli_Input/Cli_Input_termios.o \
 	${OBJECTDIR}/cli_core_test_main.o
 
@@ -103,11 +102,6 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core ${OBJECTFILES} ${LDLIBSOPTIONS}
-
-${OBJECTDIR}/Cli_Input/Cli_Input_ifstream.o: Cli_Input/Cli_Input_ifstream.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Cli_Input
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_ifstream.o Cli_Input/Cli_Input_ifstream.cpp
 
 ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o: Cli_Input/Cli_Input_termios.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Cli_Input
@@ -286,19 +280,6 @@ ${TESTDIR}/tests/Test_Str_Filter.o: tests/Test_Str_Filter.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Str_Filter.o tests/Test_Str_Filter.cpp
 
-
-${OBJECTDIR}/Cli_Input/Cli_Input_ifstream_nomain.o: ${OBJECTDIR}/Cli_Input/Cli_Input_ifstream.o Cli_Input/Cli_Input_ifstream.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Cli_Input
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/Cli_Input/Cli_Input_ifstream.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input/Cli_Input_ifstream_nomain.o Cli_Input/Cli_Input_ifstream.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/Cli_Input/Cli_Input_ifstream.o ${OBJECTDIR}/Cli_Input/Cli_Input_ifstream_nomain.o;\
-	fi
 
 ${OBJECTDIR}/Cli_Input/Cli_Input_termios_nomain.o: ${OBJECTDIR}/Cli_Input/Cli_Input_termios.o Cli_Input/Cli_Input_termios.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Cli_Input

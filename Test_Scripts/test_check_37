@@ -1,0 +1,11 @@
+
+
+
+$ Test "check_if_str_exists_print_str_else_print_str"
+check if .v_exists exists do command ".v_exists delete"
+check if .v_exists exists print "___FAILED___" else print "___Ok___"
+.v_exists = 1
+check if .v_exists exists print "___Ok___" else print "___FAILED___"
+.v_exists delete
+
+$check goto debug_end

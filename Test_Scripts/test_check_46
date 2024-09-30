@@ -1,0 +1,14 @@
+
+
+
+$ Test "check_var_by_var_goto_label_n_10"
+.Count = 0
+.Count_Max = 10
+check label check_var_by_var_goto_label_n_10
+.Count inc
+check if .Count < .Count_Max as var goto check_var_by_var_goto_label_n_10
+check if .Count == .Count_Max as var do command ".Passed inc" else do command ".Failed inc"
+.Total inc
+.*
+
+$check goto debug_end

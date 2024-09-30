@@ -1,0 +1,111 @@
+
+
+
+$ Test "check_if_str_compare_int_do_command_str"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 do command ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 do command ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+.*
+
+$check goto debug_end
