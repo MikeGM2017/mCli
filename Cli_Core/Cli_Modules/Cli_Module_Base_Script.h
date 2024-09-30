@@ -84,7 +84,7 @@ public:
     Cli_Command_Processor(cli_command_processor),
     Script_Command_Str(script_command_str), Script_Label_Str(script_label_str), Script_Dir_Str(script_dir_str) {
 
-        Version = "0.03";
+        Version = "0.04";
 
         Script_Buf = new char[Script_Buf_Size];
 
@@ -253,9 +253,7 @@ public:
         Cli_Command_Processor.Process_Input_Item(input_item2, is_debug, debug_res);
     }
 
-    bool do_script(Cli_Cmd *cmd, bool is_no_history) {
-
-        string cmd_filename = cmd->Items[2]->Value_Str;
+    bool do_script(string cmd_filename, bool is_no_history) {
 
         bool res_filename_check = script_filename_check(cmd_filename);
         if (!res_filename_check) {
@@ -320,6 +318,9 @@ public:
                 Cli_Input.Is_Ctrl_C_Pressed_Clear();
             } else {
                 Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop ? "Stopped" : "End"));
+                if (Cmd_Script_Stop) {
+                    Cmd_Script_Stop = false;
+                }
             }
             Cli_Output.Output_NewLine();
         } else {
@@ -340,15 +341,17 @@ public:
             case CMD_ID_do_script:
                 if (is_debug) return true;
             {
+                string cmd_filename = cmd->Items[2]->Value_Str;
                 bool is_no_history = false;
-                return do_script(cmd, is_no_history);
+                return do_script(cmd_filename, is_no_history);
             }
                 break;
             case CMD_ID_do_script_no_history:
                 if (is_debug) return true;
             {
+                string cmd_filename = cmd->Items[2]->Value_Str;
                 bool is_no_history = true;
-                return do_script(cmd, is_no_history);
+                return do_script(cmd_filename, is_no_history);
             }
                 break;
             case CMD_ID_do_script_stop:
