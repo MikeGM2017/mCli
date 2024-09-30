@@ -50,6 +50,8 @@ public:
 
         CMD_ID_point_var_name_inc,
 
+        CMD_ID_point_var_name_add_str,
+
         CMD_ID_point_var_name_delete,
 
         CMD_ID_LAST
@@ -67,7 +69,7 @@ public:
     Str_Without_Commas(str_without_commas),
     Cli_Output(cli_output), C_Single(c_single), C_Multy(c_multy) {
 
-        Version = "0.03";
+        Version = "0.04";
 
         // <editor-fold defaultstate="collapsed" desc="Vars: get/set">
         {
@@ -113,6 +115,20 @@ public:
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
             cmd->Item_Add(new Cmd_Item_Word("inc", "increment"));
+            Cmd_Add(cmd);
+        }
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Vars: add">
+        {
+            // inc @Attention: increment as integer only (string converted to "0")
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_add_str);
+            cmd->Text_Set(".<var_name> add <str>");
+            cmd->Help_Set("<var_name> add int/var/str");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
+            cmd->Item_Add(new Cmd_Item_Word("add", "add"));
+            cmd->Item_Add(new Cmd_Item_Str("<str>", "value to add"));
             Cmd_Add(cmd);
         }
         // </editor-fold>
@@ -212,6 +228,87 @@ public:
         return true;
     }
 
+    bool Char_Is_Digit(char c) {
+        if (c >= '0' && c <= '9') return true;
+        return false;
+    }
+
+    bool Char_Is_Digit_Or_Plus_Or_Minus(char c) {
+        if (c >= '0' && c <= '9') return true;
+        if (c == '+') return true;
+        if (c == '-') return true;
+        return false;
+    }
+
+    bool Str_Is_Int(string s) {
+        if (s.empty()) return false; // Case: empty string is not digit
+        for (int i = 0; i < s.length(); i++) {
+            char c = s[i];
+            if (i == 0) {
+                if (!Char_Is_Digit_Or_Plus_Or_Minus(c)) return false;
+            } else {
+                if (!Char_Is_Digit(c)) return false;
+            }
+        }
+        return true;
+    }
+
+    bool var_add(string point_var_name_str, string add_str) {
+        string var_name = point_var_name_str.substr(1);
+        bool found = false;
+        for (map<string, string>::iterator iter_left = Values_Map.begin();
+                iter_left != Values_Map.end(); iter_left++) {
+            string item_var_name = iter_left->first;
+            if (var_name == item_var_name) {
+                string item_var_value_old = iter_left->second.c_str();
+                if (Str_Is_Int(item_var_value_old) && Str_Is_Int(add_str)) { // Case 1: VAR_INT add VALUE_INT
+                    int item_var_value_int_old = atoi(item_var_value_old.c_str());
+                    int add_value_int = atoi(add_str.c_str());
+                    int item_var_value_int_new = item_var_value_int_old + add_value_int;
+                    stringstream s_str;
+                    s_str << item_var_value_int_new;
+                    iter_left->second = s_str.str();
+                } else if (add_str.length() > 0 && add_str[0] == '.') { // Case 2: VAR add VAR
+                    map<string, string>::iterator iter_right = Values_Map.find(add_str.substr(1));
+                    if (iter_right != Values_Map.end()) {
+                        string add_var_value = iter_right->second;
+                        if (Str_Is_Int(item_var_value_old) && Str_Is_Int(add_var_value)) { // Case 2.1: VAR_INT add VAR_INT
+                            int item_var_value_int_old = atoi(item_var_value_old.c_str());
+                            int add_value_int = atoi(add_var_value.c_str());
+                            int item_var_value_int_new = item_var_value_int_old + add_value_int;
+                            stringstream s_str;
+                            s_str << item_var_value_int_new;
+                            iter_left->second = s_str.str();
+                        } else { // Case 2.2: VAR add VAR as str
+                            string item_var_value_new = item_var_value_old + add_var_value;
+                            iter_left->second = item_var_value_new;
+                        }
+                    } else {
+                        Cli_Output.Output_Str(add_str + " - Not Found");
+                        Cli_Output.Output_NewLine();
+                    }
+                } else { // Case 3: VAR add STR
+                    string add_var_value = add_str;
+                    string item_var_value_new = item_var_value_old + add_var_value;
+                    iter_left->second = item_var_value_new;
+                }
+                found = true;
+            }
+        }
+        if (!found) {
+            Cli_Output.Output_Str(var_name + " - Not Found");
+            Cli_Output.Output_NewLine();
+            if (add_str.length() > 0 && add_str[0] == '.') {
+                map<string, string>::iterator iter_right = Values_Map.find(add_str.substr(1));
+                if (iter_right == Values_Map.end()) {
+                    Cli_Output.Output_Str(add_str + " - Not Found");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+        }
+        return true;
+    }
+
     bool var_delete(string point_var_name_str) {
 
         string var_name = point_var_name_str.substr(1);
@@ -268,6 +365,18 @@ public:
             {
                 string point_var_name_str = cmd->Items[0]->Value_Str;
                 return var_inc(point_var_name_str);
+            }
+
+                // </editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="Vars: add int/var/str">
+
+            case CMD_ID_point_var_name_add_str:
+                if (is_debug) return true;
+            {
+                string point_var_name_str = cmd->Items[0]->Value_Str;
+                string add_str = cmd->Items[2]->Value_Str;
+                return var_add(point_var_name_str, add_str);
             }
 
                 // </editor-fold>
