@@ -935,6 +935,49 @@ $check goto debug_end
 
 
 
+$ Test "check_if_str_compare_int_do_script_filename_no_history"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+check if .v1 == 1 "do script test_check_test_script_01 no history"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_str_compare_str_as_var_do_script_stop"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == .v2 "do script test_check_test_script_02"
+.Local_Total inc
+.*
+
+check if .Local_Failed == 0 ".Local_Passed inc"
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
 check label debug_end
 .*
 check if .Failed == 0 "println \"Test Check - Ok\"" else "println \"Test Check - Failed\""

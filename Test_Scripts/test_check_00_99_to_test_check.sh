@@ -9,5 +9,7 @@ cat test_check_05 >> test_check
 cat test_check_06 >> test_check
 cat test_check_07 >> test_check
 cat test_check_08 >> test_check
+cat test_check_09 >> test_check
+cat test_check_10 >> test_check
 
 cat test_check_99_footer >> test_check

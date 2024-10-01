@@ -1,0 +1,5 @@
+println "___NESTED_SCRIPT_BEG___"
+
+.Local_Passed inc
+
+println "___NESTED_SCRIPT_END___"

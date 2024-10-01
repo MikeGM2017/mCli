@@ -1,0 +1,11 @@
+println "___NESTED_SCRIPT_BEG___"
+
+println "___TRY_SCRIPT_STOP___"
+
+do script stop
+
+.Local_Failed inc
+
+println "___FAILED_SCRIPT_STOP___"
+
+println "___NESTED_SCRIPT_END___"
