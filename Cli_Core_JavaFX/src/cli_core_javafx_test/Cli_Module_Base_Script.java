@@ -148,99 +148,119 @@ public class Cli_Module_Base_Script extends Cli_Module {
 
                         String filename = Script_Thread_FileName;
                         boolean is_no_history = Script_Thread_Is_No_History;
-                        BufferedReader reader = null;
-                        try {
-                            reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
-                            reader.mark(1);
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Begin");
-                            Cli_Output.Output_NewLine();
-                            boolean is_debug = false;
-                            Ref_Boolean debug_res = new Ref_Boolean(false);
-                            String s = "";
-                            Cmd_Script_Stop.Value = false;
-                            Cmd_Quit.Value = false;
-                            do {
-                                if (!Cli_Input.Is_Ctrl_C_Pressed_Get()) {
-                                    s = reader.readLine();
-                                    if (s != null && !s.isEmpty()) {
-                                        String s_trim = s.trim();
-                                        if (!is_no_history && !is_debug && !s_trim.isEmpty()) {
-                                            History.History_Put(s_trim);
-                                        }
-                                        Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
-                                        Cli_Output.Output_Str(s_trim);
 
-                                        Script_Command_Str.Value = "";
-                                        Script_Label_Str.Value = "";
-
-                                        Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
-                                        while (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
-                                            Cli_Input.Input_sleep(1);
-                                        }
-
-                                        if (Script_Command_Str.Value.length() > 0) {
-                                            Execute_Script_Command(is_debug, debug_res);
-                                            Script_Command_Str.Value = "";
-                                        }
-
-                                        //@Warning: Command "check goto <label>" - special case: is moves file position
-                                        if (Script_Label_Str.Value.length() > 0) {
-                                            boolean label_found = Execute_Command_check_goto_label(reader, Script_Label_Str.Value);
-                                            if (!label_found) {
-                                                Cli_Output.Output_NewLine();
-                                                Cli_Output.Output_Str("ERROR: label \"" + Script_Label_Str.Value + "\" - not found, script stopped");
-                                                Cli_Output.Output_NewLine();
-                                                Cmd_Script_Stop.Value = true; // Stop - label not found
-                                            }
-                                            Script_Label_Str.Value = "";
-                                        }
-
-                                    }
-                                } else {
-                                    Cmd_Script_Stop.Value = true; // Stop By Ctrl+C
-                                }
-                            } while (s != null && !Cmd_Script_Stop.Value && !Cmd_Quit.Value);
-                            if (Cli_Input.Is_Ctrl_C_Pressed_Get()) {
-                                Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
-                                Cli_Input.Is_Ctrl_C_Pressed_Clear();
-                            } else {
-                                Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop.Value ? "Stopped" : "End"));
-                                if (Cmd_Script_Stop.Value) {
-                                    Cmd_Script_Stop.Value = false;
-                                }
-                            }
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                            Cli_Input.Input_Str_Set_Empty();
-                        } catch (FileNotFoundException ex) {
-                            Cli_Output.Output_Str("File \"" + filename + "\" - not found");
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                            Cli_Input.Input_Str_Set_Empty();
-                        } catch (IOException ex) {
-                            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
-                            Cli_Output.Output_Str("File \"" + filename + "\" - read error");
-                        } catch (Exception ex) {
-                            Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
-                        } finally {
-                            try {
-                                if (reader != null) {
-                                    reader.close();
-                                    ///Cli_Output.Output_Str("File \"" + filename + "\" - Ok");
-                                }
-                            } catch (IOException ex) {
-                                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
-                                Cli_Output.Output_Str("File \"" + filename + "\" - close error");
-                            } catch (Exception ex) {
-                                Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
                         Script_Thread_FileName = "";
                         Script_Thread_Is_No_History = false;
+
+                        Execute_Script(filename, is_no_history);
+
                     } else {
                         Cli_Input.Input_sleep(1);
+                    }
+                }
+            }
+
+            private void Execute_Script(String filename, boolean is_no_history) {
+                BufferedReader reader = null;
+                try {
+                    reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+                    reader.mark(1);
+                    Cli_Output.Output_NewLine();
+                    Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Begin");
+                    Cli_Output.Output_NewLine();
+                    boolean is_debug = false;
+                    Ref_Boolean debug_res = new Ref_Boolean(false);
+                    String s = "";
+                    Cmd_Script_Stop.Value = false;
+                    Cmd_Quit.Value = false;
+                    do {
+                        if (!Cli_Input.Is_Ctrl_C_Pressed_Get()) {
+                            s = reader.readLine();
+                            if (s != null && !s.isEmpty()) {
+                                String s_trim = s.trim();
+                                if (!is_no_history && !is_debug && !s_trim.isEmpty()) {
+                                    History.History_Put(s_trim);
+                                }
+                                Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
+                                Cli_Output.Output_Str(s_trim);
+
+                                Script_Command_Str.Value = "";
+                                Script_Label_Str.Value = "";
+                                Script_Thread_FileName = "";
+                                Script_Thread_Is_No_History = false;
+
+                                Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                                while (Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT) {
+                                    Cli_Input.Input_sleep(1);
+                                }
+
+                                if (Script_Command_Str.Value.length() > 0) {
+                                            Execute_Script_Command(is_debug, debug_res);
+                                    Script_Command_Str.Value = "";
+                                }
+
+                                //@Warning: Command "check goto <label>" - special case: is moves file position
+                                if (Script_Label_Str.Value.length() > 0) {
+                                    String label = Script_Label_Str.Value;
+                                    Script_Label_Str.Value = "";
+                                    boolean label_found = Execute_Command_check_goto_label(reader, label);
+                                    if (!label_found) {
+                                        Cli_Output.Output_NewLine();
+                                        Cli_Output.Output_Str("ERROR: label \"" + label + "\" - not found, script stopped");
+                                        Cli_Output.Output_NewLine();
+                                        Cmd_Script_Stop.Value = true; // Stop - label not found
+                                    }
+                                }
+
+                                if (Script_Thread_FileName.length() > 0) {
+                                    String nested_script_filename = Script_Thread_FileName;
+                                    boolean nested_script_is_no_history = Script_Thread_Is_No_History;
+
+                                    Script_Thread_FileName = "";
+                                    Script_Thread_Is_No_History = false;
+
+                                    Execute_Script(nested_script_filename, nested_script_is_no_history);
+                                }
+
+                            }
+                        } else {
+                            Cmd_Script_Stop.Value = true; // Stop By Ctrl+C
+                        }
+                    } while (s != null && !Cmd_Script_Stop.Value && !Cmd_Quit.Value);
+                    if (Cli_Input.Is_Ctrl_C_Pressed_Get()) {
+                        Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
+                        Cli_Input.Is_Ctrl_C_Pressed_Clear();
+                    } else {
+                        Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                        if (Cmd_Script_Stop.Value) {
+                            Cmd_Script_Stop.Value = false;
+                        }
+                    }
+                    Cli_Output.Output_NewLine();
+                    Cli_Output.Output_NewLine();
+                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                    Cli_Input.Input_Str_Set_Empty();
+                } catch (FileNotFoundException ex) {
+                    Cli_Output.Output_Str("File \"" + filename + "\" - not found");
+                    Cli_Output.Output_NewLine();
+                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                    Cli_Input.Input_Str_Set_Empty();
+                } catch (IOException ex) {
+                    Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+                    Cli_Output.Output_Str("File \"" + filename + "\" - read error");
+                } catch (Exception ex) {
+                    Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    try {
+                        if (reader != null) {
+                            reader.close();
+                            ///Cli_Output.Output_Str("File \"" + filename + "\" - Ok");
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
+                        Cli_Output.Output_Str("File \"" + filename + "\" - close error");
+                    } catch (Exception ex) {
+                        Logger.getLogger(Cli_Module_Base_Script.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -387,6 +407,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
 
     public void Execute_Script_Command(boolean is_debug, Ref_Boolean debug_res) {
         String Script_Command_Str_Trim1 = Script_Command_Str.Value.trim();
+        Script_Command_Str.Value = "";
         boolean is_commas_found = false;
         if (Script_Command_Str_Trim1.length() >= 2
                 && Script_Command_Str_Trim1.charAt(0) == '\"'
@@ -405,7 +426,6 @@ public class Cli_Module_Base_Script extends Cli_Module {
             Script_Command_Str_Trim2 = Script_Command_Str_Trim1;
         }
         Cli_Input_Item input_item2 = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, Script_Command_Str_Trim2);
-        Script_Command_Str.Value = "";
         Cli_Command_Processor.Process_Input_Item(input_item2, is_debug, debug_res);
     }
 
