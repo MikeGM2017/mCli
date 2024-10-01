@@ -195,7 +195,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
                                 }
 
                                 if (Script_Command_Str.Value.length() > 0) {
-                                            Execute_Script_Command(is_debug, debug_res);
+                                    Execute_Script_Command(is_debug, debug_res);
                                     Script_Command_Str.Value = "";
                                 }
 
