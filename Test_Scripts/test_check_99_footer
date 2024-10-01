@@ -1,0 +1,6 @@
+
+
+
+check label debug_end
+.*
+check if .Failed == 0 "println \"Test Check - Ok\"" else "println \"Test Check - Failed\""

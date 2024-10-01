@@ -1,0 +1,26 @@
+
+
+
+$ Test "check_goto_label"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.*
+
+check goto check_goto_label_end
+println "___FAILED___"
+.Local_Failed inc
+
+check label check_goto_label_end
+.Local_Total inc
+
+check if .Local_Failed == 0 ".Local_Passed add .Local_Total"
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

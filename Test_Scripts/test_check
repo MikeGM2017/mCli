@@ -1,0 +1,940 @@
+.Passed = 0
+.Failed = 0
+.Total = 0
+
+
+
+$ Test "check_modules_by_filter_to_map"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+check if .Check* exists do command ".Check* delete"
+
+check modules "Check" to map
+
+check if .Check.Count_Passed exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+.Local_Total inc
+.*
+
+check if .Check* exists do command ".Check* delete"
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 do command ".Failed add .Local_Total"
+check if .Local_Failed == 0 do command ".Passed add .Local_Total"
+check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_goto_label"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.*
+
+check goto check_goto_label_end
+println "___FAILED___"
+.Local_Failed inc
+
+check label check_goto_label_end
+.Local_Total inc
+
+check if .Local_Failed == 0 ".Local_Passed add .Local_Total"
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_var_exists_command'
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.*
+check if .v_exists exists ".v_exists delete"
+check if .v_exists exists ".Local_Failed inc"
+.Local_Total inc
+.*
+.v_exists = 1
+check if .v_exists exists ".Local_Passed inc"
+.v_exists delete
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_var_exists_command1_else_command2'
+check if .v_exists exists ".v_exists delete"
+check if .v_exists exists ".Failed inc" else ".Passed inc"
+.Total inc
+.*
+.v_exists = 1
+check if .v_exists exists ".Passed inc" else ".Failed inc"
+.v_exists delete
+.Total inc
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_var_compare_int_command"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_var_compare_int_command1_else_command2"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+
+$check goto debug_end
+
+
+
+$ Test "check_if_var_compare_str_command"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == a ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != a ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > a ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < a ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= a ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= a ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == b ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != b ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > b ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < b ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= b ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= b ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == a ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != a ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > a ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < a ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= a ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= a ".Local_Passed inc"
+.Local_Total inc
+.*
+
+
+.v1 = 1
+.v2 = 1
+check if .v1 == "1" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == "2" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "2" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "2" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "2" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "2" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "2" ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == "1" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == "a" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == "b" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "b" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "b" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "b" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "b" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "b" ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == "a" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+$ Test "check_if_var_compare_str_command1_else_command2"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 1
+check if .v1 == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 & 2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 & 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 | 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 && 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 || 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == a ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != a ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > a ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < a ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= a ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= a ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == b ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != b ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > b ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < b ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= b ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= b ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == a ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != a ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > a ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < a ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= a ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= a ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+
+.v1 = 1
+.v2 = 1
+check if .v1 == "1" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = 1
+.v2 = 2
+check if .v1 == "2" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "2" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "2" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "2" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "2" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "2" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = 2
+.v2 = 1
+check if .v1 == "1" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "1" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "1" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "1" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "1" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "1" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = a
+check if .v1 == "a" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 = a
+.v2 = b
+check if .v1 == "b" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "b" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "b" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 < "b" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 <= "b" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 >= "b" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v1 = b
+.v2 = a
+check if .v1 == "a" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 != "a" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 > "a" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 < "a" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 <= "a" ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+check if .v1 >= "a" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end
+
+
+
+check label debug_end
+.*
+check if .Failed == 0 "println \"Test Check - Ok\"" else "println \"Test Check - Failed\""

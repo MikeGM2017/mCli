@@ -1,0 +1,15 @@
+
+
+
+$ Test "check_if_var_exists_command1_else_command2'
+check if .v_exists exists ".v_exists delete"
+check if .v_exists exists ".Failed inc" else ".Passed inc"
+.Total inc
+.*
+.v_exists = 1
+check if .v_exists exists ".Passed inc" else ".Failed inc"
+.v_exists delete
+.Total inc
+.*
+
+$check goto debug_end

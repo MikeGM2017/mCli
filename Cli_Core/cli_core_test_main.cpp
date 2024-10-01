@@ -55,7 +55,7 @@ using namespace std;
 
 #include "Do_Command.h"
 
-const string Version = "0.05";
+const string Version = "0.06";
 
 void Version_Print() {
     cout << "V" << Version << endl;

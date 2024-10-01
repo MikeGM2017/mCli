@@ -1,2 +1,2 @@
 wait 3
-check print "Test Wait - End\r\n"
+println "Test Wait - End"
