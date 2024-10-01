@@ -6,10 +6,11 @@
 package cli_core_javafx_test;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -68,7 +69,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
             Ref_String script_command_str, Ref_String script_label_str, Ref_String script_dir_str) {
         super("Base Script");
 
-        Version = "0.03";
+        Version = "0.04";
 
         History = history;
         Cli_Input = cli_input;
@@ -147,11 +148,10 @@ public class Cli_Module_Base_Script extends Cli_Module {
 
                         String filename = Script_Thread_FileName;
                         boolean is_no_history = Script_Thread_Is_No_History;
-                        FileReader inputFile;
                         BufferedReader reader = null;
                         try {
-                            inputFile = new FileReader(filename);
-                            reader = new BufferedReader(inputFile);
+                            reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+                            reader.mark(1);
                             Cli_Output.Output_NewLine();
                             Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - Begin");
                             Cli_Output.Output_NewLine();
@@ -186,7 +186,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
 
                                         //@Warning: Command "check goto <label>" - special case: is moves file position
                                         if (Script_Label_Str.Value.length() > 0) {
-                                            boolean label_found = Execute_Command_check_goto_label(inputFile, Script_Label_Str.Value);
+                                            boolean label_found = Execute_Command_check_goto_label(reader, Script_Label_Str.Value);
                                             if (!label_found) {
                                                 Cli_Output.Output_NewLine();
                                                 Cli_Output.Output_Str("ERROR: label \"" + Script_Label_Str.Value + "\" - not found, script stopped");
@@ -206,6 +206,9 @@ public class Cli_Module_Base_Script extends Cli_Module {
                                 Cli_Input.Is_Ctrl_C_Pressed_Clear();
                             } else {
                                 Cli_Output.Output_Str(Str_Rem + " Do script " + filename + " - " + (Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                                if (Cmd_Script_Stop.Value) {
+                                    Cmd_Script_Stop.Value = false;
+                                }
                             }
                             Cli_Output.Output_NewLine();
                             Cli_Output.Output_NewLine();
@@ -324,7 +327,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
         return true;
     }
 
-    public boolean Execute_Command_check_goto_label(FileReader inputFile, String label_str) {
+    public boolean Execute_Command_check_goto_label(BufferedReader inputFile, String label_str) {
         boolean stop = false;
         boolean found = false;
         try {
@@ -341,7 +344,7 @@ public class Cli_Module_Base_Script extends Cli_Module {
                     try {
                         c = inputFile.read();
                         if (c != -1 && c != '\r' && c != '\n') {
-                            s += c;
+                            s += (char) c;
                         } else if (c == '\r' || c == '\n') {
                             c = 0; // End of line found
                             s_stop = true;

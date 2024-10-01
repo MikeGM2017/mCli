@@ -26,7 +26,7 @@ import javafx.scene.text.Font;
  */
 public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
-    protected String Version = "0.02";
+    protected String Version = "0.06";
 
     @FXML
     protected TextArea Cli_Input_TextArea;
@@ -140,12 +140,12 @@ public class Cli_Core_JavaFX_Test_FormController implements Initializable {
 
         Str_Get_Without_Commas str_without_commas = new Str_Get_Without_Commas();
 
+        Modules.Module_Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
+                Cli_Output, C_Single, C_Multy)));
+
         Modules.Module_Add((new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas,
                 Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str,
                 Do_Command_Object)));
-
-        Modules.Module_Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
-                Cli_Output, C_Single, C_Multy)));
 
         Modules.Module_Add(new Cli_Module_Base_Level(Cli_Input, Cli_Output, level_root));
 

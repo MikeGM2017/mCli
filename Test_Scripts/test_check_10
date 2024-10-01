@@ -11,8 +11,6 @@ check if .v1 == .v2 "do script test_check_test_script_02"
 .Local_Total inc
 .*
 
-check if .Local_Failed == 0 ".Local_Passed inc"
-
 .Total add .Local_Total
 check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
 check if .Local_Passed == 0 ".Failed add .Local_Total"

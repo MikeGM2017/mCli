@@ -2,6 +2,9 @@ println "___NESTED_SCRIPT_BEG___"
 
 println "___TRY_SCRIPT_STOP___"
 
+.Local_Passed inc
+.Local_Total inc
+
 do script stop
 
 .Local_Failed inc

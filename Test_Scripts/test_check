@@ -9,22 +9,22 @@ $ Test "check_modules_by_filter_to_map"
 .Local_Failed = 0
 .Local_Total = 0
 
-check if .Check* exists do command ".Check* delete"
+check if .Check* exists ".Check* delete"
 
 check modules "Check" to map
 
-check if .Check.Count_Passed exists do command ".Local_Passed inc" else do command ".Local_Failed inc"
+check if .Check.Count_Passed exists ".Local_Passed inc" else ".Local_Failed inc"
 .Local_Total inc
 .*
 
-check if .Check* exists do command ".Check* delete"
+check if .Check* exists ".Check* delete"
 .*
 
 .Total add .Local_Total
-check if .Local_Passed == 0 do command ".Local_Failed add .Local_Total"
-check if .Local_Passed == 0 do command ".Failed add .Local_Total"
-check if .Local_Failed == 0 do command ".Passed add .Local_Total"
-check if .Local_Failed != 0 do command ".Failed add .Local_Failed"
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
 .*
 
 $check goto debug_end
@@ -964,8 +964,6 @@ $ Test "check_if_str_compare_str_as_var_do_script_stop"
 check if .v1 == .v2 "do script test_check_test_script_02"
 .Local_Total inc
 .*
-
-check if .Local_Failed == 0 ".Local_Passed inc"
 
 .Total add .Local_Total
 check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
