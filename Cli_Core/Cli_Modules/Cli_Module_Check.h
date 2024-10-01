@@ -139,10 +139,6 @@ public:
         cmp_str_words.push_back(">");
         cmp_str_words.push_back("<=");
         cmp_str_words.push_back(">=");
-        //cmp_str_words.push_back("&");
-        //cmp_str_words.push_back("|");
-        //cmp_str_words.push_back("&&");
-        //cmp_str_words.push_back("||");
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Values_Map: print, clear">
