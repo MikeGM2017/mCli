@@ -34,10 +34,11 @@ public class Cli_Module_Vars extends Cli_Module {
     private final int CMD_ID_point_var_name_inc = 4;
 
     private final int CMD_ID_point_var_name_add_str = 5;
+    private final int CMD_ID_point_var_name_stradd_str = 6;
 
-    private final int CMD_ID_point_var_name_delete = 6;
+    private final int CMD_ID_point_var_name_delete = 7;
 
-    private final int CMD_ID_LAST = 7;
+    private final int CMD_ID_LAST = 8;
     //};
 
     @Override
@@ -57,7 +58,7 @@ public class Cli_Module_Vars extends Cli_Module {
             char c_single, char c_multy) {
         super("Vars");
 
-        Version = "0.04";
+        Version = "0.05";
 
         Modules = modules;
         Values_Map = values_map;
@@ -117,14 +118,25 @@ public class Cli_Module_Vars extends Cli_Module {
 
         // <editor-fold defaultstate="collapsed" desc="Vars: add">
         {
-            // inc @Attention: increment as integer only (String converted to "0")
+            // .<var_name> add <str>
             Cli_Cmd cmd = new Cli_Cmd(CMD_ID_point_var_name_add_str);
             cmd.Text_Set(".<var_name> add <str>");
             cmd.Help_Set("<var_name> add int/var/str");
             cmd.Is_Global_Set(true);
             cmd.Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
             cmd.Item_Add(new Cmd_Item_Word("add", "add"));
-            cmd.Item_Add(new Cmd_Item_Str("<str>", "value to add"));
+            cmd.Item_Add(new Cmd_Item_Str("<str>", "value to add")); // <str> . .v/int/str
+            Cmd_Add(cmd);
+        }
+        {
+            // .<var_name> stradd <str>
+            Cli_Cmd cmd = new Cli_Cmd(CMD_ID_point_var_name_stradd_str);
+            cmd.Text_Set(".<var_name> stradd <str>");
+            cmd.Help_Set("<var_name> add var/str as str");
+            cmd.Is_Global_Set(true);
+            cmd.Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
+            cmd.Item_Add(new Cmd_Item_Word("stradd", "add as str")); // <str> . .v/str
+            cmd.Item_Add(new Cmd_Item_Str("<str>", "value to add as str"));
             Cmd_Add(cmd);
         }
         // </editor-fold>
@@ -261,23 +273,23 @@ public class Cli_Module_Vars extends Cli_Module {
         return true;
     }
 
-    boolean var_add(String point_var_name_str, String add_str) {
+    boolean var_add(String point_var_name_str, String add_str, boolean is_try_add_int) {
         String var_name = point_var_name_str.substring(1);
         boolean found = false;
         for (Map.Entry<String, String> item : Values_Map.entrySet()) {
             String item_var_name = item.getKey();
             if (var_name.equals(item_var_name)) {
                 String item_var_value_old = item.getValue();
-                if (Str_Is_Int(item_var_value_old) && Str_Is_Int(add_str)) { // Case 1: VAR_INT add VALUE_INT
+                if (is_try_add_int && Str_Is_Int(item_var_value_old) && Str_Is_Int(Str_Without_Commas.Get(add_str))) { // Case 1: VAR_INT add VALUE_INT
                     int item_var_value_int_old = Str_To_Int(item_var_value_old);
-                    int add_value_int = Str_To_Int(add_str);
+                    int add_value_int = Str_To_Int(Str_Without_Commas.Get(add_str));
                     int item_var_value_int_new = item_var_value_int_old + add_value_int;
                     Values_Map.put(var_name, Integer.toString(item_var_value_int_new));
                 } else if (add_str.length() > 0 && add_str.charAt(0) == '.') { // Case 2: VAR add VAR
                     Map.Entry<String, String> item_right = Values_Map_Find_By_Var_Name(add_str);
                     if (item_right != null) {
                         String add_var_value = item_right.getValue();
-                        if (Str_Is_Int(item_var_value_old) && Str_Is_Int(add_var_value)) { // Case 2.1: VAR_INT add VAR_INT
+                        if (is_try_add_int && Str_Is_Int(item_var_value_old) && Str_Is_Int(add_var_value)) { // Case 2.1: VAR_INT add VAR_INT
                             int item_var_value_int_old = Str_To_Int(item_var_value_old);
                             int add_value_int = Str_To_Int(add_var_value);
                             int item_var_value_int_new = item_var_value_int_old + add_value_int;
@@ -291,8 +303,7 @@ public class Cli_Module_Vars extends Cli_Module {
                         Cli_Output.Output_NewLine();
                     }
                 } else { // Case 3: VAR add STR
-                    String add_var_value = add_str;
-                    String item_var_value_new = item_var_value_old + add_var_value;
+                    String item_var_value_new = item_var_value_old + Str_Without_Commas.Get(add_str);
                     Values_Map.put(var_name, item_var_value_new);
                 }
                 found = true;
@@ -385,11 +396,20 @@ public class Cli_Module_Vars extends Cli_Module {
             case CMD_ID_point_var_name_add_str:
                 if (is_debug) {
                     return true;
-                }
-                 {
+                } else {
                     String point_var_name_str = cmd.Items.get(0).Value_Str;
                     String add_str = cmd.Items.get(2).Value_Str;
-                    return var_add(point_var_name_str, add_str);
+                    boolean is_try_add_int;
+                    return var_add(point_var_name_str, add_str, is_try_add_int = true);
+                }
+            case CMD_ID_point_var_name_stradd_str:
+                if (is_debug) {
+                    return true;
+                } else {
+                    String point_var_name_str = cmd.Items.get(0).Value_Str;
+                    String add_str = cmd.Items.get(2).Value_Str;
+                    boolean is_try_add_int;
+                    return var_add(point_var_name_str, add_str, is_try_add_int = false);
                 }
 
             // </editor-fold>
