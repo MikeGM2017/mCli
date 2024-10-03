@@ -551,7 +551,37 @@ class Cli_Input_JavaFX extends Cli_Core_JavaFX_Test {
                         String s = event.getText();
                         if (s.length() > 0) {
                             char c = s.charAt(0);
-                            if (Character.isUpperCase(c) && event.isShiftDown()) {
+
+                            if (c == '`' && event.isShiftDown()) {
+                                s = "~";
+                            } else if (c == '1' && event.isShiftDown()) {
+                                s = "!";
+                            } else if (c == '2' && event.isShiftDown()) {
+                                s = "@";
+                            } else if (c == '3' && event.isShiftDown()) {
+                                s = "#";
+                            } else if (c == '4' && event.isShiftDown()) {
+                                s = "$";
+                            } else if (c == '5' && event.isShiftDown()) {
+                                s = "%";
+                            } else if (c == '6' && event.isShiftDown()) {
+                                s = "^";
+                            } else if (c == '7' && event.isShiftDown()) {
+                                s = "&";
+                            } else if (c == '8' && event.isShiftDown()) {
+                                s = "*";
+                            } else if (c == '9' && event.isShiftDown()) {
+                                s = "(";
+                            } else if (c == '0' && event.isShiftDown()) {
+                                s = ")";
+                            } else if (c == '-' && event.isShiftDown()) {
+                                s = "_";
+                            } else if (c == '=' && event.isShiftDown()) {
+                                s = "+";
+                            } else if (c == '\\' && event.isShiftDown()) {
+                                s = "|";
+
+                            } else if (Character.isUpperCase(c) && event.isShiftDown()) {
                                 s = event.getText().toLowerCase();
                             } else if (event.isShiftDown()) {
                                 s = event.getText().toUpperCase();
