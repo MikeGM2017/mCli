@@ -58,7 +58,7 @@ public class Cli_Module_Vars extends Cli_Module {
             char c_single, char c_multy) {
         super("Vars");
 
-        Version = "0.05";
+        Version = "0.06";
 
         Modules = modules;
         Values_Map = values_map;
@@ -166,6 +166,10 @@ public class Cli_Module_Vars extends Cli_Module {
         return v;
     }
 
+    String Int_To_Str(int v) {
+        return Integer.toString(v);
+    }
+
     boolean Char_Is_Digit(char c) {
         if (c >= '0' && c <= '9') {
             return true;
@@ -262,7 +266,7 @@ public class Cli_Module_Vars extends Cli_Module {
             String item_var_name = item.getKey();
             if (var_name.equals(item_var_name)) {
                 int item_var_value_int_new = Str_To_Int(item.getValue()) + 1;
-                Values_Map.put(item_var_name, Integer.toString(item_var_value_int_new));
+                Values_Map.put(item_var_name, Int_To_Str(item_var_value_int_new));
                 found = true;
             }
         }
@@ -284,7 +288,7 @@ public class Cli_Module_Vars extends Cli_Module {
                     int item_var_value_int_old = Str_To_Int(item_var_value_old);
                     int add_value_int = Str_To_Int(Str_Without_Commas.Get(add_str));
                     int item_var_value_int_new = item_var_value_int_old + add_value_int;
-                    Values_Map.put(var_name, Integer.toString(item_var_value_int_new));
+                    Values_Map.put(var_name, Int_To_Str(item_var_value_int_new));
                 } else if (add_str.length() > 0 && add_str.charAt(0) == '.') { // Case 2: VAR add VAR
                     Map.Entry<String, String> item_right = Values_Map_Find_By_Var_Name(add_str);
                     if (item_right != null) {
@@ -293,7 +297,7 @@ public class Cli_Module_Vars extends Cli_Module {
                             int item_var_value_int_old = Str_To_Int(item_var_value_old);
                             int add_value_int = Str_To_Int(add_var_value);
                             int item_var_value_int_new = item_var_value_int_old + add_value_int;
-                            Values_Map.put(var_name, Integer.toString(item_var_value_int_new));
+                            Values_Map.put(var_name, Int_To_Str(item_var_value_int_new));
                         } else { // Case 2.2: VAR add VAR as str
                             String item_var_value_new = item_var_value_old + add_var_value;
                             Values_Map.put(var_name, item_var_value_new);
@@ -326,7 +330,6 @@ public class Cli_Module_Vars extends Cli_Module {
     boolean var_delete(String point_var_name_str) {
         String var_name = point_var_name_str.substring(1);
         boolean found = false;
-        Map<String, String> map_new = new HashMap<>();
         for (Map.Entry<String, String> item : Values_Map.entrySet()) {
             String item_var_name = item.getKey();
             if (Str_Filter.Is_Match(var_name, item_var_name)) {
@@ -334,6 +337,7 @@ public class Cli_Module_Vars extends Cli_Module {
             }
         }
         if (found) {
+            Map<String, String> map_new = new HashMap<>();
             for (Map.Entry<String, String> item : Values_Map.entrySet()) {
                 String item_var_name = item.getKey();
                 if (!Str_Filter.Is_Match(var_name, item_var_name)) {
