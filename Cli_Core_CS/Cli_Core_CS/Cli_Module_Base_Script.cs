@@ -56,125 +56,15 @@ namespace Cli_Core_CS
                 {
                     if (!String.IsNullOrEmpty(main_obj.Script_Thread_FileName))
                     {
+                        main_obj.Cli_Input.Is_Ctrl_C_Pressed_Clear(); // Before starting script - clear stop flag
+
                         String filename = main_obj.Script_Thread_FileName;
                         bool is_no_history = main_obj.Script_Thread_Is_No_History;
 
-                        StreamReader inputFile = null;
-                        try
-                        {
-                            inputFile = new StreamReader(filename);
+                        main_obj.Script_Thread_FileName = "";
+                        main_obj.Script_Thread_Is_No_History = false;
 
-                            if (inputFile != null)
-                            {
-                                main_obj.Cli_Output.Output_NewLine();
-                                main_obj.Cli_Output.Output_NewLine();
-                                main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - Begin");
-                                main_obj.Cli_Output.Output_NewLine();
-
-                                bool is_debug = false;
-                                Ref_Boolean debug_res = new Ref_Boolean(false);
-                                String s = null;
-                                do
-                                {
-                                    if (!main_obj.Cli_Input.Is_Ctrl_C_Pressed_Get())
-                                    {
-                                        s = inputFile.ReadLine();
-                                        if (!String.IsNullOrEmpty(s))
-                                        {
-                                            String s_trim = s.Trim();
-                                            if (!is_no_history && !is_debug && !String.IsNullOrEmpty(s_trim))
-                                            {
-                                                main_obj.History.History_Put(s_trim);
-                                            }
-                                            Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
-                                            main_obj.Cli_Output.Output_Str(s_trim);
-
-                                            main_obj.Script_Command_Str.Value = "";
-                                            main_obj.Script_Label_Str.Value = "";
-
-                                            main_obj.Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
-                                            while (main_obj.Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT)
-                                            {
-                                                main_obj.Cli_Input.Input_sleep(1);
-                                            }
-
-                                            if (main_obj.Script_Command_Str.Value.Length > 0)
-                                            {
-                                                main_obj.Execute_Script_Command(is_debug, debug_res);
-                                                main_obj.Script_Command_Str.Value = "";
-                                            }
-
-                                            //@Warning: Command "check goto <label>" - special case: is moves file position
-                                            if (main_obj.Script_Label_Str.Value.Length > 0)
-                                            {
-                                                bool label_found = main_obj.Execute_Command_check_goto_label(inputFile, main_obj.Script_Label_Str.Value);
-                                                if (!label_found)
-                                                {
-                                                    main_obj.Cli_Output.Output_NewLine();
-                                                    main_obj.Cli_Output.Output_Str("ERROR: label \"" + main_obj.Script_Label_Str.Value + "\" - not found, script stopped");
-                                                    main_obj.Cli_Output.Output_NewLine();
-                                                    main_obj.Cmd_Script_Stop.Value = true; // Stop - label not found
-                                                }
-                                                main_obj.Script_Label_Str.Value = "";
-                                            }
-
-                                        }
-                                    }
-                                    else
-                                    {
-                                        main_obj.Cmd_Script_Stop.Value = true; // Stop By Ctrl+C
-                                    }
-                                } while (!inputFile.EndOfStream && s != null && !main_obj.Cmd_Script_Stop.Value && !main_obj.Cmd_Quit.Value);
-
-                                if (main_obj.Cli_Input.Is_Ctrl_C_Pressed_Get())
-                                {
-                                    main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
-                                    main_obj.Cli_Input.Is_Ctrl_C_Pressed_Clear();
-                                }
-                                else
-                                {
-                                    main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - " + (main_obj.Cmd_Script_Stop.Value ? "Stopped" : "End"));
-                                }
-                                main_obj.Cli_Output.Output_NewLine();
-                                main_obj.Cli_Output.Output_NewLine();
-                                main_obj.Cli_Output.Output_Str(main_obj.Cli_Input.Invitation_Full_Get());
-                                main_obj.Cli_Input.Input_Str_Set_Empty();
-                            }
-                            else
-                            {
-                                main_obj.Cli_Input.Input_sleep(1);
-                            }
-
-                        }
-                        catch (FileNotFoundException ex)
-                        {
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_Str("File \"" + filename + "\" - not found");
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_Str(main_obj.Cli_Input.Invitation_Full_Get());
-                            main_obj.Cli_Input.Input_Str_Set_Empty();
-                        }
-                        catch (IOException ex)
-                        {
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_Str("File \"" + filename + "\" - read error");
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_NewLine();
-                            main_obj.Cli_Output.Output_Str(main_obj.Cli_Input.Invitation_Full_Get());
-                            main_obj.Cli_Input.Input_Str_Set_Empty();
-                        }
-                        finally
-                        {
-                            if (inputFile != null)
-                            {
-                                inputFile.Close();
-                            }
-                            main_obj.Script_Thread_FileName = "";
-                            main_obj.Script_Thread_Is_No_History = false;
-                        }
+                        Execute_Script(main_obj, filename, is_no_history);
                     }
                     else
                     {
@@ -185,13 +75,149 @@ namespace Cli_Core_CS
             }
         }
 
+        static void Execute_Script(Cli_Module_Base_Script main_obj, String filename, bool is_no_history)
+        {
+
+            StreamReader inputFile = null;
+            try
+            {
+                inputFile = new StreamReader(filename);
+
+                if (inputFile != null)
+                {
+                    main_obj.Cli_Output.Output_NewLine();
+                    main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - Begin");
+                    main_obj.Cli_Output.Output_NewLine();
+
+                    bool is_debug = false;
+                    Ref_Boolean debug_res = new Ref_Boolean(false);
+                    String s = null;
+                    do
+                    {
+                        if (!main_obj.Cli_Input.Is_Ctrl_C_Pressed_Get())
+                        {
+                            s = inputFile.ReadLine();
+                            if (!String.IsNullOrEmpty(s))
+                            {
+                                String s_trim = s.Trim();
+                                if (!is_no_history && !is_debug && !String.IsNullOrEmpty(s_trim))
+                                {
+                                    main_obj.History.History_Put(s_trim);
+                                }
+                                Cli_Input_Item input_item = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, s_trim);
+                                main_obj.Cli_Output.Output_Str(s_trim);
+
+                                main_obj.Script_Command_Str.Value = "";
+                                main_obj.Script_Label_Str.Value = "";
+                                main_obj.Script_Thread_FileName = "";
+                                main_obj.Script_Thread_Is_No_History = false;
+
+                                main_obj.Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                                while (main_obj.Cli_Input.Input_Mode_Get() == Input_Mode_Type.INPUT_MODE_WAIT)
+                                {
+                                    main_obj.Cli_Input.Input_sleep(1);
+                                }
+
+                                if (main_obj.Script_Command_Str.Value.Length > 0)
+                                {
+                                    main_obj.Execute_Script_Command(is_debug, debug_res);
+                                    main_obj.Script_Command_Str.Value = "";
+                                }
+
+                                //@Warning: Command "check goto <label>" - special case: is moves file position
+                                if (main_obj.Script_Label_Str.Value.Length > 0)
+                                {
+                                    String label = main_obj.Script_Label_Str.Value;
+                                    main_obj.Script_Label_Str.Value = "";
+                                    bool label_found = main_obj.Execute_Command_check_goto_label(inputFile, label);
+                                    if (!label_found)
+                                    {
+                                        main_obj.Cli_Output.Output_NewLine();
+                                        main_obj.Cli_Output.Output_Str("ERROR: label \"" + label + "\" - not found, script stopped");
+                                        main_obj.Cli_Output.Output_NewLine();
+                                        main_obj.Cmd_Script_Stop.Value = true; // Stop - label not found
+                                    }
+                                }
+
+                                if (main_obj.Script_Thread_FileName.Length > 0)
+                                {
+                                    String nested_script_filename = main_obj.Script_Thread_FileName;
+                                    bool nested_script_is_no_history = main_obj.Script_Thread_Is_No_History;
+
+                                    main_obj.Script_Thread_FileName = "";
+                                    main_obj.Script_Thread_Is_No_History = false;
+
+                                    Execute_Script(main_obj, nested_script_filename, nested_script_is_no_history);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            main_obj.Cmd_Script_Stop.Value = true; // Stop By Ctrl+C
+                        }
+                    } while (!inputFile.EndOfStream && s != null && !main_obj.Cmd_Script_Stop.Value && !main_obj.Cmd_Quit.Value);
+
+                    if (main_obj.Cli_Input.Is_Ctrl_C_Pressed_Get())
+                    {
+                        main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
+                        main_obj.Cli_Input.Is_Ctrl_C_Pressed_Clear();
+                    }
+                    else
+                    {
+                        main_obj.Cli_Output.Output_Str(main_obj.Str_Rem + " Do script " + filename + " - " + (main_obj.Cmd_Script_Stop.Value ? "Stopped" : "End"));
+                        if (main_obj.Cmd_Script_Stop.Value)
+                        {
+                            main_obj.Cmd_Script_Stop.Value = false;
+                        }
+                    }
+                    main_obj.Cli_Output.Output_NewLine();
+                    main_obj.Cli_Output.Output_NewLine();
+                    main_obj.Cli_Output.Output_Str(main_obj.Cli_Input.Invitation_Full_Get());
+                    main_obj.Cli_Input.Input_Str_Set_Empty();
+                }
+                else
+                {
+                    main_obj.Cli_Input.Input_sleep(1);
+                }
+
+            }
+            catch (FileNotFoundException ex)
+            {
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_Str("File \"" + filename + "\" - not found");
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_Str(main_obj.Cli_Input.Invitation_Full_Get());
+                main_obj.Cli_Input.Input_Str_Set_Empty();
+            }
+            catch (IOException ex)
+            {
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_Str("File \"" + filename + "\" - read error");
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_NewLine();
+                main_obj.Cli_Output.Output_Str(main_obj.Cli_Input.Invitation_Full_Get());
+                main_obj.Cli_Input.Input_Str_Set_Empty();
+            }
+            finally
+            {
+                if (inputFile != null)
+                {
+                    inputFile.Close();
+                }
+            }
+        }
+
         public Cli_Module_Base_Script(Cli_History history, Cli_Input_CS cli_input, Cli_Output_CS cli_output,
             String str_rem, Ref_Boolean cmd_script_stop, Ref_Boolean cmd_quit,
             Cli_CMD_Processor cli_command_processor,
             Ref_String script_command_str, Ref_String script_label_str, Ref_String script_dir_str) : base("Base Script")
         {
 
-            Version = "0.03";
+            Version = "0.04";
 
             History = history;
             Cli_Input = cli_input;
@@ -356,6 +382,7 @@ namespace Cli_Core_CS
         public void Execute_Script_Command(bool is_debug, Ref_Boolean debug_res)
         {
             string Script_Command_Str_Trim1 = Script_Command_Str.Value.Trim();
+            Script_Command_Str.Value = "";
             bool is_commas_found = false;
             if (Script_Command_Str_Trim1.Length >= 2
                     && Script_Command_Str_Trim1[0] == '\"'
@@ -379,7 +406,6 @@ namespace Cli_Core_CS
                 Script_Command_Str_Trim2 = Script_Command_Str_Trim1;
             }
             Cli_Input_Item input_item2 = new Cli_Input_Item(Input_Cmd_Type.INPUT_CMD_ENTER, Script_Command_Str_Trim2);
-            Script_Command_Str.Value = "";
             Cli_Command_Processor.Process_Input_Item(input_item2, is_debug, debug_res);
         }
 
