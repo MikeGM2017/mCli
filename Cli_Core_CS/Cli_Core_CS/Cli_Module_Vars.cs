@@ -272,6 +272,7 @@ namespace Cli_Core_CS
                     int item_var_value_int_new = Str_To_Int(item.Value) + 1;
                     Values_Map[item_var_name] = Int_To_Str(item_var_value_int_new);
                     found = true;
+                    break; //@Warning: difference from C++ / JavaFX versions: Values_Map can not be changed in foreach(...) loop
                 }
             }
             if (!found)
