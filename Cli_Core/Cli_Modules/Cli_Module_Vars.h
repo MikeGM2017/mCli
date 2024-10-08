@@ -70,7 +70,7 @@ public:
     Str_Without_Commas(str_without_commas),
     Cli_Output(cli_output), C_Single(c_single), C_Multy(c_multy) {
 
-        Version = "0.06";
+        Version = "0.07";
 
         // <editor-fold defaultstate="collapsed" desc="Vars: get/set">
         {
@@ -229,8 +229,26 @@ public:
         return Values_Map.end();
     }
 
+    string var_name_get(string s) {
+        if (s.length() > 0 && s[0] == '.') {
+            string var_name = s.substr(1);
+            if (var_name.length() > 0 && var_name[0] == '.') {
+                string var_name2 = var_name.substr(1);
+                map<string, string>::iterator iter = Values_Map.find(var_name2);
+                if (iter != Values_Map.end()) {
+                    var_name = iter->second;
+                    if (var_name.length() > 0 && var_name[0] == '.') {
+                        var_name = var_name.substr(1);
+                    }
+                }
+            }
+            return var_name;
+        }
+        return s;
+    }
+
     bool var_set_str(string point_var_name_str, string value_str) {
-        string var_name = point_var_name_str.substr(1);
+        string var_name = var_name_get(point_var_name_str);
         string value_str_without_commas = Str_Without_Commas.Get(value_str);
         Values_Map[var_name] = value_str_without_commas;
         Cli_Output.Output_Str(var_name + " = \"" + value_str_without_commas + "\"");
@@ -241,7 +259,7 @@ public:
     bool var_set_var(string point_var1_name_str, string point_var2_name_str) {
         map<string, string>::iterator iter2 = Values_Map_Find_By_Var_Name(point_var2_name_str);
         if (iter2 != Values_Map.end()) {
-            string var1_name = point_var1_name_str.substr(1);
+            string var1_name = var_name_get(point_var1_name_str);
             string var2_value = iter2->second;
             Values_Map[var1_name] = var2_value;
             Cli_Output.Output_Str(var1_name + " = \"" + var2_value + "\"");

@@ -1,17 +1,82 @@
+
+
+
+$ "Test vars"
+
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
 .v1 = "1"
+.Local_Total inc
+check if .v1 exists ".Local_Passed inc" else ".Local_Failed inc"
+check if .v1 == 1 ".Local_Passed inc" else ".Local_Failed inc"
+
 .v2 = 2
 .v2 inc
+.Local_Total inc
+check if .v2 == 3 ".Local_Passed inc" else ".Local_Failed inc"
+
 .v1 = .v2
+.Local_Total inc
+check if .v1 == 3 ".Local_Passed inc" else ".Local_Failed inc"
+
 .*
 .v2 delete
+.Local_Total inc
+check if .v2 exists ".Local_Failed inc" else ".Local_Passed inc"
+
 .*
 .v3 = "  1234  0"
 .*
 .v3 inc
 .*
-.* delete
-.*
+
+.Local_Total inc
+check if .v3 == 1235 ".Local_Passed inc" else ".Local_Failed inc"
+
+$.* delete
+$.*
 .v1 = .v10
 .v1 inc
 .v1 delete
-.* delete
+$.* delete
+
+.v1 = ".mv2"
+..v1 = z
+.*
+
+.Local_Total inc
+check if .mv2 exists "check goto mv2_exists_label" else "check goto mv2_not_exists_label"
+
+check label mv2_not_exists_label
+
+.Local_Failed inc
+check goto mv2_end_label
+
+check label mv2_exists_label
+.Local_Passed inc
+.Local_Total inc
+check if .mv2 == z ".Local_Passed inc" else ".Local_Failed inc"
+check goto mv2_end_label
+
+check label mv2_end_label
+.*
+
+.v2 = "zz"
+
+..v1 = .v2
+.Local_Total inc
+check if .mv2 == zz ".Local_Passed inc" else ".Local_Failed inc"
+
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+
+$check goto debug_end
