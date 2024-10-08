@@ -1,0 +1,44 @@
+
+
+
+$ Test "var_name_inc_dec"
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+.v1 = 1
+.v2 = 0
+.v3 = z
+
+.v1 inc
+check if .v1 == 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v1 dec
+check if .v1 == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v2 dec
+check if .v == -1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v2 inc
+check if .v2 == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v3 inc
+check if .v3 == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

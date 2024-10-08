@@ -49,6 +49,7 @@ public:
         CMD_ID_point_var_name_assign_point_var_name,
 
         CMD_ID_point_var_name_inc,
+        CMD_ID_point_var_name_dec,
 
         CMD_ID_point_var_name_add_str,
         CMD_ID_point_var_name_stradd_str,
@@ -107,7 +108,7 @@ public:
         }
         // </editor-fold>
 
-        // <editor-fold defaultstate="collapsed" desc="Vars: inc">
+        // <editor-fold defaultstate="collapsed" desc="Vars: inc/dec">
         {
             // inc @Attention: increment as integer only (string converted to "0")
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_inc);
@@ -116,6 +117,16 @@ public:
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
             cmd->Item_Add(new Cmd_Item_Word("inc", "increment"));
+            Cmd_Add(cmd);
+        }
+        {
+            // dec @Attention: decrement as integer only (string converted to "0")
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_dec);
+            cmd->Text_Set(".<var_name> dec");
+            cmd->Help_Set("decrement <var_name>");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
+            cmd->Item_Add(new Cmd_Item_Word("dec", "decrement"));
             Cmd_Add(cmd);
         }
         // </editor-fold>
@@ -277,6 +288,24 @@ public:
         return true;
     }
 
+    bool var_dec(string point_var_name_str) {
+        string var_name = point_var_name_str.substr(1);
+        bool found = false;
+        for (map<string, string>::iterator iter = Values_Map.begin(); iter != Values_Map.end(); iter++) {
+            string item_var_name = iter->first;
+            if (var_name == item_var_name) {
+                int item_var_value_int_new = Str_To_Int(iter->second) - 1;
+                iter->second = Int_To_Str(item_var_value_int_new);
+                found = true;
+            }
+        }
+        if (!found) {
+            Cli_Output.Output_Str(var_name + " - Not Found");
+            Cli_Output.Output_NewLine();
+        }
+        return true;
+    }
+
     bool var_add(string point_var_name_str, string add_str, bool is_try_add_int) {
         string var_name = point_var_name_str.substr(1);
         bool found = false;
@@ -374,13 +403,19 @@ public:
 
                 // </editor-fold>
 
-                // <editor-fold defaultstate="collapsed" desc="Vars: inc">
+                // <editor-fold defaultstate="collapsed" desc="Vars: inc/dec">
 
             case CMD_ID_point_var_name_inc:
                 if (is_debug) return true;
             {
                 string point_var_name_str = cmd->Items[0]->Value_Str;
                 return var_inc(point_var_name_str);
+            }
+            case CMD_ID_point_var_name_dec:
+                if (is_debug) return true;
+            {
+                string point_var_name_str = cmd->Items[0]->Value_Str;
+                return var_dec(point_var_name_str);
             }
 
                 // </editor-fold>
