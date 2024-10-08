@@ -217,18 +217,6 @@ public:
         return true;
     }
 
-    map<string, string>::iterator Values_Map_Find_By_Var_Name(string var_name_arg) {
-        for (map<string, string>::iterator iter = Values_Map.begin();
-                iter != Values_Map.end(); iter++) {
-            string item_var_name = "." + iter->first;
-            if (var_name_arg == item_var_name) {
-                return iter;
-                break;
-            }
-        }
-        return Values_Map.end();
-    }
-
     string var_name_get(string s) {
         if (s.length() > 0 && s[0] == '.') {
             string var_name = s.substr(1);
@@ -257,7 +245,7 @@ public:
     }
 
     bool var_set_var(string point_var1_name_str, string point_var2_name_str) {
-        map<string, string>::iterator iter2 = Values_Map_Find_By_Var_Name(point_var2_name_str);
+        map<string, string>::iterator iter2 = Values_Map.find(point_var2_name_str.substr(1));
         if (iter2 != Values_Map.end()) {
             string var1_name = var_name_get(point_var1_name_str);
             string var2_value = iter2->second;
