@@ -114,6 +114,12 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f17"
+                     displayName="Test_Cmd_Item_Assignment_Mark"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/Test_Cmd_Item_Assignment_Mark.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f6"
                      displayName="Test_Cmd_Item_Date"
                      projectFiles="true"
@@ -580,6 +586,21 @@
           <output>${TESTDIR}/TestFiles/f16</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f17">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f17</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -700,6 +721,11 @@
           <output>${TESTDIR}/TestFiles/f9</output>
         </linkerTool>
       </folder>
+      <item path="tests/Test_Cmd_Item_Assignment_Mark.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="tests/Test_Cmd_Item_Date.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_DateTime.cpp" ex="false" tool="1" flavor2="0">
@@ -1082,6 +1108,21 @@
           <output>${TESTDIR}/TestFiles/f16</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f17">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f17</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -1202,6 +1243,11 @@
           <output>${TESTDIR}/TestFiles/f9</output>
         </linkerTool>
       </folder>
+      <item path="tests/Test_Cmd_Item_Assignment_Mark.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="tests/Test_Cmd_Item_Date.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/Test_Cmd_Item_DateTime.cpp" ex="false" tool="1" flavor2="0">

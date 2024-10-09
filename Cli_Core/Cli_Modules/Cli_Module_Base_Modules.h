@@ -201,7 +201,7 @@ public:
         items.push_back(new Cmd_Item_Word("", ""));
         items.push_back(new Cmd_Item_Word_List("", "", words));
         items.push_back(new Cmd_Item_Word_Range("", "", words));
-        items.push_back(new Cmd_Item_Assignment_Mark("", ""));
+        items.push_back(new Cmd_Item_Assignment_Mark("", "", words));
 
         bool found = false;
         for (int i = 0; i < items.size(); i++) {

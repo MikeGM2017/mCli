@@ -1,0 +1,272 @@
+
+
+
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+
+.v* delete
+.m* delete
+
+$ "Test point_var_name"
+.*
+
+check if .v* exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+
+.v1
+.v1 = 1
+.*
+check if .v1 exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .v1 != 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+$ "Test point_var_name_assign_str"
+.*
+
+.v2 += 1
+.v2
+check if .v2 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 ~ 1
+.v2
+check if .v2 != -2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 ~ z
+.v2
+check if .v2 != -2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 += 1
+.v2
+check if .v2 != -1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 -= 2
+.v2
+check if .v2 != -3 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 *= 3
+.v2
+check if .v2 != -9 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 /= 4
+.v2
+check if .v2 != -2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 /= 0
+.v2
+check if .v2 != -2 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 = 7
+.v2 %= 3
+.v2
+check if .v2 != 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 = 7
+.v2 ^= 4
+.v2
+check if .v2 != 3 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 = 7
+.v2 &= 4
+.v2
+check if .v2 != 4 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v2 = 3
+.v2 |= 4
+.v2
+check if .v2 != 7 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v3 = 1
+.v3 <<= 8
+.v3
+check if .v3 != 256 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+.v3 >>= 4
+.v3
+check if .v3 != 16 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v3 += "100"
+.v3
+check if .v3 != 116 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v3 += "abc"
+.v3
+check if .v3 != 116abc ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v3 %= "abc"
+.v3
+check if .v3 != 116abc ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v4 = .v1
+.v4
+check if .v4 != 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v4 = .v111
+.v4
+check if .v4 != 1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v4 = 4
+.v5 = 5
+.v4 ~ .v5
+.v4
+check if .v4 != -6 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v4 += .v5
+.v4
+check if .v4 != -1 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v6 += .v7
+check if .v6 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v10 = ".mv10"
+..v10 = z
+check if .mv10 exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+check if .mv10 != z ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v11 inc
+check if .v11 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+.v11 = 11
+.v11 inc
+.v11
+check if .v11 != 12 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v12 dec
+check if .v12 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+.v12 = 12
+.v12 dec
+.v12
+check if .v12 != 11 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v13 = 13
+.v13 add 133
+.v13 add .v14
+.v13
+check if .v13 != 146 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v14 = 14
+.v13 add .v14
+.v13
+check if .v13 != 160 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v13 add "233"
+.v13
+check if .v13 != 393 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v13 add z
+.v13
+check if .v13 != 393z ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v13 stradd 333
+.v13
+check if .v13 != 393z333 ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v15 = z
+.v16 = abc
+.v15 add .v16
+.v15
+check if .v15 != zabc ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v17 add 1
+check if .v17 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+.v17 add .v18
+check if .v17 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v19 delete
+check if .v19 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v19 = 19
+check if .v19 exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v19 delete
+check if .v19 exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.v* delete
+check if .v* exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.m* delete
+check if .m* exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*

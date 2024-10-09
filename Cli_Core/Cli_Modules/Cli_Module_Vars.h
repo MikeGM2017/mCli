@@ -73,6 +73,23 @@ public:
 
         Version = "0.07";
 
+        // <editor-fold defaultstate="collapsed" desc="Decl: assign_str/words">
+        string assign_str = "= += -= *= /= %= ^= &= |= <<= >>= ~";
+        vector<string> assign_words;
+        assign_words.push_back("=");
+        assign_words.push_back("+=");
+        assign_words.push_back("-=");
+        assign_words.push_back("*=");
+        assign_words.push_back("/=");
+        assign_words.push_back("%=");
+        assign_words.push_back("^=");
+        assign_words.push_back("&=");
+        assign_words.push_back("|=");
+        assign_words.push_back("<<=");
+        assign_words.push_back(">>=");
+        assign_words.push_back("~");
+        // </editor-fold>
+
         // <editor-fold defaultstate="collapsed" desc="Vars: get/set">
         {
             // get
@@ -91,7 +108,7 @@ public:
             cmd->Help_Set("set <var_name> value of <var2_name>");
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
-            cmd->Item_Add(new Cmd_Item_Assignment_Mark("=", "set"));
+            cmd->Item_Add(new Cmd_Item_Assignment_Mark("assign: " + assign_str, "set", assign_words));
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var2_name>", "var2 name", C_Single, C_Multy));
             Cmd_Add(cmd);
         }
@@ -102,7 +119,7 @@ public:
             cmd->Help_Set("set <var_name> to <str>");
             cmd->Is_Global_Set(true);
             cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
-            cmd->Item_Add(new Cmd_Item_Assignment_Mark("=", "set"));
+            cmd->Item_Add(new Cmd_Item_Assignment_Mark("assign: " + assign_str, "set", assign_words));
             cmd->Item_Add(new Cmd_Item_Str("<str>", "new value"));
             Cmd_Add(cmd);
         }
@@ -270,6 +287,112 @@ public:
         return true;
     }
 
+    bool var_assign_str(string point_var_name_str, string assign_str, string value_str) {
+
+        if (assign_str == "~") {
+            if (Str_Is_Int(value_str)) {
+                string var_name = point_var_name_str.substr(1);
+                int value_int = Str_To_Int(value_str);
+                int var_value_new_int = ~value_int;
+                Values_Map[var_name] = Int_To_Str(var_value_new_int);
+            } else {
+                Cli_Output.Output_Str(assign_str + " - Operator Not Allowed");
+                Cli_Output.Output_NewLine();
+            }
+            return true;
+        }
+
+        map<string, string>::iterator iter = Values_Map.find(point_var_name_str.substr(1));
+        bool var_found = (iter != Values_Map.end());
+        if (var_found) {
+            string var_value_old = iter->second;
+            if (Str_Is_Int(var_value_old) && Str_Is_Int(value_str)) { // Case 1: int <assing: += -= *= /= %= ^= &= |= <<= >>= ~> int
+                int var_value_old_int = Str_To_Int(var_value_old);
+                int value_int = Str_To_Int(value_str);
+                int var_value_new_int = var_value_old_int;
+                // = += -= *= /= %= ^= &= |= <<= >>= ~
+                if (assign_str == "+=") {
+                    var_value_new_int += value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "-=") {
+                    var_value_new_int -= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "*=") {
+                    var_value_new_int *= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "/=") {
+                    if (value_int != 0) {
+                        var_value_new_int /= value_int;
+                        iter->second = Int_To_Str(var_value_new_int);
+                    } else {
+                        Cli_Output.Output_Str(value_str + " - Division by 0 Not Allowed");
+                        Cli_Output.Output_NewLine();
+                    }
+                } else if (assign_str == "%=") {
+                    var_value_new_int %= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "^=") {
+                    var_value_new_int ^= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "&=") {
+                    var_value_new_int &= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "|=") {
+                    var_value_new_int |= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "<<=") {
+                    var_value_new_int <<= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == ">>=") {
+                    var_value_new_int >>= value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else if (assign_str == "~") {
+                    var_value_new_int = ~value_int;
+                    iter->second = Int_To_Str(var_value_new_int);
+                } else {
+                    Cli_Output.Output_Str(assign_str + " - Operator Not Allowed");
+                    Cli_Output.Output_NewLine();
+                }
+            } else {
+                if (assign_str == "+=") { // Case 2: str += str
+                    iter->second += value_str;
+                } else {
+                    Cli_Output.Output_Str(assign_str + " - Operator Not Allowed");
+                    Cli_Output.Output_NewLine();
+                }
+            }
+        } else {
+            Cli_Output.Output_Str(point_var_name_str + " - Not Found");
+            Cli_Output.Output_NewLine();
+        }
+        return true;
+    }
+
+    bool var_assign_var(string point_var1_name_str, string assign_str, string point_var2_name_str) {
+        map<string, string>::iterator iter1 = Values_Map.find(point_var1_name_str.substr(1));
+        bool var1_found = (iter1 != Values_Map.end());
+        map<string, string>::iterator iter2 = Values_Map.find(point_var2_name_str.substr(1));
+        bool var2_found = (iter2 != Values_Map.end());
+
+        if (assign_str == "~" && var2_found) {
+            return var_assign_str(point_var1_name_str, assign_str, iter2->second);
+        }
+
+        if (var1_found && var2_found) {
+            return var_assign_str(point_var1_name_str, assign_str, iter2->second);
+        } else {
+            if (!var1_found) {
+                Cli_Output.Output_Str(point_var1_name_str + " - Not Found");
+                Cli_Output.Output_NewLine();
+            }
+            if (!var2_found) {
+                Cli_Output.Output_Str(point_var2_name_str + " - Not Found");
+                Cli_Output.Output_NewLine();
+            }
+        }
+        return true;
+    }
+
     bool var_inc(string point_var_name_str) {
         string var_name = point_var_name_str.substr(1);
         bool found = false;
@@ -390,15 +513,25 @@ public:
                 if (is_debug) return true;
             {
                 string point_var_name_str = cmd->Items[0]->Value_Str;
+                string assign_str = cmd->Items[1]->Value_Str;
                 string value_str = cmd->Items[2]->Value_Str;
-                return var_set_str(point_var_name_str, value_str);
+                if (assign_str == "=") {
+                    return var_set_str(point_var_name_str, value_str);
+                } else {
+                    return var_assign_str(point_var_name_str, assign_str, Str_Without_Commas.Get(value_str));
+                }
             }
             case CMD_ID_point_var_name_assign_point_var_name:
                 if (is_debug) return true;
             {
                 string point_var1_name_str = cmd->Items[0]->Value_Str;
+                string assign_str = cmd->Items[1]->Value_Str;
                 string point_var2_name_str = cmd->Items[2]->Value_Str;
-                return var_set_var(point_var1_name_str, point_var2_name_str);
+                if (assign_str == "=") {
+                    return var_set_var(point_var1_name_str, point_var2_name_str);
+                } else {
+                    return var_assign_var(point_var1_name_str, assign_str, point_var2_name_str);
+                }
             }
 
                 // </editor-fold>

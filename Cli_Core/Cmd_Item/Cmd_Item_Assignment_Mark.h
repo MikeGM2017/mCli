@@ -14,21 +14,78 @@
 #ifndef CMD_ITEM_ASSIGNMENT_MARK_H
 #define CMD_ITEM_ASSIGNMENT_MARK_H
 
-#include "Cmd_Item_Base.h"
+#include "Cmd_Item_EQU_Range.h"
 
-class Cmd_Item_Assignment_Mark : public Cmd_Item_Base {
+class Cmd_Item_Assignment_Mark : public Cmd_Item_EQU_Range {
 protected:
 
     virtual bool Is_Char_Valid(char c, int pos, int len) {
-        // =
-        if (len == 1 && pos == 0 && c == '=') return true;
+        // = += -= *= /= %= ^= &= |= <<= >>= ~=
+        if (len == 1) {
+            if (pos == 0) {
+                if (c == '=') return true;
+
+                if (c == '+') return true;
+                if (c == '-') return true;
+                if (c == '*') return true;
+                if (c == '/') return true;
+                if (c == '%') return true;
+                if (c == '^') return true;
+                if (c == '&') return true;
+                if (c == '|') return true;
+                if (c == '~') return true;
+
+                if (c == '<') return true;
+                if (c == '>') return true;
+            }
+        }
+        if (len == 2) {
+            if (pos == 0) {
+                if (c == '+') return true;
+                if (c == '-') return true;
+                if (c == '*') return true;
+                if (c == '/') return true;
+                if (c == '%') return true;
+                if (c == '^') return true;
+                if (c == '&') return true;
+                if (c == '|') return true;
+
+                if (c == '<') return true;
+                if (c == '>') return true;
+                return false;
+            }
+            if (pos == 1) {
+                if (c == '=') return true;
+
+                if (c == '<') return true;
+                if (c == '>') return true;
+                return false;
+            }
+        }
+        if (len == 3) {
+            if (pos == 0) {
+                if (c == '<') return true;
+                if (c == '>') return true;
+                return false;
+            }
+            if (pos == 1) {
+                if (c == '<') return true;
+                if (c == '>') return true;
+                return false;
+            }
+            if (pos == 2) {
+                if (c == '=') return true;
+                return false;
+            }
+        }
         return false;
     }
 
 public:
 
-    Cmd_Item_Assignment_Mark(string text, string help) : Cmd_Item_Base(text, help) {
+    Cmd_Item_Assignment_Mark(string text, string help, vector<string> words) : Cmd_Item_EQU_Range(text, help, words) {
         Type = "Assignment_Mark";
+        Version = "0.02";
     }
 
 };

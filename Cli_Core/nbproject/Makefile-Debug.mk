@@ -43,6 +43,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
+	${TESTDIR}/TestFiles/f17 \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f13 \
@@ -62,6 +63,7 @@ TESTFILES= \
 
 # Test Object Files
 TESTOBJECTFILES= \
+	${TESTDIR}/tests/Test_Cmd_Item_Assignment_Mark.o \
 	${TESTDIR}/tests/Test_Cmd_Item_Date.o \
 	${TESTDIR}/tests/Test_Cmd_Item_DateTime.o \
 	${TESTDIR}/tests/Test_Cmd_Item_IP4.o \
@@ -119,6 +121,10 @@ ${OBJECTDIR}/cli_core_test_main.o: cli_core_test_main.cpp
 # Build Test Targets
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
 .build-tests-subprojects:
+
+${TESTDIR}/TestFiles/f17: ${TESTDIR}/tests/Test_Cmd_Item_Assignment_Mark.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f17 $^ ${LDLIBSOPTIONS} 
 
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/Test_Cmd_Item_Date.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
@@ -183,6 +189,12 @@ ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/Test_Cmd_Item_Word_Range.o ${OBJECTFIL
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/Test_Str_Filter.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
+
+
+${TESTDIR}/tests/Test_Cmd_Item_Assignment_Mark.o: tests/Test_Cmd_Item_Assignment_Mark.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I. -ICli_Core -ICli_Input -ICli_Output -ICli_Modules -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -ICli_CMD_Processor -ICli_TAB_Processor -ICli_Module_Test -I../lua-5.3.5/src -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/Test_Cmd_Item_Assignment_Mark.o tests/Test_Cmd_Item_Assignment_Mark.cpp
 
 
 ${TESTDIR}/tests/Test_Cmd_Item_Date.o: tests/Test_Cmd_Item_Date.cpp 
@@ -311,6 +323,7 @@ ${OBJECTDIR}/cli_core_test_main_nomain.o: ${OBJECTDIR}/cli_core_test_main.o cli_
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
+	    ${TESTDIR}/TestFiles/f17 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f13 || true; \

@@ -1,0 +1,75 @@
+
+
+
+$ "Test vars_assign"
+
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v1 = 1
+check if .v1 exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .v1 == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v2 = 2
+
+.v1 += 1
+check if .v1 == 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 -= 1
+check if .v1 == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 = 2
+.v1 *= 100
+check if .v1 == 200 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 /= 4
+check if .v1 == 50 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 = 7
+.v1 %= 4
+check if .v1 == 3 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 = 7
+.v1 ^= 2
+check if .v1 == 5 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 = 7
+.v1 &= 4
+check if .v1 == 4 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 = 1
+.v1 <<= 4
+check if .v1 == 16 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 = 32
+.v1 >>= 4
+check if .v1 == 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.v1 = 7
+.v1 ~ 3
+check if .v1 == 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+
+.*
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+
+$check goto debug_end

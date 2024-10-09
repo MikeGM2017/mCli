@@ -32,8 +32,8 @@ check if .v2 exists ".Local_Failed inc" else ".Local_Passed inc"
 .v3 inc
 .*
 
-.Local_Total inc
 check if .v3 == 1235 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
 
 $.* delete
 $.*
@@ -46,8 +46,8 @@ $.* delete
 ..v1 = z
 .*
 
-.Local_Total inc
 check if .mv2 exists "check goto mv2_exists_label" else "check goto mv2_not_exists_label"
+.Local_Total inc
 
 check label mv2_not_exists_label
 
@@ -66,8 +66,8 @@ check label mv2_end_label
 .v2 = "zz"
 
 ..v1 = .v2
-.Local_Total inc
 check if .mv2 == zz ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
 
 .*
 
