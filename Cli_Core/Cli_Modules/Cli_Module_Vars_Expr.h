@@ -49,6 +49,7 @@ public:
         CMD_ID_NO,
 
         CMD_ID_point_var_name_equ_expr_str,
+        CMD_ID_point_var_name_equ_expr_str_verbose,
 
         CMD_ID_LAST
     };
@@ -75,6 +76,19 @@ public:
             cmd->Item_Add(new Cmd_Item_Assignment_Mark("=", "set"));
             cmd->Item_Add(new Cmd_Item_Word("expr", "set expression"));
             cmd->Item_Add(new Cmd_Item_Str("<expr_str>", "expression"));
+            Cmd_Add(cmd);
+        }
+        {
+            // var assign expr_str verbose
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_point_var_name_equ_expr_str_verbose);
+            cmd->Text_Set(".<var_name> = expr <expr_str> verbose");
+            cmd->Help_Set("set <var_name> to <expr_str> with verbose information");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Point_Var_Name(".<var_name>", "var name", C_Single, C_Multy));
+            cmd->Item_Add(new Cmd_Item_Assignment_Mark("=", "set"));
+            cmd->Item_Add(new Cmd_Item_Word("expr", "set expression"));
+            cmd->Item_Add(new Cmd_Item_Str("<expr_str>", "expression"));
+            cmd->Item_Add(new Cmd_Item_Word("verbose", "with verbose information"));
             Cmd_Add(cmd);
         }
 
@@ -444,7 +458,7 @@ public:
         return t;
     }
 
-    bool EXPR_Tokens_Get(string expr_str, vector<EXPR_Token> &tokens, EXPR_Token &token_error) {
+    bool EXPR_Tokens_Get(string expr_str, vector<EXPR_Token> &tokens, EXPR_Token &token_error, bool is_verbose) {
         int expr_str_pos = 0;
         bool res = true; // Ok
         bool stop = false;
@@ -453,9 +467,11 @@ public:
             if (t.Type != EXPR_TT_SPACE) {
                 tokens.push_back(t);
             }
-            if (t.Type > EXPR_TT_NO && t.Type <= EXPR_TT_ERROR) {// && t.Type != EXPR_TT_SPACE && t.Type != EXPR_TT_END) {
-                Cli_Output.Output_Str("\"" + t.Text + "\" " + EXPR_TT_To_Str(t.Type));
-                Cli_Output.Output_NewLine();
+            if (is_verbose) {
+                if (t.Type > EXPR_TT_NO && t.Type <= EXPR_TT_ERROR && t.Type != EXPR_TT_SPACE && t.Type != EXPR_TT_END) {
+                    Cli_Output.Output_Str("\"" + t.Text + "\" " + EXPR_TT_To_Str(t.Type));
+                    Cli_Output.Output_NewLine();
+                }
             }
             if (t.Type == EXPR_TT_END || t.Type == EXPR_TT_NO || t.Type == EXPR_TT_ERROR || t.Type >= EXPR_TT_LAST) {
                 stop = true;
@@ -574,11 +590,11 @@ public:
         return res;
     }
 
-    bool EXPR_Calc(string expr_str, string &res_str, string &error_str) {
+    bool EXPR_Calc(string expr_str, string &res_str, string &error_str, bool is_verbose) {
         bool res = true; // Ok
         vector<EXPR_Token> tokens;
         EXPR_Token token_error;
-        bool res_tokens = EXPR_Tokens_Get(expr_str, tokens, token_error);
+        bool res_tokens = EXPR_Tokens_Get(expr_str, tokens, token_error, is_verbose);
         if (res_tokens) {
             res = EXPR_Tokens_Calc(tokens, res_str, error_str);
         } else {
@@ -590,18 +606,25 @@ public:
 
     // </editor-fold>
 
-    bool var_set_expr(string point_var_name_str, string expr_str) {
-        Cli_Output.Output_Str(point_var_name_str + " = expr \"" + expr_str + "\"");
-        Cli_Output.Output_NewLine();
+    bool var_set_expr(string point_var_name_str, string expr_str, bool is_verbose) {
+
+        if (is_verbose) {
+            Cli_Output.Output_Str(point_var_name_str + " = expr \"" + expr_str + "\"");
+            Cli_Output.Output_NewLine();
+        }
 
         string res_str;
         string error_str;
 
-        bool res_calc = EXPR_Calc(expr_str, res_str, error_str);
+        bool res_calc = EXPR_Calc(expr_str, res_str, error_str, is_verbose);
 
         if (res_calc) {
             string var_name = point_var_name_str.substr(1);
             Values_Map[var_name] = res_str;
+            if (is_verbose) {
+                Cli_Output.Output_Str(point_var_name_str + " = \"" + res_str + "\"");
+                Cli_Output.Output_NewLine();
+            }
         } else {
             Cli_Output.Output_Str(expr_str + " - " + error_str);
             Cli_Output.Output_NewLine();
@@ -619,7 +642,16 @@ public:
             {
                 string point_var_name_str = cmd->Items[0]->Value_Str;
                 string expr_str = Str_Without_Commas.Get(cmd->Items[3]->Value_Str);
-                return var_set_expr(point_var_name_str, expr_str);
+                bool is_verbose;
+                return var_set_expr(point_var_name_str, expr_str, is_verbose = false);
+            }
+            case CMD_ID_point_var_name_equ_expr_str_verbose:
+                if (is_debug) return true;
+            {
+                string point_var_name_str = cmd->Items[0]->Value_Str;
+                string expr_str = Str_Without_Commas.Get(cmd->Items[3]->Value_Str);
+                bool is_verbose;
+                return var_set_expr(point_var_name_str, expr_str, is_verbose = true);
             }
 
             default:
