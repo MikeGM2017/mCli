@@ -1,0 +1,178 @@
+
+
+
+$ "Test vars expr"
+
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+.v = expr ""
+check if .v exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .v == "" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "abc"
+check if .v == abc ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr +1
+check if .v == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr -1
+check if .v == -1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr ~7
+check if .v == -8 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr !7
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr !0
+check if .v == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr ++1
+check if .v == 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr --1
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr **1
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .EXPR_Error == "true" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+.EXPR_Error delete
+.EXPR_Error_Str delete
+
+.v = expr "1+2"
+check if .v == 3 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "1-2"
+check if .v == -1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "1*2"
+check if .v == 2 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "1/2"
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "1/0"
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .EXPR_Error == "true" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+.EXPR_Error delete
+.EXPR_Error_Str delete
+
+.v = expr "1%2"
+check if .v == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "1^2"
+check if .v == 3 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "7&3"
+check if .v == 3 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "7|3"
+check if .v == 7 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "7&&3"
+check if .v == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "7&&0"
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "0&&0"
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "7||3"
+check if .v == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "7||0"
+check if .v == 1 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "0||0"
+check if .v == 0 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "1 << 5"
+check if .v == 32 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "256 >> 4"
+check if .v == 16 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v = expr "256 >>> 4"
+check if .EXPR_Error == "true" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+.EXPR_Error delete
+.EXPR_Error_Str delete
+
+.v = expr "1+2+3"
+check if .EXPR_Error == "true" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+.EXPR_Error delete
+.EXPR_Error_Str delete
+
+
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

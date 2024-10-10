@@ -49,6 +49,7 @@ using namespace std;
 #include "Cli_Module_Test_Terminal.h"
 
 #include "Cli_Module_Vars.h"
+#include "Cli_Module_Vars_Expr.h"
 #include "Cli_Module_Check.h"
 #include "Cli_Module_Base_Level.h"
 #include "Cli_Module_Lua.h"
@@ -230,6 +231,9 @@ int main(int argc, char *argv[]) {
     Str_Get_Without_Commas str_without_commas;
 
     Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
+            Cli_Output, C_Single, C_Multy)));
+
+    Modules.Add((new Cli_Module_Vars_Expr(Values_Map, str_without_commas,
             Cli_Output, C_Single, C_Multy)));
 
     Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas,
