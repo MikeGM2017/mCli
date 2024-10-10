@@ -1,0 +1,71 @@
+
+
+
+$ "Test vars expr 2"
+
+.Local_Passed = 0
+.Local_Failed = 0
+.Local_Total = 0
+
+check if .v exists ".v delete"
+check if .v1 exists ".v1 delete"
+check if .v2 exists ".v2 delete"
+check if .mv1 exists ".mv1 delete"
+check if .mv2 exists ".mv2 delete"
+check if .EXPR_Error exists ".EXPR_Error delete"
+check if .EXPR_Error_Str exists ".EXPR_Error_Str delete"
+
+.v1 = ".mv1"
+.v2 = ".mv2"
+
+.*
+
+.v = expr "..v1+1" verbose
+check if .EXPR_Error exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .EXPR_Error == "true" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .EXPR_Error_Str exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .v exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.EXPR_Error delete
+.EXPR_Error_Str delete
+.mv1 = 1001
+.v = expr "..v1+1" verbose
+check if .v == 1002 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+.v delete
+.v = expr "..v1+..v2" verbose
+check if .EXPR_Error exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .EXPR_Error == "true" ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .EXPR_Error_Str exists ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+check if .v exists ".Local_Failed inc" else ".Local_Passed inc"
+.Local_Total inc
+.*
+
+.EXPR_Error delete
+.EXPR_Error_Str delete
+.mv2 = 10002
+.v = expr "..v1+..v2" verbose
+check if .v == 11003 ".Local_Passed inc" else ".Local_Failed inc"
+.Local_Total inc
+.*
+
+
+
+.Total add .Local_Total
+check if .Local_Passed == 0 ".Local_Failed add .Local_Total"
+check if .Local_Passed == 0 ".Failed add .Local_Total"
+check if .Local_Failed == 0 ".Passed add .Local_Total"
+check if .Local_Failed != 0 ".Failed add .Local_Failed"
+.*
+
+$check goto debug_end

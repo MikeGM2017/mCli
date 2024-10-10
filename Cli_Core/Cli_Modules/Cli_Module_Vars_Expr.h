@@ -488,6 +488,57 @@ public:
 
     // <editor-fold defaultstate="collapsed" desc="EXPR_Tokens_Calc()/EXPR_Calc()">
 
+    bool Str_Is_Var(string s) {
+        return POINT_VAR_NAME_Is_Valid(s);
+    }
+
+    string Str_To_Var_Name(string s) {
+        return s.substr(1);
+    }
+
+    bool Str_To_Int_Or_Error(string s, int &left_int,
+            string &error_str, const string EXPR_Error, const string EXPR_Error_Str, const string EXPR_Error_true) {
+        bool res = true; // Ok
+        if (Str_Is_Var(s)) { // Cases: .v or ..v
+            string left_var_name = Str_To_Var_Name(s);
+            if (Str_Is_Var(left_var_name)) { // Case: ..v
+                string left_var_name2 = Str_To_Var_Name(left_var_name);
+                map<string, string>::iterator left_var_iter2 = Values_Map.find(left_var_name2);
+                bool left_var_found2 = (left_var_iter2 != Values_Map.end());
+                if (left_var_found2) {
+                    string left_var_name3 = Str_To_Var_Name(left_var_iter2->second);
+                    map<string, string>::iterator left_var_iter3 = Values_Map.find(left_var_name3);
+                    bool left_var_found3 = (left_var_iter3 != Values_Map.end());
+                    if (left_var_found3) {
+                        left_int = Str_To_Int(left_var_iter3->second);
+                    } else {
+                        error_str = left_var_name + " -> ." + left_var_name3 + " - Not found";
+                        Values_Map[EXPR_Error] = EXPR_Error_true;
+                        Values_Map[EXPR_Error_Str] = error_str;
+                        res = false;
+                    }
+                } else {
+                    error_str = "." + left_var_name2 + " - Not found";
+                    Values_Map[EXPR_Error] = EXPR_Error_true;
+                    Values_Map[EXPR_Error_Str] = error_str;
+                    res = false;
+                }
+            } else { // Cases: .v -> int or str
+                map<string, string>::iterator left_var_iter = Values_Map.find(left_var_name);
+                bool left_var_found = (left_var_iter != Values_Map.end());
+                if (left_var_found) {
+                    left_int = Str_To_Int(left_var_iter->second);
+                } else {
+                    error_str = "." + left_var_name + " - Not found";
+                    Values_Map[EXPR_Error] = EXPR_Error_true;
+                    Values_Map[EXPR_Error_Str] = error_str;
+                    res = false;
+                }
+            }
+        }
+        return res;
+    }
+
     bool EXPR_Tokens_Calc(vector<EXPR_Token> &tokens, string &res_str, string &error_str) {
         static const string EXPR_Error = "EXPR_Error";
         static const string EXPR_Error_Str = "EXPR_Error_Str";
@@ -498,27 +549,34 @@ public:
             res_str = "";
         } else if (tokens.size() == 2) { // Assign
             res_str = tokens[0].Text;
-        } else if (tokens.size() == 3 && !Str_Is_Int(tokens[0].Text) && Str_Is_Int(tokens[1].Text)) { // Unary pre operations
+        } else if (tokens.size() == 3) { // Unary pre operations
             string op_str = tokens[0].Text;
             string left_str = tokens[1].Text;
 
-            int left_int = Str_To_Int(left_str);
+            int left_value_int = Str_To_Int(left_str);
+
+            bool left_res = Str_To_Int_Or_Error(left_str, left_value_int, error_str, EXPR_Error, EXPR_Error_Str, EXPR_Error_true);
+
+            if (!left_res) {
+                res = false; // Failed
+                return res;
+            }
 
             int res_int = 0;
 
             // + - ~ ! ++ --
             if (op_str == "+") {
-                res_int = +left_int;
+                res_int = +left_value_int;
             } else if (op_str == "-") {
-                res_int = -left_int;
+                res_int = -left_value_int;
             } else if (op_str == "~") {
-                res_int = ~left_int;
+                res_int = ~left_value_int;
             } else if (op_str == "!") {
-                res_int = !left_int;
+                res_int = !left_value_int;
             } else if (op_str == "++") {
-                res_int = ++left_int;
+                res_int = ++left_value_int;
             } else if (op_str == "--") {
-                res_int = --left_int;
+                res_int = --left_value_int;
             } else {
                 error_str = op_str + " - Operator Not Allowed";
                 Values_Map[EXPR_Error] = EXPR_Error_true;
@@ -533,21 +591,29 @@ public:
             string op_str = tokens[1].Text;
             string right_str = tokens[2].Text;
 
-            int left_int = Str_To_Int(left_str);
-            int right_int = Str_To_Int(right_str);
+            int left_value_int = Str_To_Int(left_str);
+            int right_value_int = Str_To_Int(right_str);
+
+            bool left_res = Str_To_Int_Or_Error(left_str, left_value_int, error_str, EXPR_Error, EXPR_Error_Str, EXPR_Error_true);
+            bool right_res = Str_To_Int_Or_Error(right_str, right_value_int, error_str, EXPR_Error, EXPR_Error_Str, EXPR_Error_true);
+
+            if (!left_res || !right_res) {
+                res = false; // Failed
+                return res;
+            }
 
             int res_int = 0;
 
             // + - * / % ^ & | && || << >>
             if (op_str == "+") {
-                res_int = left_int + right_int;
+                res_int = left_value_int + right_value_int;
             } else if (op_str == "-") {
-                res_int = left_int - right_int;
+                res_int = left_value_int - right_value_int;
             } else if (op_str == "*") {
-                res_int = left_int * right_int;
+                res_int = left_value_int * right_value_int;
             } else if (op_str == "/") {
-                if (right_int != 0) {
-                    res_int = left_int / right_int;
+                if (right_value_int != 0) {
+                    res_int = left_value_int / right_value_int;
                 } else {
                     error_str = "Division by 0 Not Allowed";
                     Values_Map[EXPR_Error] = EXPR_Error_true;
@@ -555,21 +621,21 @@ public:
                     res = false;
                 }
             } else if (op_str == "%") {
-                res_int = left_int % right_int;
+                res_int = left_value_int % right_value_int;
             } else if (op_str == "^") {
-                res_int = left_int ^ right_int;
+                res_int = left_value_int ^ right_value_int;
             } else if (op_str == "&") {
-                res_int = left_int & right_int;
+                res_int = left_value_int & right_value_int;
             } else if (op_str == "|") {
-                res_int = left_int | right_int;
+                res_int = left_value_int | right_value_int;
             } else if (op_str == "&&") {
-                res_int = left_int && right_int;
+                res_int = left_value_int && right_value_int;
             } else if (op_str == "||") {
-                res_int = left_int || right_int;
+                res_int = left_value_int || right_value_int;
             } else if (op_str == "<<") {
-                res_int = left_int << right_int;
+                res_int = left_value_int << right_value_int;
             } else if (op_str == ">>") {
-                res_int = left_int >> right_int;
+                res_int = left_value_int >> right_value_int;
             } else {
                 error_str = op_str + " - Operator Not Allowed";
                 Values_Map[EXPR_Error] = EXPR_Error_true;
