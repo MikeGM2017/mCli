@@ -50,6 +50,7 @@
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter_Abstract.h</itemPath>
+        <itemPath>Cli_Modules/Str_Get_Int.h</itemPath>
         <itemPath>Cli_Modules/Str_Get_Without_Commas.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="Cli_Output" projectFiles="true">
@@ -359,6 +360,8 @@
       <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Get_Int.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Str_Get_Without_Commas.h"
             ex="false"
@@ -863,6 +866,8 @@
       <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Get_Int.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Str_Get_Without_Commas.h"
             ex="false"

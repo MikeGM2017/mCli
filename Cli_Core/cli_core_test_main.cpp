@@ -40,6 +40,7 @@ using namespace std;
 #include "Str_Filter.h"
 
 #include "Str_Get_Without_Commas.h"
+#include "Str_Get_Int.h"
 
 #include "Cli_CMD_Processor.h"
 
@@ -229,14 +230,15 @@ int main(int argc, char *argv[]) {
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
     Str_Get_Without_Commas str_without_commas;
+    Str_Get_Int str_int;
 
-    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas,
+    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas, str_int,
             Cli_Output, C_Single, C_Multy)));
 
-    Modules.Add((new Cli_Module_Vars_Expr(Values_Map, str_without_commas,
+    Modules.Add((new Cli_Module_Vars_Expr(Values_Map, str_without_commas, str_int,
             Cli_Output, C_Single, C_Multy)));
 
-    Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas,
+    Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas, str_int,
             Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str,
             Do_Command_Object)));
 

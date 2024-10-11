@@ -32,6 +32,7 @@ using namespace std;
 #include "Str_Filter_Abstract.h"
 
 #include "Str_Get_Without_Commas.h"
+#include "Str_Get_Int.h"
 
 #include "Do_Abstract.h"
 
@@ -45,6 +46,8 @@ protected:
     Str_Filter_Abstract &Str_Filter;
 
     Str_Get_Without_Commas &Str_Without_Commas;
+
+    Str_Get_Int &Str_Int;
 
     Cli_Output_Abstract &Cli_Output;
 
@@ -102,20 +105,20 @@ public:
 
     Cli_Module_Check(Cli_Modules &modules, map<string, string> &values_map,
             Str_Filter_Abstract &str_filter,
-            Str_Get_Without_Commas &str_without_commas,
+            Str_Get_Without_Commas &str_without_commas, Str_Get_Int &str_int,
             Cli_Output_Abstract &cli_output,
             bool &cmd_script_stop,
             string &script_command_str, string &script_label_str,
             Do_Abstract &do_command_object) : Cli_Module("Check"),
     Modules(modules), Values_Map(values_map),
     Str_Filter(str_filter),
-    Str_Without_Commas(str_without_commas),
+    Str_Without_Commas(str_without_commas), Str_Int(str_int),
     Cli_Output(cli_output),
     Cmd_Script_Stop(cmd_script_stop),
     Script_Command_Str(script_command_str), Script_Label_Str(script_label_str),
     Do_Command_Object(do_command_object) {
 
-        Version = "0.06";
+        Version = "0.07";
 
         // <editor-fold defaultstate="collapsed" desc="Decl: cmp_int_str/words, cmp_str_str/words">
         string cmp_int_str = "== != < > <= >= & | && ||";
@@ -374,35 +377,10 @@ public:
         return s;
     }
 
-    bool Char_Is_Digit(char c) {
-        if (c >= '0' && c <= '9') return true;
-        return false;
-    }
-
-    bool Char_Is_Digit_Or_Plus_Or_Minus(char c) {
-        if (c >= '0' && c <= '9') return true;
-        if (c == '+') return true;
-        if (c == '-') return true;
-        return false;
-    }
-
-    bool Str_Is_Int(string s) {
-        if (s.empty()) return false; // Case: empty string is not digit
-        for (int i = 0; i < s.length(); i++) {
-            char c = s[i];
-            if (i == 0) {
-                if (!Char_Is_Digit_Or_Plus_Or_Minus(c)) return false;
-            } else {
-                if (!Char_Is_Digit(c)) return false;
-            }
-        }
-        return true;
-    }
-
     Local_Compare_Result Compare_Values_Str_Or_Int(string var_left_value, string s_compare, string var_right_value) {
         Local_Compare_Result cmp_res = CMP_ERROR;
 
-        if (Str_Is_Int(var_left_value) && Str_Is_Int(var_right_value)) {
+        if (Str_Int.Str_Is_Int(var_left_value) && Str_Int.Str_Is_Int(var_right_value)) {
             int var_left_value_int = atoi(Str_Without_Commas.Get(var_left_value).c_str());
             int var_right_value_int = atoi(Str_Without_Commas.Get(var_right_value).c_str());
             cmp_res = Compare_Values_Int(var_left_value_int, s_compare, var_right_value_int);

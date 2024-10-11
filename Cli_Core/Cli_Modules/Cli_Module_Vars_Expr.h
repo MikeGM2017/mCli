@@ -32,6 +32,7 @@ using namespace std;
 #include "Cli_Output_Abstract.h"
 
 #include "Str_Get_Without_Commas.h"
+#include "Str_Get_Int.h"
 
 class Cli_Module_Vars_Expr : public Cli_Module {
 protected:
@@ -39,6 +40,7 @@ protected:
     map<string, string> &Values_Map;
     Str_Get_Without_Commas &Str_Without_Commas;
     Cli_Output_Abstract &Cli_Output;
+    Str_Get_Int &Str_Int;
 
     char C_Single;
     char C_Multy;
@@ -59,12 +61,14 @@ public:
     }
 
     Cli_Module_Vars_Expr(map<string, string> &values_map,
-            Str_Get_Without_Commas &str_without_commas,
+            Str_Get_Without_Commas &str_without_commas, Str_Get_Int &str_int,
             Cli_Output_Abstract &cli_output,
             char c_single = '?', char c_multy = '*') :
     Cli_Module("Vars_Expr"), Values_Map(values_map),
-    Str_Without_Commas(str_without_commas),
+    Str_Without_Commas(str_without_commas), Str_Int(str_int),
     Cli_Output(cli_output), C_Single(c_single), C_Multy(c_multy) {
+
+        Version = "0.02";
 
         {
             // var assign expr_str
@@ -95,42 +99,6 @@ public:
     }
 
     ~Cli_Module_Vars_Expr() {
-    }
-
-    string Int_To_Str(int v) {
-        stringstream s_str;
-        s_str << v;
-        return s_str.str();
-    }
-
-    int Str_To_Int(string s) {
-        return atoi(s.c_str());
-    }
-
-    bool Char_Is_Digit(char c) {
-        if (c >= '0' && c <= '9') return true;
-        return false;
-    }
-
-    bool Char_Is_Digit_Or_Plus_Or_Minus(char c) {
-        if (c >= '0' && c <= '9') return true;
-        if (c == '+') return true;
-        if (c == '-') return true;
-        return false;
-    }
-
-    bool Str_Is_Int(string s) {
-        if (s.empty()) return false; // Case: empty string is not digit
-        if (s.size() == 1 && !Char_Is_Digit(s[0])) return false; // Case: "+" or "-" without digits
-        for (int i = 0; i < s.length(); i++) {
-            char c = s[i];
-            if (i == 0) {
-                if (!Char_Is_Digit_Or_Plus_Or_Minus(c)) return false;
-            } else {
-                if (!Char_Is_Digit(c)) return false;
-            }
-        }
-        return true;
     }
 
     // <editor-fold defaultstate="collapsed" desc="EXPR_TT">
@@ -564,9 +532,9 @@ public:
                 return res;
             }
 
-            if (Str_Is_Int(left_value_str)) { // Case: op / int
+            if (Str_Int.Str_Is_Int(left_value_str)) { // Case: op / int
 
-                int left_value_int = Str_To_Int(left_value_str);
+                int left_value_int = Str_Int.Str_To_Int(left_value_str);
 
                 int res_int = 0;
 
@@ -590,7 +558,7 @@ public:
                     res = false;
                 }
 
-                res_str = Int_To_Str(res_int);
+                res_str = Str_Int.Int_To_Str(res_int);
 
             } else { // Case: op / str - not allowed
                 error_str = op_str + " - Operator Not Allowed";
@@ -615,10 +583,10 @@ public:
                 return res;
             }
 
-            if (Str_Is_Int(left_value_str) && Str_Is_Int(right_value_str)) {
+            if (Str_Int.Str_Is_Int(left_value_str) && Str_Int.Str_Is_Int(right_value_str)) {
 
-                int left_value_int = Str_To_Int(left_value_str);
-                int right_value_int = Str_To_Int(right_value_str);
+                int left_value_int = Str_Int.Str_To_Int(left_value_str);
+                int right_value_int = Str_Int.Str_To_Int(right_value_str);
 
                 int res_int = 0;
 
@@ -661,7 +629,7 @@ public:
                     res = false;
                 }
 
-                res_str = Int_To_Str(res_int);
+                res_str = Str_Int.Int_To_Str(res_int);
             } else { // Case: str op str
                 // + only
                 if (op_str == "+") {
@@ -675,7 +643,7 @@ public:
             }
         } else {
             if (tokens.size() > 4) {
-                error_str = Int_To_Str(tokens.size() - 1) + " tokens - Too Complex Expression";
+                error_str = Str_Int.Int_To_Str(tokens.size() - 1) + " tokens - Too Complex Expression";
                 Values_Map[EXPR_Error] = EXPR_Error_true;
                 Values_Map[EXPR_Error_Str] = error_str;
                 res = false;
@@ -693,7 +661,7 @@ public:
         if (res_tokens) {
             res = EXPR_Tokens_Calc(tokens, res_str, error_str);
         } else {
-            error_str = expr_str + " - ERROR at position " + Int_To_Str(token_error.Error_Pos);
+            error_str = expr_str + " - ERROR at position " + Str_Int.Int_To_Str(token_error.Error_Pos);
             res = false; // Failed
         }
         return res;
