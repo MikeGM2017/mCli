@@ -253,94 +253,22 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
         return 0;
     }
 
-    int i;
     char *data_ptr = (char *) data;
-    fprintf(stderr, "DEBUG: data_function(...): data(%d): ", len);
+    char wr_buf[1024];
+    int wr_buf_len = 0;
+    int i;
+    char c;
+    if (len > 0) {
+        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\n");
+    }
     for (i = 0; i < len; i++) {
-        if (isprint(data_ptr[i])) fprintf(stderr, " %c", data_ptr[i] & 0xFF);
-        else fprintf(stderr, " .");
-        fprintf(stderr, " 0x%02X", data_ptr[i] & 0xFF);
+        c = data_ptr[i];
+        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X", c & 0xFF);
     }
-    fprintf(stderr, "\n");
-
-    if (data_ptr[0] == 'E') {
-        fprintf(stderr, "E: Exit - processed\n");
-        char cmd[] = "exit\n";
-        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
-        return len;
-    }
-    if (data_ptr[0] == 'Q') {
-        fprintf(stderr, "Q: Quit - processed\n");
-        char cmd[] = "exit\n";
-        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
-        return len;
-    }
-    if (data_ptr[0] == 'H') {
-        fprintf(stderr, "H: Help - processed\n");
-        char cmd[] = "echo 'Help: Q - quit, E - exit, H - help, TAB - help'\n";
-        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
-        return len;
-    }
-    if (data_ptr[0] == 0x09) { // TAB
-        fprintf(stderr, "TAB: Help - processed\n");
-        char cmd[] = "echo 'Help: Q - quit, E - exit, H - help, TAB - help'\n";
-        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
-        return len;
+    if (wr_buf_len > 0) {
+        ssh_channel_write(channel, wr_buf, wr_buf_len);
     }
 
-    if (data_ptr[0] == 0x0D) { // Enter
-        fprintf(stderr, "Enter - processed\n");
-        ssh_channel_write(channel, "\r\n$ ", 4);
-    } else if (data_ptr[0] == 0x03) { // Ctrl+C
-        fprintf(stderr, "Ctrl+C - processed\n");
-        return write(cdata->child_stdin, (char *) data, len);
-    } else if (data_ptr[0] == 0x1A) { // Ctrl+Z
-        fprintf(stderr, "Ctrl+Z - processed\n");
-        return write(cdata->child_stdin, (char *) data, len);
-    } else if (data_ptr[0] == 0x1C) { // Ctrl+Backslash
-        fprintf(stderr, "Ctrl+Backslash - processed\n");
-        return write(cdata->child_stdin, (char *) data, len);
-    } else if (data_ptr[0] == 0x7F) { // Back
-        fprintf(stderr, "Back - processed\n");
-    } else if (data_ptr[0] == 0x08) { // Shift+Back
-        fprintf(stderr, "Shift+Back - processed\n");
-
-    } else if (len == 1 && data_ptr[0] == 0x1B) { // Esc
-        fprintf(stderr, "Esc - processed\n");
-
-    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x5A) { // SHIFT+TAB
-        fprintf(stderr, "SHIFT+TAB - processed\n");
-    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x41) { // UP
-        fprintf(stderr, "UP - processed\n");
-    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x42) { // DOWN
-        fprintf(stderr, "DOWN - processed\n");
-    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x43) { // RIGHT
-        fprintf(stderr, "RIGHT - processed\n");
-    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x44) { // LEFT
-        fprintf(stderr, "LEFT - processed\n");
-    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x48) { // HOME
-        fprintf(stderr, "HOME - processed\n");
-
-    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x46) { // END
-        fprintf(stderr, "END - processed\n");
-    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x33 && data_ptr[3] == 0x7E) { // DELETE
-        fprintf(stderr, "DELETE - processed\n");
-    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x32 && data_ptr[3] == 0x7E) { // INSERT
-        fprintf(stderr, "INSERT - processed\n");
-    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x34 && data_ptr[3] == 0x7E) { // END
-        fprintf(stderr, "END - processed\n");
-    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x31 && data_ptr[3] == 0x7E) { // HOME
-        fprintf(stderr, "HOME - processed\n");
-    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x35 && data_ptr[3] == 0x7E) { // PAGEUP
-        fprintf(stderr, "PAGEUP - processed\n");
-    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x36 && data_ptr[3] == 0x7E) { // PAGEDOWN
-        fprintf(stderr, "PAGEDOWN - processed\n");
-
-    } else {
-        ssh_channel_write(channel, data_ptr, len);
-    }
-
-    //return write(cdata->child_stdin, (char *) data, len);
     return len;
 }
 
