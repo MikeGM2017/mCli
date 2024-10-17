@@ -56,26 +56,26 @@
 #define SFTP_SERVER_PATH "/usr/lib/sftp-server"
 
 static void set_default_keys(ssh_bind sshbind,
-                             int rsa_already_set,
-                             int dsa_already_set,
-                             int ecdsa_already_set) {
+        int rsa_already_set,
+        int dsa_already_set,
+        int ecdsa_already_set) {
     if (!rsa_already_set) {
         ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_RSAKEY,
-                             KEYS_FOLDER "ssh_host_rsa_key");
+                KEYS_FOLDER "ssh_host_rsa_key");
     }
     if (!dsa_already_set) {
         ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_DSAKEY,
-                             KEYS_FOLDER "ssh_host_dsa_key");
+                KEYS_FOLDER "ssh_host_dsa_key");
     }
     if (!ecdsa_already_set) {
         ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_ECDSAKEY,
-                             KEYS_FOLDER "ssh_host_ecdsa_key");
+                KEYS_FOLDER "ssh_host_ecdsa_key");
     }
 }
 
 #ifdef HAVE_ARGP_H
 const char *argp_program_version = "libssh server example "
-SSH_STRINGIFY(LIBSSH_VERSION);
+        SSH_STRINGIFY(LIBSSH_VERSION);
 const char *argp_program_bug_address = "<libssh@libssh.org>";
 
 /* Program documentation. */
@@ -87,67 +87,67 @@ static char args_doc[] = "BINDADDR";
 /* The options we understand. */
 static struct argp_option options[] = {
     {
-        .name  = "port",
-        .key   = 'p',
-        .arg   = "PORT",
+        .name = "port",
+        .key = 'p',
+        .arg = "PORT",
         .flags = 0,
-        .doc   = "Set the port to bind.",
+        .doc = "Set the port to bind.",
         .group = 0
     },
     {
-        .name  = "hostkey",
-        .key   = 'k',
-        .arg   = "FILE",
+        .name = "hostkey",
+        .key = 'k',
+        .arg = "FILE",
         .flags = 0,
-        .doc   = "Set a host key.  Can be used multiple times.  "
-                 "Implies no default keys.",
+        .doc = "Set a host key.  Can be used multiple times.  "
+        "Implies no default keys.",
         .group = 0
     },
     {
-        .name  = "dsakey",
-        .key   = 'd',
-        .arg   = "FILE",
+        .name = "dsakey",
+        .key = 'd',
+        .arg = "FILE",
         .flags = 0,
-        .doc   = "Set the dsa key.",
+        .doc = "Set the dsa key.",
         .group = 0
     },
     {
-        .name  = "rsakey",
-        .key   = 'r',
-        .arg   = "FILE",
+        .name = "rsakey",
+        .key = 'r',
+        .arg = "FILE",
         .flags = 0,
-        .doc   = "Set the rsa key.",
+        .doc = "Set the rsa key.",
         .group = 0
     },
     {
-        .name  = "ecdsakey",
-        .key   = 'e',
-        .arg   = "FILE",
+        .name = "ecdsakey",
+        .key = 'e',
+        .arg = "FILE",
         .flags = 0,
-        .doc   = "Set the ecdsa key.",
+        .doc = "Set the ecdsa key.",
         .group = 0
     },
     {
-        .name  = "no-default-keys",
-        .key   = 'n',
-        .arg   = NULL,
+        .name = "no-default-keys",
+        .key = 'n',
+        .arg = NULL,
         .flags = 0,
-        .doc   = "Do not set default key locations.",
+        .doc = "Do not set default key locations.",
         .group = 0
     },
     {
-        .name  = "verbose",
-        .key   = 'v',
-        .arg   = NULL,
+        .name = "verbose",
+        .key = 'v',
+        .arg = NULL,
         .flags = 0,
-        .doc   = "Get verbose output.",
+        .doc = "Get verbose output.",
         .group = 0
     },
     {NULL, 0, NULL, 0, NULL, 0}
 };
 
 /* Parse a single option. */
-static error_t parse_opt (int key, char *arg, struct argp_state *state) {
+static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     /* Get the input argument from argp_parse, which we
      * know is a pointer to our arguments structure. */
     ssh_bind sshbind = state->input;
@@ -182,26 +182,26 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
             break;
         case 'v':
             ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_LOG_VERBOSITY_STR,
-                                 "3");
+                    "3");
             break;
         case ARGP_KEY_ARG:
             if (state->arg_num >= 1) {
                 /* Too many arguments. */
-                argp_usage (state);
+                argp_usage(state);
             }
             ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_BINDADDR, arg);
             break;
         case ARGP_KEY_END:
             if (state->arg_num < 1) {
                 /* Not enough arguments. */
-                argp_usage (state);
+                argp_usage(state);
             }
 
             if (!no_default_keys) {
                 set_default_keys(sshbind,
-                                 rsa_already_set,
-                                 dsa_already_set,
-                                 ecdsa_already_set);
+                        rsa_already_set,
+                        dsa_already_set,
+                        ecdsa_already_set);
             }
 
             break;
@@ -242,7 +242,7 @@ struct session_data_struct {
 };
 
 static int data_function(ssh_session session, ssh_channel channel, void *data,
-                         uint32_t len, int is_stderr, void *userdata) {
+        uint32_t len, int is_stderr, void *userdata) {
     struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
 
     (void) session;
@@ -254,86 +254,86 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
     }
 
     int i;
-    char *data_ptr = (char *)data;
+    char *data_ptr = (char *) data;
     fprintf(stderr, "DEBUG: data_function(...): data(%d): ", len);
-    for(i = 0; i < len; i++) {
-        if(isprint(data_ptr[i])) fprintf(stderr, " %c", data_ptr[i] & 0xFF);
+    for (i = 0; i < len; i++) {
+        if (isprint(data_ptr[i])) fprintf(stderr, " %c", data_ptr[i] & 0xFF);
         else fprintf(stderr, " .");
         fprintf(stderr, " 0x%02X", data_ptr[i] & 0xFF);
     }
     fprintf(stderr, "\n");
 
-    if(data_ptr[0] == 'E') {
+    if (data_ptr[0] == 'E') {
         fprintf(stderr, "E: Exit - processed\n");
         char cmd[] = "exit\n";
-        write(cdata->child_stdin, cmd, sizeof(cmd) - 1);
+        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
         return len;
     }
-    if(data_ptr[0] == 'Q') {
+    if (data_ptr[0] == 'Q') {
         fprintf(stderr, "Q: Quit - processed\n");
         char cmd[] = "exit\n";
-        write(cdata->child_stdin, cmd, sizeof(cmd) - 1);
+        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
         return len;
     }
-    if(data_ptr[0] == 'H') {
+    if (data_ptr[0] == 'H') {
         fprintf(stderr, "H: Help - processed\n");
         char cmd[] = "echo 'Help: Q - quit, E - exit, H - help, TAB - help'\n";
-        write(cdata->child_stdin, cmd, sizeof(cmd) - 1);
+        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
         return len;
     }
-    if(data_ptr[0] == 0x09) { // TAB
+    if (data_ptr[0] == 0x09) { // TAB
         fprintf(stderr, "TAB: Help - processed\n");
         char cmd[] = "echo 'Help: Q - quit, E - exit, H - help, TAB - help'\n";
-        write(cdata->child_stdin, cmd, sizeof(cmd) - 1);
+        write(cdata->child_stdin, cmd, sizeof (cmd) - 1);
         return len;
     }
 
-    if(data_ptr[0] == 0x0D) { // Enter
+    if (data_ptr[0] == 0x0D) { // Enter
         fprintf(stderr, "Enter - processed\n");
         ssh_channel_write(channel, "\r\n$ ", 4);
-    } else if(data_ptr[0] == 0x03) { // Ctrl+C
+    } else if (data_ptr[0] == 0x03) { // Ctrl+C
         fprintf(stderr, "Ctrl+C - processed\n");
         return write(cdata->child_stdin, (char *) data, len);
-    } else if(data_ptr[0] == 0x1A) { // Ctrl+Z
+    } else if (data_ptr[0] == 0x1A) { // Ctrl+Z
         fprintf(stderr, "Ctrl+Z - processed\n");
         return write(cdata->child_stdin, (char *) data, len);
-    } else if(data_ptr[0] == 0x1C) { // Ctrl+Backslash
+    } else if (data_ptr[0] == 0x1C) { // Ctrl+Backslash
         fprintf(stderr, "Ctrl+Backslash - processed\n");
         return write(cdata->child_stdin, (char *) data, len);
-    } else if(data_ptr[0] == 0x7F) { // Back
+    } else if (data_ptr[0] == 0x7F) { // Back
         fprintf(stderr, "Back - processed\n");
-    } else if(data_ptr[0] == 0x08) { // Shift+Back
+    } else if (data_ptr[0] == 0x08) { // Shift+Back
         fprintf(stderr, "Shift+Back - processed\n");
 
-    } else if(len == 1 && data_ptr[0] == 0x1B) { // Esc
+    } else if (len == 1 && data_ptr[0] == 0x1B) { // Esc
         fprintf(stderr, "Esc - processed\n");
 
-    } else if(len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x5A) { // SHIFT+TAB
+    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x5A) { // SHIFT+TAB
         fprintf(stderr, "SHIFT+TAB - processed\n");
-    } else if(len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x41) { // UP
+    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x41) { // UP
         fprintf(stderr, "UP - processed\n");
-    } else if(len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x42) { // DOWN
+    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x42) { // DOWN
         fprintf(stderr, "DOWN - processed\n");
-    } else if(len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x43) { // RIGHT
+    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x43) { // RIGHT
         fprintf(stderr, "RIGHT - processed\n");
-    } else if(len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x44) { // LEFT
+    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x44) { // LEFT
         fprintf(stderr, "LEFT - processed\n");
-    } else if(len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x48) { // HOME
+    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x48) { // HOME
         fprintf(stderr, "HOME - processed\n");
 
-    } else if(len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x46) { // END
+    } else if (len == 3 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x46) { // END
         fprintf(stderr, "END - processed\n");
-    } else if(len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x33 && data_ptr[3] == 0x7E) { // DELETE
+    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x33 && data_ptr[3] == 0x7E) { // DELETE
         fprintf(stderr, "DELETE - processed\n");
-    } else if(len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x32 && data_ptr[3] == 0x7E) { // INSERT
+    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x32 && data_ptr[3] == 0x7E) { // INSERT
         fprintf(stderr, "INSERT - processed\n");
-    } else if(len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x34 && data_ptr[3] == 0x7E) { // END
+    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x34 && data_ptr[3] == 0x7E) { // END
         fprintf(stderr, "END - processed\n");
-    } else if(len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x31 && data_ptr[3] == 0x7E) { // HOME
+    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x31 && data_ptr[3] == 0x7E) { // HOME
         fprintf(stderr, "HOME - processed\n");
-    } else if(len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x35 && data_ptr[3] == 0x7E) { // PAGEUP
+    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x35 && data_ptr[3] == 0x7E) { // PAGEUP
         fprintf(stderr, "PAGEUP - processed\n");
-    } else if(len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x36 && data_ptr[3] == 0x7E) { // PAGEDOWN
+    } else if (len == 4 && data_ptr[0] == 0x1B && data_ptr[1] == 0x5B && data_ptr[2] == 0x36 && data_ptr[3] == 0x7E) { // PAGEDOWN
         fprintf(stderr, "PAGEDOWN - processed\n");
 
     } else {
@@ -345,9 +345,9 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
 }
 
 static int pty_request(ssh_session session, ssh_channel channel,
-                       const char *term, int cols, int rows, int py, int px,
-                       void *userdata) {
-    struct channel_data_struct *cdata = (struct channel_data_struct *)userdata;
+        const char *term, int cols, int rows, int py, int px,
+        void *userdata) {
+    struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
 
     (void) session;
     (void) channel;
@@ -359,7 +359,7 @@ static int pty_request(ssh_session session, ssh_channel channel,
     cdata->winsize->ws_ypixel = py;
 
     if (openpty(&cdata->pty_master, &cdata->pty_slave, NULL, NULL,
-                cdata->winsize) != 0) {
+            cdata->winsize) != 0) {
         fprintf(stderr, "Failed to open pty\n");
         return SSH_ERROR;
     }
@@ -367,8 +367,8 @@ static int pty_request(ssh_session session, ssh_channel channel,
 }
 
 static int pty_resize(ssh_session session, ssh_channel channel, int cols,
-                      int rows, int py, int px, void *userdata) {
-    struct channel_data_struct *cdata = (struct channel_data_struct *)userdata;
+        int rows, int py, int px, void *userdata) {
+    struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
 
     (void) session;
     (void) channel;
@@ -386,8 +386,8 @@ static int pty_resize(ssh_session session, ssh_channel channel, int cols,
 }
 
 static int exec_pty(const char *mode, const char *command,
-                    struct channel_data_struct *cdata) {
-    switch(cdata->pid = fork()) {
+        struct channel_data_struct *cdata) {
+    switch (cdata->pid = fork()) {
         case -1:
             close(cdata->pty_master);
             close(cdata->pty_slave);
@@ -422,7 +422,7 @@ static int exec_nopty(const char *command, struct channel_data_struct *cdata) {
         goto stderr_failed;
     }
 
-    switch(cdata->pid = fork()) {
+    switch (cdata->pid = fork()) {
         case -1:
             goto fork_failed;
         case 0:
@@ -465,14 +465,14 @@ stdin_failed:
 }
 
 static int exec_request(ssh_session session, ssh_channel channel,
-                        const char *command, void *userdata) {
+        const char *command, void *userdata) {
     struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
 
 
     (void) session;
     (void) channel;
 
-    if(cdata->pid > 0) {
+    if (cdata->pid > 0) {
         return SSH_ERROR;
     }
 
@@ -483,13 +483,13 @@ static int exec_request(ssh_session session, ssh_channel channel,
 }
 
 static int shell_request(ssh_session session, ssh_channel channel,
-                         void *userdata) {
+        void *userdata) {
     struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
 
     (void) session;
     (void) channel;
 
-    if(cdata->pid > 0) {
+    if (cdata->pid > 0) {
         return SSH_ERROR;
     }
 
@@ -501,7 +501,7 @@ static int shell_request(ssh_session session, ssh_channel channel,
 }
 
 static int subsystem_request(ssh_session session, ssh_channel channel,
-                             const char *subsystem, void *userdata) {
+        const char *subsystem, void *userdata) {
     /* subsystem requests behave simillarly to exec requests. */
     if (strcmp(subsystem, "sftp") == 0) {
         return exec_request(session, channel, SFTP_SERVER_PATH, userdata);
@@ -510,7 +510,7 @@ static int subsystem_request(ssh_session session, ssh_channel channel,
 }
 
 static int auth_password(ssh_session session, const char *user,
-                         const char *pass, void *userdata) {
+        const char *pass, void *userdata) {
     struct session_data_struct *sdata = (struct session_data_struct *) userdata;
 
     (void) session;
@@ -641,7 +641,7 @@ static void handle_session(ssh_event event, ssh_session session) {
         /* Poll the main event which takes care of the session, the channel and
          * even our child process's stdout/stderr (once it's started). */
         if (ssh_event_dopoll(event, -1) == SSH_ERROR) {
-          ssh_channel_close(sdata.channel);
+            ssh_channel_close(sdata.channel);
         }
 
         /* If child process's stdout/stderr has been registered with the event,
@@ -654,21 +654,21 @@ static void handle_session(ssh_event event, ssh_session session) {
         /* If stdout valid, add stdout to be monitored by the poll event. */
         if (cdata.child_stdout != -1) {
             if (ssh_event_add_fd(event, cdata.child_stdout, POLLIN, process_stdout,
-                                 sdata.channel) != SSH_OK) {
+                    sdata.channel) != SSH_OK) {
                 fprintf(stderr, "Failed to register stdout to poll context\n");
                 ssh_channel_close(sdata.channel);
             }
         }
 
         /* If stderr valid, add stderr to be monitored by the poll event. */
-        if (cdata.child_stderr != -1){
+        if (cdata.child_stderr != -1) {
             if (ssh_event_add_fd(event, cdata.child_stderr, POLLIN, process_stderr,
-                                 sdata.channel) != SSH_OK) {
+                    sdata.channel) != SSH_OK) {
                 fprintf(stderr, "Failed to register stderr to poll context\n");
                 ssh_channel_close(sdata.channel);
             }
         }
-    } while(ssh_channel_is_open(sdata.channel) &&
+    } while (ssh_channel_is_open(sdata.channel) &&
             (cdata.pid == 0 || waitpid(cdata.pid, &rc, WNOHANG) == 0));
 
     close(cdata.pty_master);
@@ -685,8 +685,8 @@ static void handle_session(ssh_event event, ssh_session session) {
     if (kill(cdata.pid, 0) < 0 && WIFEXITED(rc)) {
         rc = WEXITSTATUS(rc);
         ssh_channel_request_send_exit_status(sdata.channel, rc);
-    /* If client terminated the channel or the process did not exit nicely,
-     * but only if something has been forked. */
+        /* If client terminated the channel or the process did not exit nicely,
+         * but only if something has been forked. */
     } else if (cdata.pid > 0) {
         kill(cdata.pid, SIGKILL);
     }
@@ -733,7 +733,7 @@ int main(int argc, char **argv) {
     set_default_keys(sshbind, 0, 0, 0);
 #endif /* HAVE_ARGP_H */
 
-    if(ssh_bind_listen(sshbind) < 0) {
+    if (ssh_bind_listen(sshbind) < 0) {
         fprintf(stderr, "%s\n", ssh_get_error(sshbind));
         return 1;
     }
@@ -746,8 +746,8 @@ int main(int argc, char **argv) {
         }
 
         /* Blocks until there is a new incoming connection. */
-        if(ssh_bind_accept(sshbind, session) != SSH_ERROR) {
-            switch(fork()) {
+        if (ssh_bind_accept(sshbind, session) != SSH_ERROR) {
+            switch (fork()) {
                 case 0:
                     /* Remove the SIGCHLD handler inherited from parent. */
                     sa.sa_handler = SIG_DFL;
