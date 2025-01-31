@@ -49,10 +49,13 @@ protected:
 
     string Chars_Not_Allowed_Str;
 
+    bool Is_Ctrl_C_Pressed;
+
 public:
 
     Cli_Input_Abstract(Cli_Output_Abstract &cli_output) : Invitation("> "), Divider_L("["), Divider_R("]"),
-    Cli_Output(cli_output), Is_Echo(true), Input_Str_Pos(0), Input_Mode(INPUT_MODE_NORMAL), Wait_Count(-1) {
+    Cli_Output(cli_output), Is_Echo(true), Input_Str_Pos(0), Input_Mode(INPUT_MODE_NORMAL), Wait_Count(-1),
+    Is_Ctrl_C_Pressed(false) {
     }
 
     virtual ~Cli_Input_Abstract() {
@@ -304,6 +307,18 @@ public:
     virtual bool Is_Char_Valid(string char_str) = 0;
 
     virtual Cli_Input_Item On_Key_Pressed(int key_code, string key_str, bool is_ctrl, bool is_shift) = 0; // Attention: Not Blocked
+
+    virtual bool Is_Ctrl_C_Pressed_Get() {
+        return Is_Ctrl_C_Pressed;
+    }
+
+    virtual void Is_Ctrl_C_Pressed_Set() {
+        Is_Ctrl_C_Pressed = true;
+    }
+
+    virtual void Is_Ctrl_C_Pressed_Clear() {
+        Is_Ctrl_C_Pressed = false;
+    }
 
 };
 

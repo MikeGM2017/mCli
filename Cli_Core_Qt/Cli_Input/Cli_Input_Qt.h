@@ -250,6 +250,7 @@ public:
         }
 
         if (is_ctrl && key_code == Qt::Key_C) {
+            Is_Ctrl_C_Pressed_Set();
             return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_CTRL_C, "");
         } else if (is_ctrl && key_code == Qt::Key_Z) {
             return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_CTRL_Z, "");

@@ -71,6 +71,8 @@ using namespace std;
 #include "Cli_Module_Check.h"
 #include "Cli_Module_Vars.h"
 
+#include "Do_Command.h"
+
 const string Version = "0.04";
 
 void Version_Print() {
@@ -250,9 +252,14 @@ int main(int argc, char *argv[]) {
 
     bool Cmd_Script_Stop = false;
     int Script_Buf_Size = 1024;
-    Modules.Add(new Cli_Module_Base_Script(History, Cli_Output,
+    string Script_Command_Str;
+    string Script_Label_Str;
+    string Script_Dir_Str = "./scripts";
+    Cli_Module_Base_Script Module_Script(History, Cli_Input, Cli_Output,
             Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
-            CMD_Processor));
+            CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str);
+    Modules.Add(&Module_Script);
+    Do_Command Do_Command_Object(Module_Script);
 
     bool Cmd_Wait_Stop = false;
     Modules.Add(new Cli_Module_Base_Wait_Qt(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
