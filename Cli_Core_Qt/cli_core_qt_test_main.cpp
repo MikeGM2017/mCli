@@ -215,6 +215,7 @@ int main(int argc, char *argv[]) {
 
     Cli_History History;
 
+    bool Cmd_Exit = false;
     bool Cmd_Quit = false;
 
     //Cli_Input_Test_Key_Processor cli_Key_Processor(Cli_Input, Cli_Output);
@@ -235,7 +236,7 @@ int main(int argc, char *argv[]) {
 
     Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
-    Modules.Add(new Cli_Module_Base_Quit(Cmd_Quit));
+    Modules.Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
 
     char C_Single = '?';
     char C_Multy = '*';

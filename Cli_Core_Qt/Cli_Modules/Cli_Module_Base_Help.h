@@ -32,7 +32,7 @@ using namespace std;
 class Cli_Module_Base_Help : public Cli_Module {
 protected:
 
-    Cli_Cmd_Privilege_ID User_Privilege;
+    Cli_Cmd_Privilege_ID &User_Privilege;
     Cli_Modules &Modules;
 
     Str_Filter_Abstract &Help_Str_Filter;
@@ -61,12 +61,15 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Help(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
+    Cli_Module_Base_Help(Cli_Cmd_Privilege_ID &user_privilege, Cli_Modules &modules,
             Str_Filter_Abstract &help_str_filter,
             Cli_Output_Abstract &cli_output) : Cli_Module("Base Help"),
     User_Privilege(user_privilege), Modules(modules),
     Help_Str_Filter(help_str_filter),
     Cli_Output(cli_output) {
+
+        Version = "0.02";
+
         {
             // H - help
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_help_H);
@@ -178,7 +181,10 @@ public:
 
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module *module_ptr = modules.Get(module);
-            if (is_full || str_filter.Is_Match(module_filter, module_ptr->Name_Get())) {
+            string module_name = module_ptr->Name_Get();
+            string module_name_with_commas = "\"" + module_ptr->Name_Get() + "\"";
+            if (is_full || str_filter.Is_Match(module_filter, module_name)
+                    || str_filter.Is_Match(module_filter, module_name_with_commas)) {
                 for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
                     Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
                     bool is_cmd_prt_valid = HELP_Cmd_Ptr_Check_By_Level(cmd_ptr, User_Privilege, level, is_full, is_module_full);
@@ -222,7 +228,10 @@ public:
 
         for (int module = 0; module < modules.Get_Size(); module++) {
             Cli_Module *module_ptr = modules.Get(module);
-            if (is_full || str_filter.Is_Match(module_filter, module_ptr->Name_Get())) {
+            string module_name = module_ptr->Name_Get();
+            string module_name_with_commas = "\"" + module_ptr->Name_Get() + "\"";
+            if (is_full || str_filter.Is_Match(module_filter, module_name)
+                    || str_filter.Is_Match(module_filter, module_name_with_commas)) {
                 modules_count++;
                 for (int cmd = 0; cmd < module_ptr->Module_Cmd_List.size(); cmd++) {
                     Cli_Cmd *cmd_ptr = module_ptr->Module_Cmd_List[cmd];
