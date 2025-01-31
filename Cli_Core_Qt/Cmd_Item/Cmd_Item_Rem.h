@@ -12,7 +12,7 @@
  */
 
 #ifndef CMD_ITEM_INPUT_REM_H
-#define CMD_ITEM__REM_H
+#define CMD_ITEM_INPUT_REM_H
 
 #include "Cmd_Item_Base.h"
 
@@ -39,4 +39,4 @@ public:
 
 };
 
-#endif /* CMD_ITEM__REM_H */
+#endif /* CMD_ITEM_INPUT_REM_H */

@@ -144,6 +144,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		Cli_Modules/Str_Filter.h \
 		Cli_Modules/Str_Filter_Abstract.h \
 		Cli_Output/Cli_Output_Abstract.h \
+		Cli_Output/Cli_Output_ofstream.h \
 		Cli_Output_Form_QPlainTextEdit.h \
 		Cli_Output_QPlainTextEdit.h \
 		Cli_TAB_Processor/Cli_TAB_Processor.h \
@@ -165,6 +166,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		Cmd_Item/Cmd_Item_Point_Var_Name.h \
 		Cmd_Item/Cmd_Item_Rem.h \
 		Cmd_Item/Cmd_Item_Str.h \
+		Cmd_Item/Cmd_Item_Str_Esc.h \
 		Cmd_Item/Cmd_Item_Time.h \
 		Cmd_Item/Cmd_Item_Valid_Result.h \
 		Cmd_Item/Cmd_Item_Valid_Result_Func.h \
@@ -344,7 +346,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents Cli_CMD_Processor/Cli_CMD_Processor.h Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h Cli_Core/Cli_Core.h Cli_Core_Test_Key_Processor.h Cli_History/Cli_History.h Cli_Input/Cli_Input_Abstract.h Cli_Input/Cli_Input_Item.h Cli_Input/Cli_Input_Item_Type.h Cli_Input/Cli_Input_Qt.h Cli_Input_Test_Key_Processor.h Cli_Key_Processor_Abstract.h Cli_Module_Test/Cli_Module_Test_Tab.h Cli_Modules/Cli_Cmd.h Cli_Modules/Cli_Cmd_ID.h Cli_Modules/Cli_Cmd_Privilege_ID.h Cli_Modules/Cli_Module.h Cli_Modules/Cli_Module_Base_Debug.h Cli_Modules/Cli_Module_Base_Help.h Cli_Modules/Cli_Module_Base_History.h Cli_Modules/Cli_Module_Base_Log.h Cli_Modules/Cli_Module_Base_Modules.h Cli_Modules/Cli_Module_Base_Quit.h Cli_Modules/Cli_Module_Base_Rem.h Cli_Modules/Cli_Module_Base_Script.h Cli_Modules/Cli_Module_Base_Wait.h Cli_Modules/Cli_Module_Base_Wait_Qt.h Cli_Modules/Cli_Module_Check.h Cli_Modules/Cli_Module_Test_Tab_Min_Max.h Cli_Modules/Cli_Module_Test_Terminal.h Cli_Modules/Cli_Module_Vars.h Cli_Modules/Cli_Modules.h Cli_Modules/Level_Description.h Cli_Modules/Str_Filter.h Cli_Modules/Str_Filter_Abstract.h Cli_Output/Cli_Output_Abstract.h Cli_Output_Form_QPlainTextEdit.h Cli_Output_QPlainTextEdit.h Cli_TAB_Processor/Cli_TAB_Processor.h Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h Cli_TAB_Processor/Cli_TAB_Result.h Cmd_Item/Cmd_Item_Assignment_Mark.h Cmd_Item/Cmd_Item_Base.h Cmd_Item/Cmd_Item_Date.h Cmd_Item/Cmd_Item_DateTime.h Cmd_Item/Cmd_Item_EQU.h Cmd_Item/Cmd_Item_EQU_Range.h Cmd_Item/Cmd_Item_IP4.h Cmd_Item/Cmd_Item_IP6.h Cmd_Item/Cmd_Item_Int.h Cmd_Item/Cmd_Item_Int_List.h Cmd_Item/Cmd_Item_Int_List_Item.h Cmd_Item/Cmd_Item_Int_Range.h Cmd_Item/Cmd_Item_MAC.h Cmd_Item/Cmd_Item_Point_Var_Name.h Cmd_Item/Cmd_Item_Rem.h Cmd_Item/Cmd_Item_Str.h Cmd_Item/Cmd_Item_Time.h Cmd_Item/Cmd_Item_Valid_Result.h Cmd_Item/Cmd_Item_Valid_Result_Func.h Cmd_Item/Cmd_Item_Word.h Cmd_Item/Cmd_Item_Word_List.h Cmd_Item/Cmd_Item_Word_Range.h Cmd_Token_Parser/Cmd_Token.h Cmd_Token_Parser/Cmd_Token_Parser.h Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h Cmd_Token_Parser/Cmd_Token_Parser_Result.h Input_Mode_Type.h TAB_Cmd/TAB_Cmd.h TAB_Cmd/TAB_Cmd_ID.h cli_qplaintextedit.h ui_Cli_Output_Form_QPlainTextEdit.h $(DISTDIR)/
+	$(COPY_FILE) --parents Cli_CMD_Processor/Cli_CMD_Processor.h Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h Cli_Core/Cli_Core.h Cli_Core_Test_Key_Processor.h Cli_History/Cli_History.h Cli_Input/Cli_Input_Abstract.h Cli_Input/Cli_Input_Item.h Cli_Input/Cli_Input_Item_Type.h Cli_Input/Cli_Input_Qt.h Cli_Input_Test_Key_Processor.h Cli_Key_Processor_Abstract.h Cli_Module_Test/Cli_Module_Test_Tab.h Cli_Modules/Cli_Cmd.h Cli_Modules/Cli_Cmd_ID.h Cli_Modules/Cli_Cmd_Privilege_ID.h Cli_Modules/Cli_Module.h Cli_Modules/Cli_Module_Base_Debug.h Cli_Modules/Cli_Module_Base_Help.h Cli_Modules/Cli_Module_Base_History.h Cli_Modules/Cli_Module_Base_Log.h Cli_Modules/Cli_Module_Base_Modules.h Cli_Modules/Cli_Module_Base_Quit.h Cli_Modules/Cli_Module_Base_Rem.h Cli_Modules/Cli_Module_Base_Script.h Cli_Modules/Cli_Module_Base_Wait.h Cli_Modules/Cli_Module_Base_Wait_Qt.h Cli_Modules/Cli_Module_Check.h Cli_Modules/Cli_Module_Test_Tab_Min_Max.h Cli_Modules/Cli_Module_Test_Terminal.h Cli_Modules/Cli_Module_Vars.h Cli_Modules/Cli_Modules.h Cli_Modules/Level_Description.h Cli_Modules/Str_Filter.h Cli_Modules/Str_Filter_Abstract.h Cli_Output/Cli_Output_Abstract.h Cli_Output/Cli_Output_ofstream.h Cli_Output_Form_QPlainTextEdit.h Cli_Output_QPlainTextEdit.h Cli_TAB_Processor/Cli_TAB_Processor.h Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h Cli_TAB_Processor/Cli_TAB_Result.h Cmd_Item/Cmd_Item_Assignment_Mark.h Cmd_Item/Cmd_Item_Base.h Cmd_Item/Cmd_Item_Date.h Cmd_Item/Cmd_Item_DateTime.h Cmd_Item/Cmd_Item_EQU.h Cmd_Item/Cmd_Item_EQU_Range.h Cmd_Item/Cmd_Item_IP4.h Cmd_Item/Cmd_Item_IP6.h Cmd_Item/Cmd_Item_Int.h Cmd_Item/Cmd_Item_Int_List.h Cmd_Item/Cmd_Item_Int_List_Item.h Cmd_Item/Cmd_Item_Int_Range.h Cmd_Item/Cmd_Item_MAC.h Cmd_Item/Cmd_Item_Point_Var_Name.h Cmd_Item/Cmd_Item_Rem.h Cmd_Item/Cmd_Item_Str.h Cmd_Item/Cmd_Item_Str_Esc.h Cmd_Item/Cmd_Item_Time.h Cmd_Item/Cmd_Item_Valid_Result.h Cmd_Item/Cmd_Item_Valid_Result_Func.h Cmd_Item/Cmd_Item_Word.h Cmd_Item/Cmd_Item_Word_List.h Cmd_Item/Cmd_Item_Word_Range.h Cmd_Token_Parser/Cmd_Token.h Cmd_Token_Parser/Cmd_Token_Parser.h Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h Cmd_Token_Parser/Cmd_Token_Parser_Result.h Input_Mode_Type.h TAB_Cmd/TAB_Cmd.h TAB_Cmd/TAB_Cmd_ID.h cli_qplaintextedit.h ui_Cli_Output_Form_QPlainTextEdit.h $(DISTDIR)/
 	$(COPY_FILE) --parents Cli_Output_Form_QPlainTextEdit.cpp.cc cli_core_qt_test_main.cpp $(DISTDIR)/
 
 
@@ -450,6 +452,7 @@ build/Debug/GNU-Linux/cli_core_qt_test_main.o: cli_core_qt_test_main.cpp Cli_Out
 		TAB_Cmd/TAB_Cmd_ID.h \
 		Cli_History/Cli_History.h \
 		Cli_Input/Cli_Input_Qt.h \
+		Cli_Output/Cli_Output_ofstream.h \
 		Cli_Core/Cli_Core.h \
 		Cli_Modules/Cli_Module_Base_Rem.h \
 		Cmd_Item/Cmd_Item_Rem.h \
@@ -459,32 +462,33 @@ build/Debug/GNU-Linux/cli_core_qt_test_main.o: cli_core_qt_test_main.cpp Cli_Out
 		Cmd_Item/Cmd_Item_Str.h \
 		Cli_Modules/Str_Filter_Abstract.h \
 		Cli_Modules/Cli_Module_Base_Modules.h \
+		Cmd_Item/Cmd_Item_Date.h \
+		Cmd_Item/Cmd_Item_DateTime.h \
+		Cmd_Item/Cmd_Item_Time.h \
+		Cmd_Item/Cmd_Item_EQU.h \
+		Cmd_Item/Cmd_Item_EQU_Range.h \
+		Cmd_Item/Cmd_Item_IP4.h \
+		Cmd_Item/Cmd_Item_IP6.h \
+		Cmd_Item/Cmd_Item_Int.h \
+		Cmd_Item/Cmd_Item_Int_List.h \
+		Cmd_Item/Cmd_Item_Int_Range.h \
+		Cmd_Item/Cmd_Item_Int_List_Item.h \
+		Cmd_Item/Cmd_Item_MAC.h \
+		Cmd_Item/Cmd_Item_Point_Var_Name.h \
+		Cmd_Item/Cmd_Item_Str_Esc.h \
+		Cmd_Item/Cmd_Item_Word_List.h \
+		Cmd_Item/Cmd_Item_Word_Range.h \
+		Cmd_Item/Cmd_Item_Assignment_Mark.h \
 		Cli_Modules/Cli_Module_Base_History.h \
 		Cli_Modules/Cli_Module_Base_Log.h \
 		Cli_Modules/Cli_Module_Base_Script.h \
 		Cli_Modules/Cli_Module_Base_Wait_Qt.h \
-		Cmd_Item/Cmd_Item_Int_Range.h \
-		Cmd_Item/Cmd_Item_Int.h \
 		Cli_Modules/Cli_Module_Base_Debug.h \
 		Cli_Modules/Str_Filter.h \
 		Cli_Modules/Cli_Module_Test_Tab_Min_Max.h \
 		Cli_Modules/Cli_Module_Test_Terminal.h \
-		Cmd_Item/Cmd_Item_Int_List.h \
-		Cmd_Item/Cmd_Item_Int_List_Item.h \
-		Cmd_Item/Cmd_Item_Word_Range.h \
-		Cmd_Item/Cmd_Item_Word_List.h \
-		Cmd_Item/Cmd_Item_Date.h \
-		Cmd_Item/Cmd_Item_Time.h \
-		Cmd_Item/Cmd_Item_DateTime.h \
-		Cmd_Item/Cmd_Item_IP4.h \
-		Cmd_Item/Cmd_Item_IP6.h \
-		Cmd_Item/Cmd_Item_MAC.h \
 		Cli_Modules/Cli_Module_Check.h \
-		Cmd_Item/Cmd_Item_EQU_Range.h \
-		Cmd_Item/Cmd_Item_EQU.h \
-		Cmd_Item/Cmd_Item_Point_Var_Name.h \
-		Cli_Modules/Cli_Module_Vars.h \
-		Cmd_Item/Cmd_Item_Assignment_Mark.h
+		Cli_Modules/Cli_Module_Vars.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/Debug/GNU-Linux/cli_core_qt_test_main.o cli_core_qt_test_main.cpp
 
 build/Debug/GNU-Linux/moc_Cli_Input_Qt.o: moc_Cli_Input_Qt.cpp 

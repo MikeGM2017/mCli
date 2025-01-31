@@ -31,7 +31,7 @@ using namespace std;
 class Cli_CMD_Processor : public Cli_CMD_Processor_Abstract {
 protected:
 
-    Cli_Cmd_Privilege_ID User_Privilege;
+    Cli_Cmd_Privilege_ID &User_Privilege;
     Cli_Modules &Modules;
 
     vector<Level_Description> &Levels;
@@ -44,7 +44,7 @@ protected:
 
 public:
 
-    Cli_CMD_Processor(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
+    Cli_CMD_Processor(Cli_Cmd_Privilege_ID &user_privilege, Cli_Modules &modules,
             vector<Level_Description> &levels, Cmd_Token_Parser &parser,
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             string str_rem) :
@@ -52,6 +52,8 @@ public:
     Levels(levels), Token_Parser(parser),
     Cli_Input(cli_input), Cli_Output(cli_output),
     Str_Rem(str_rem) {
+        Type = "Cli_CMD_Processor";
+        Version = "0.02";
     }
 
     virtual ~Cli_CMD_Processor() {
@@ -129,14 +131,16 @@ public:
                                 case CMD_ITEM_NOT_MATCH:
                                     break;
                                 default:
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Output.Output_Str("ERROR: " + s_trim + " - " + Cmd_Item_Valid_Result_Func::To_String(res_cmd_valid));
+                                    //Cli_Output.Output_NewLine();
+                                    //Cli_Output.Output_Str("ERROR: " + s_trim + " - " + Cmd_Item_Valid_Result_Func::To_String(res_cmd_valid));
+                                    break;
                             }
                         }
                     }
                 }
             }
             if (!is_processed) {
+                Cli_Output.Output_NewLine();
                 Cli_Output.Output_NewLine();
                 Cli_Output.Output_Str(s_trim + " - Not Processed");
                 Cli_Output.Output_NewLine();

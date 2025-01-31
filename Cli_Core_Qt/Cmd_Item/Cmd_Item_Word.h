@@ -25,6 +25,7 @@ protected:
         if (c == '_') return true;
         //if (pos > 0 && c >= '0' && c <= '9') return true;
         if (c >= '0' && c <= '9') return true;
+        if (c == '-') return true;
         return false;
     }
 
@@ -32,6 +33,7 @@ public:
 
     Cmd_Item_Word(string text, string help) : Cmd_Item_Base(text, help) {
         Type = "Word";
+        Version = "0.02";
     }
 
     virtual string Debug_Value_Get() {

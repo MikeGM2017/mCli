@@ -34,7 +34,7 @@ public:
                 return (c == '"');
             case 5:
             case 8:
-                return (c == '-');
+                return (c == '-' || c == ':');
         }
         return (c >= '0' && c <= '9');
     }

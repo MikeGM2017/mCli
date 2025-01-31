@@ -27,12 +27,14 @@ class Cli_Module {
 protected:
 
     string Name;
+    string Version;
 
 public:
 
     vector<Cli_Cmd *> Module_Cmd_List;
 
     Cli_Module(string name) : Name(name) {
+        Version = "0.01"; //@Warning: Dummy value - Version is not set
     }
 
     virtual ~Cli_Module() {
@@ -75,6 +77,10 @@ public:
             return Module_Cmd_List[cmd_index];
         }
         return NULL;
+    }
+
+    string Version_Get() {
+        return Version;
     }
 
     virtual void To_Map(map<string, string> &values_map) = 0;

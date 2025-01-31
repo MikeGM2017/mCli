@@ -21,15 +21,30 @@ using namespace std;
 #include "Cli_Input_Item.h"
 
 class Cli_CMD_Processor_Abstract {
+protected:
+
+    string Type;
+    string Version;
+
 public:
 
     Cli_CMD_Processor_Abstract() {
+        Type = "Cli_CMD_Processor_Abstract";
+        Version = "0.01";
     }
 
     virtual ~Cli_CMD_Processor_Abstract() {
     }
 
     virtual bool Process_Input_Item(Cli_Input_Item &input_item, bool is_debug, bool &debug_res) = 0;
+
+    string Type_Get() {
+        return Type;
+    }
+
+    string Version_Get() {
+        return Version;
+    }
 
 };
 

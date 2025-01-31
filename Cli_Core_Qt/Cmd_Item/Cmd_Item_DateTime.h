@@ -42,7 +42,7 @@ public:
             case 8:
             case 14:
             case 17:
-                return (c == '-');
+                return (c == '-' || c == ':');
             case 11:
                 return (c == ' ');
         }

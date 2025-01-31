@@ -49,6 +49,7 @@
       </logicalFolder>
       <logicalFolder name="f2" displayName="Cli_Output" projectFiles="true">
         <itemPath>Cli_Output/Cli_Output_Abstract.h</itemPath>
+        <itemPath>Cli_Output/Cli_Output_ofstream.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f8" displayName="Cli_TAB_Processor" projectFiles="true">
         <itemPath>Cli_TAB_Processor/Cli_TAB_Processor.h</itemPath>
@@ -72,6 +73,7 @@
         <itemPath>Cmd_Item/Cmd_Item_Point_Var_Name.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Str.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Str_Esc.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Time.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
         <itemPath>Cmd_Item/Cmd_Item_Valid_Result_Func.h</itemPath>
@@ -261,6 +263,8 @@
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Output/Cli_Output_ofstream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Output_Form_QPlainTextEdit.cpp.cc"
             ex="false"
             tool="1"
@@ -316,6 +320,8 @@
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str_Esc.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -494,6 +500,8 @@
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Output/Cli_Output_ofstream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Output_Form_QPlainTextEdit.cpp.cc"
             ex="false"
             tool="1"
@@ -549,6 +557,8 @@
       <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str_Esc.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
       </item>

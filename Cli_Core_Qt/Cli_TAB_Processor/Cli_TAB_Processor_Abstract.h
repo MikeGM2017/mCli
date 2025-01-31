@@ -17,15 +17,30 @@
 #include "Cli_Input_Item.h"
 
 class Cli_TAB_Processor_Abstract {
+protected:
+
+    string Type;
+    string Version;
+
 public:
 
     Cli_TAB_Processor_Abstract() {
+        Type = "Cli_TAB_Processor_Abstract";
+        Version = "0.01";
     }
 
     virtual ~Cli_TAB_Processor_Abstract() {
     }
 
     virtual void Process_Input_Item(Cli_Input_Item &input_item, bool &is_invitation_print) = 0;
+
+    string Type_Get() {
+        return Type;
+    }
+
+    string Version_Get() {
+        return Version;
+    }
 
 };
 
