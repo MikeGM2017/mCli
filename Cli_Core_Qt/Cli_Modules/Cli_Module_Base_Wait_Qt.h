@@ -59,6 +59,9 @@ public:
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output) : Cli_Module("Base Wait Qt"),
     Log_Wait_Enable(log_wait_enable), Cmd_Wait_Stop(cmd_wait_stop),
     Cli_Input(cli_input), Cli_Output(cli_output) {
+
+        Version = "0.02";
+
         {
             // wait <sec>
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_wait);
@@ -101,10 +104,11 @@ public:
         int wait_sec = atoi(token_value.c_str());
 
         Cmd_Wait_Stop = false;
+        Cli_Input.Is_Ctrl_C_Pressed_Clear();
 
         if (log_wait_enable) {
             Cli_Output.Output_Str("Wait (Press Enter to stop):");
-            //Cli_Output.Output_NewLine();
+            Cli_Output.Output_NewLine();
         }
 
         Cli_Input.Input_Str_Set_Empty();

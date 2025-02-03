@@ -27,7 +27,7 @@ using namespace std;
 class Cli_Module_Base_Debug : public Cli_Module {
 protected:
 
-    Cli_Cmd_Privilege_ID User_Privilege;
+    Cli_Cmd_Privilege_ID &User_Privilege;
     Cli_Modules &Modules;
 
     vector<Level_Description> &Levels;
@@ -53,12 +53,15 @@ public:
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
 
-    Cli_Module_Base_Debug(Cli_Cmd_Privilege_ID user_privilege, Cli_Modules &modules,
+    Cli_Module_Base_Debug(Cli_Cmd_Privilege_ID &user_privilege, Cli_Modules &modules,
             vector<Level_Description> &levels, Cli_CMD_Processor_Abstract &cmd_processor,
             Cli_Output_Abstract &cli_output) : Cli_Module("Base Debug"),
     User_Privilege(user_privilege), Modules(modules),
     Levels(levels), CMD_Processor(cmd_processor),
     Cli_Output(cli_output) {
+
+        Version = "0.02";
+
         {
             // debug cli
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_debug_cli);

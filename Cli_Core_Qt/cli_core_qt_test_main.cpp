@@ -61,6 +61,9 @@ using namespace std;
 
 #include "Str_Filter.h"
 
+#include "Str_Get_Without_Commas.h"
+#include "Str_Get_Int.h"
+
 #include "Cli_CMD_Processor.h"
 
 #include "Cli_TAB_Processor.h"
@@ -68,12 +71,14 @@ using namespace std;
 #include "Cli_Module_Test_Tab_Min_Max.h"
 #include "Cli_Module_Test_Terminal.h"
 
-#include "Cli_Module_Check.h"
 #include "Cli_Module_Vars.h"
+#include "Cli_Module_Vars_Expr.h"
+#include "Cli_Module_Check.h"
+#include "Cli_Module_Base_Level.h"
 
 #include "Do_Command.h"
 
-const string Version = "0.04";
+const string Version = "0.08";
 
 void Version_Print() {
     cout << "V" << Version << endl;
@@ -236,6 +241,8 @@ int main(int argc, char *argv[]) {
 
     // Modules Add - Begin
 
+    string level_root = "top level";
+
     Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
     Modules.Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
@@ -269,9 +276,20 @@ int main(int argc, char *argv[]) {
 
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
-    Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, Cli_Output, Cmd_Script_Stop)));
+    Str_Get_Without_Commas str_without_commas;
+    Str_Get_Int str_int;
 
-    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, Cli_Output, C_Single, C_Multy)));
+    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas, str_int,
+            Cli_Output, C_Single, C_Multy)));
+
+    Modules.Add((new Cli_Module_Vars_Expr(Values_Map, str_without_commas, str_int,
+            Cli_Output, C_Single, C_Multy)));
+
+    Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas, str_int,
+            Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str,
+            Do_Command_Object)));
+
+    Modules.Add(new Cli_Module_Base_Level(Cli_Input, Cli_Output, level_root));
 
     // Modules Add - End
 
