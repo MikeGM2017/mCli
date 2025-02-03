@@ -87,7 +87,6 @@ namespace Cli_Core_CS
             }
 
             Cli_Input.Input_Str_Set_Empty();
-            Cli_Input.Wait_Count_Set(wait_sec);
             Cli_Input.Input_Mode_Set(Input_Mode_Type.INPUT_MODE_WAIT);
             Cli_Input.Wait_Count_Set(wait_sec);
 
