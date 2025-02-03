@@ -216,7 +216,8 @@ int main(int argc, char *argv[]) {
     string Script_Dir_Str = "./scripts";
     Cli_Module_Base_Script Module_Script(History, Cli_Input, Cli_Output,
             Str_Rem_DEF, Cmd_Script_Stop, Cmd_Quit, Script_Buf_Size,
-            CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str);
+            CMD_Processor, Script_Command_Str, Script_Label_Str, Script_Dir_Str,
+            str_filter);
     Modules.Add(&Module_Script);
     Do_Command Do_Command_Object(Module_Script);
 

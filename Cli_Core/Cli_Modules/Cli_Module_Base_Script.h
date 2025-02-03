@@ -20,6 +20,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <dirent.h>
 
 #include "Cli_Module.h"
 
@@ -32,6 +33,7 @@
 
 #include "Cli_Input_Abstract.h"
 #include "Cli_Output_Abstract.h"
+#include "Str_Filter_Abstract.h"
 
 class Cli_Module_Base_Script : public Cli_Module {
 protected:
@@ -56,6 +58,8 @@ protected:
 
     string &Script_Dir_Str;
 
+    Str_Filter_Abstract &Str_Filter;
+
 public:
 
     enum Local_Cmd_ID {
@@ -65,6 +69,8 @@ public:
         CMD_ID_do_script_no_history,
         CMD_ID_do_script_stop,
         CMD_ID_save_history_as_script,
+        CMD_ID_scripts_list,
+        CMD_ID_scripts_list_by_filter,
 
         CMD_ID_LAST
     };
@@ -77,14 +83,16 @@ public:
             Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             string str_rem, bool &cmd_script_stop, bool &cmd_quit, int script_buf_size,
             Cli_CMD_Processor_Abstract &cli_command_processor,
-            string &script_command_str, string &script_label_str, string &script_dir_str) : Cli_Module("Base Script"),
+            string &script_command_str, string &script_label_str, string &script_dir_str,
+            Str_Filter_Abstract &str_filter) : Cli_Module("Base Script"),
     History(history), Cli_Input(cli_input), Cli_Output(cli_output),
     Str_Rem(str_rem),
     Cmd_Script_Stop(cmd_script_stop), Cmd_Quit(cmd_quit), Script_Buf_Size(script_buf_size),
     Cli_Command_Processor(cli_command_processor),
-    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str), Script_Dir_Str(script_dir_str) {
+    Script_Command_Str(script_command_str), Script_Label_Str(script_label_str), Script_Dir_Str(script_dir_str),
+    Str_Filter(str_filter) {
 
-        Version = "0.04";
+        Version = "0.05";
 
         Script_Buf = new char[Script_Buf_Size];
 
@@ -144,6 +152,28 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("as", "save history as"));
             cmd->Item_Add(new Cmd_Item_Word("script", "save history as script to file"));
             cmd->Item_Add(new Cmd_Item_Str("\"<file>\"", "script filename"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // scripts list
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_scripts_list);
+            cmd->Text_Set("scripts list");
+            cmd->Help_Set("scripts list (all)");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("scripts", "scripts"));
+            cmd->Item_Add(new Cmd_Item_Word("list", "scripts list (all)"));
+            Cmd_Add(cmd);
+        }
+        {
+            // scripts list <filename>
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_scripts_list_by_filter);
+            cmd->Text_Set("scripts list <filename>");
+            cmd->Help_Set("scripts list (by filter)");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("scripts", "scripts"));
+            cmd->Item_Add(new Cmd_Item_Word("list", "scripts list"));
+            cmd->Item_Add(new Cmd_Item_Str("<filename>", "scripts list (by filter)"));
             Cmd_Add(cmd);
         }
     }
@@ -331,6 +361,35 @@ public:
         return true;
     }
 
+    bool scripts_list_by_filter(Str_Filter_Abstract &str_filter, string filter) {
+        DIR *dir;
+        struct dirent *ent;
+        if ((dir = opendir(Script_Dir_Str.c_str())) != NULL) {
+            while ((ent = readdir(dir)) != NULL) {
+                string filename = ent->d_name;
+                if (filename != "." && filename != ".." && str_filter.Is_Match(filter, filename)) {
+                    stringstream s_str;
+                    if (ent->d_type == DT_DIR) {
+                        s_str << "[D] ";
+                    } else if (ent->d_type == DT_REG) {
+                        s_str << "[f] ";
+                    } else {
+                        s_str << "[?] ";
+                    }
+                    s_str << filename;
+                    Cli_Output.Output_Str(s_str.str());
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            closedir(dir);
+        } else {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("ERROR: can not read dir \"" + Script_Dir_Str + "\"");
+            Cli_Output.Output_NewLine();
+        }
+        return true;
+    }
+
     virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
         enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
@@ -358,6 +417,21 @@ public:
                 if (is_debug) return true;
                 Cmd_Script_Stop = true;
                 return true;
+
+            case CMD_ID_scripts_list:
+                if (is_debug) return true;
+            {
+                string filter = "*";
+                return scripts_list_by_filter(Str_Filter, filter);
+            }
+                break;
+            case CMD_ID_scripts_list_by_filter:
+                if (is_debug) return true;
+            {
+                string filter = cmd->Items[2]->Value_Str;
+                return scripts_list_by_filter(Str_Filter, filter);
+            }
+                break;
 
             default:
                 return false; // Not Implemented
