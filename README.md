@@ -1,7 +1,7 @@
 # mCli
 Console Command Line Interface framework
 
-Features: Modules / Command Levels / Tab Hints
+Features: Modules / Command Levels / Tab Hints / Scripts / Conditional Executing
 
 Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby (Curses); Qt; C#
 
@@ -20,6 +20,8 @@ Projects:
   - Cli_Core_Qt - Cli Core Test Project for Qt (C++, Qt/QPlainTextEdit)
 
   - Cli_Core_JavaFX - Cli Core Test Project for JavaFX (Java, JavaFX/TextArea)
+
+  - Cli_Core_CS - Cli Core Test Project for C#
 
 Test Projects:
 
