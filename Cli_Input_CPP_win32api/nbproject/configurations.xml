@@ -4,7 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>CLI_CT.h</itemPath>
       <itemPath>Cli_Input_Abstract.h</itemPath>
+      <itemPath>Cli_Input_Char_Item.h</itemPath>
       <itemPath>Cli_Input_Item.h</itemPath>
       <itemPath>Cli_Input_Item_Type.h</itemPath>
       <itemPath>Cli_Input_win32api.h</itemPath>
@@ -53,7 +55,11 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="CLI_CT.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Char_Item.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -92,7 +98,11 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="CLI_CT.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Char_Item.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
       </item>

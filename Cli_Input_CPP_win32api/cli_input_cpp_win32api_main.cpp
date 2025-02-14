@@ -44,49 +44,12 @@ static fpWndProc *hwndEdit_WndProc_Org;
 
 static pthread_t Cli_Input_Thread_Handle = 0;
 
-enum CLI_CT {
-    CLI_CT_NO,
-
-    CLI_CT_CHAR,
-
-    CLI_CT_CTRL_C,
-    CLI_CT_CTRL_Z,
-    CLI_CT_CTRL_BACKSLASH,
-
-    CLI_CT_UP,
-    CLI_CT_DOWN,
-    CLI_CT_LEFT,
-    CLI_CT_RIGHT,
-
-    CLI_CT_HOME,
-    CLI_CT_END,
-    CLI_CT_DELETE,
-
-    CLI_CT_ENTER,
-    CLI_CT_TAB,
-    CLI_CT_ESC,
-    CLI_CT_BACK,
-
-    CLI_CT_LAST,
-    CLI_CT_UNDEFINED
-};
-
-class Cli_Input_Char_Item {
-public:
-    CLI_CT Char_Type;
-    WPARAM wParam;
-    string Text;
-
-    Cli_Input_Char_Item(CLI_CT char_type, WPARAM wparam, string text) : Char_Type(char_type), wParam(wparam), Text(text) {
-    }
-
-};
-
 class Cli_Input_Thread_Args_t {
 public:
+    HWND Main_HWND;
     HWND Output_HWND;
     bool Cli_Input_Thread_CMD_Stop;
-    list<Cli_Input_Char_Item> Cli_Input_Thread_Queue;
+    list<Cli_Input_Char_Item_t> Cli_Input_Thread_Queue;
     HANDLE Cli_Input_Queue_Mutex;
     int Cli_Input_Queue_Mutex_Wait_Time;
 
@@ -96,6 +59,14 @@ public:
                 NULL, // default security attributes
                 FALSE, // initially not owned
                 NULL);
+    }
+
+    void Main_HWND_Set(HWND hwnd) {
+        Main_HWND = hwnd;
+    }
+
+    HWND Main_HWND_Get() {
+        return Main_HWND;
     }
 
     void Output_HWND_Set(HWND hwnd) {
@@ -111,7 +82,7 @@ public:
         switch (dwWaitResult) {
             case WAIT_OBJECT_0:
             {
-                Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
+                Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item_t(ct, wParam, s));
                 ReleaseMutex(Cli_Input_Queue_Mutex);
             }
                 break;
@@ -134,7 +105,7 @@ void *Cli_Input_Thread_Func(void *arg) {
     Cli_Output.Output_NewLine();
     Cli_Output.Output_NewLine();
 
-    Cli_Input_win32api Cli_Input(Cli_Output);
+    Cli_Input_win32api Cli_Input(Cli_Output, thread_args->Output_HWND_Get());
 
     Cli_Input.Title_Set("cli demo");
     Cli_Input.User_Set("root");
@@ -146,6 +117,7 @@ void *Cli_Input_Thread_Func(void *arg) {
 
     Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
 
+    int state = 0;
     while (1) {
 
         if (thread_args->Cli_Input_Thread_CMD_Stop) {
@@ -153,34 +125,142 @@ void *Cli_Input_Thread_Func(void *arg) {
         }
 
         if (thread_args->Cli_Input_Thread_Queue.empty()) {
-            usleep(1000);
+            switch (state) {
+                case 0:
+                    usleep(1000);
+                    break;
+                case 1:
+                    Cli_Output.Output_Str("Press Any Key to stop");
+                    Cli_Output.Output_NewLine();
+                    Cli_Input.Input_sleep(1);
+                    break;
+            }
+
         } else {
 
             DWORD dwWaitResult = WaitForSingleObject(thread_args->Cli_Input_Queue_Mutex, thread_args->Cli_Input_Queue_Mutex_Wait_Time);
             switch (dwWaitResult) {
                 case WAIT_OBJECT_0:
                 {
-                    if (!thread_args->Cli_Input_Thread_Queue.empty()) {
-                        Cli_Input_Char_Item item = thread_args->Cli_Input_Thread_Queue.front();
-                        thread_args->Cli_Input_Thread_Queue.pop_front();
-                        ReleaseMutex(thread_args->Cli_Input_Queue_Mutex);
 
-                        CLI_CT ct = item.Char_Type;
-                        WPARAM code = item.wParam;
-                        string s = item.Text;
-                        if (ct == CLI_CT_ENTER
-                                || ct == CLI_CT_CTRL_C || ct == CLI_CT_CTRL_Z || ct == CLI_CT_CTRL_BACKSLASH
-                                || ct == CLI_CT_TAB || ct == CLI_CT_BACK || ct == CLI_CT_ESC
-                                || ct == CLI_CT_UP || ct == CLI_CT_DOWN || ct == CLI_CT_LEFT || ct == CLI_CT_RIGHT
-                                || ct == CLI_CT_HOME || ct == CLI_CT_END || ct == CLI_CT_DELETE) {
-                            if (ct != CLI_CT_ENTER) {
+                    if (state == 0) {
+
+                        if (!thread_args->Cli_Input_Thread_Queue.empty()) {
+                            Cli_Input_Char_Item_t char_item = thread_args->Cli_Input_Thread_Queue.front();
+                            thread_args->Cli_Input_Thread_Queue.pop_front();
+                            ReleaseMutex(thread_args->Cli_Input_Queue_Mutex);
+
+                            Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(char_item);
+
+                            if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_STR) {
+                                string input_str = input_item.Text_Get();
+                                if (input_str == "Q") {
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Output.Output_Str("Quit - Processed");
+                                    Cli_Output.Output_NewLine();
+                                    state = 1; // Quit
+                                } else if (input_str == "C") {
+                                    Cli_Input.Input_Clear();
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Output.Output_Str("Clear - Processed");
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Input.Input_Str_Set_Empty();
+                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                } else if (!input_str.empty()) {
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Output.Output_Str(input_item.Text_Get());
+                                    Cli_Output.Output_Str(" - Not Processed");
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Input.Input_Str_Set_Empty();
+                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                } else {
+                                    Cli_Output.Output_NewLine();
+                                    Cli_Input.Input_Str_Set_Empty();
+                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                }
+
+                            } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_TAB) {
                                 Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str(s);
+                                Cli_Output.Output_Str("TAB: ");
+                                Cli_Output.Output_Str(input_item.Text_Get());
+                                Cli_Output.Output_NewLine();
+                                Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().size());
+                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                            } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_UP) {
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str("UP: ");
+                                Cli_Output.Output_Str(input_item.Text_Get());
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                            } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_DOWN) {
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str("DOWN: ");
+                                Cli_Output.Output_Str(input_item.Text_Get());
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                            } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_QUIT) {
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str("Quit - Processed");
+                                Cli_Output.Output_NewLine();
+                                state = 1; // Quit
+
+                            } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_C) {
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str("Ctrl+C - Processed");
+                                Cli_Output.Output_NewLine();
+                                Cli_Input.Input_Str_Set_Empty();
+                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                Cli_Input.Is_Ctrl_C_Pressed_Clear();
+                            } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_Z) {
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str("Ctrl+Z - Processed");
+                                Cli_Output.Output_NewLine();
+                                Cli_Input.Input_Str_Set_Empty();
+                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                Cli_Input.Is_Ctrl_C_Pressed_Clear();
+                            } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH) {
+                                Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str("Ctrl+BackSlash - Processed");
+                                Cli_Output.Output_NewLine();
+                                Cli_Input.Input_Str_Set_Empty();
+                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                Cli_Input.Is_Ctrl_C_Pressed_Clear();
                             }
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                        } else {
-                            Cli_Output.Output_Str(s);
+
+                        }
+
+                    } else if (state == 1) {
+                        if (!thread_args->Cli_Input_Thread_Queue.empty()) {
+                            Cli_Input_Char_Item_t char_item = thread_args->Cli_Input_Thread_Queue.front();
+                            thread_args->Cli_Input_Thread_Queue.pop_front();
+                            ReleaseMutex(thread_args->Cli_Input_Queue_Mutex);
+                            Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(char_item);
+                            if (Cli_Input.Input_kbhit()) {
+                                Cli_Output.Output_Str("Press Any Key to exit");
+                                Cli_Output.Output_NewLine();
+                                state = 2;
+                            }
+                        }
+
+                    } else if (state == 2) {
+                        if (!thread_args->Cli_Input_Thread_Queue.empty()) {
+                            Cli_Input_Char_Item_t char_item = thread_args->Cli_Input_Thread_Queue.front();
+                            thread_args->Cli_Input_Thread_Queue.pop_front();
+                            ReleaseMutex(thread_args->Cli_Input_Queue_Mutex);
+                            Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(char_item);
+                            if (Cli_Input.Input_kbhit()) {
+                                state = 3;
+                                SendMessage(thread_args->Main_HWND_Get(), WM_DESTROY, 0, 0);
+                            }
                         }
 
                     }
@@ -192,6 +272,7 @@ void *Cli_Input_Thread_Func(void *arg) {
         }
 
     }
+
     return 0;
 }
 
@@ -410,6 +491,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 }
             }
 
+            Cli_Input_Thread_Args.Main_HWND_Set(hwnd);
             Cli_Input_Thread_Args.Output_HWND_Set(hwndEdit);
 
             // Create Cli_Thread
