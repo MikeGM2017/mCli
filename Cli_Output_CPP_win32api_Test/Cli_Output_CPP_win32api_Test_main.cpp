@@ -8,8 +8,6 @@ using namespace std;
 
 #include "main_resource_def.h"
 
-
-
 #define ID_HELP   150
 #define ID_TEXT   200
 
@@ -72,9 +70,7 @@ LRESULT CALLBACK DialogProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam) {
     return 0;
 }
 
-LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner, 
-    LPSTR lpszMessage)
-{
+LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner, LPSTR lpszMessage) {
     HGLOBAL hgbl;
     LPDLGTEMPLATE lpdt;
     LPDLGITEMTEMPLATE lpdit;
@@ -86,116 +82,121 @@ LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner,
     hgbl = GlobalAlloc(GMEM_ZEROINIT, 1024);
     if (!hgbl)
         return -1;
- 
-    lpdt = (LPDLGTEMPLATE)GlobalLock(hgbl);
- 
+
+    lpdt = (LPDLGTEMPLATE) GlobalLock(hgbl);
+
     // Define a dialog box.
- 
+
     lpdt->style = WS_POPUP | WS_BORDER | WS_SYSMENU
-                   | DS_MODALFRAME | WS_CAPTION;
-    lpdt->dwExtendedStyle = 0;  // added by codeguru (olivthill)
-    lpdt->cdit = 3;  // number of controls
-    lpdt->x  = 10;  lpdt->y  = 10;
-    lpdt->cx = 100; lpdt->cy = 100;
+            | DS_MODALFRAME | WS_CAPTION;
+    lpdt->dwExtendedStyle = 0; // added by codeguru (olivthill)
+    lpdt->cdit = 3; // number of controls
+    lpdt->x = 10;
+    lpdt->y = 10;
+    lpdt->cx = 100;
+    lpdt->cy = 100;
 
     lpw = (LPWORD) (lpdt + 1);
-    *lpw++ = 0;   // no menu
-    *lpw++ = 0;   // predefined dialog box class (by default)
+    *lpw++ = 0; // no menu
+    *lpw++ = 0; // predefined dialog box class (by default)
 
     lpwsz = (LPWSTR) lpw;
-    nchar = 1+ MultiByteToWideChar (CP_ACP, 0, "My Dialog", 
-                                    -1, lpwsz, 50);
-    lpw   += nchar;
+    nchar = 1 + MultiByteToWideChar(CP_ACP, 0, "My Dialog",
+            -1, lpwsz, 50);
+    lpw += nchar;
 
     //-----------------------
     // Define an OK button.
     //-----------------------
-    lpw = lpwAlign (lpw); // align DLGITEMTEMPLATE on DWORD boundary
+    lpw = lpwAlign(lpw); // align DLGITEMTEMPLATE on DWORD boundary
     lpdit = (LPDLGITEMTEMPLATE) lpw;
-    lpdit->x  = 10; lpdit->y  = 70;
-    lpdit->cx = 80; lpdit->cy = 20;
-    lpdit->id = IDOK;  // OK button identifier
+    lpdit->x = 10;
+    lpdit->y = 70;
+    lpdit->cx = 80;
+    lpdit->cy = 20;
+    lpdit->id = IDOK; // OK button identifier
     lpdit->style = WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON;
 
     lpw = (LPWORD) (lpdit + 1);
     *lpw++ = 0xFFFF;
-    *lpw++ = 0x0080;    // button class
+    *lpw++ = 0x0080; // button class
 
     lpwsz = (LPWSTR) lpw;
-    nchar = 1+MultiByteToWideChar (CP_ACP, 0, "OK", -1, lpwsz, 50);
-    lpw   += nchar;
-// commented by codeguru (olivthill)   lpw = lpwAlign (lpw); // align creation data on DWORD boundary
-    *lpw++ = 0;           // no creation data
+    nchar = 1 + MultiByteToWideChar(CP_ACP, 0, "OK", -1, lpwsz, 50);
+    lpw += nchar;
+    // commented by codeguru (olivthill)   lpw = lpwAlign (lpw); // align creation data on DWORD boundary
+    *lpw++ = 0; // no creation data
 
     //-----------------------
     // Define a Help button.
     //-----------------------
-    lpw = lpwAlign (lpw); // align DLGITEMTEMPLATE on DWORD boundary
+    lpw = lpwAlign(lpw); // align DLGITEMTEMPLATE on DWORD boundary
     lpdit = (LPDLGITEMTEMPLATE) lpw;
-    lpdit->x  = 55; lpdit->y  = 10;
-    lpdit->cx = 40; lpdit->cy = 20;
-    lpdit->id = ID_HELP;    // Help button identifier
+    lpdit->x = 55;
+    lpdit->y = 10;
+    lpdit->cx = 40;
+    lpdit->cy = 20;
+    lpdit->id = ID_HELP; // Help button identifier
     lpdit->style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
 
     lpw = (LPWORD) (lpdit + 1);
     *lpw++ = 0xFFFF;
-    *lpw++ = 0x0080;                 // button class atom
+    *lpw++ = 0x0080; // button class atom
 
     lpwsz = (LPWSTR) lpw;
-    nchar = 1+MultiByteToWideChar (CP_ACP, 0, "Help", -1, lpwsz, 50);
-    lpw   += nchar;
-// commented by codeguru (olivthill)   lpw = lpwAlign (lpw); // align creation data on DWORD boundary
-    *lpw++ = 0;           // no creation data
+    nchar = 1 + MultiByteToWideChar(CP_ACP, 0, "Help", -1, lpwsz, 50);
+    lpw += nchar;
+    // commented by codeguru (olivthill)   lpw = lpwAlign (lpw); // align creation data on DWORD boundary
+    *lpw++ = 0; // no creation data
 
     //-----------------------
     // Define a static text control.
     //-----------------------
-    lpw = lpwAlign (lpw); // align DLGITEMTEMPLATE on DWORD boundary
+    lpw = lpwAlign(lpw); // align DLGITEMTEMPLATE on DWORD boundary
     lpdit = (LPDLGITEMTEMPLATE) lpw;
-    lpdit->x  = 10; lpdit->y  = 10;
-    lpdit->cx = 40; lpdit->cy = 20;
-    lpdit->id = ID_TEXT;  // text identifier
+    lpdit->x = 10;
+    lpdit->y = 10;
+    lpdit->cx = 40;
+    lpdit->cy = 40;
+    lpdit->id = ID_TEXT; // text identifier
     lpdit->style = WS_CHILD | WS_VISIBLE | SS_LEFT;
 
     lpw = (LPWORD) (lpdit + 1);
     *lpw++ = 0xFFFF;
-    *lpw++ = 0x0082;                         // static class
+    *lpw++ = 0x0082; // static class
 
-    for (lpwsz = (LPWSTR)lpw;    
-        *lpwsz++ = (WCHAR) *lpszMessage++;
-    );
-    lpw = (LPWORD)lpwsz;
-    lpw = lpwAlign (lpw); // align creation data on DWORD boundary
-    *lpw++ = 0;           // no creation data
+    for (lpwsz = (LPWSTR) lpw;
+            *lpwsz++ = (WCHAR) * lpszMessage++;
+            );
+    lpw = (LPWORD) lpwsz;
+    lpw = lpwAlign(lpw); // align creation data on DWORD boundary
+    *lpw++ = 0; // no creation data
 
-    GlobalUnlock(hgbl); 
-    ret = DialogBoxIndirect(hinst, (LPDLGTEMPLATE) hgbl, 
-        hwndOwner, (DLGPROC) DialogProc); 
-	
-	LPVOID lpMsgBuf;
-	FormatMessage( 
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-		FORMAT_MESSAGE_FROM_SYSTEM | 
-		FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL,
-		GetLastError(),
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-		(LPTSTR) &lpMsgBuf,
-		0,
-		NULL 
-	);
-	// Process any inserts in lpMsgBuf.
-	// ...
-	// Display the string.
-	//MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
-	// Free the buffer.
-	LocalFree( lpMsgBuf );
+    GlobalUnlock(hgbl);
+    ret = DialogBoxIndirect(hinst, (LPDLGTEMPLATE) hgbl, hwndOwner, (DLGPROC) DialogProc);
 
-    GlobalFree(hgbl); 
-    return ret; 
+    LPVOID lpMsgBuf;
+    FormatMessage(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER |
+            FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            GetLastError(),
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            (LPTSTR) & lpMsgBuf,
+            0,
+            NULL
+            );
+    // Process any inserts in lpMsgBuf.
+    // ...
+    // Display the string.
+    //MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
+    // Free the buffer.
+    LocalFree(lpMsgBuf);
+
+    GlobalFree(hgbl);
+    return ret;
 }
-
-
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -365,10 +366,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
                 case IDM_HELP_ABOUT:
                 {
-                    //                    MessageBox(hwndEdit,
-                    //                                "Cli Output C++ Win32API Test",
-                    //                                "About",
-                    //                                MB_OK);
                     HINSTANCE hInst = GetModuleHandle(NULL);
                     LRESULT res_dlg = DisplayMyMessage(hInst, hwnd, (LPSTR) "Cli Output C++ Win32API Test");
                     stringstream s_str;
@@ -377,7 +374,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 }
                     break;
                 case IDM_HELP_SITE:
-                    //ShellExecute(NULL, "Open", "https://npotelecom.ru/", NULL, NULL, SW_SHOWNORMAL);
+                    ShellExecute(NULL, "Open", "https://npotelecom.ru/", NULL, NULL, SW_SHOWNORMAL);
                     break;
 
                 default:
