@@ -429,7 +429,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
                 case IDM_FILE_EXIT:
                     Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop = true;
-                    sleep(1);
+                    WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
                     CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex);
                     PostQuitMessage(0);
                     break;
@@ -460,7 +460,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         case WM_DESTROY:
         {
             Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop = true;
-            sleep(1);
+            WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
             CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex);
             PostQuitMessage(0);
         }
