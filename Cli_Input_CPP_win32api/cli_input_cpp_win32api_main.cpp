@@ -10,6 +10,7 @@ using namespace std;
 #include <pthread.h>
 #include <unistd.h>
 
+#include "Cli_Input_win32api.h"
 #include "Cli_Output_win32api.h"
 
 #define ID_EDITCHILD 101
@@ -128,8 +129,22 @@ void *Cli_Input_Thread_Func(void *arg) {
     Cli_Output_win32api Cli_Output;
     Cli_Output.Output_HWND_Set(thread_args->Output_HWND_Get());
 
-    Cli_Output.Output_Str("Started");
     Cli_Output.Output_NewLine();
+    Cli_Output.Output_Str("Cli Input Win32API started");
+    Cli_Output.Output_NewLine();
+    Cli_Output.Output_NewLine();
+
+    Cli_Input_win32api Cli_Input(Cli_Output);
+
+    Cli_Input.Title_Set("cli demo");
+    Cli_Input.User_Set("root");
+    Cli_Input.Level_Set("top level");
+    Cli_Input.Invitation_Set("> ");
+    Cli_Input.Divider_L_Set("[");
+    Cli_Input.Divider_R_Set("]");
+    Cli_Input.Input_Init();
+
+    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
 
     while (1) {
 
@@ -145,28 +160,27 @@ void *Cli_Input_Thread_Func(void *arg) {
             switch (dwWaitResult) {
                 case WAIT_OBJECT_0:
                 {
-                    static bool is_newline = true;
                     if (!thread_args->Cli_Input_Thread_Queue.empty()) {
                         Cli_Input_Char_Item item = thread_args->Cli_Input_Thread_Queue.front();
                         thread_args->Cli_Input_Thread_Queue.pop_front();
                         ReleaseMutex(thread_args->Cli_Input_Queue_Mutex);
 
                         CLI_CT ct = item.Char_Type;
+                        WPARAM code = item.wParam;
                         string s = item.Text;
                         if (ct == CLI_CT_ENTER
                                 || ct == CLI_CT_CTRL_C || ct == CLI_CT_CTRL_Z || ct == CLI_CT_CTRL_BACKSLASH
                                 || ct == CLI_CT_TAB || ct == CLI_CT_BACK || ct == CLI_CT_ESC
                                 || ct == CLI_CT_UP || ct == CLI_CT_DOWN || ct == CLI_CT_LEFT || ct == CLI_CT_RIGHT
                                 || ct == CLI_CT_HOME || ct == CLI_CT_END || ct == CLI_CT_DELETE) {
-                            if (!is_newline) {
+                            if (ct != CLI_CT_ENTER) {
                                 Cli_Output.Output_NewLine();
+                                Cli_Output.Output_Str(s);
                             }
-                            Cli_Output.Output_Str(s);
                             Cli_Output.Output_NewLine();
-                            is_newline = true;
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
                         } else {
                             Cli_Output.Output_Str(s);
-                            is_newline = false;
                         }
 
                     }

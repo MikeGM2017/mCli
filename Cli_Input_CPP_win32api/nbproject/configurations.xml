@@ -4,8 +4,13 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Cli_Input_Abstract.h</itemPath>
+      <itemPath>Cli_Input_Item.h</itemPath>
+      <itemPath>Cli_Input_Item_Type.h</itemPath>
+      <itemPath>Cli_Input_win32api.h</itemPath>
       <itemPath>Cli_Output_Abstract.h</itemPath>
       <itemPath>Cli_Output_win32api.h</itemPath>
+      <itemPath>Input_Mode_Type.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -48,9 +53,19 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_input_cpp_win32api_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -77,9 +92,19 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_input_cpp_win32api_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
