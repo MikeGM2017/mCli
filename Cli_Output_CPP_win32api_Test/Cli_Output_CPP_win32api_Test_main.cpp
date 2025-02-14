@@ -6,9 +6,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     HWND hwnd;
     MSG msg;
     WNDCLASS wndclass;
-    static const char *szAppName = "Splitter Example";
+    static const char *szAppName = "Cli Output CPP Win32API Test";
 
-    wndclass.style = CS_HREDRAW | CS_VREDRAW;//0; //CS_HREDRAW | CS_VREDRAW;
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
     wndclass.lpfnWndProc = WndProc;
     wndclass.cbClsExtra = 0;
     wndclass.cbWndExtra = 0;
@@ -38,93 +38,109 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     return msg.wParam;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    HINSTANCE hInst;
-    RECT rect;
-    static HCURSOR hCursor;
-    static BOOL bSplitterMoving;
-    static DWORD dwSplitterPos;
-    static HWND hWnd1, hWnd2;
+#define ID_EDITCHILD 100
 
-    switch (uMsg) {
+LRESULT CALLBACK WndProc(HWND hwnd, // window handle
+        UINT message, // type of message
+        WPARAM wParam, // additional information
+        LPARAM lParam) // additional information
+{
+    static HWND hwndEdit;
+
+    //    TCHAR lpszLatin[] =  L"Lorem ipsum dolor sit amet, consectetur "
+    //                         L"adipisicing elit, sed do eiusmod tempor "
+    //                         L"incididunt ut labore et dolore magna "
+    //                         L"aliqua. Ut enim ad minim veniam, quis "
+    //                         L"nostrud exercitation ullamco laboris nisi "
+    //                         L"ut aliquip ex ea commodo consequat. Duis "
+    //                         L"aute irure dolor in reprehenderit in "
+    //                         L"voluptate velit esse cillum dolore eu "
+    //                         L"fugiat nulla pariatur. Excepteur sint "
+    //                         L"occaecat cupidatat non proident, sunt "
+    //                         L"in culpa qui officia deserunt mollit "
+    //                         L"anim id est laborum.";
+
+    switch (message) {
         case WM_CREATE:
-        {
-            hInst = ((LPCREATESTRUCT) lParam) -> hInstance;
+            hwndEdit = CreateWindowEx(
+                    0, "EDIT", // predefined class
+                    NULL, // no window title
+                    WS_CHILD | WS_VISIBLE | WS_VSCROLL |
+                    ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL,
+                    0, 0, 0, 0, // set size in WM_SIZE message
+                    hwnd, // parent window
+                    (HMENU) ID_EDITCHILD, // edit control ID
+                    (HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
+                    NULL); // pointer not needed
 
-            hWnd1 = CreateWindowEx(WS_EX_CLIENTEDGE,
-                    "edit", NULL,
-                    WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | ES_MULTILINE | WS_VSCROLL,
-                    0, 0, 0, 0,
-                    hWnd, (HMENU) 1,
-                    hInst, NULL);
+            // Add text to the window.
+            //            SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) lpszLatin);
 
-            hWnd2 = CreateWindowEx(WS_EX_CLIENTEDGE,
-                    "edit", NULL,
-                    WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | ES_MULTILINE | WS_VSCROLL,
-                    0, 0, 0, 0,
-                    hWnd, (HMENU) 2,
-                    hInst, NULL);
+            return 0;
 
+        case WM_COMMAND:
+            switch (wParam) {
+                    //                case IDM_EDUNDO:
+                    //                    // Send WM_UNDO only if there is something to be undone.
+                    //
+                    //                    if (SendMessage(hwndEdit, EM_CANUNDO, 0, 0))
+                    //                        SendMessage(hwndEdit, WM_UNDO, 0, 0);
+                    //                    else {
+                    //                        MessageBox(hwndEdit,
+                    //                                L"Nothing to undo.",
+                    //                                L"Undo notification",
+                    //                                MB_OK);
+                    //                    }
+                    //                    break;
+                    //
+                    //                case IDM_EDCUT:
+                    //                    SendMessage(hwndEdit, WM_CUT, 0, 0);
+                    //                    break;
+                    //
+                    //                case IDM_EDCOPY:
+                    //                    SendMessage(hwndEdit, WM_COPY, 0, 0);
+                    //                    break;
+                    //
+                    //                case IDM_EDPASTE:
+                    //                    SendMessage(hwndEdit, WM_PASTE, 0, 0);
+                    //                    break;
+                    //
+                    //                case IDM_EDDEL:
+                    //                    SendMessage(hwndEdit, WM_CLEAR, 0, 0);
+                    //                    break;
+                    //
+                    //                case IDM_ABOUT:
+                    //                    DialogBox(hInst, // current instance
+                    //                            L"AboutBox", // resource to use
+                    //                            hwnd, // parent handle
+                    //                            (DLGPROC) About);
+                    //                    break;
 
-            hCursor = LoadCursor(NULL, MAKEINTRESOURCE(IDC_SIZENS));
-            bSplitterMoving = FALSE;
+                default:
+                    return DefWindowProc(hwnd, message, wParam, lParam);
+            }
+            break;
 
-            dwSplitterPos = 130;
-        }
+        case WM_SETFOCUS:
+            SetFocus(hwndEdit);
             return 0;
 
         case WM_SIZE:
-        {
-            /* 
-               If window is shrunk so that splitter now lies outside the 
-               window boundaries, move the splitter within the window.
-             */
-            if ((wParam != SIZE_MINIMIZED) && (HIWORD(lParam) < dwSplitterPos))
-                dwSplitterPos = HIWORD(lParam) - 10;
+            // Make the edit control the size of the window's client area.
 
-            /* Adjust the children's size and position */
-            MoveWindow(hWnd1, 0, 0, LOWORD(lParam), dwSplitterPos - 1, TRUE);
-            MoveWindow(hWnd2, 0, dwSplitterPos + 2, LOWORD(lParam), HIWORD(lParam) - dwSplitterPos - 2, TRUE);
-        }
-            return 0;
-
-        case WM_MOUSEMOVE:
-        {
-            if (HIWORD(lParam) > 10) // do not allow above this mark
-            {
-                SetCursor(hCursor);
-                if ((wParam == MK_LBUTTON) && bSplitterMoving) {
-                    GetClientRect(hWnd, &rect);
-                    if (HIWORD(lParam) > rect.bottom)
-                        return 0;
-
-                    dwSplitterPos = HIWORD(lParam);
-                    SendMessage(hWnd, WM_SIZE, 0, MAKELPARAM(rect.right, rect.bottom));
-                }
-            }
-        }
-            return 0;
-
-        case WM_LBUTTONDOWN:
-        {
-            SetCursor(hCursor);
-            bSplitterMoving = TRUE;
-            SetCapture(hWnd);
-        }
-            return 0;
-
-        case WM_LBUTTONUP:
-        {
-            ReleaseCapture();
-            bSplitterMoving = FALSE;
-        }
+            MoveWindow(hwndEdit,
+                    0, 0, // starting x- and y-coordinates
+                    LOWORD(lParam), // width of client area
+                    HIWORD(lParam), // height of client area
+                    TRUE); // repaint window
             return 0;
 
         case WM_DESTROY:
-        {
             PostQuitMessage(0);
-        }
             return 0;
+
+        default:
+            return DefWindowProc(hwnd, message, wParam, lParam);
     }
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
+    return NULL;
 }
