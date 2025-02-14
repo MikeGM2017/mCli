@@ -150,6 +150,12 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                 case 0x1A:
                     s = "Ctrl+Z";
                     break;
+                case 0x0A:
+                    s = "\"\\r\"";
+                    break;
+                case 0x1B:
+                    s = "ESC";
+                    break;
                 default:
                     s_buf[0] = wParam;
                     s_buf[1] = '\0';
