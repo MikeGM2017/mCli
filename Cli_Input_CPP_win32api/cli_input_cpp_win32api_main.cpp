@@ -105,7 +105,7 @@ void *Cli_Input_Thread_Func(void *arg) {
 
                         case INPUT_MODE_WAIT:
                         {
-                            sleep(1);
+                            Cli_Input.Input_sleep(1);
                             if (Cli_Input.Wait_Count_Get() > 0) {
                                 stringstream s_str;
                                 s_str << "Wait " << Cli_Input.Wait_Count_Get() << "...";
