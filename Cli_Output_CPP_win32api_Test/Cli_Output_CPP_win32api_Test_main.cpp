@@ -15,7 +15,6 @@ void AppendText(const HWND &hwndEdit, TCHAR *newText) {
     char *buf = new char[buf_size];
     int res_gettext = GetWindowText(hwndEdit, buf, buf_size - 1);
     int pos = res_gettext;
-    //pos += sprintf(buf + pos, "\nlen: %d%s", len_prev, newText);
     if (!len_prev) {
         pos += sprintf(buf + pos, "%s", newText);
     } else {
@@ -45,8 +44,6 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
         case WM_KEYDOWN:
         {
             char buf[1024];
-            //char s_buf[] = "12";
-            //char *s = s_buf;
             char *s = "";
             bool is_print = true;
             switch (wParam) {
@@ -103,27 +100,19 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     break;
 
                 default:
-                    //s_buf[0] = wParam;
-                    //s_buf[1] = '\0';
                     is_print = false;
                     break;
             }
-            //sprintf(buf, "WM_KEYDOWN: %x %x", wParam, lParam);
             if (is_print) {
                 sprintf(buf, "WM_KEYDOWN: 0x%02X %s", wParam, s);
                 AppendText(hwndEdit, buf);
             }
         }
-            //            if (wParam == VK_ESCAPE) {
-            //                PostQuitMessage(0);
-            //            }
             break;
 
         case WM_KEYUP:
         {
             char buf[1024];
-            //char s_buf[] = "12";
-            //char *s = s_buf;
             char *s = "";
             bool is_print = true;
             switch (wParam) {
@@ -133,20 +122,14 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     is_print = false;
                     break;
                 default:
-                    //s_buf[0] = wParam;
-                    //s_buf[1] = '\0';
                     is_print = false;
                     break;
             }
-            //sprintf(buf, "WM_KEYDOWN: %x %x", wParam, lParam);
             if (is_print) {
                 sprintf(buf, "  WM_KEYUP: 0x%02X %s", wParam, s);
                 AppendText(hwndEdit, buf);
             }
         }
-            //            if (wParam == VK_ESCAPE) {
-            //                PostQuitMessage(0);
-            //            }
             break;
 
         case WM_CHAR:
@@ -174,13 +157,9 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     s_buf[0] = wParam;
                     s_buf[1] = '\0';
             }
-            //sprintf(buf, "WM_CHAR: %x %x %s", wParam, lParam, s);
             sprintf(buf, "        WM_CHAR: 0x%02X %s", wParam, s);
             AppendText(hwndEdit, buf);
         }
-            //            if (wParam == VK_ESCAPE) {
-            //                PostQuitMessage(0);
-            //            }
             break;
         default:
             return hwndEdit_WndProc_Org(hwnd, message, wParam, lParam);
