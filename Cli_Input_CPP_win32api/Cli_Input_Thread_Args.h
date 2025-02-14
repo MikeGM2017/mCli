@@ -35,9 +35,11 @@ public:
     list<Cli_Input_Char_Item_t> Cli_Input_Thread_Queue;
     HANDLE Cli_Input_Queue_Mutex;
     int Cli_Input_Queue_Mutex_Wait_Time;
+    bool Is_kbhit;
 
     Cli_Input_Thread_Args_t() : Output_HWND(0), Cli_Input_Thread_CMD_Stop(false),
-    Cli_Input_Queue_Mutex(0), Cli_Input_Queue_Mutex_Wait_Time(100), hwndEdit_WndProc_Org(0) {
+    Cli_Input_Queue_Mutex(0), Cli_Input_Queue_Mutex_Wait_Time(100), hwndEdit_WndProc_Org(0),
+    Is_kbhit(false) {
         Cli_Input_Queue_Mutex = CreateMutex(
                 NULL, // default security attributes
                 FALSE, // initially not owned
@@ -58,6 +60,18 @@ public:
 
     HWND Output_HWND_Get() {
         return Output_HWND;
+    }
+
+    void Is_kbhit_Set() {
+        Is_kbhit = true;
+    }
+
+    void Is_kbhit_Clear() {
+        Is_kbhit = true;
+    }
+
+    bool Is_kbhit_Get() {
+        return Is_kbhit;
     }
 
     void Cli_Input_Queue_Add(WPARAM wParam, CLI_CT ct, string s) {

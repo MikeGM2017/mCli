@@ -26,8 +26,6 @@ protected:
 
     HWND Output_HWND;
 
-    bool Is_kbhit;
-
     Cli_Input_Thread_Args_t *Thread_Args;
 
     static LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
@@ -40,6 +38,7 @@ protected:
 
             case WM_KEYDOWN:
             {
+                if (thread_args) thread_args->Is_kbhit_Set();
                 CLI_CT ct = CLI_CT_NO;
                 const int buf_size = 1024;
                 char buf[buf_size];
@@ -121,6 +120,7 @@ protected:
 
             case WM_CHAR:
             {
+                if (thread_args) thread_args->Is_kbhit_Set();
                 CLI_CT ct = CLI_CT_NO;
                 const int buf_size = 1024;
                 char buf[buf_size];
@@ -185,7 +185,7 @@ protected:
 public:
 
     Cli_Input_win32api(Cli_Output_Abstract &cli_output, Cli_Input_Thread_Args_t *thread_args) : Cli_Input_Abstract(cli_output),
-    Thread_Args(thread_args), Is_kbhit(false) {
+    Thread_Args(thread_args) {
         Output_HWND = Thread_Args ? Thread_Args->Output_HWND : 0;
     }
 
@@ -337,8 +337,11 @@ public:
     }
 
     virtual bool Input_kbhit() { // Attention: Not Blocked
-        bool ret = Is_kbhit;
-        Is_kbhit = false;
+        bool ret = false;
+        if (Thread_Args) {
+            ret = Thread_Args->Is_kbhit_Get();
+            Thread_Args->Is_kbhit_Clear();
+        }
         return ret;
     }
 
@@ -413,7 +416,7 @@ public:
                 break;
         }
         if (char_item.Char_Type != CLI_CT_NO) {
-            Is_kbhit = true;
+            if (Thread_Args) Thread_Args->Is_kbhit_Set();
         }
         return item;
     }
