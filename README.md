@@ -37,6 +37,8 @@ Test Projects:
 
   - Cli_Input_Test_Key_Codes_telnet
 
+  - Cli_Input_Test_Key_Codes_CPP_win32api
+
   - Cli_Input_Test_Key_Codes_Ruby_curses
 
   - Cli_Input_Test_Key_Codes_JavaFX
@@ -62,6 +64,8 @@ Test Projects:
   - Cli_Output_CPP_file_Test (for test/debug)
 
   - Cli_Output_CPP_ofstream_Test (for test/debug)
+
+  - Cli_Output_CPP_win32api_Test
 
   - Cli_Output_C_ncurses_Test
 
@@ -96,6 +100,8 @@ Test Projects:
   - Cli_Input_CPP_file (for test/debug)
 
   - Cli_Input_CPP_ifstream (for test/debug)
+
+  - Cli_Input_CPP_win32api
 
   - Cli_Input_C_conio
 
