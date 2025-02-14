@@ -42,6 +42,27 @@ static pthread_t Cli_Input_Thread_Handle = 0;
 
 static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
 
+void On_Ctrl_C_Z_BACKSLASH(Cli_Output_win32api &Cli_Output, Cli_Input_win32api &Cli_Input, Cli_Input_Item &input_item) {
+    Cli_Output.Output_NewLine();
+
+    if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_C) {
+        Cli_Output.Output_Str("Ctrl+C - Processed");
+    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_Z) {
+        Cli_Output.Output_Str("Ctrl+Z - Processed");
+    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH) {
+        Cli_Output.Output_Str("Ctrl + BackSlash - Processed");
+    }
+
+    Cli_Output.Output_NewLine();
+    Cli_Input.Input_Str_Set_Empty();
+    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+    Cli_Input.Is_Ctrl_C_Pressed_Clear();
+    Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
+    Cli_Input.Is_Echo_On();
+    Cli_Input.Wait_Count_Set(-1);
+}
+
 void *Cli_Input_Thread_Func(void *arg) {
 
     Cli_Input_Thread_Args_t *thread_args = (Cli_Input_Thread_Args_t *) arg;
@@ -235,26 +256,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 case CLI_INPUT_ITEM_TYPE_CTRL_C:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_Z:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH:
-                                {
-                                    Cli_Output.Output_NewLine();
-
-                                    if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_C) {
-                                        Cli_Output.Output_Str("Ctrl+C - Processed");
-                                    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_Z) {
-                                        Cli_Output.Output_Str("Ctrl+Z - Processed");
-                                    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH) {
-                                        Cli_Output.Output_Str("Ctrl + BackSlash - Processed");
-                                    }
-
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Input.Input_Str_Set_Empty();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-                                    Cli_Input.Is_Ctrl_C_Pressed_Clear();
-                                    Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
-                                    Cli_Input.Is_Echo_On();
-                                    Cli_Input.Wait_Count_Set(-1);
-                                }
+                                    On_Ctrl_C_Z_BACKSLASH(Cli_Output, Cli_Input, input_item);
                                     break;
 
                             } // switch (input_item.Type_Get())
@@ -288,26 +290,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 case CLI_INPUT_ITEM_TYPE_CTRL_C:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_Z:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH:
-                                {
-                                    Cli_Output.Output_NewLine();
-
-                                    if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_C) {
-                                        Cli_Output.Output_Str("Ctrl+C - Processed");
-                                    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_Z) {
-                                        Cli_Output.Output_Str("Ctrl+Z - Processed");
-                                    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH) {
-                                        Cli_Output.Output_Str("Ctrl + BackSlash - Processed");
-                                    }
-
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Input.Input_Str_Set_Empty();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-                                    Cli_Input.Is_Ctrl_C_Pressed_Clear();
-                                    Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
-                                    Cli_Input.Is_Echo_On();
-                                    Cli_Input.Wait_Count_Set(-1);
-                                }
+                                    On_Ctrl_C_Z_BACKSLASH(Cli_Output, Cli_Input, input_item);
                                     break;
 
                             } // switch (input_item.Type_Get())
@@ -336,26 +319,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 case CLI_INPUT_ITEM_TYPE_CTRL_C:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_Z:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH:
-                                {
-                                    Cli_Output.Output_NewLine();
-
-                                    if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_C) {
-                                        Cli_Output.Output_Str("Ctrl+C - Processed");
-                                    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_Z) {
-                                        Cli_Output.Output_Str("Ctrl+Z - Processed");
-                                    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH) {
-                                        Cli_Output.Output_Str("Ctrl + BackSlash - Processed");
-                                    }
-
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Input.Input_Str_Set_Empty();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-                                    Cli_Input.Is_Ctrl_C_Pressed_Clear();
-                                    Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
-                                    Cli_Input.Is_Echo_On();
-                                    Cli_Input.Wait_Count_Set(-1);
-                                }
+                                    On_Ctrl_C_Z_BACKSLASH(Cli_Output, Cli_Input, input_item);
                                     break;
 
                             } // switch (input_item.Type_Get())
