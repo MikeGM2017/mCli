@@ -42,7 +42,7 @@ static pthread_t Cli_Input_Thread_Handle = 0;
 
 static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
 
-void On_Ctrl_C_Z_BACKSLASH(Cli_Output_win32api &Cli_Output, Cli_Input_win32api &Cli_Input, Cli_Input_Item &input_item) {
+void On_Ctrl_C_Z_BACKSLASH(Cli_Input_win32api &Cli_Input, Cli_Output_win32api &Cli_Output, Cli_Input_Item &input_item) {
     Cli_Output.Output_NewLine();
 
     if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_C) {
@@ -227,7 +227,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 case CLI_INPUT_ITEM_TYPE_CTRL_C:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_Z:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH:
-                                    On_Ctrl_C_Z_BACKSLASH(Cli_Output, Cli_Input, input_item);
+                                    On_Ctrl_C_Z_BACKSLASH(Cli_Input, Cli_Output, input_item);
                                     break;
 
                             } // switch (input_item.Type_Get())
@@ -258,7 +258,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 case CLI_INPUT_ITEM_TYPE_CTRL_C:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_Z:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH:
-                                    On_Ctrl_C_Z_BACKSLASH(Cli_Output, Cli_Input, input_item);
+                                    On_Ctrl_C_Z_BACKSLASH(Cli_Input, Cli_Output, input_item);
                                     break;
 
                             } // switch (input_item.Type_Get())
@@ -283,7 +283,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 case CLI_INPUT_ITEM_TYPE_CTRL_C:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_Z:
                                 case CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH:
-                                    On_Ctrl_C_Z_BACKSLASH(Cli_Output, Cli_Input, input_item);
+                                    On_Ctrl_C_Z_BACKSLASH(Cli_Input, Cli_Output, input_item);
                                     break;
 
                             } // switch (input_item.Type_Get())
