@@ -176,6 +176,17 @@ LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner, LPSTR lpszMessage) {
     return ret;
 }
 
+void AppendText(const HWND &hwndEdit, TCHAR *newText) {
+    int len_prev = GetWindowTextLength(hwndEdit);
+    int buf_size = len_prev + strlen(newText) + 1 + 1024;
+    char *buf = new char[buf_size];
+    int res_gettext = GetWindowText(hwndEdit, buf, buf_size - 1);
+    int pos = res_gettext;
+    pos += sprintf(buf + pos, "\nlen: %d%s", len_prev, newText);
+    SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) buf);
+    delete[] buf;
+}
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
@@ -335,7 +346,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     break;
 
                 case IDM_EDIT_PASTE:
-                    SendMessage(hwndEdit, WM_PASTE, 0, 0);
+                    //SendMessage(hwndEdit, WM_PASTE, 0, 0);
+                    AppendText(hwndEdit, " - Text Appended!");
                     break;
 
                 case IDM_EDIT_DELETE:
