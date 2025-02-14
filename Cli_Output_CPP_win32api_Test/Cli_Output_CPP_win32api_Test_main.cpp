@@ -104,7 +104,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     break;
             }
             if (is_print) {
-                sprintf(buf, "WM_KEYDOWN: 0x%02X %s", wParam, s);
+                sprintf(buf, " WM_KEYDOWN: 0x%02X %s", wParam, s);
                 AppendText(hwndEdit, buf);
             }
         }
@@ -126,7 +126,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     break;
             }
             if (is_print) {
-                sprintf(buf, "  WM_KEYUP: 0x%02X %s", wParam, s);
+                sprintf(buf, "   WM_KEYUP: 0x%02X %s", wParam, s);
                 AppendText(hwndEdit, buf);
             }
         }
@@ -157,7 +157,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     s_buf[0] = wParam;
                     s_buf[1] = '\0';
             }
-            sprintf(buf, "        WM_CHAR: 0x%02X %s", wParam, s);
+            sprintf(buf, "         WM_CHAR: 0x%02X %s", wParam, s);
             AppendText(hwndEdit, buf);
         }
             break;
@@ -388,6 +388,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #define IDM_EDIT_COPY 20003
 #define IDM_EDIT_PASTE 20004
 #define IDM_EDIT_DELETE 20005
+#define IDM_EDIT_SELECT_ALL 20006
+#define IDM_EDIT_CLEAR_ALL 20007
 
 #define IDM_HELP_ABOUT 30001
 #define IDM_HELP_SITE 30002
@@ -411,6 +413,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     (HMENU) ID_EDITCHILD, // edit control ID
                     (HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
                     NULL); // pointer not needed
+
+            // Set new Font
+            HFONT hwndEdit_hFont_new = CreateFont(0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, TEXT("Courier New"));
+            SendMessage(hwndEdit, WM_SETFONT, (WPARAM) hwndEdit_hFont_new, 0);
 
             // Set new WndProc
             hwndEdit_WndProc_Org = (fpWndProc *) GetWindowLongPtr(hwndEdit, GWLP_WNDPROC);
@@ -440,13 +446,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_COPY, "Copy");
                 AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_PASTE, "Paste");
                 AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_DELETE, "Delete");
+                AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
+                AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_SELECT_ALL, "Select All");
+                AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
+                AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CLEAR_ALL, "Clear All");
 
                 BOOL res_help = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hHelp, "&Help");
 
                 AppendMenu(hHelp, MF_ENABLED | MF_STRING, IDM_HELP_ABOUT, "&About");
                 AppendMenu(hHelp, MF_SEPARATOR, 0, 0);
                 AppendMenu(hHelp, MF_ENABLED | MF_STRING, IDM_HELP_SITE, "Site...");
-
 
                 BOOL res_set = SetMenu(hwnd, hMainMenu);
 
@@ -483,13 +492,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     break;
 
                 case IDM_EDIT_PASTE:
-                {
-                    const TCHAR *s = TEXT(" - Text Appended!");
-                    AppendText(hwndEdit, s);
-                }
+                    SendMessage(hwndEdit, WM_PASTE, 0, 0);
                     break;
 
                 case IDM_EDIT_DELETE:
+                    SendMessage(hwndEdit, WM_CLEAR, 0, 0);
+                    break;
+
+                case IDM_EDIT_SELECT_ALL:
+                    SendMessage(hwndEdit, EM_SETSEL, 0, -1); //Select all
+                    break;
+
+                case IDM_EDIT_CLEAR_ALL:
+                    SendMessage(hwndEdit, EM_SETSEL, 0, -1); //Select all
                     SendMessage(hwndEdit, WM_CLEAR, 0, 0);
                     break;
 
