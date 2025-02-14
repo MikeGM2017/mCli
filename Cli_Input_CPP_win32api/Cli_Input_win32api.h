@@ -33,8 +33,13 @@ public:
     }
 
     virtual void Input_Caret_Pos_Set() {
-        int pos = GetWindowTextLength(Output_HWND) - Input_Str.length() + Input_Str_Pos;
-        SendMessage(Output_HWND, EM_SETSEL, pos, pos);
+        if (Is_Echo_Get()) {
+            int pos = GetWindowTextLength(Output_HWND) - Input_Str.length() + Input_Str_Pos;
+            SendMessage(Output_HWND, EM_SETSEL, pos, pos);
+        } else {
+            int pos = GetWindowTextLength(Output_HWND);
+            SendMessage(Output_HWND, EM_SETSEL, pos, pos);
+        }
     }
 
     virtual void Input_Add(char c, bool is_shift) {
@@ -56,10 +61,13 @@ public:
             string s3 = Input_Str.substr(Input_Str_Pos, Input_Str.length() - Input_Str_Pos);
 
             Input_Str = s1 + s2_c + s3;
+
             Input_Str_Pos++;
 
-            SendMessage(Output_HWND, EM_SETSEL, pos_beg, len_prev);
-            SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) Input_Str.c_str());
+            if (Is_Echo_Get()) {
+                SendMessage(Output_HWND, EM_SETSEL, pos_beg, len_prev);
+                SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) Input_Str.c_str());
+            }
         }
         Input_Caret_Pos_Set();
     }
@@ -74,8 +82,10 @@ public:
                     Input_Str = s_prev.substr(0, s_prev.size() - 1);
                     Input_Str_Pos--;
 
-                    SendMessage(Output_HWND, EM_SETSEL, len_prev - 1, len_prev);
-                    SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) "");
+                    if (Is_Echo_Get()) {
+                        SendMessage(Output_HWND, EM_SETSEL, len_prev - 1, len_prev);
+                        SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) "");
+                    }
                 }
             } else {
                 if (Input_Str_Pos > 0) {
@@ -86,8 +96,10 @@ public:
                             + s_prev.substr(Input_Str_Pos, s_prev.size() - Input_Str_Pos);
                     Input_Str_Pos--;
 
-                    SendMessage(Output_HWND, EM_SETSEL, pos_beg, len_prev);
-                    SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) Input_Str.c_str());
+                    if (Is_Echo_Get()) {
+                        SendMessage(Output_HWND, EM_SETSEL, pos_beg, len_prev);
+                        SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) Input_Str.c_str());
+                    }
                 }
             }
         }
@@ -104,8 +116,10 @@ public:
             Input_Str = s_prev.substr(0, Input_Str_Pos)
                     + s_prev.substr(Input_Str_Pos + 1, s_prev.size() - Input_Str_Pos - 1);
 
-            SendMessage(Output_HWND, EM_SETSEL, pos_beg, len_prev);
-            SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) Input_Str.c_str());
+            if (Is_Echo_Get()) {
+                SendMessage(Output_HWND, EM_SETSEL, pos_beg, len_prev);
+                SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) Input_Str.c_str());
+            }
         }
         Input_Caret_Pos_Set();
         return Cli_Input_Item(CLI_INPUT_ITEM_TYPE_DELETE, "");
