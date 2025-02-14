@@ -4,7 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>main_resource_def.h</itemPath>
+      <itemPath>Cli_Output_Abstract.h</itemPath>
+      <itemPath>Cli_Output_win32api.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -57,8 +58,6 @@
       </item>
       <item path="main_resource.rc" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="main_resource_def.h" ex="false" tool="3" flavor2="0">
-      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -90,8 +89,6 @@
       <item path="Cli_Output_win32api.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main_resource.rc" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="main_resource_def.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

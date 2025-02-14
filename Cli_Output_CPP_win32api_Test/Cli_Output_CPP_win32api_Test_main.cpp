@@ -146,7 +146,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
             // Test Cli_Output
             {
-                Cli_Output.HWND_Set(hwndEdit);
+                Cli_Output.Output_HWND_Set(hwndEdit);
 
                 Cli_Output.Output_Init();
 
