@@ -104,6 +104,20 @@ public:
         return char_item;
     }
 
+    void Cli_Input_Thread_Queue_Clear() {
+        if (!Cli_Input_Thread_Queue.empty()) {
+            DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, Cli_Input_Queue_Mutex_Wait_Time);
+            switch (dwWaitResult) {
+                case WAIT_OBJECT_0:
+                {
+                    Cli_Input_Thread_Queue.clear();
+                    ReleaseMutex(Cli_Input_Queue_Mutex);
+                }
+                    break;
+            }
+        }
+    }
+
 };
 
 #endif /* CLI_INPUT_THREAD_ARGS_H */
