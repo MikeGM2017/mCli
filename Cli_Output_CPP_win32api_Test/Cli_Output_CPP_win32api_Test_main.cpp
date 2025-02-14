@@ -36,20 +36,15 @@ using namespace std;
 static int TIMER1_Count = 0;
 
 void AppendText(const HWND &hwndEdit, const TCHAR *newText) {
-    int len_prev = GetWindowTextLength(hwndEdit);
-    int buf_size = len_prev + strlen(newText) + 1 + 1024;
-    char *buf = new char[buf_size];
-    int res_gettext = GetWindowText(hwndEdit, buf, buf_size - 1);
-    int pos = res_gettext;
-    if (!len_prev) {
-        pos += sprintf(buf + pos, "%s", newText);
-    } else {
-        pos += sprintf(buf + pos, "\n%s", newText);
+    int len_prev1 = GetWindowTextLength(hwndEdit);
+    if (len_prev1) {
+        SendMessage(hwndEdit, EM_SETSEL, len_prev1, len_prev1); //Select end pos
+        SendMessage(hwndEdit, EM_REPLACESEL, FALSE, (LPARAM) "\r\n");
     }
-    SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) buf);
-    SendMessage(hwndEdit, EM_SETSEL, 0, -1); //Select all
+    int len_prev2 = GetWindowTextLength(hwndEdit);
+    SendMessage(hwndEdit, EM_SETSEL, len_prev2, len_prev2); //Select end pos
+    SendMessage(hwndEdit, EM_REPLACESEL, FALSE, (LPARAM) newText);
     SendMessage(hwndEdit, EM_SETSEL, -1, -1); //Unselect and stay at the end pos
-    delete[] buf;
 }
 
 typedef LRESULT CALLBACK fpWndProc(HWND hwnd, // window handle
