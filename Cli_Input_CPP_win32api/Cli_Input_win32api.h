@@ -38,7 +38,6 @@ protected:
 
             case WM_KEYDOWN:
             {
-                if (thread_args) thread_args->Is_kbhit_Set();
                 CLI_CT ct = CLI_CT_NO;
                 const int buf_size = 1024;
                 char buf[buf_size];
@@ -113,6 +112,7 @@ protected:
 
                 if (is_print) {
                     if (thread_args) thread_args->Cli_Input_Queue_Add(wParam, ct, s);
+                    if (thread_args) thread_args->Is_kbhit_Set();
                 }
 
             }
@@ -120,7 +120,6 @@ protected:
 
             case WM_CHAR:
             {
-                if (thread_args) thread_args->Is_kbhit_Set();
                 CLI_CT ct = CLI_CT_NO;
                 const int buf_size = 1024;
                 char buf[buf_size];
@@ -168,6 +167,7 @@ protected:
 
                 if (is_print) {
                     if (thread_args) thread_args->Cli_Input_Queue_Add(wParam, ct, s);
+                    if (thread_args) thread_args->Is_kbhit_Set();
                 }
 
             }
@@ -414,9 +414,6 @@ public:
                 item.Type_Set(CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH);
                 item.Text_Set(Input_Str_Get());
                 break;
-        }
-        if (char_item.Char_Type != CLI_CT_NO) {
-            if (Thread_Args) Thread_Args->Is_kbhit_Set();
         }
         return item;
     }
