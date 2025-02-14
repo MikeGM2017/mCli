@@ -83,13 +83,13 @@ public:
 
 class Cli_Input_Thread_Args_t {
 public:
-    HWND output_hwnd;
+    HWND Output_HWND;
     bool Cli_Input_Thread_CMD_Stop;
     list<Cli_Input_Char_Item> Cli_Input_Thread_Queue;
     HANDLE Cli_Input_Queue_Mutex;
     int Cli_Input_Queue_Mutex_Wait_Time;
 
-    Cli_Input_Thread_Args_t() : output_hwnd(0), Cli_Input_Thread_CMD_Stop(false),
+    Cli_Input_Thread_Args_t() : Output_HWND(0), Cli_Input_Thread_CMD_Stop(false),
     Cli_Input_Queue_Mutex(0), Cli_Input_Queue_Mutex_Wait_Time(100) {
         Cli_Input_Queue_Mutex = CreateMutex(
                 NULL, // default security attributes
@@ -97,8 +97,12 @@ public:
                 NULL);
     }
 
-    void HWND_Set(HWND hwnd) {
-        output_hwnd = hwnd;
+    void Output_HWND_Set(HWND hwnd) {
+        Output_HWND = hwnd;
+    }
+
+    HWND Output_HWND_Get() {
+        return Output_HWND;
     }
 
     void Cli_Input_Queue_Add(WPARAM wParam, CLI_CT ct, string s) {
@@ -122,7 +126,7 @@ void *Cli_Input_Thread_Func(void *arg) {
     Cli_Input_Thread_Args_t *thread_args = (Cli_Input_Thread_Args_t *) arg;
 
     Cli_Output_win32api Cli_Output;
-    Cli_Output.HWND_Set(thread_args->output_hwnd);
+    Cli_Output.Output_HWND_Set(thread_args->Output_HWND_Get());
 
     Cli_Output.Output_Str("Started");
     Cli_Output.Output_NewLine();
@@ -392,7 +396,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 }
             }
 
-            Cli_Input_Thread_Args.HWND_Set(hwndEdit);
+            Cli_Input_Thread_Args.Output_HWND_Set(hwndEdit);
 
             // Create Cli_Thread
             {

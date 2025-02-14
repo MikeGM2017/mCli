@@ -22,7 +22,7 @@
 class Cli_Output_win32api : public Cli_Output_Abstract {
 protected:
 
-    HWND output_hwnd;
+    HWND Output_HWND;
 
     void AppendText(const HWND hwndEdit, const TCHAR *newText) {
         int len_prev = GetWindowTextLength(hwndEdit);
@@ -33,11 +33,11 @@ protected:
 
 public:
 
-    Cli_Output_win32api() : output_hwnd(0) {
+    Cli_Output_win32api() : Output_HWND(0) {
     }
 
-    virtual void HWND_Set(HWND hwnd) {
-        output_hwnd = hwnd;
+    virtual void Output_HWND_Set(HWND hwnd) {
+        Output_HWND = hwnd;
     }
 
     virtual bool Output_Init() {
@@ -49,41 +49,41 @@ public:
     }
 
     virtual bool Output_Clear() {
-        SetWindowText(output_hwnd, "\0");
+        SetWindowText(Output_HWND, "\0");
         return true;
     }
 
     virtual void Output_NewLine() {
-        AppendText(output_hwnd, "\n");
+        AppendText(Output_HWND, "\n");
     }
 
     virtual void Output_Char(char c) {
         TCHAR s[2];
         s[0] = c;
         s[1] = 0;
-        AppendText(output_hwnd, s);
+        AppendText(Output_HWND, s);
     }
 
     virtual void Output_Str(string s) {
-        AppendText(output_hwnd, s.c_str());
+        AppendText(Output_HWND, s.c_str());
     }
 
     virtual void Output_Return() {
-        int buf_size = GetWindowTextLength(output_hwnd);
+        int buf_size = GetWindowTextLength(Output_HWND);
         if (buf_size) {
             TCHAR *buf = new TCHAR[buf_size];
-            int len = GetWindowText(output_hwnd, buf, buf_size);
+            int len = GetWindowText(Output_HWND, buf, buf_size);
             if (len > 0) {
                 int pos = len - 1;
                 while (1) {
                     TCHAR c = buf[pos];
                     if (c == '\n' || c == '\r') {
-                        SendMessage(output_hwnd, EM_SETSEL, pos + 1, pos + 1);
+                        SendMessage(Output_HWND, EM_SETSEL, pos + 1, pos + 1);
                         break;
                     } else {
                         pos--;
                         if (pos < 0) {
-                            SendMessage(output_hwnd, EM_SETSEL, 0, 0);
+                            SendMessage(Output_HWND, EM_SETSEL, 0, 0);
                             break;
                         }
                     }
@@ -91,7 +91,7 @@ public:
             }
             delete[] buf;
         } else {
-            SendMessage(output_hwnd, EM_SETSEL, 0, 0);
+            SendMessage(Output_HWND, EM_SETSEL, 0, 0);
         }
     }
 
