@@ -53,14 +53,8 @@ void On_Ctrl_C_Z_BACKSLASH(Cli_Output_win32api &Cli_Output, Cli_Input_win32api &
         Cli_Output.Output_Str("Ctrl + BackSlash - Processed");
     }
 
-    Cli_Output.Output_NewLine();
-    Cli_Input.Input_Str_Set_Empty();
-    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-    Cli_Input.Is_Ctrl_C_Pressed_Clear();
-    Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
-    Cli_Input.Is_Echo_On();
-    Cli_Input.Wait_Count_Set(-1);
+    Cli_Input.Input_Default_State_Set();
+    Cli_Input.Input_Invitation_Print();
 }
 
 void *Cli_Input_Thread_Func(void *arg) {
@@ -119,14 +113,8 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 Cli_Output.Output_Str(s_str.str());
                                 Cli_Input.Wait_Count_Set(Cli_Input.Wait_Count_Get() - 1);
                             } else {
-                                Cli_Output.Output_NewLine();
-                                Cli_Input.Input_Str_Set_Empty();
-                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-                                Cli_Input.Is_Ctrl_C_Pressed_Clear();
-                                Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
-                                Cli_Input.Is_Echo_On();
-                                Cli_Input.Wait_Count_Set(-1);
+                                Cli_Input.Input_Default_State_Set();
+                                Cli_Input.Input_Invitation_Print();
                             }
                         }
                             break;
@@ -160,47 +148,39 @@ void *Cli_Input_Thread_Func(void *arg) {
                                         Cli_Input.Input_Clear();
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str("Clear - Processed");
-                                        Cli_Output.Output_NewLine();
-                                        Cli_Input.Input_Str_Set_Empty();
-                                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                        Cli_Input.Input_Default_State_Set();
+                                        Cli_Input.Input_Invitation_Print();
                                     } else if (input_str == "H" || input_str == "help") {
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str(Help_Str);
-                                        Cli_Output.Output_NewLine();
-                                        Cli_Input.Input_Str_Set_Empty();
-                                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                        Cli_Input.Input_Default_State_Set();
+                                        Cli_Input.Input_Invitation_Print();
                                     } else if (input_str == "A" || input_str == "ask") {
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str("Is it right?(yes/no) ");
-                                        Cli_Input.Input_Str_Set_Empty();
+                                        Cli_Input.Input_Default_State_Set();
                                         Cli_Input.Input_Mode_Set(INPUT_MODE_PROMPT);
                                     } else if (input_str == "P" || input_str == "passwd") {
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str("Password:");
-                                        Cli_Input.Input_Str_Set_Empty();
+                                        Cli_Input.Input_Default_State_Set();
                                         Cli_Input.Input_Mode_Set(INPUT_MODE_PASSWD);
                                         Cli_Input.Is_Echo_Off();
                                     } else if (input_str == "W" || input_str == "wait") {
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str("Wait (Press Enter to stop):");
-                                        Cli_Input.Input_Str_Set_Empty();
+                                        Cli_Input.Input_Default_State_Set();
                                         Cli_Input.Input_Mode_Set(INPUT_MODE_WAIT);
                                         Cli_Input.Wait_Count_Set(10);
                                     } else if (!input_str.empty()) {
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str(input_item.Text_Get());
                                         Cli_Output.Output_Str(" - Not Processed");
-                                        Cli_Output.Output_NewLine();
-                                        Cli_Input.Input_Str_Set_Empty();
-                                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                        Cli_Input.Input_Default_State_Set();
+                                        Cli_Input.Input_Invitation_Print();
                                     } else {
-                                        Cli_Output.Output_NewLine();
-                                        Cli_Input.Input_Str_Set_Empty();
-                                        Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                        Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                        Cli_Input.Input_Default_State_Set();
+                                        Cli_Input.Input_Invitation_Print();
                                     }
 
                                 }
@@ -210,13 +190,8 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 {
                                     Cli_Output.Output_NewLine();
                                     Cli_Output.Output_Str(Help_Str);
-
                                     Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().length());
-
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-
+                                    Cli_Input.Input_Invitation_Print();
                                 }
                                     break;
 
@@ -225,9 +200,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                     Cli_Output.Output_NewLine();
                                     Cli_Output.Output_Str("UP: ");
                                     Cli_Output.Output_Str(input_item.Text_Get());
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                    Cli_Input.Input_Invitation_Print();
                                 }
                                     break;
 
@@ -236,9 +209,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                     Cli_Output.Output_NewLine();
                                     Cli_Output.Output_Str("DOWN: ");
                                     Cli_Output.Output_Str(input_item.Text_Get());
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                                    Cli_Input.Input_Invitation_Print();
                                 }
                                     break;
 
@@ -279,11 +250,8 @@ void *Cli_Input_Thread_Func(void *arg) {
                                     } else {
                                         Cli_Output.Output_Str("Answer: No");
                                     }
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Input.Input_Str_Set_Empty();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-                                    Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
+                                    Cli_Input.Input_Default_State_Set();
+                                    Cli_Input.Input_Invitation_Print();
                                 }
                                     break;
 
@@ -307,12 +275,8 @@ void *Cli_Input_Thread_Func(void *arg) {
                                 {
                                     Cli_Output.Output_NewLine();
                                     Cli_Output.Output_Str("Password:" + input_item.Text_Get());
-                                    Cli_Output.Output_NewLine();
-                                    Cli_Input.Input_Str_Set_Empty();
-                                    Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                                    Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-                                    Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
-                                    Cli_Input.Is_Echo_On();
+                                    Cli_Input.Input_Default_State_Set();
+                                    Cli_Input.Input_Invitation_Print();
                                 }
                                     break;
 
@@ -329,14 +293,10 @@ void *Cli_Input_Thread_Func(void *arg) {
 
                         case INPUT_MODE_WAIT: // Any Key -> Stop Wait
                         {
-                            Cli_Input.Wait_Count_Set(-1);
                             Cli_Output.Output_NewLine();
                             Cli_Output.Output_Str("Wait stopped");
-                            Cli_Output.Output_NewLine();
-                            Cli_Input.Input_Str_Set_Empty();
-                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                            Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
-                            Cli_Input.Input_Mode_Set(INPUT_MODE_NORMAL);
+                            Cli_Input.Input_Default_State_Set();
+                            Cli_Input.Input_Invitation_Print();
                         }
                             break;
 

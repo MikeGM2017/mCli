@@ -61,6 +61,20 @@ public:
     virtual ~Cli_Input_Abstract() {
     }
 
+    virtual void Input_Default_State_Set() {
+        Input_Mode_Set(INPUT_MODE_NORMAL);
+        Input_Str_Set_Empty();
+        Is_Ctrl_C_Pressed_Clear();
+        Is_Echo_On();
+        Wait_Count_Set(-1);
+    }
+
+    virtual void Input_Invitation_Print() {
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str(Invitation_Full_Get());
+        Cli_Output.Output_Str(Input_Str_Get());
+    }
+
     virtual string Title_Get() {
         return Title;
     }
