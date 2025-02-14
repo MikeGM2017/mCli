@@ -47,18 +47,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 {
     static HWND hwndEdit;
 
-    //    TCHAR lpszLatin[] =  L"Lorem ipsum dolor sit amet, consectetur "
-    //                         L"adipisicing elit, sed do eiusmod tempor "
-    //                         L"incididunt ut labore et dolore magna "
-    //                         L"aliqua. Ut enim ad minim veniam, quis "
-    //                         L"nostrud exercitation ullamco laboris nisi "
-    //                         L"ut aliquip ex ea commodo consequat. Duis "
-    //                         L"aute irure dolor in reprehenderit in "
-    //                         L"voluptate velit esse cillum dolore eu "
-    //                         L"fugiat nulla pariatur. Excepteur sint "
-    //                         L"occaecat cupidatat non proident, sunt "
-    //                         L"in culpa qui officia deserunt mollit "
-    //                         L"anim id est laborum.";
+    TCHAR lpszLatin[] = "Lorem ipsum dolor sit amet, consectetur "
+            "adipisicing elit, sed do eiusmod tempor "
+            "incididunt ut labore et dolore magna "
+            "aliqua. Ut enim ad minim veniam, quis "
+            "nostrud exercitation ullamco laboris nisi "
+            "ut aliquip ex ea commodo consequat. Duis "
+            "aute irure dolor in reprehenderit in "
+            "voluptate velit esse cillum dolore eu "
+            "fugiat nulla pariatur. Excepteur sint "
+            "occaecat cupidatat non proident, sunt "
+            "in culpa qui officia deserunt mollit "
+            "anim id est laborum.";
 
     switch (message) {
         case WM_CREATE:
@@ -74,7 +74,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     NULL); // pointer not needed
 
             // Add text to the window.
-            //            SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) lpszLatin);
+            SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) lpszLatin);
 
             return 0;
 
