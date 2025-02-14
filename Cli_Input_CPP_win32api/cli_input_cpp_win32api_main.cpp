@@ -95,7 +95,9 @@ void *Cli_Input_Thread_Func(void *arg) {
             case 0: // Normal
             {
 
-                if (thread_args->Cli_Input_Thread_Queue.empty()) {
+                bool is_kbhit = Cli_Input.Input_kbhit(); // Get and Clear Is_kbhit
+
+                if (!is_kbhit) {
 
                     switch (Cli_Input.Input_Mode_Get()) {
 
@@ -123,7 +125,7 @@ void *Cli_Input_Thread_Func(void *arg) {
 
                 }
 
-                if (!thread_args->Cli_Input_Thread_Queue.empty()) {
+                if (is_kbhit) {
 
                     Cli_Input_Char_Item_t char_item = thread_args->Cli_Input_Queue_Get();
                     Cli_Input_Item input_item = Cli_Input.On_Key_Pressed(char_item);
@@ -142,7 +144,8 @@ void *Cli_Input_Thread_Func(void *arg) {
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str("Quit - Processed");
                                         Cli_Output.Output_NewLine();
-                                        thread_args->Cli_Input_Thread_Queue_Clear();
+                                        Cli_Input.Input_Default_State_Set();
+                                        Cli_Input.Input_kbhit(); // Clear Is_kbhit
                                         state = 1; // Quit
                                     } else if (input_str == "C" || input_str == "clear") {
                                         Cli_Input.Input_Clear();
@@ -172,6 +175,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                                         Cli_Input.Input_Default_State_Set();
                                         Cli_Input.Input_Mode_Set(INPUT_MODE_WAIT);
                                         Cli_Input.Wait_Count_Set(10);
+                                        Cli_Input.Input_kbhit(); // Clear Is_kbhit
                                     } else if (!input_str.empty()) {
                                         Cli_Output.Output_NewLine();
                                         Cli_Output.Output_Str(input_item.Text_Get());
@@ -218,7 +222,8 @@ void *Cli_Input_Thread_Func(void *arg) {
                                     Cli_Output.Output_NewLine();
                                     Cli_Output.Output_Str("Quit - Processed");
                                     Cli_Output.Output_NewLine();
-                                    thread_args->Cli_Input_Thread_Queue_Clear();
+                                    Cli_Input.Input_Default_State_Set();
+                                    Cli_Input.Input_kbhit(); // Clear Is_kbhit
                                     state = 1; // Quit
 
                                 }
@@ -309,12 +314,12 @@ void *Cli_Input_Thread_Func(void *arg) {
 
             case 1: // Quit: "Press Any Key to stop" xN ->  "Press Any Key to exit"
             {
-                if (thread_args->Cli_Input_Thread_Queue.empty()) {
+                bool is_kbhit = Cli_Input.Input_kbhit(); // Get and Clear Is_kbhit
+                if (!is_kbhit) {
                     Cli_Output.Output_Str("Press Any Key to stop");
                     Cli_Output.Output_NewLine();
                     Cli_Input.Input_sleep(1);
                 } else {
-                    thread_args->Cli_Input_Thread_Queue_Clear();
                     Cli_Output.Output_Str("Press Any Key to exit");
                     Cli_Output.Output_NewLine();
                     state = 2;
@@ -322,11 +327,11 @@ void *Cli_Input_Thread_Func(void *arg) {
             }
                 break;
 
-            case 2:
-            default: // Quit: WM_DESTROY
+            case 2: // Quit: WM_DESTROY
+            default:
             {
-                if (!thread_args->Cli_Input_Thread_Queue.empty()) {
-                    thread_args->Cli_Input_Thread_Queue_Clear();
+                bool is_kbhit = Cli_Input.Input_kbhit(); // Get and Clear Is_kbhit
+                if (is_kbhit) {
                     state = 3;
                     SendMessage(thread_args->Main_HWND_Get(), WM_DESTROY, 0, 0);
                 }
@@ -472,6 +477,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
         default:
             return DefWindowProc(hwnd, message, wParam, lParam);
+
     }
 
     return 0;
