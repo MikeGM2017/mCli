@@ -86,6 +86,8 @@ void *Cli_Input_Thread_Func(void *arg) {
     int state = 0;
     while (1) {
 
+        usleep(1000); // Minimum Delay for all cases
+
         if (thread_args->Cli_Input_Thread_CMD_Stop_Get()) {
             break;
         }
@@ -100,10 +102,6 @@ void *Cli_Input_Thread_Func(void *arg) {
                 if (!is_kbhit) {
 
                     switch (Cli_Input.Input_Mode_Get()) {
-
-                        case INPUT_MODE_NORMAL:
-                            usleep(1000);
-                            break;
 
                         case INPUT_MODE_WAIT:
                         {
