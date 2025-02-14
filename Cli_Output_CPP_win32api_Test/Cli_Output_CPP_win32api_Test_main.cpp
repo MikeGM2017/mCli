@@ -6,8 +6,34 @@ using namespace std;
 #include <windows.h>
 #include <winuser.h>
 
+#define ID_EDITCHILD 100
+
 #define ID_HELP   150
 #define ID_TEXT   200
+
+#define IDM_FILE_OPEN 10001
+#define IDM_FILE_SAVE 10002
+#define IDM_FILE_SAVE_AS 10003
+#define IDM_FILE_EXIT 10004
+
+#define IDM_EDIT_UNDO 20001
+#define IDM_EDIT_CUT 20002
+#define IDM_EDIT_COPY 20003
+#define IDM_EDIT_PASTE 20004
+#define IDM_EDIT_DELETE 20005
+#define IDM_EDIT_SELECT_ALL 20006
+#define IDM_EDIT_CLEAR_ALL 20007
+
+#define IDM_TEST_TIMER1_START 30001
+#define IDM_TEST_TIMER1_STOP 30002
+
+#define IDM_HELP_ABOUT 40001
+#define IDM_HELP_SITE 40002
+
+#define IDT_TIMER1 301
+
+#define TIMER1_COUNT_MAX 10
+static int TIMER1_Count = 0;
 
 void AppendText(const HWND &hwndEdit, const TCHAR *newText) {
     int len_prev = GetWindowTextLength(hwndEdit);
@@ -376,24 +402,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     return msg.wParam;
 }
 
-#define ID_EDITCHILD 100
-
-#define IDM_FILE_OPEN 10001
-#define IDM_FILE_SAVE 10002
-#define IDM_FILE_SAVE_AS 10003
-#define IDM_FILE_EXIT 10004
-
-#define IDM_EDIT_UNDO 20001
-#define IDM_EDIT_CUT 20002
-#define IDM_EDIT_COPY 20003
-#define IDM_EDIT_PASTE 20004
-#define IDM_EDIT_DELETE 20005
-#define IDM_EDIT_SELECT_ALL 20006
-#define IDM_EDIT_CLEAR_ALL 20007
-
-#define IDM_HELP_ABOUT 30001
-#define IDM_HELP_SITE 30002
-
 LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         UINT message, // type of message
         WPARAM wParam, // additional information
@@ -425,6 +433,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
             HMENU hMainMenu = CreateMenu();
             HMENU hFile = CreateMenu();
             HMENU hEdit = CreateMenu();
+            HMENU hTest = CreateMenu();
             HMENU hHelp = CreateMenu();
 
             if (hMainMenu != NULL) {
@@ -450,6 +459,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_SELECT_ALL, "Select All");
                 AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
                 AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CLEAR_ALL, "Clear All");
+
+                BOOL res_test = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hTest, "&Test");
+                AppendMenu(hTest, MF_ENABLED | MF_STRING, IDM_TEST_TIMER1_START, "Timer Start");
+                AppendMenu(hTest, MF_SEPARATOR, 0, 0);
+                AppendMenu(hTest, MF_ENABLED | MF_STRING, IDM_TEST_TIMER1_STOP, "Timer Stop");
 
                 BOOL res_help = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hHelp, "&Help");
 
@@ -508,6 +522,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     SendMessage(hwndEdit, WM_CLEAR, 0, 0);
                     break;
 
+                case IDM_TEST_TIMER1_START:
+                {
+                    TIMER1_Count = 0;
+                    UINT_PTR res_timer_set = SetTimer(hwnd, // handle to main window
+                            IDT_TIMER1, // timer identifier
+                            1000, // 1-second interval
+                            (TIMERPROC) NULL); // no timer callback
+                    char s[100];
+                    sprintf(s, "SetTimer(..., TIMER1, ...): %d", res_timer_set);
+                    AppendText(hwndEdit, s);
+                }
+                    break;
+
+                case IDM_TEST_TIMER1_STOP:
+                {
+                    BOOL res_timer_kill = KillTimer(hwnd, IDT_TIMER1);
+                    char s[100];
+                    sprintf(s, "KillTimer(..., TIMER1): %s", res_timer_kill ? "Ok" : "Failed");
+                    AppendText(hwndEdit, s);
+                }
+                    break;
+
                 case IDM_HELP_ABOUT:
                 {
                     HINSTANCE hInst = GetModuleHandle(NULL);
@@ -517,6 +553,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) s_str.str().c_str());
                 }
                     break;
+
                 case IDM_HELP_SITE:
                     ShellExecute(NULL, "Open", "https://npotelecom.ru/", NULL, NULL, SW_SHOWNORMAL);
                     break;
@@ -542,6 +579,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     LOWORD(lParam), // width of client area
                     HIWORD(lParam), // height of client area
                     TRUE); // repaint window
+            return 0;
+
+        case WM_TIMER:
+            switch (wParam) {
+                case IDT_TIMER1:
+                    TIMER1_Count++;
+                    char s[100];
+                    sprintf(s, "TIMER1: %d", TIMER1_Count);
+                    AppendText(hwndEdit, s);
+                    if (TIMER1_Count >= TIMER1_COUNT_MAX) {
+                        BOOL res_timer_kill = KillTimer(hwnd, IDT_TIMER1);
+                        char s[100];
+                        sprintf(s, "KillTimer(..., TIMER1): %s", res_timer_kill ? "Ok" : "False");
+                        AppendText(hwndEdit, s);
+                    }
+                    return 0;
+            }
             return 0;
 
         case WM_DESTROY:
