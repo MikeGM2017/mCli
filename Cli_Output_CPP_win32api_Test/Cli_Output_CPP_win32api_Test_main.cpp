@@ -6,8 +6,6 @@ using namespace std;
 #include <windows.h>
 #include <winuser.h>
 
-#include "main_resource_def.h"
-
 #define ID_HELP   150
 #define ID_TEXT   200
 
