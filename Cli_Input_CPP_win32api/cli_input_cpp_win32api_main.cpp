@@ -24,18 +24,6 @@ using namespace std;
 #define IDM_EDIT_SELECT_ALL 20003
 #define IDM_EDIT_CLEAR_ALL 20004
 
-void AppendText(const HWND hwndEdit, const TCHAR *newText) {
-    int len_prev1 = GetWindowTextLength(hwndEdit);
-    if (len_prev1) {
-        SendMessage(hwndEdit, EM_SETSEL, len_prev1, len_prev1); //Select end pos
-        SendMessage(hwndEdit, EM_REPLACESEL, FALSE, (LPARAM) "\r\n");
-    }
-    int len_prev2 = GetWindowTextLength(hwndEdit);
-    SendMessage(hwndEdit, EM_SETSEL, len_prev2, len_prev2); //Select end pos
-    SendMessage(hwndEdit, EM_REPLACESEL, FALSE, (LPARAM) newText);
-    SendMessage(hwndEdit, EM_SETSEL, -1, -1); //Unselect and stay at the end pos
-}
-
 static HWND hwndEdit;
 
 static pthread_t Cli_Input_Thread_Handle = 0;
