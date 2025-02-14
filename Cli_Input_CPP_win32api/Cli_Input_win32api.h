@@ -332,7 +332,7 @@ public:
     }
 
     virtual bool Input_sleep(int sleep_sec) {
-        sleep(sleep_sec);
+        Sleep(sleep_sec * 1000);
         return true;
     }
 

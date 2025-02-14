@@ -49,12 +49,12 @@ public:
     }
 
     virtual bool Output_Clear() {
-        SetWindowText(Output_HWND, "\0");
+        SetWindowText(Output_HWND, TEXT("\0"));
         return true;
     }
 
     virtual void Output_NewLine() {
-        AppendText(Output_HWND, "\r\n");
+        AppendText(Output_HWND, TEXT("\r\n"));
     }
 
     virtual void Output_Char(char c) {
@@ -65,7 +65,12 @@ public:
     }
 
     virtual void Output_Str(string s) {
+#ifdef UNICODE
+        wstring ws(s.begin(), s.end());
+        AppendText(Output_HWND, ws.c_str());
+#else
         AppendText(Output_HWND, s.c_str());
+#endif
     }
 
     virtual void Output_Return() {

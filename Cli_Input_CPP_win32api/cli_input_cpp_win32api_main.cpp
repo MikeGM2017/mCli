@@ -7,8 +7,6 @@ using namespace std;
 #include <winuser.h>
 
 #include <stdio.h>
-#include <pthread.h>
-#include <unistd.h>
 
 #include "Cli_Input_win32api.h"
 #include "Cli_Output_win32api.h"
@@ -26,7 +24,8 @@ using namespace std;
 
 static HWND hwndEdit;
 
-static pthread_t Cli_Input_Thread_Handle = 0;
+static HANDLE Cli_Input_Thread_Handle = 0;
+static DWORD Cli_Input_Thread_ID = 0;
 
 static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
 
@@ -45,7 +44,7 @@ void On_Ctrl_C_Z_BACKSLASH(Cli_Input_win32api &Cli_Input, Cli_Output_win32api &C
     Cli_Input.Input_Invitation_Print();
 }
 
-void *Cli_Input_Thread_Func(void *arg) {
+DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
     Cli_Input_Thread_Args_t *thread_args = (Cli_Input_Thread_Args_t *) arg;
 
@@ -74,7 +73,7 @@ void *Cli_Input_Thread_Func(void *arg) {
     int state = 0;
     while (1) {
 
-        usleep(1000); // Minimum Delay for all cases
+        Sleep(1); // 1ms - Minimum Delay for all cases
 
         if (thread_args->Cli_Input_Thread_CMD_Stop_Get()) {
             break;
@@ -345,7 +344,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
             // Create Window
             {
                 hwndEdit = CreateWindowEx(
-                        0, "EDIT", // predefined class
+                        0, TEXT("EDIT"), // predefined class
                         NULL, // no window title
                         WS_CHILD | WS_VISIBLE | WS_VSCROLL |
                         ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL,
@@ -372,21 +371,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
                 if (hMainMenu != NULL) {
 
-                    BOOL res_file = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hFile, "&File");
-                    AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_EXIT, "E&xit");
+                    BOOL res_file = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hFile, TEXT("&File"));
+                    AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_EXIT, TEXT("E&xit"));
 
-                    BOOL res_edit = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hEdit, "&Edit");
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CUT, "Cut");
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_COPY, "Copy");
+                    BOOL res_edit = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hEdit, TEXT("&Edit"));
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CUT, TEXT("Cut"));
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_COPY, TEXT("Copy"));
                     AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_SELECT_ALL, "Select All");
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_SELECT_ALL, TEXT("Select All"));
                     AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CLEAR_ALL, "Clear All");
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CLEAR_ALL, TEXT("Clear All"));
 
                     BOOL res_set = SetMenu(hwnd, hMainMenu);
 
                 } else {
-                    MessageBox(0, "hMainMenu = NULL", "hMainMenu = NULL", MB_ICONEXCLAMATION | MB_OK);
+                    MessageBox(0, TEXT("hMainMenu = NULL"), TEXT("hMainMenu = NULL"), MB_ICONEXCLAMATION | MB_OK);
                 }
             }
 
@@ -395,7 +394,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
             // Create Cli_Thread
             {
-                pthread_create(&Cli_Input_Thread_Handle, 0, Cli_Input_Thread_Func, &Cli_Input_Thread_Args);
+                Cli_Input_Thread_Handle = CreateThread(
+                        NULL, // default security attributes
+                        0, // use default stack size
+                        Cli_Input_Thread_Func, // thread function name
+                        &Cli_Input_Thread_Args, // argument to thread function
+                        0, // use default creation flags
+                        &Cli_Input_Thread_ID);
             }
 
         }
@@ -424,7 +429,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
                 case IDM_FILE_EXIT:
                     Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
-                    WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
+                    WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, 100);
                     CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
                     PostQuitMessage(0);
                     break;
@@ -455,7 +460,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         case WM_DESTROY:
         {
             Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
-            WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
+            WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, 100);
             CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
             PostQuitMessage(0);
         }
@@ -473,7 +478,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     HWND hwnd;
     MSG msg;
     WNDCLASS wndclass;
-    static const char *szAppName = "Cli_Input_CPP_win32api";
+    TCHAR szAppName[] = TEXT("Cli_Input_CPP_win32api");
 
     wndclass.style = CS_HREDRAW | CS_VREDRAW;
     wndclass.lpfnWndProc = WndProc;
