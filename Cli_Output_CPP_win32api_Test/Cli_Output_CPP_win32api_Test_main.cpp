@@ -9,6 +9,184 @@ using namespace std;
 #define ID_HELP   150
 #define ID_TEXT   200
 
+void AppendText(const HWND &hwndEdit, TCHAR *newText) {
+    int len_prev = GetWindowTextLength(hwndEdit);
+    int buf_size = len_prev + strlen(newText) + 1 + 1024;
+    char *buf = new char[buf_size];
+    int res_gettext = GetWindowText(hwndEdit, buf, buf_size - 1);
+    int pos = res_gettext;
+    //pos += sprintf(buf + pos, "\nlen: %d%s", len_prev, newText);
+    if (!len_prev) {
+        pos += sprintf(buf + pos, "%s", newText);
+    } else {
+        pos += sprintf(buf + pos, "\n%s", newText);
+    }
+    SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) buf);
+    SendMessage(hwndEdit, EM_SETSEL, 0, -1); //Select all
+    SendMessage(hwndEdit, EM_SETSEL, -1, -1); //Unselect and stay at the end pos
+    delete[] buf;
+}
+
+typedef LRESULT CALLBACK fpWndProc(HWND hwnd, // window handle
+        UINT message, // type of message
+        WPARAM wParam, // additional information
+        LPARAM lParam);
+
+static HWND hwndEdit;
+static fpWndProc *hwndEdit_WndProc_Org;
+static bool Is_Ctrl = false;
+
+LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
+        UINT message, // type of message
+        WPARAM wParam, // additional information
+        LPARAM lParam) // additional information
+{
+    switch (message) {
+        case WM_KEYDOWN:
+        {
+            char buf[1024];
+            //char s_buf[] = "12";
+            //char *s = s_buf;
+            char *s = "";
+            bool is_print = true;
+            switch (wParam) {
+                case VK_CONTROL:
+                    //s = "CTRL";
+                    Is_Ctrl = true;
+                    is_print = false;
+                    break;
+                case VK_RETURN:
+                    s = "ENTER";
+                    is_print = false;
+                    break;
+                case VK_TAB:
+                    s = "TAB";
+                    is_print = false;
+                    break;
+                case VK_BACK:
+                    s = "BACK";
+                    is_print = false;
+                    break;
+                case VK_CANCEL:
+                    s = "Ctrl+C";
+                    break;
+                case 0x1A:
+                    s = "Ctrl+Z";
+                    break;
+                case 0xDC:
+                    if (Is_Ctrl) {
+                        s = "Ctrl+BACKSLASH";
+                    } else {
+                        is_print = false;
+                    }
+                    break;
+                case VK_UP:
+                    s = "UP";
+                    break;
+                case VK_DOWN:
+                    s = "DOWN";
+                    break;
+                case VK_RIGHT:
+                    s = "RIGHT";
+                    break;
+                case VK_LEFT:
+                    s = "LEFT";
+                    break;
+                case VK_DELETE:
+                    s = "DELETE";
+                    break;
+                case VK_HOME:
+                    s = "HOME";
+                    break;
+                case VK_END:
+                    s = "END";
+                    break;
+
+                default:
+                    //s_buf[0] = wParam;
+                    //s_buf[1] = '\0';
+                    is_print = false;
+                    break;
+            }
+            //sprintf(buf, "WM_KEYDOWN: %x %x", wParam, lParam);
+            if (is_print) {
+                sprintf(buf, "WM_KEYDOWN: 0x%02X %s", wParam, s);
+                AppendText(hwndEdit, buf);
+            }
+        }
+            //            if (wParam == VK_ESCAPE) {
+            //                PostQuitMessage(0);
+            //            }
+            break;
+
+        case WM_KEYUP:
+        {
+            char buf[1024];
+            //char s_buf[] = "12";
+            //char *s = s_buf;
+            char *s = "";
+            bool is_print = true;
+            switch (wParam) {
+                case VK_CONTROL:
+                    //s = "CTRL";
+                    Is_Ctrl = false;
+                    is_print = false;
+                    break;
+                default:
+                    //s_buf[0] = wParam;
+                    //s_buf[1] = '\0';
+                    is_print = false;
+                    break;
+            }
+            //sprintf(buf, "WM_KEYDOWN: %x %x", wParam, lParam);
+            if (is_print) {
+                sprintf(buf, "  WM_KEYUP: 0x%02X %s", wParam, s);
+                AppendText(hwndEdit, buf);
+            }
+        }
+            //            if (wParam == VK_ESCAPE) {
+            //                PostQuitMessage(0);
+            //            }
+            break;
+
+        case WM_CHAR:
+        {
+            char buf[1024];
+            char s_buf[] = "12";
+            char *s = s_buf;
+            switch (wParam) {
+                case VK_RETURN:
+                    s = "ENTER";
+                    break;
+                case VK_TAB:
+                    s = "TAB";
+                    break;
+                case VK_BACK:
+                    s = "BACK";
+                    break;
+                case VK_CANCEL:
+                    s = "Ctrl+C";
+                    break;
+                case 0x1A:
+                    s = "Ctrl+Z";
+                    break;
+                default:
+                    s_buf[0] = wParam;
+                    s_buf[1] = '\0';
+            }
+            //sprintf(buf, "WM_CHAR: %x %x %s", wParam, lParam, s);
+            sprintf(buf, "        WM_CHAR: 0x%02X %s", wParam, s);
+            AppendText(hwndEdit, buf);
+        }
+            //            if (wParam == VK_ESCAPE) {
+            //                PostQuitMessage(0);
+            //            }
+            break;
+        default:
+            return hwndEdit_WndProc_Org(hwnd, message, wParam, lParam);
+    }
+}
+
 LPWORD lpwAlign(LPWORD lpIn) {
     ULONG ul;
 
@@ -176,17 +354,6 @@ LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner, LPSTR lpszMessage) {
     return ret;
 }
 
-void AppendText(const HWND &hwndEdit, TCHAR *newText) {
-    int len_prev = GetWindowTextLength(hwndEdit);
-    int buf_size = len_prev + strlen(newText) + 1 + 1024;
-    char *buf = new char[buf_size];
-    int res_gettext = GetWindowText(hwndEdit, buf, buf_size - 1);
-    int pos = res_gettext;
-    pos += sprintf(buf + pos, "\nlen: %d%s", len_prev, newText);
-    SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) buf);
-    delete[] buf;
-}
-
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
@@ -246,21 +413,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         WPARAM wParam, // additional information
         LPARAM lParam) // additional information
 {
-    static HWND hwndEdit;
-
-    TCHAR lpszLatin[] = "Test Text:\n"
-            "Lorem ipsum dolor sit amet, consectetur "
-            "adipisicing elit, sed do eiusmod tempor "
-            "incididunt ut labore et dolore magna "
-            "aliqua. Ut enim ad minim veniam, quis "
-            "nostrud exercitation ullamco laboris nisi "
-            "ut aliquip ex ea commodo consequat. Duis "
-            "aute irure dolor in reprehenderit in "
-            "voluptate velit esse cillum dolore eu "
-            "fugiat nulla pariatur. Excepteur sint "
-            "occaecat cupidatat non proident, sunt "
-            "in culpa qui officia deserunt mollit "
-            "anim id est laborum.";
 
     switch (message) {
         case WM_CREATE:
@@ -276,8 +428,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     (HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
                     NULL); // pointer not needed
 
-            // Add text to the window.
-            SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) lpszLatin);
+            // Set new WndProc
+            hwndEdit_WndProc_Org = (fpWndProc *) GetWindowLongPtr(hwndEdit, GWLP_WNDPROC);
+            hwndEdit_WndProc_Org = (fpWndProc *) SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, hwndEdit_WndProc_New);
 
             HMENU hMainMenu = CreateMenu();
             HMENU hFile = CreateMenu();
