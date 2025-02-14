@@ -30,38 +30,18 @@ LRESULT CALLBACK DialogProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam) {
     //	}
 
     switch (Msg) {
-            //	case WM_COMMAND:
-            //		{
-            //			switch(LOWORD(wParam))
-            //			{
-            //			case 27:
-            //				{
-            //					wchar_t szItemData[64];
-            //					if (!GetDlgItemText(hDlg, 26, szItemData, 64)) 
-            //						*szItemData=0;
-            //
-            //					if(pPass && szItemData)
-            //					{
-            //						std::wstring my(szItemData);
-            //						*pPass = std::string( my.begin(), my.end() );
-            //					}
-            //					EndDialog(hDlg, IDOK);
-            //					return 1;
-            //				}
-            //				break;
-            //			case 28:
-            //				{
-            //					EndDialog(hDlg, IDOK);
-            //					return 1;
-            //				}
-            //				break;
-            //			default:
-            //				break;
-            //			}
-            //			break;
-            //		}
+        case WM_COMMAND:
+        {
+            switch (LOWORD(wParam)) {
+                case IDOK:
+                    EndDialog(hDlg, IDOK);
+                    return 1;
+            }
+            break;
+        }
+            break;
         case WM_CLOSE:
-            EndDialog(hDlg, IDOK);
+            EndDialog(hDlg, IDCANCEL);
             return 1;
     }
 
