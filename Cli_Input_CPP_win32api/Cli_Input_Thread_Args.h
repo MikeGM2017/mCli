@@ -67,7 +67,7 @@ public:
     }
 
     void Is_kbhit_Clear() {
-        Is_kbhit = true;
+        Is_kbhit = false;
     }
 
     bool Is_kbhit_Get() {
