@@ -54,7 +54,6 @@ typedef LRESULT CALLBACK fpWndProc(HWND hwnd, // window handle
 
 static HWND hwndEdit;
 static fpWndProc *hwndEdit_WndProc_Org;
-static bool Is_Ctrl = false;
 
 LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
         UINT message, // type of message
@@ -70,7 +69,6 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
             switch (wParam) {
                 case VK_CONTROL:
                     //s = "CTRL";
-                    Is_Ctrl = true;
                     is_print = false;
                     break;
                 case VK_RETURN:
@@ -92,7 +90,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     s = "Ctrl+Z";
                     break;
                 case 0xDC:
-                    if (Is_Ctrl) {
+                    if (GetKeyState(VK_CONTROL) < 0) {
                         s = "Ctrl+BACKSLASH";
                     } else {
                         is_print = false;
@@ -126,28 +124,6 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
             }
             if (is_print) {
                 sprintf(buf, " WM_KEYDOWN: 0x%02X %s", wParam, s);
-                AppendText(hwndEdit, buf);
-            }
-        }
-            break;
-
-        case WM_KEYUP:
-        {
-            char buf[1024];
-            const char *s = "";
-            bool is_print = true;
-            switch (wParam) {
-                case VK_CONTROL:
-                    //s = "CTRL";
-                    Is_Ctrl = false;
-                    is_print = false;
-                    break;
-                default:
-                    is_print = false;
-                    break;
-            }
-            if (is_print) {
-                sprintf(buf, "   WM_KEYUP: 0x%02X %s", wParam, s);
                 AppendText(hwndEdit, buf);
             }
         }
