@@ -19,6 +19,8 @@
 #include "CLI_CT.h"
 #include "Cli_Input_Char_Item.h"
 
+#include "Cli_Input_Thread_Args.h"
+
 class Cli_Input_win32api : public Cli_Input_Abstract {
 protected:
 
@@ -26,10 +28,185 @@ protected:
 
     bool Is_kbhit;
 
+    Cli_Input_Thread_Args_t *Thread_Args;
+
+    static LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
+            UINT message, // type of message
+            WPARAM wParam, // additional information
+            LPARAM lParam) // additional information
+    {
+        Cli_Input_Thread_Args_t *thread_args = (Cli_Input_Thread_Args_t *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+        switch (message) {
+
+            case WM_KEYDOWN:
+            {
+                CLI_CT ct = CLI_CT_NO;
+                const int buf_size = 1024;
+                char buf[buf_size];
+                const char *s = "";
+                bool is_print = true;
+                switch (wParam) {
+                    case VK_CONTROL:
+                        //s = "CTRL";
+                        is_print = false;
+                        break;
+                    case VK_RETURN:
+                        s = "ENTER";
+                        is_print = false;
+                        break;
+                    case VK_TAB:
+                        s = "TAB";
+                        is_print = false;
+                        break;
+                    case VK_BACK:
+                        s = "BACK";
+                        is_print = false;
+                        break;
+                    case VK_CANCEL:
+                        s = "Ctrl+C";
+                        ct = CLI_CT_CTRL_C;
+                        break;
+                    case 0x1A:
+                        s = "Ctrl+Z";
+                        ct = CLI_CT_CTRL_Z;
+                        break;
+                    case 0xDC:
+                        if (GetKeyState(VK_CONTROL) < 0) {
+                            s = "Ctrl+BACKSLASH";
+                            ct = CLI_CT_CTRL_BACKSLASH;
+                        } else {
+                            is_print = false;
+                        }
+                        break;
+                    case VK_UP:
+                        s = "UP";
+                        ct = CLI_CT_UP;
+                        break;
+                    case VK_DOWN:
+                        s = "DOWN";
+                        ct = CLI_CT_DOWN;
+                        break;
+                    case VK_RIGHT:
+                        s = "RIGHT";
+                        ct = CLI_CT_RIGHT;
+                        break;
+                    case VK_LEFT:
+                        s = "LEFT";
+                        ct = CLI_CT_LEFT;
+                        break;
+                    case VK_DELETE:
+                        s = "DELETE";
+                        ct = CLI_CT_DELETE;
+                        break;
+                    case VK_HOME:
+                        s = "HOME";
+                        ct = CLI_CT_HOME;
+                        break;
+                    case VK_END:
+                        s = "END";
+                        ct = CLI_CT_END;
+                        break;
+
+                    default:
+                        is_print = false;
+                        break;
+                }
+
+                if (is_print) {
+                    if (thread_args) thread_args->Cli_Input_Queue_Add(wParam, ct, s);
+                }
+
+            }
+                break;
+
+            case WM_CHAR:
+            {
+                CLI_CT ct = CLI_CT_NO;
+                const int buf_size = 1024;
+                char buf[buf_size];
+                char s_buf[] = "12"; // Dummy value
+                const char *s = s_buf;
+                bool is_print = true;
+                switch (wParam) {
+                    case VK_RETURN:
+                        s = "ENTER";
+                        ct = CLI_CT_ENTER;
+                        break;
+                    case VK_TAB:
+                        s = "TAB";
+                        ct = CLI_CT_TAB;
+                        break;
+                    case VK_BACK:
+                        s = "BACK";
+                        ct = CLI_CT_BACK;
+                        break;
+                    case VK_CANCEL:
+                        s = "Ctrl+C";
+                        ct = CLI_CT_CTRL_C;
+                        break;
+                    case 0x1A:
+                        s = "Ctrl+Z";
+                        ct = CLI_CT_CTRL_Z;
+                        break;
+                    case 0x0A:
+                        s = "\"\\r\"";
+                        ct = CLI_CT_ENTER;
+                        break;
+                    case 0x1B:
+                        s = "ESC";
+                        ct = CLI_CT_ESC;
+                        break;
+                    default:
+                        s_buf[0] = wParam;
+                        s_buf[1] = '\0';
+                        if (wParam < 0x20) {
+                            is_print = false;
+                        } else {
+                            ct = CLI_CT_CHAR;
+                        }
+                }
+
+                if (is_print) {
+                    if (thread_args) thread_args->Cli_Input_Queue_Add(wParam, ct, s);
+                }
+
+            }
+                break;
+
+            default:
+                if (thread_args && thread_args->hwndEdit_WndProc_Org) {
+                    return thread_args->hwndEdit_WndProc_Org(hwnd, message, wParam, lParam);
+                }
+        }
+
+        return 0;
+    }
+
 public:
 
-    Cli_Input_win32api(Cli_Output_Abstract &cli_output, HWND output_hwnd) : Cli_Input_Abstract(cli_output),
-    Output_HWND(output_hwnd), Is_kbhit(false) {
+    Cli_Input_win32api(Cli_Output_Abstract &cli_output, Cli_Input_Thread_Args_t *thread_args) : Cli_Input_Abstract(cli_output),
+    Thread_Args(thread_args), Is_kbhit(false) {
+        Output_HWND = Thread_Args ? Thread_Args->Output_HWND : 0;
+    }
+
+    virtual bool Input_Init() {
+        // Set new WndProc as GWLP_WNDPROC and Thread_Args as GWLP_USERDATA
+        {
+            SetWindowLongPtr(Output_HWND, GWLP_USERDATA, (LONG_PTR) Thread_Args);
+            Thread_Args->hwndEdit_WndProc_Org = (fpWndProc *) GetWindowLongPtr(Output_HWND, GWLP_WNDPROC);
+            Thread_Args->hwndEdit_WndProc_Org = (fpWndProc *) SetWindowLongPtr(Output_HWND, GWLP_WNDPROC, (LONG_PTR) hwndEdit_WndProc_New);
+        }
+
+        return Cli_Output.Output_Init();
+    }
+
+    virtual bool Input_Restore() {
+        // Restore WndProc
+        {
+            SetWindowLongPtr(Output_HWND, GWLP_WNDPROC, (LONG_PTR) Thread_Args->hwndEdit_WndProc_Org);
+            Thread_Args->hwndEdit_WndProc_Org = 0;
+        }
+        return Cli_Output.Output_Close();
     }
 
     virtual void Input_Caret_Pos_Set() {

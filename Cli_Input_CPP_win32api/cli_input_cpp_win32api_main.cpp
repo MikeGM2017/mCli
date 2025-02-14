@@ -13,6 +13,8 @@ using namespace std;
 #include "Cli_Input_win32api.h"
 #include "Cli_Output_win32api.h"
 
+#include "Cli_Input_Thread_Args.h"
+
 #define ID_EDITCHILD 101
 
 #define IDM_FILE_EXIT 10001
@@ -34,80 +36,9 @@ void AppendText(const HWND hwndEdit, const TCHAR *newText) {
     SendMessage(hwndEdit, EM_SETSEL, -1, -1); //Unselect and stay at the end pos
 }
 
-typedef LRESULT CALLBACK fpWndProc(HWND hwnd, // window handle
-        UINT message, // type of message
-        WPARAM wParam, // additional information
-        LPARAM lParam);
-
 static HWND hwndEdit;
-static fpWndProc *hwndEdit_WndProc_Org;
 
 static pthread_t Cli_Input_Thread_Handle = 0;
-
-class Cli_Input_Thread_Args_t {
-public:
-    HWND Main_HWND;
-    HWND Output_HWND;
-    bool Cli_Input_Thread_CMD_Stop;
-    list<Cli_Input_Char_Item_t> Cli_Input_Thread_Queue;
-    HANDLE Cli_Input_Queue_Mutex;
-    int Cli_Input_Queue_Mutex_Wait_Time;
-
-    Cli_Input_Thread_Args_t() : Output_HWND(0), Cli_Input_Thread_CMD_Stop(false),
-    Cli_Input_Queue_Mutex(0), Cli_Input_Queue_Mutex_Wait_Time(100) {
-        Cli_Input_Queue_Mutex = CreateMutex(
-                NULL, // default security attributes
-                FALSE, // initially not owned
-                NULL);
-    }
-
-    void Main_HWND_Set(HWND hwnd) {
-        Main_HWND = hwnd;
-    }
-
-    HWND Main_HWND_Get() {
-        return Main_HWND;
-    }
-
-    void Output_HWND_Set(HWND hwnd) {
-        Output_HWND = hwnd;
-    }
-
-    HWND Output_HWND_Get() {
-        return Output_HWND;
-    }
-
-    void Cli_Input_Queue_Add(WPARAM wParam, CLI_CT ct, string s) {
-        DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, INFINITE);
-        switch (dwWaitResult) {
-            case WAIT_OBJECT_0:
-            {
-                Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item_t(ct, wParam, s));
-                ReleaseMutex(Cli_Input_Queue_Mutex);
-            }
-                break;
-        }
-    }
-
-    Cli_Input_Char_Item_t Cli_Input_Queue_Get() {
-        if (!Cli_Input_Thread_Queue.empty()) {
-            DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, Cli_Input_Queue_Mutex_Wait_Time);
-            switch (dwWaitResult) {
-                case WAIT_OBJECT_0:
-                {
-                    Cli_Input_Char_Item_t char_item = Cli_Input_Thread_Queue.front();
-                    Cli_Input_Thread_Queue.pop_front();
-                    ReleaseMutex(Cli_Input_Queue_Mutex);
-                    return char_item;
-                }
-                    break;
-            }
-        }
-        Cli_Input_Char_Item_t char_item(CLI_CT_NO, 0, ""); // No Action
-        return char_item;
-    }
-
-};
 
 static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
 
@@ -125,7 +56,7 @@ void *Cli_Input_Thread_Func(void *arg) {
     Cli_Output.Output_NewLine();
     Cli_Output.Output_NewLine();
 
-    Cli_Input_win32api Cli_Input(Cli_Output, thread_args->Output_HWND_Get());
+    Cli_Input_win32api Cli_Input(Cli_Output, thread_args);
 
     Cli_Input.Title_Set("cli demo");
     Cli_Input.User_Set("root");
@@ -282,6 +213,7 @@ void *Cli_Input_Thread_Func(void *arg) {
                     }
 
                 } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_TAB) {
+                    Cli_Output.Output_NewLine();
                     Cli_Output.Output_Str(Help_Str);
 
                     Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().length());
@@ -414,156 +346,6 @@ void *Cli_Input_Thread_Func(void *arg) {
     return 0;
 }
 
-LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
-        UINT message, // type of message
-        WPARAM wParam, // additional information
-        LPARAM lParam) // additional information
-{
-
-    switch (message) {
-
-        case WM_KEYDOWN:
-        {
-            CLI_CT ct = CLI_CT_NO;
-            const int buf_size = 1024;
-            char buf[buf_size];
-            const char *s = "";
-            bool is_print = true;
-            switch (wParam) {
-                case VK_CONTROL:
-                    //s = "CTRL";
-                    is_print = false;
-                    break;
-                case VK_RETURN:
-                    s = "ENTER";
-                    is_print = false;
-                    break;
-                case VK_TAB:
-                    s = "TAB";
-                    is_print = false;
-                    break;
-                case VK_BACK:
-                    s = "BACK";
-                    is_print = false;
-                    break;
-                case VK_CANCEL:
-                    s = "Ctrl+C";
-                    ct = CLI_CT_CTRL_C;
-                    break;
-                case 0x1A:
-                    s = "Ctrl+Z";
-                    ct = CLI_CT_CTRL_Z;
-                    break;
-                case 0xDC:
-                    if (GetKeyState(VK_CONTROL) < 0) {
-                        s = "Ctrl+BACKSLASH";
-                        ct = CLI_CT_CTRL_BACKSLASH;
-                    } else {
-                        is_print = false;
-                    }
-                    break;
-                case VK_UP:
-                    s = "UP";
-                    ct = CLI_CT_UP;
-                    break;
-                case VK_DOWN:
-                    s = "DOWN";
-                    ct = CLI_CT_DOWN;
-                    break;
-                case VK_RIGHT:
-                    s = "RIGHT";
-                    ct = CLI_CT_RIGHT;
-                    break;
-                case VK_LEFT:
-                    s = "LEFT";
-                    ct = CLI_CT_LEFT;
-                    break;
-                case VK_DELETE:
-                    s = "DELETE";
-                    ct = CLI_CT_DELETE;
-                    break;
-                case VK_HOME:
-                    s = "HOME";
-                    ct = CLI_CT_HOME;
-                    break;
-                case VK_END:
-                    s = "END";
-                    ct = CLI_CT_END;
-                    break;
-
-                default:
-                    is_print = false;
-                    break;
-            }
-
-            if (is_print) {
-                Cli_Input_Thread_Args.Cli_Input_Queue_Add(wParam, ct, s);
-            }
-
-        }
-            break;
-
-        case WM_CHAR:
-        {
-            CLI_CT ct = CLI_CT_NO;
-            const int buf_size = 1024;
-            char buf[buf_size];
-            char s_buf[] = "12"; // Dummy value
-            const char *s = s_buf;
-            bool is_print = true;
-            switch (wParam) {
-                case VK_RETURN:
-                    s = "ENTER";
-                    ct = CLI_CT_ENTER;
-                    break;
-                case VK_TAB:
-                    s = "TAB";
-                    ct = CLI_CT_TAB;
-                    break;
-                case VK_BACK:
-                    s = "BACK";
-                    ct = CLI_CT_BACK;
-                    break;
-                case VK_CANCEL:
-                    s = "Ctrl+C";
-                    ct = CLI_CT_CTRL_C;
-                    break;
-                case 0x1A:
-                    s = "Ctrl+Z";
-                    ct = CLI_CT_CTRL_Z;
-                    break;
-                case 0x0A:
-                    s = "\"\\r\"";
-                    ct = CLI_CT_ENTER;
-                    break;
-                case 0x1B:
-                    s = "ESC";
-                    ct = CLI_CT_ESC;
-                    break;
-                default:
-                    s_buf[0] = wParam;
-                    s_buf[1] = '\0';
-                    if (wParam < 0x20) {
-                        is_print = false;
-                    } else {
-                        ct = CLI_CT_CHAR;
-                    }
-            }
-
-            if (is_print) {
-                Cli_Input_Thread_Args.Cli_Input_Queue_Add(wParam, ct, s);
-            }
-
-        }
-            break;
-
-        default:
-            return hwndEdit_WndProc_Org(hwnd, message, wParam, lParam);
-    }
-
-    return 0;
-}
-
 LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         UINT message, // type of message
         WPARAM wParam, // additional information
@@ -593,12 +375,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
             {
                 HFONT hwndEdit_hFont_new = CreateFont(0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, TEXT("Courier New"));
                 SendMessage(hwndEdit, WM_SETFONT, (WPARAM) hwndEdit_hFont_new, 0);
-            }
-
-            // Set new WndProc
-            {
-                hwndEdit_WndProc_Org = (fpWndProc *) GetWindowLongPtr(hwndEdit, GWLP_WNDPROC);
-                hwndEdit_WndProc_Org = (fpWndProc *) SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR) hwndEdit_WndProc_New);
             }
 
             // Set Main Menu
