@@ -42,7 +42,6 @@ static HWND hwndEdit;
 static fpWndProc *hwndEdit_WndProc_Org;
 
 static pthread_t Cli_Input_Thread_Handle = 0;
-static bool Cli_Input_Thread_CMD_Stop = false;
 
 enum CLI_CT {
     CLI_CT_NO,
@@ -82,45 +81,71 @@ public:
 
 };
 
-static list<Cli_Input_Char_Item> Cli_Input_Thread_Queue;
+class Cli_Input_Thread_Args_t {
+public:
+    HWND output_hwnd;
+    bool Cli_Input_Thread_CMD_Stop;
+    list<Cli_Input_Char_Item> Cli_Input_Thread_Queue;
+    HANDLE Cli_Input_Queue_Mutex;
+    int Cli_Input_Queue_Mutex_Wait_Time;
 
-static HANDLE Cli_Input_Queue_Mutex = 0;
-static const int Cli_Input_Queue_Mutex_Wait_Time = 100;
-
-static Cli_Output_win32api Cli_Output;
-
-void Cli_Input_Queue_Add(WPARAM wParam, CLI_CT ct, string s) {
-    DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, INFINITE);
-    switch (dwWaitResult) {
-        case WAIT_OBJECT_0:
-        {
-            Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
-            ReleaseMutex(Cli_Input_Queue_Mutex);
-        }
-            break;
+    Cli_Input_Thread_Args_t() : output_hwnd(0), Cli_Input_Thread_CMD_Stop(false),
+    Cli_Input_Queue_Mutex(0), Cli_Input_Queue_Mutex_Wait_Time(100) {
+        Cli_Input_Queue_Mutex = CreateMutex(
+                NULL, // default security attributes
+                FALSE, // initially not owned
+                NULL);
     }
-}
+
+    void HWND_Set(HWND hwnd) {
+        output_hwnd = hwnd;
+    }
+
+    void Cli_Input_Queue_Add(WPARAM wParam, CLI_CT ct, string s) {
+        DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, INFINITE);
+        switch (dwWaitResult) {
+            case WAIT_OBJECT_0:
+            {
+                Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
+                ReleaseMutex(Cli_Input_Queue_Mutex);
+            }
+                break;
+        }
+    }
+
+};
+
+static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
 
 void *Cli_Input_Thread_Func(void *arg) {
+
+    Cli_Input_Thread_Args_t *thread_args = (Cli_Input_Thread_Args_t *) arg;
+
+    Cli_Output_win32api Cli_Output;
+    Cli_Output.HWND_Set(thread_args->output_hwnd);
+
+    Cli_Output.Output_Str("Started");
+    Cli_Output.Output_NewLine();
+
     while (1) {
 
-        if (Cli_Input_Thread_CMD_Stop) {
+        if (thread_args->Cli_Input_Thread_CMD_Stop) {
             break;
         }
 
-        if (Cli_Input_Thread_Queue.empty()) {
+        if (thread_args->Cli_Input_Thread_Queue.empty()) {
             usleep(1000);
         } else {
 
-            DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, Cli_Input_Queue_Mutex_Wait_Time);
+            DWORD dwWaitResult = WaitForSingleObject(thread_args->Cli_Input_Queue_Mutex, thread_args->Cli_Input_Queue_Mutex_Wait_Time);
             switch (dwWaitResult) {
                 case WAIT_OBJECT_0:
                 {
                     static bool is_newline = true;
-                    if (!Cli_Input_Thread_Queue.empty()) {
-                        Cli_Input_Char_Item item = Cli_Input_Thread_Queue.front();
-                        Cli_Input_Thread_Queue.pop_front();
-                        ReleaseMutex(Cli_Input_Queue_Mutex);
+                    if (!thread_args->Cli_Input_Thread_Queue.empty()) {
+                        Cli_Input_Char_Item item = thread_args->Cli_Input_Thread_Queue.front();
+                        thread_args->Cli_Input_Thread_Queue.pop_front();
+                        ReleaseMutex(thread_args->Cli_Input_Queue_Mutex);
 
                         CLI_CT ct = item.Char_Type;
                         string s = item.Text;
@@ -235,7 +260,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
             }
 
             if (is_print) {
-                Cli_Input_Queue_Add(wParam, ct, s);
+                Cli_Input_Thread_Args.Cli_Input_Queue_Add(wParam, ct, s);
             }
 
         }
@@ -289,7 +314,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
             }
 
             if (is_print) {
-                Cli_Input_Queue_Add(wParam, ct, s);
+                Cli_Input_Thread_Args.Cli_Input_Queue_Add(wParam, ct, s);
             }
 
         }
@@ -367,19 +392,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 }
             }
 
-            Cli_Input_Queue_Mutex = CreateMutex(
-                    NULL, // default security attributes
-                    FALSE, // initially not owned
-                    NULL);
-
-            Cli_Output.HWND_Set(hwndEdit);
-
-            Cli_Output.Output_Str("Started");
-            Cli_Output.Output_NewLine();
+            Cli_Input_Thread_Args.HWND_Set(hwndEdit);
 
             // Create Cli_Thread
             {
-                pthread_create(&Cli_Input_Thread_Handle, 0, Cli_Input_Thread_Func, 0);
+                pthread_create(&Cli_Input_Thread_Handle, 0, Cli_Input_Thread_Func, &Cli_Input_Thread_Args);
             }
 
         }
@@ -407,9 +424,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     break;
 
                 case IDM_FILE_EXIT:
-                    Cli_Input_Thread_CMD_Stop = true;
+                    Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop = true;
                     sleep(1);
-                    CloseHandle(Cli_Input_Queue_Mutex);
+                    CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex);
                     PostQuitMessage(0);
                     break;
 
@@ -438,9 +455,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
         case WM_DESTROY:
         {
-            Cli_Input_Thread_CMD_Stop = true;
+            Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop = true;
             sleep(1);
-            CloseHandle(Cli_Input_Queue_Mutex);
+            CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex);
             PostQuitMessage(0);
         }
             break;
