@@ -54,7 +54,7 @@ public:
     }
 
     virtual void Output_NewLine() {
-        AppendText(Output_HWND, "\n");
+        AppendText(Output_HWND, "\r\n");
     }
 
     virtual void Output_Char(char c) {
