@@ -86,7 +86,7 @@ void *Cli_Input_Thread_Func(void *arg) {
     int state = 0;
     while (1) {
 
-        if (thread_args->Cli_Input_Thread_CMD_Stop) {
+        if (thread_args->Cli_Input_Thread_CMD_Stop_Get()) {
             break;
         }
 
@@ -437,9 +437,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     break;
 
                 case IDM_FILE_EXIT:
-                    Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop = true;
+                    Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
                     WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
-                    CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex);
+                    CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
                     PostQuitMessage(0);
                     break;
 
@@ -468,9 +468,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
         case WM_DESTROY:
         {
-            Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop = true;
+            Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
             WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
-            CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex);
+            CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
             PostQuitMessage(0);
         }
             break;

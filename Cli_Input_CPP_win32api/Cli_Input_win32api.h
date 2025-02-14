@@ -174,8 +174,8 @@ protected:
                 break;
 
             default:
-                if (thread_args && thread_args->hwndEdit_WndProc_Org) {
-                    return thread_args->hwndEdit_WndProc_Org(hwnd, message, wParam, lParam);
+                if (thread_args && thread_args->hwndEdit_WndProc_Org_Get()) {
+                    return thread_args->hwndEdit_WndProc_Org_Get()(hwnd, message, wParam, lParam);
                 }
         }
 
@@ -186,15 +186,15 @@ public:
 
     Cli_Input_win32api(Cli_Output_Abstract &cli_output, Cli_Input_Thread_Args_t *thread_args) : Cli_Input_Abstract(cli_output),
     Thread_Args(thread_args) {
-        Output_HWND = Thread_Args ? Thread_Args->Output_HWND : 0;
+        Output_HWND = Thread_Args ? Thread_Args->Output_HWND_Get() : 0;
     }
 
     virtual bool Input_Init() {
         // Set new WndProc as GWLP_WNDPROC and Thread_Args as GWLP_USERDATA
         {
             SetWindowLongPtr(Output_HWND, GWLP_USERDATA, (LONG_PTR) Thread_Args);
-            Thread_Args->hwndEdit_WndProc_Org = (fpWndProc *) GetWindowLongPtr(Output_HWND, GWLP_WNDPROC);
-            Thread_Args->hwndEdit_WndProc_Org = (fpWndProc *) SetWindowLongPtr(Output_HWND, GWLP_WNDPROC, (LONG_PTR) hwndEdit_WndProc_New);
+            Thread_Args->hwndEdit_WndProc_Org_Set((fpWndProc *) GetWindowLongPtr(Output_HWND, GWLP_WNDPROC));
+            Thread_Args->hwndEdit_WndProc_Org_Set((fpWndProc *) SetWindowLongPtr(Output_HWND, GWLP_WNDPROC, (LONG_PTR) hwndEdit_WndProc_New));
         }
 
         return Cli_Output.Output_Init();
@@ -203,8 +203,8 @@ public:
     virtual bool Input_Restore() {
         // Restore WndProc
         {
-            SetWindowLongPtr(Output_HWND, GWLP_WNDPROC, (LONG_PTR) Thread_Args->hwndEdit_WndProc_Org);
-            Thread_Args->hwndEdit_WndProc_Org = 0;
+            SetWindowLongPtr(Output_HWND, GWLP_WNDPROC, (LONG_PTR) Thread_Args->hwndEdit_WndProc_Org_Get());
+            Thread_Args->hwndEdit_WndProc_Org_Set(0);
         }
         return Cli_Output.Output_Close();
     }

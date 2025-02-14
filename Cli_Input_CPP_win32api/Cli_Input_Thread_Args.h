@@ -27,15 +27,19 @@ typedef LRESULT CALLBACK fpWndProc(HWND hwnd, // window handle
         LPARAM lParam);
 
 class Cli_Input_Thread_Args_t {
-public:
+protected:
+
     HWND Main_HWND;
     HWND Output_HWND;
     fpWndProc *hwndEdit_WndProc_Org;
     bool Cli_Input_Thread_CMD_Stop;
-    list<Cli_Input_Char_Item_t> Cli_Input_Thread_Queue;
     HANDLE Cli_Input_Queue_Mutex;
-    int Cli_Input_Queue_Mutex_Wait_Time;
     bool Is_kbhit;
+
+    list<Cli_Input_Char_Item_t> Cli_Input_Thread_Queue;
+    int Cli_Input_Queue_Mutex_Wait_Time;
+
+public:
 
     Cli_Input_Thread_Args_t() : Output_HWND(0), Cli_Input_Thread_CMD_Stop(false),
     Cli_Input_Queue_Mutex(0), Cli_Input_Queue_Mutex_Wait_Time(100), hwndEdit_WndProc_Org(0),
@@ -60,6 +64,30 @@ public:
 
     HWND Output_HWND_Get() {
         return Output_HWND;
+    }
+
+    void hwndEdit_WndProc_Org_Set(fpWndProc *fp) {
+        hwndEdit_WndProc_Org = fp;
+    }
+
+    fpWndProc *hwndEdit_WndProc_Org_Get() {
+        return hwndEdit_WndProc_Org;
+    }
+
+    void Cli_Input_Thread_CMD_Stop_Set(bool v) {
+        Cli_Input_Thread_CMD_Stop = v;
+    }
+
+    bool Cli_Input_Thread_CMD_Stop_Get() {
+        return Cli_Input_Thread_CMD_Stop;
+    }
+
+    HANDLE Cli_Input_Queue_Mutex_Get() {
+        return Cli_Input_Queue_Mutex;
+    }
+
+    void Cli_Input_Queue_Mutex_Set(HANDLE h) {
+        Cli_Input_Queue_Mutex = h;
     }
 
     void Is_kbhit_Set() {
@@ -102,20 +130,6 @@ public:
         }
         Cli_Input_Char_Item_t char_item(CLI_CT_NO, 0, ""); // No Action
         return char_item;
-    }
-
-    void Cli_Input_Thread_Queue_Clear() {
-        if (!Cli_Input_Thread_Queue.empty()) {
-            DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, Cli_Input_Queue_Mutex_Wait_Time);
-            switch (dwWaitResult) {
-                case WAIT_OBJECT_0:
-                {
-                    Cli_Input_Thread_Queue.clear();
-                    ReleaseMutex(Cli_Input_Queue_Mutex);
-                }
-                    break;
-            }
-        }
     }
 
 };
