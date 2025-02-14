@@ -1,4 +1,7 @@
 #include <windows.h>
+#include <winuser.h>
+
+#include "main_resource_def.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -40,6 +43,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 #define ID_EDITCHILD 100
 
+#define IDM_FILE_OPEN 10001
+#define IDM_FILE_SAVE 10002
+#define IDM_FILE_SAVE_AS 10003
+#define IDM_FILE_EXIT 10004
+
+#define IDM_EDIT_UNDO 20001
+#define IDM_EDIT_CUT 20002
+#define IDM_EDIT_COPY 20003
+#define IDM_EDIT_PASTE 20004
+#define IDM_EDIT_DELETE 20005
+
+#define IDM_HELP_ABOUT 30001
+#define IDM_HELP_SITE 30002
+
 LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         UINT message, // type of message
         WPARAM wParam, // additional information
@@ -47,7 +64,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 {
     static HWND hwndEdit;
 
-    TCHAR lpszLatin[] = "Lorem ipsum dolor sit amet, consectetur "
+    TCHAR lpszLatin[] = "Test Text:\n"
+            "Lorem ipsum dolor sit amet, consectetur "
             "adipisicing elit, sed do eiusmod tempor "
             "incididunt ut labore et dolore magna "
             "aliqua. Ut enim ad minim veniam, quis "
@@ -62,6 +80,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
     switch (message) {
         case WM_CREATE:
+        {
             hwndEdit = CreateWindowEx(
                     0, "EDIT", // predefined class
                     NULL, // no window title
@@ -76,45 +95,91 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
             // Add text to the window.
             SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM) lpszLatin);
 
+            HMENU hMainMenu = CreateMenu();
+            HMENU hFile = CreateMenu();
+            HMENU hEdit = CreateMenu();
+            HMENU hHelp = CreateMenu();
+
+            if (hMainMenu != NULL) {
+
+                BOOL res_file = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hFile, "&File");
+
+                AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_OPEN, "&Open...");
+                AppendMenu(hFile, MF_SEPARATOR, 0, 0);
+                AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_SAVE, "&Save");
+                AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_SAVE_AS, "Save &As...");
+                AppendMenu(hFile, MF_SEPARATOR, 0, 0);
+                AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_EXIT, "E&xit");
+
+                BOOL res_edit = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hEdit, "&Edit");
+
+                AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_UNDO, "Undo");
+                AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
+                AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CUT, "Cut");
+                AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_COPY, "Copy");
+                AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_PASTE, "Paste");
+                AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_DELETE, "Delete");
+
+                BOOL res_help = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hHelp, "&Help");
+
+                AppendMenu(hHelp, MF_ENABLED | MF_STRING, IDM_HELP_ABOUT, "&About");
+                AppendMenu(hHelp, MF_SEPARATOR, 0, 0);
+                AppendMenu(hHelp, MF_ENABLED | MF_STRING, IDM_HELP_SITE, "Site...");
+
+
+                BOOL res_set = SetMenu(hwnd, hMainMenu);
+
+            } else {
+                MessageBox(0, "hMainMenu = NULL", "hMainMenu = NULL", MB_ICONEXCLAMATION | MB_OK);
+            }
+
+        }
+
             return 0;
 
         case WM_COMMAND:
             switch (wParam) {
-                    //                case IDM_EDUNDO:
-                    //                    // Send WM_UNDO only if there is something to be undone.
-                    //
-                    //                    if (SendMessage(hwndEdit, EM_CANUNDO, 0, 0))
-                    //                        SendMessage(hwndEdit, WM_UNDO, 0, 0);
-                    //                    else {
-                    //                        MessageBox(hwndEdit,
-                    //                                L"Nothing to undo.",
-                    //                                L"Undo notification",
-                    //                                MB_OK);
-                    //                    }
-                    //                    break;
-                    //
-                    //                case IDM_EDCUT:
-                    //                    SendMessage(hwndEdit, WM_CUT, 0, 0);
-                    //                    break;
-                    //
-                    //                case IDM_EDCOPY:
-                    //                    SendMessage(hwndEdit, WM_COPY, 0, 0);
-                    //                    break;
-                    //
-                    //                case IDM_EDPASTE:
-                    //                    SendMessage(hwndEdit, WM_PASTE, 0, 0);
-                    //                    break;
-                    //
-                    //                case IDM_EDDEL:
-                    //                    SendMessage(hwndEdit, WM_CLEAR, 0, 0);
-                    //                    break;
-                    //
-                    //                case IDM_ABOUT:
-                    //                    DialogBox(hInst, // current instance
-                    //                            L"AboutBox", // resource to use
-                    //                            hwnd, // parent handle
-                    //                            (DLGPROC) About);
-                    //                    break;
+
+                case IDM_EDIT_UNDO:
+                    // Send WM_UNDO only if there is something to be undone.
+
+                    if (SendMessage(hwndEdit, EM_CANUNDO, 0, 0))
+                        SendMessage(hwndEdit, WM_UNDO, 0, 0);
+                    else {
+                        MessageBox(hwndEdit,
+                                "Nothing to undo.",
+                                "Undo notification",
+                                MB_OK);
+                    }
+                    break;
+
+                case IDM_EDIT_CUT:
+                    SendMessage(hwndEdit, WM_CUT, 0, 0);
+                    break;
+
+                case IDM_EDIT_COPY:
+                    SendMessage(hwndEdit, WM_COPY, 0, 0);
+                    break;
+
+                case IDM_EDIT_PASTE:
+                    SendMessage(hwndEdit, WM_PASTE, 0, 0);
+                    break;
+
+                case IDM_EDIT_DELETE:
+                    SendMessage(hwndEdit, WM_CLEAR, 0, 0);
+                    break;
+
+                case IDM_HELP_ABOUT:
+                {
+                    MessageBox(hwndEdit,
+                                "Cli Output C++ Win32API Test",
+                                "About",
+                                MB_OK);
+                }
+                    break;
+                case IDM_HELP_SITE:
+                    ShellExecute(NULL, "Open", "https://npotelecom.ru/", NULL, NULL, SW_SHOWNORMAL);
+                    break;
 
                 default:
                     return DefWindowProc(hwnd, message, wParam, lParam);

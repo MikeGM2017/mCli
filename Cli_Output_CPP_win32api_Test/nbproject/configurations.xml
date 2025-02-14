@@ -4,10 +4,12 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>main_resource_def.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>main_resource.rc</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -49,6 +51,10 @@
             tool="1"
             flavor2="0">
       </item>
+      <item path="main_resource.rc" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_resource_def.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -74,6 +80,10 @@
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="main_resource.rc" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_resource_def.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
