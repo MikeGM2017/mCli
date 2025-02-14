@@ -146,7 +146,11 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     s_buf[0] = wParam;
                     s_buf[1] = '\0';
             }
-            sprintf(buf, "         WM_CHAR: 0x%02X %s", wParam, s);
+            if (s_buf[0] >= 0x20) {
+                sprintf(buf, "         WM_CHAR: 0x%02X %s", wParam, s);
+            } else {
+                sprintf(buf, "         WM_CHAR: 0x%02X", wParam);
+            }
             AppendText(hwndEdit, buf);
         }
             break;
