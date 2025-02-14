@@ -318,7 +318,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                 bool is_kbhit = Cli_Input.Input_kbhit(); // Get and Clear Is_kbhit
                 if (is_kbhit) {
                     state = 3;
-                    SendMessage(thread_args->Main_HWND_Get(), WM_DESTROY, 0, 0);
+                    thread_args->Cli_Input_Thread_CMD_Stop_Set(true);
                 }
             }
                 break;
@@ -326,6 +326,8 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
         }
 
     }
+
+    PostMessage(thread_args->Main_HWND_Get(), WM_COMMAND, IDM_FILE_EXIT, 0);
 
     return 0;
 }
@@ -429,7 +431,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
                 case IDM_FILE_EXIT:
                     Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
-                    WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, 100);
+                    WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
                     CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
                     PostQuitMessage(0);
                     break;
@@ -460,7 +462,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         case WM_DESTROY:
         {
             Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
-            WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, 100);
+            WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
             CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
             PostQuitMessage(0);
         }
