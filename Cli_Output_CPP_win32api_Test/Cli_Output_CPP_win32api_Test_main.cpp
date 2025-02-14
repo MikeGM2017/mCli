@@ -499,6 +499,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     ShellExecute(NULL, "Open", "https://npotelecom.ru/", NULL, NULL, SW_SHOWNORMAL);
                     break;
 
+                case IDM_FILE_EXIT:
+                    PostQuitMessage(0);
+                    break;
+
                 default:
                     return DefWindowProc(hwnd, message, wParam, lParam);
             }
