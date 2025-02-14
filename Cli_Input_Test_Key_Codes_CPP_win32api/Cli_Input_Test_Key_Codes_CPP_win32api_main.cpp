@@ -21,7 +21,7 @@ void AppendText(const HWND hwndEdit, const TCHAR *newText) {
     int len_prev1 = GetWindowTextLength(hwndEdit);
     if (len_prev1) {
         SendMessage(hwndEdit, EM_SETSEL, len_prev1, len_prev1); //Select end pos
-        SendMessage(hwndEdit, EM_REPLACESEL, FALSE, (LPARAM) "\r\n");
+        SendMessage(hwndEdit, EM_REPLACESEL, FALSE, (LPARAM) (TEXT("\r\n")));
     }
     int len_prev2 = GetWindowTextLength(hwndEdit);
     SendMessage(hwndEdit, EM_SETSEL, len_prev2, len_prev2); //Select end pos
@@ -108,8 +108,14 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     break;
             }
             if (is_print) {
-                sprintf(buf, " WM_KEYDOWN: 0x%02X %s", wParam, s);
-                AppendText(hwndEdit, buf);
+                snprintf(buf, buf_size, " WM_KEYDOWN: 0x%02X %s", wParam, s);
+                string s_tmp = buf;
+#ifdef UNICODE
+                wstring ws(s_tmp.begin(), s_tmp.end());
+                AppendText(hwndEdit, ws.c_str());
+#else
+                AppendText(hwndEdit, s_tmp.c_str());
+#endif
             }
         }
             break;
@@ -147,11 +153,17 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     s_buf[1] = '\0';
             }
             if (s_buf[0] >= 0x20) {
-                sprintf(buf, "         WM_CHAR: 0x%02X %s", wParam, s);
+                snprintf(buf, buf_size, "         WM_CHAR: 0x%02X %s", wParam, s);
             } else {
-                sprintf(buf, "         WM_CHAR: 0x%02X", wParam);
+                snprintf(buf, buf_size, "         WM_CHAR: 0x%02X", wParam);
             }
-            AppendText(hwndEdit, buf);
+            string s_tmp = buf;
+#ifdef UNICODE
+            wstring ws(s_tmp.begin(), s_tmp.end());
+            AppendText(hwndEdit, ws.c_str());
+#else
+            AppendText(hwndEdit, s_tmp.c_str());
+#endif
         }
             break;
 
@@ -176,7 +188,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
             // Create Window
             {
                 hwndEdit = CreateWindowEx(
-                        0, "EDIT", // predefined class
+                        0, TEXT("EDIT"), // predefined class
                         NULL, // no window title
                         WS_CHILD | WS_VISIBLE | WS_VSCROLL |
                         ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL,
@@ -207,21 +219,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
                 if (hMainMenu != NULL) {
 
-                    BOOL res_file = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hFile, "&File");
-                    AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_EXIT, "E&xit");
+                    BOOL res_file = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hFile, TEXT("&File"));
+                    AppendMenu(hFile, MF_ENABLED | MF_STRING, IDM_FILE_EXIT, TEXT("E&xit"));
 
-                    BOOL res_edit = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hEdit, "&Edit");
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CUT, "Cut");
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_COPY, "Copy");
+                    BOOL res_edit = AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR) hEdit, TEXT("&Edit"));
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CUT, TEXT("Cut"));
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_COPY, TEXT("Copy"));
                     AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_SELECT_ALL, "Select All");
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_SELECT_ALL, TEXT("Select All"));
                     AppendMenu(hEdit, MF_SEPARATOR, 0, 0);
-                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CLEAR_ALL, "Clear All");
+                    AppendMenu(hEdit, MF_ENABLED | MF_STRING, IDM_EDIT_CLEAR_ALL, TEXT("Clear All"));
 
                     BOOL res_set = SetMenu(hwnd, hMainMenu);
 
                 } else {
-                    MessageBox(0, "hMainMenu = NULL", "hMainMenu = NULL", MB_ICONEXCLAMATION | MB_OK);
+                    MessageBox(0, TEXT("hMainMenu = NULL"), TEXT("hMainMenu = NULL"), MB_ICONEXCLAMATION | MB_OK);
                 }
             }
 
@@ -293,7 +305,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     HWND hwnd;
     MSG msg;
     WNDCLASS wndclass;
-    static const char *szAppName = "Cli Input Test Key Codes CPP Win32API";
+    TCHAR szAppName[] = TEXT("Cli Input Test Key Codes CPP Win32API");
 
     wndclass.style = CS_HREDRAW | CS_VREDRAW;
     wndclass.lpfnWndProc = WndProc;
