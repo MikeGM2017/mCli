@@ -89,6 +89,18 @@ static const int Cli_Input_Queue_Mutex_Wait_Time = 100;
 
 static Cli_Output_win32api Cli_Output;
 
+void Cli_Input_Queue_Add(WPARAM wParam, CLI_CT ct, string s) {
+    DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, INFINITE);
+    switch (dwWaitResult) {
+        case WAIT_OBJECT_0:
+        {
+            Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
+            ReleaseMutex(Cli_Input_Queue_Mutex);
+        }
+            break;
+    }
+}
+
 void *Cli_Input_Thread_Func(void *arg) {
     while (1) {
 
@@ -223,17 +235,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
             }
 
             if (is_print) {
-
-                DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, INFINITE);
-                switch (dwWaitResult) {
-                    case WAIT_OBJECT_0:
-                    {
-                        Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
-                        ReleaseMutex(Cli_Input_Queue_Mutex);
-                    }
-                        break;
-                }
-
+                Cli_Input_Queue_Add(wParam, ct, s);
             }
 
         }
@@ -287,17 +289,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
             }
 
             if (is_print) {
-
-                DWORD dwWaitResult = WaitForSingleObject(Cli_Input_Queue_Mutex, INFINITE);
-                switch (dwWaitResult) {
-                    case WAIT_OBJECT_0:
-                    {
-                        Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
-                        ReleaseMutex(Cli_Input_Queue_Mutex);
-                    }
-                        break;
-                }
-
+                Cli_Input_Queue_Add(wParam, ct, s);
             }
 
         }
