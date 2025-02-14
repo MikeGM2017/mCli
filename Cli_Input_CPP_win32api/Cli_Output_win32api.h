@@ -70,7 +70,7 @@ public:
 
     virtual void Output_Return() {
         int buf_size = GetWindowTextLength(Output_HWND);
-        if (buf_size) {
+        if (buf_size > 0) {
             TCHAR *buf = new TCHAR[buf_size];
             int len = GetWindowText(Output_HWND, buf, buf_size);
             if (len > 0) {
