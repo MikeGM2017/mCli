@@ -45,30 +45,30 @@ static pthread_t Cli_Input_Thread_Handle = 0;
 static bool Cli_Input_Thread_CMD_Stop = false;
 
 enum CLI_CT {
-    CT_NO,
+    CLI_CT_NO,
 
-    CT_CHAR,
+    CLI_CT_CHAR,
 
-    CT_CTRL_C,
-    CT_CTRL_Z,
-    CT_CTRL_BACKSLASH,
+    CLI_CT_CTRL_C,
+    CLI_CT_CTRL_Z,
+    CLI_CT_CTRL_BACKSLASH,
 
-    CT_UP,
-    CT_DOWN,
-    CT_LEFT,
-    CT_RIGHT,
+    CLI_CT_UP,
+    CLI_CT_DOWN,
+    CLI_CT_LEFT,
+    CLI_CT_RIGHT,
 
-    CT_HOME,
-    CT_END,
-    CT_DELETE,
+    CLI_CT_HOME,
+    CLI_CT_END,
+    CLI_CT_DELETE,
 
-    CT_ENTER,
-    CT_TAB,
-    CT_ESC,
-    CT_BACK,
+    CLI_CT_ENTER,
+    CLI_CT_TAB,
+    CLI_CT_ESC,
+    CLI_CT_BACK,
 
-    CT_LAST,
-    CT_UNDEFINED
+    CLI_CT_LAST,
+    CLI_CT_UNDEFINED
 };
 
 class Cli_Input_Char_Item {
@@ -82,7 +82,7 @@ public:
 
 };
 
-static list<string> Cli_Input_Thread_Queue;
+static list<Cli_Input_Char_Item> Cli_Input_Thread_Queue;
 
 static HANDLE Cli_Input_Queue_Mutex = 0;
 static const int Cli_Input_Queue_Mutex_Wait_Time = 100;
@@ -106,15 +106,17 @@ void *Cli_Input_Thread_Func(void *arg) {
                 {
                     static bool is_newline = true;
                     if (!Cli_Input_Thread_Queue.empty()) {
-                        string s = Cli_Input_Thread_Queue.front();
+                        Cli_Input_Char_Item item = Cli_Input_Thread_Queue.front();
                         Cli_Input_Thread_Queue.pop_front();
                         ReleaseMutex(Cli_Input_Queue_Mutex);
 
-                        if (s == "ENTER" || s == "\"\\r\""
-                                || s == "Ctrl+C" || s == "Ctrl+Z" || s == "Ctrl+BACKSLASH"
-                                || s == "TAB" || s == "BACK" || s == "ESC"
-                                || s == "UP" || s == "DOWN" || s == "LEFT" || s == "RIGHT"
-                                || s == "HOME" || s == "END" || s == "DELETE") {
+                        CLI_CT ct = item.Char_Type;
+                        string s = item.Text;
+                        if (ct == CLI_CT_ENTER
+                                || ct == CLI_CT_CTRL_C || ct == CLI_CT_CTRL_Z || ct == CLI_CT_CTRL_BACKSLASH
+                                || ct == CLI_CT_TAB || ct == CLI_CT_BACK || ct == CLI_CT_ESC
+                                || ct == CLI_CT_UP || ct == CLI_CT_DOWN || ct == CLI_CT_LEFT || ct == CLI_CT_RIGHT
+                                || ct == CLI_CT_HOME || ct == CLI_CT_END || ct == CLI_CT_DELETE) {
                             if (!is_newline) {
                                 Cli_Output.Output_NewLine();
                             }
@@ -148,6 +150,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
 
         case WM_KEYDOWN:
         {
+            CLI_CT ct = CLI_CT_NO;
             const int buf_size = 1024;
             char buf[buf_size];
             const char *s = "";
@@ -171,37 +174,47 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                     break;
                 case VK_CANCEL:
                     s = "Ctrl+C";
+                    ct = CLI_CT_CTRL_C;
                     break;
                 case 0x1A:
                     s = "Ctrl+Z";
+                    ct = CLI_CT_CTRL_Z;
                     break;
                 case 0xDC:
                     if (GetKeyState(VK_CONTROL) < 0) {
                         s = "Ctrl+BACKSLASH";
+                        ct = CLI_CT_CTRL_BACKSLASH;
                     } else {
                         is_print = false;
                     }
                     break;
                 case VK_UP:
                     s = "UP";
+                    ct = CLI_CT_UP;
                     break;
                 case VK_DOWN:
                     s = "DOWN";
+                    ct = CLI_CT_DOWN;
                     break;
                 case VK_RIGHT:
                     s = "RIGHT";
+                    ct = CLI_CT_RIGHT;
                     break;
                 case VK_LEFT:
                     s = "LEFT";
+                    ct = CLI_CT_LEFT;
                     break;
                 case VK_DELETE:
                     s = "DELETE";
+                    ct = CLI_CT_DELETE;
                     break;
                 case VK_HOME:
                     s = "HOME";
+                    ct = CLI_CT_HOME;
                     break;
                 case VK_END:
                     s = "END";
+                    ct = CLI_CT_END;
                     break;
 
                 default:
@@ -215,7 +228,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                 switch (dwWaitResult) {
                     case WAIT_OBJECT_0:
                     {
-                        Cli_Input_Thread_Queue.push_back(s);
+                        Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
                         ReleaseMutex(Cli_Input_Queue_Mutex);
                     }
                         break;
@@ -228,6 +241,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
 
         case WM_CHAR:
         {
+            CLI_CT ct = CLI_CT_NO;
             const int buf_size = 1024;
             char buf[buf_size];
             char s_buf[] = "12"; // Dummy value
@@ -236,30 +250,39 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
             switch (wParam) {
                 case VK_RETURN:
                     s = "ENTER";
+                    ct = CLI_CT_ENTER;
                     break;
                 case VK_TAB:
                     s = "TAB";
+                    ct = CLI_CT_TAB;
                     break;
                 case VK_BACK:
                     s = "BACK";
+                    ct = CLI_CT_BACK;
                     break;
                 case VK_CANCEL:
                     s = "Ctrl+C";
+                    ct = CLI_CT_CTRL_C;
                     break;
                 case 0x1A:
                     s = "Ctrl+Z";
+                    ct = CLI_CT_CTRL_Z;
                     break;
                 case 0x0A:
                     s = "\"\\r\"";
+                    ct = CLI_CT_ENTER;
                     break;
                 case 0x1B:
                     s = "ESC";
+                    ct = CLI_CT_ESC;
                     break;
                 default:
                     s_buf[0] = wParam;
                     s_buf[1] = '\0';
                     if (wParam < 0x20) {
                         is_print = false;
+                    } else {
+                        ct = CLI_CT_CHAR;
                     }
             }
 
@@ -269,7 +292,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
                 switch (dwWaitResult) {
                     case WAIT_OBJECT_0:
                     {
-                        Cli_Input_Thread_Queue.push_back(s);
+                        Cli_Input_Thread_Queue.push_back(Cli_Input_Char_Item(ct, wParam, s));
                         ReleaseMutex(Cli_Input_Queue_Mutex);
                     }
                         break;
