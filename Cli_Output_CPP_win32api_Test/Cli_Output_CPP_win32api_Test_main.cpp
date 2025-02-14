@@ -9,7 +9,7 @@ using namespace std;
 #define ID_HELP   150
 #define ID_TEXT   200
 
-void AppendText(const HWND &hwndEdit, TCHAR *newText) {
+void AppendText(const HWND &hwndEdit, const TCHAR *newText) {
     int len_prev = GetWindowTextLength(hwndEdit);
     int buf_size = len_prev + strlen(newText) + 1 + 1024;
     char *buf = new char[buf_size];
@@ -44,7 +44,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
         case WM_KEYDOWN:
         {
             char buf[1024];
-            char *s = "";
+            const char *s = "";
             bool is_print = true;
             switch (wParam) {
                 case VK_CONTROL:
@@ -113,7 +113,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
         case WM_KEYUP:
         {
             char buf[1024];
-            char *s = "";
+            const char *s = "";
             bool is_print = true;
             switch (wParam) {
                 case VK_CONTROL:
@@ -136,7 +136,7 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
         {
             char buf[1024];
             char s_buf[] = "12";
-            char *s = s_buf;
+            const char *s = s_buf;
             switch (wParam) {
                 case VK_RETURN:
                     s = "ENTER";
@@ -164,12 +164,15 @@ LRESULT CALLBACK hwndEdit_WndProc_New(HWND hwnd, // window handle
         default:
             return hwndEdit_WndProc_Org(hwnd, message, wParam, lParam);
     }
+
+    return 0;
 }
 
 LPWORD lpwAlign(LPWORD lpIn) {
-    ULONG ul;
+    //ULONG ul;
+    unsigned long long int ul;
 
-    ul = (ULONG) lpIn;
+    ul = (unsigned long long int) lpIn;
     ul += 3;
     ul >>= 2;
     ul <<= 2;
@@ -330,6 +333,7 @@ LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner, LPSTR lpszMessage) {
     LocalFree(lpMsgBuf);
 
     GlobalFree(hgbl);
+
     return ret;
 }
 
@@ -368,6 +372,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+
     return msg.wParam;
 }
 
@@ -409,7 +414,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
             // Set new WndProc
             hwndEdit_WndProc_Org = (fpWndProc *) GetWindowLongPtr(hwndEdit, GWLP_WNDPROC);
-            hwndEdit_WndProc_Org = (fpWndProc *) SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, hwndEdit_WndProc_New);
+            hwndEdit_WndProc_Org = (fpWndProc *) SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR) hwndEdit_WndProc_New);
 
             HMENU hMainMenu = CreateMenu();
             HMENU hFile = CreateMenu();
@@ -478,8 +483,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     break;
 
                 case IDM_EDIT_PASTE:
-                    //SendMessage(hwndEdit, WM_PASTE, 0, 0);
-                    AppendText(hwndEdit, " - Text Appended!");
+                {
+                    const TCHAR *s = TEXT(" - Text Appended!");
+                    AppendText(hwndEdit, s);
+                }
                     break;
 
                 case IDM_EDIT_DELETE:
@@ -529,5 +536,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
         default:
             return DefWindowProc(hwnd, message, wParam, lParam);
     }
-    return NULL;
+
+    return 0;
 }
