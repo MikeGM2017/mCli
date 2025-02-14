@@ -121,8 +121,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 HMENU hMainMenu = CreateMenu();
                 HMENU hFile = CreateMenu();
                 HMENU hEdit = CreateMenu();
-                HMENU hTest = CreateMenu();
-                HMENU hHelp = CreateMenu();
 
                 if (hMainMenu != NULL) {
 
