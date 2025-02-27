@@ -41,16 +41,6 @@ static DWORD Cli_Input_Thread_ID = 0;
 static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
 
 void On_Ctrl_C_Z_BACKSLASH(Cli_Input_win32api &Cli_Input, Cli_Output_win32api &Cli_Output, Cli_Input_Item &input_item) {
-    Cli_Output.Output_NewLine();
-
-    if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_C) {
-        Cli_Output.Output_Str("Ctrl+C - Processed");
-    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_Z) {
-        Cli_Output.Output_Str("Ctrl+Z - Processed");
-    } else if (input_item.Type_Get() == CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH) {
-        Cli_Output.Output_Str("Ctrl + BackSlash - Processed");
-    }
-
     Cli_Input.Input_Default_State_Set();
     Cli_Input.Input_Invitation_Print();
 }
