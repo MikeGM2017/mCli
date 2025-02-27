@@ -18,6 +18,8 @@
 
 using namespace std;
 
+#include "CLI_CT.h"
+
 class Cli_Input_Char_Item_t {
 public:
     CLI_CT Char_Type;

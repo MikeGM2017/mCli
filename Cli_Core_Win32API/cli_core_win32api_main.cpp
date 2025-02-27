@@ -19,10 +19,23 @@ using namespace std;
 #include <windows.h>
 #include <winuser.h>
 
+#include "Cli_Input_Thread_Args.h"
+
 #include "Cli_Input_win32api.h"
 #include "Cli_Output_win32api.h"
 
-#include "Cli_Input_Thread_Args.h"
+#include "Cli_Core.h"
+
+#include "Cli_Cmd_Privilege_ID.h"
+#include "Cli_Modules.h"
+
+#include "Cli_Module_Base_Quit.h"
+
+#include "Cli_CMD_Processor.h"
+
+#include "Cli_TAB_Processor.h"
+
+const string Version = "0.01";
 
 #define ID_EDITCHILD 101
 
@@ -49,28 +62,58 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
     Cli_Input_Thread_Args_t *thread_args = (Cli_Input_Thread_Args_t *) arg;
 
-    string Help_Str = "Help: Q - quit, C - clear, H - help, A - ask(y/n), P - passwd(no echo), W - wait";
-
     Cli_Output_win32api Cli_Output;
     Cli_Output.Output_HWND_Set(thread_args->Output_HWND_Get());
 
-    Cli_Output.Output_NewLine();
-    Cli_Output.Output_Str("Cli Input Win32API started");
-    Cli_Output.Output_NewLine();
-    Cli_Output.Output_NewLine();
-
     Cli_Input_win32api Cli_Input(Cli_Output, thread_args);
 
-    Cli_Input.Title_Set("cli demo");
+    vector<Level_Description> Levels;
+
+    Cmd_Token_Parser Token_Parser;
+
+    const string Str_Rem_DEF = "$";
+
+    Cli_Cmd_Privilege_ID User_Privilege = CMD_PRIVILEGE_ROOT_DEF;
+    Cli_Modules Modules;
+
+    bool tab_log_is_active = false; //!Arg_TAB_Log_Output_File_Name.empty();
+
+    Cli_CMD_Processor CMD_Processor
+            (User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
+    Cli_TAB_Processor TAB_Processor
+            (User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF, tab_log_is_active);
+    Cli_Core Cli
+            (User_Privilege, Modules, Levels, Token_Parser, Cli_Input, Cli_Output, Str_Rem_DEF);
+
+    // Modules Add - Begin
+
+    string level_root = "top level";
+
+    bool Cmd_Exit = false;
+    bool Cmd_Quit = false;
+    Modules.Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
+
+    // Modules Add - End
+
+    Cli_Input.Title_Set("Cli Core Test Win32API");
     Cli_Input.User_Set("root");
-    Cli_Input.Level_Set("top level");
+    Cli_Input.Level_Set(level_root);
     Cli_Input.Invitation_Set("> ");
     Cli_Input.Divider_L_Set("[");
     Cli_Input.Divider_R_Set("]");
     Cli_Input.Input_Init();
 
+    Cli_Output.Output_NewLine();
+    Cli_Output.Output_Str("mCli: Cli Core Test");
+    Cli_Output.Output_Str(" V");
+    Cli_Output.Output_Str(Version);
+    Cli_Output.Output_NewLine();
+    Cli_Output.Output_NewLine();
+
     Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
 
+    bool stop = false;
+    bool is_invitation_print = true;
     while (1) {
 
         Sleep(1); // 1ms - Minimum Delay for all cases
@@ -119,63 +162,25 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                         case CLI_INPUT_ITEM_TYPE_STR:
                         {
-                            string input_str = input_item.Text_Get();
-                            if (input_str == "Q" || input_str == "quit") {
-                                Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str("Quit - Processed");
-                                Cli_Output.Output_NewLine();
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_kbhit(); // Clear Is_kbhit
-                                thread_args->Cli_Input_Thread_CMD_Stop_Set(true); // Quit
-                            } else if (input_str == "C" || input_str == "clear") {
-                                Cli_Input.Input_Clear();
-                                Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str("Clear - Processed");
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_Invitation_Print();
-                            } else if (input_str == "H" || input_str == "help") {
-                                Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str(Help_Str);
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_Invitation_Print();
-                            } else if (input_str == "A" || input_str == "ask") {
-                                Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str("Is it right?(yes/no) ");
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_Mode_Set(INPUT_MODE_PROMPT);
-                            } else if (input_str == "P" || input_str == "passwd") {
-                                Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str("Password:");
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_Mode_Set(INPUT_MODE_PASSWD);
-                                Cli_Input.Is_Echo_Off();
-                            } else if (input_str == "W" || input_str == "wait") {
-                                Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str("Wait (Press Enter to stop):");
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_Mode_Set(INPUT_MODE_WAIT);
-                                Cli_Input.Wait_Count_Set(10);
-                                Cli_Input.Input_kbhit(); // Clear Is_kbhit
-                            } else if (!input_str.empty()) {
-                                Cli_Output.Output_NewLine();
-                                Cli_Output.Output_Str(input_item.Text_Get());
-                                Cli_Output.Output_Str(" - Not Processed");
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_Invitation_Print();
-                            } else {
-                                Cli_Input.Input_Default_State_Set();
-                                Cli_Input.Input_Invitation_Print();
+                            bool is_no_history = false;
+                            bool is_debug = false;
+
+                            string s_trim = Cli.Str_Trim(input_item.Text_Get());
+
+                            if (!is_no_history && !is_debug && !s_trim.empty()) {
+                                //History.History_Put(s_trim);
                             }
 
+                            bool debug_res = false;
+                            CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
+                            Cli_Input.Input_Str_Set_Empty();
+                            Cli_Output.Output_NewLine();
                         }
                             break;
 
                         case CLI_INPUT_ITEM_TYPE_TAB:
                         {
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str(Help_Str);
-                            Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().length());
-                            Cli_Input.Input_Invitation_Print();
+                            TAB_Processor.Process_Input_Item(input_item, is_invitation_print);
                         }
                             break;
 
@@ -185,6 +190,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                             Cli_Output.Output_Str("UP: ");
                             Cli_Output.Output_Str(input_item.Text_Get());
                             Cli_Input.Input_Invitation_Print();
+                            is_invitation_print = false;
                         }
                             break;
 
@@ -194,6 +200,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                             Cli_Output.Output_Str("DOWN: ");
                             Cli_Output.Output_Str(input_item.Text_Get());
                             Cli_Input.Input_Invitation_Print();
+                            is_invitation_print = false;
                         }
                             break;
 
@@ -212,9 +219,18 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                         case CLI_INPUT_ITEM_TYPE_CTRL_Z:
                         case CLI_INPUT_ITEM_TYPE_CTRL_BACKSLASH:
                             On_Ctrl_C_Z_BACKSLASH(Cli_Input, Cli_Output, input_item);
+                            is_invitation_print = false;
                             break;
 
                     } // switch (input_item.Type_Get())
+
+                    if (input_item.Type_Get() != CLI_INPUT_ITEM_TYPE_NO) {
+                        if (is_invitation_print) {
+                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                            Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                        }
+                        is_invitation_print = true;
+                    }
 
                 }
                     break;
@@ -286,6 +302,19 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
             } // switch (Cli_Input.Input_Mode_Get())
 
+        }
+
+        if (Cmd_Exit) {
+            Cli_Output.Output_Str("Exit - Processed");
+            Cli_Output.Output_NewLine();
+            stop = true; // Exit
+            thread_args->Cli_Input_Thread_CMD_Stop_Set(true); // Quit
+        }
+        if (Cmd_Quit) {
+            Cli_Output.Output_Str("Quit - Processed");
+            Cli_Output.Output_NewLine();
+            stop = true; // Quit
+            thread_args->Cli_Input_Thread_CMD_Stop_Set(true); // Quit
         }
 
     }

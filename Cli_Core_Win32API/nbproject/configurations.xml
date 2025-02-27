@@ -4,6 +4,77 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="Cli_CMD_Processor" projectFiles="true">
+        <itemPath>Cli_CMD_Processor/Cli_CMD_Processor.h</itemPath>
+        <itemPath>Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="Cli_Core" projectFiles="true">
+        <itemPath>Cli_Core/Cli_Core.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="Cli_Input" projectFiles="true">
+        <itemPath>Cli_Input/CLI_CT.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Abstract.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Char_Item.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Item.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Item_Type.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_Thread_Args.h</itemPath>
+        <itemPath>Cli_Input/Cli_Input_win32api.h</itemPath>
+        <itemPath>Cli_Input/Input_Mode_Type.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4" displayName="Cli_Modules" projectFiles="true">
+        <itemPath>Cli_Modules/Cli_Cmd.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Cmd_ID.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Cmd_Privilege_ID.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
+        <itemPath>Cli_Modules/Level_Description.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5" displayName="Cli_Output" projectFiles="true">
+        <itemPath>Cli_Output/Cli_Output_Abstract.h</itemPath>
+        <itemPath>Cli_Output/Cli_Output_win32api.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6" displayName="Cli_TAB_Processor" projectFiles="true">
+        <itemPath>Cli_TAB_Processor/Cli_TAB_Processor.h</itemPath>
+        <itemPath>Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h</itemPath>
+        <itemPath>Cli_TAB_Processor/Cli_TAB_Result.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7" displayName="Cmd_Item" projectFiles="true">
+        <itemPath>Cmd_Item/Cmd_Item_Assignment_Mark.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Base.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Date.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_DateTime.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_EQU.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_EQU_Range.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_IP4.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_IP6.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_List.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_List_Item.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Int_Range.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_MAC.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Point_Var_Name.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Rem.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Str.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Str_Esc.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Time.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Valid_Result.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Valid_Result_Func.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word_List.h</itemPath>
+        <itemPath>Cmd_Item/Cmd_Item_Word_Range.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f8" displayName="Cmd_Token_Parser" projectFiles="true">
+        <itemPath>Cmd_Token_Parser/Cmd_Token.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h</itemPath>
+        <itemPath>Cmd_Token_Parser/Cmd_Token_Parser_Result.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f9" displayName="TAB_Cmd" projectFiles="true">
+        <itemPath>TAB_Cmd/TAB_Cmd.h</itemPath>
+        <itemPath>TAB_Cmd/TAB_Cmd_ID.h</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -43,6 +114,13 @@
           <incDir>
             <pElem>Cli_Input</pElem>
             <pElem>Cli_Output</pElem>
+            <pElem>Cli_Core</pElem>
+            <pElem>Cli_CMD_Processor</pElem>
+            <pElem>Cli_Modules</pElem>
+            <pElem>Cli_TAB_Processor</pElem>
+            <pElem>Cmd_Item</pElem>
+            <pElem>Cmd_Token_Parser</pElem>
+            <pElem>TAB_Cmd</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
@@ -51,6 +129,18 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input/CLI_CT.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
@@ -67,9 +157,113 @@
       </item>
       <item path="Cli_Input/Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Assignment_Mark.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP6.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Point_Var_Name.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str_Esc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Result.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_core_win32api_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -94,6 +288,18 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_CMD_Processor/Cli_CMD_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input/CLI_CT.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
@@ -110,9 +316,113 @@
       </item>
       <item path="Cli_Input/Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Processor_Abstract.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_TAB_Processor/Cli_TAB_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Assignment_Mark.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Base.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Date.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_DateTime.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_EQU_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP4.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_IP6.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_List_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Int_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_MAC.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Point_Var_Name.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Rem.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Str_Esc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Valid_Result_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_List.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Item/Cmd_Item_Word_Range.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Char_Type_Func.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cmd_Token_Parser/Cmd_Token_Parser_Result.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TAB_Cmd/TAB_Cmd_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cli_core_win32api_main.cpp" ex="false" tool="1" flavor2="0">
       </item>

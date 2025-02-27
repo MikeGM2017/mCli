@@ -21,6 +21,8 @@
 
 using namespace std;
 
+#include "Cli_Input_Char_Item.h"
+
 typedef LRESULT CALLBACK fpWndProc(HWND hwnd, // window handle
         UINT message, // type of message
         WPARAM wParam, // additional information
