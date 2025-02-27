@@ -26,6 +26,10 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>Cli_Output</Elem>
+    <Elem>Cli_Input</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -35,12 +39,38 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>Cli_Input</pElem>
+            <pElem>Cli_Output</pElem>
+          </incDir>
+        </ccTool>
         <linkerTool>
           <linkerLibItems>
             <linkerLibLibItem>gdi32</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="Cli_Input/CLI_CT.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Char_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Thread_Args.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cli_core_win32api_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -64,6 +94,26 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Cli_Input/CLI_CT.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Char_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Item_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_Thread_Args.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Cli_Input_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Output/Cli_Output_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cli_core_win32api_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>

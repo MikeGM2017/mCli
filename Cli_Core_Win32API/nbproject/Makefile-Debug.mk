@@ -65,7 +65,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_win32api: ${OBJECTFILES}
 ${OBJECTDIR}/cli_core_win32api_main.o: cli_core_win32api_main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_win32api_main.o cli_core_win32api_main.cpp
+	$(COMPILE.cc) -g -ICli_Input -ICli_Output -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cli_core_win32api_main.o cli_core_win32api_main.cpp
 
 # Subprojects
 .build-subprojects:
