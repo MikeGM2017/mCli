@@ -30,6 +30,7 @@ using namespace std;
 #include "Cli_Modules.h"
 
 #include "Cli_Module_Base_Quit.h"
+#include "Cli_Module_Base_History.h"
 
 #include "Cli_CMD_Processor.h"
 
@@ -92,6 +93,9 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     bool Cmd_Exit = false;
     bool Cmd_Quit = false;
     Modules.Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
+
+    Cli_History History;
+    Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
 
     // Modules Add - End
 
@@ -168,7 +172,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                             string s_trim = Cli.Str_Trim(input_item.Text_Get());
 
                             if (!is_no_history && !is_debug && !s_trim.empty()) {
-                                //History.History_Put(s_trim);
+                                History.History_Put(s_trim);
                             }
 
                             bool debug_res = false;
@@ -186,20 +190,20 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                         case CLI_INPUT_ITEM_TYPE_UP:
                         {
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str("UP: ");
-                            Cli_Output.Output_Str(input_item.Text_Get());
-                            Cli_Input.Input_Invitation_Print();
+                            string s_prev = Cli_Input.Input_Str_Get();
+                            Cli_Input.Input_Str_Set(History.History_Up());
+                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                            Cli_Input.Input_End();
                             is_invitation_print = false;
                         }
                             break;
 
                         case CLI_INPUT_ITEM_TYPE_DOWN:
                         {
-                            Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str("DOWN: ");
-                            Cli_Output.Output_Str(input_item.Text_Get());
-                            Cli_Input.Input_Invitation_Print();
+                            string s_prev = Cli_Input.Input_Str_Get();
+                            Cli_Input.Input_Str_Set(History.History_Down());
+                            Cli_Input.Input_Str_Modified_To_Output(s_prev);
+                            Cli_Input.Input_End();
                             is_invitation_print = false;
                         }
                             break;

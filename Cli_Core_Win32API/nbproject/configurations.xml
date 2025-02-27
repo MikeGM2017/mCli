@@ -11,6 +11,9 @@
       <logicalFolder name="f2" displayName="Cli_Core" projectFiles="true">
         <itemPath>Cli_Core/Cli_Core.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f10" displayName="Cli_History" projectFiles="true">
+        <itemPath>Cli_History/Cli_History.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3" displayName="Cli_Input" projectFiles="true">
         <itemPath>Cli_Input/CLI_CT.h</itemPath>
         <itemPath>Cli_Input/Cli_Input_Abstract.h</itemPath>
@@ -26,6 +29,7 @@
         <itemPath>Cli_Modules/Cli_Cmd_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Cmd_Privilege_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_History.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
@@ -121,6 +125,7 @@
             <pElem>Cmd_Item</pElem>
             <pElem>Cmd_Token_Parser</pElem>
             <pElem>TAB_Cmd</pElem>
+            <pElem>Cli_History</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
@@ -140,6 +145,8 @@
             flavor2="0">
       </item>
       <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_History/Cli_History.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/CLI_CT.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -164,6 +171,11 @@
       <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -300,6 +312,8 @@
       </item>
       <item path="Cli_Core/Cli_Core.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_History/Cli_History.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Input/CLI_CT.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_Abstract.h" ex="false" tool="3" flavor2="0">
@@ -323,6 +337,11 @@
       <item path="Cli_Modules/Cli_Cmd_Privilege_ID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>

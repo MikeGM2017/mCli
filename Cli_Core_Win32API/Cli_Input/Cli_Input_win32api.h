@@ -219,6 +219,14 @@ public:
         }
     }
 
+    virtual void Input_Str_Modified_To_Output(string s_prev) {
+        if (Is_Echo_Get()) {
+            int pos = GetWindowTextLength(Output_HWND) - s_prev.length();
+            SendMessage(Output_HWND, EM_SETSEL, pos, -1);
+            SendMessage(Output_HWND, EM_REPLACESEL, FALSE, (LPARAM) Input_Str.c_str());
+        }
+    }
+
     virtual void Input_Add(char c, bool is_shift) {
         if (Input_Str_Pos == Input_Str.length()) {
             if (Is_Echo_Get()) {
