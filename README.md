@@ -3,13 +3,13 @@ Console Command Line Interface framework
 
 Features: Modules / Command Levels / Tab Hints / Scripts / Conditional Executing
 
-Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h>); JavaFX; Ruby (Curses); Qt; C#
+Platforms: Linux (<termios.h> / NCurses / PDCurses); Windows (<conio.h> / Win32API); JavaFX; Ruby (Curses); Qt; C#
 
 IDE:
 
 NetBeans IDE 8.1 - for all projects
 
-Dev-C++ 5.11 - for target conio ("/Dev-Cpp/MinGW64/bin/*" used in NetBeans as Tool Collection "GNU_DevCpp")
+Dev-C++ 5.11 - for target conio / win32api ("/Dev-Cpp/MinGW64/bin/*" used in NetBeans as Tool Collection "GNU_DevCpp")
 
 MS Visual Studio - for C# projects
 
@@ -22,6 +22,8 @@ Projects:
   - Cli_Core_JavaFX - Cli Core Test Project for JavaFX (Java, JavaFX/TextArea)
 
   - Cli_Core_CS - Cli Core Test Project for C#
+
+  - Cli_Core_Win32API - Cli Core Test Project for Win32API
 
 Test Projects:
 

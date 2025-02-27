@@ -7,13 +7,13 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
-CND_PLATFORM_Debug=GNU_DevCpp6_3-Linux
-CND_ARTIFACT_DIR_Debug=dist/Debug/GNU_DevCpp6_3-Linux
+CND_PLATFORM_Debug=GNU_DevCpp-Linux
+CND_ARTIFACT_DIR_Debug=dist/Debug/GNU_DevCpp-Linux
 CND_ARTIFACT_NAME_Debug=cli_core_win32api
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU_DevCpp6_3-Linux/cli_core_win32api
-CND_PACKAGE_DIR_Debug=dist/Debug/GNU_DevCpp6_3-Linux/package
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU_DevCpp-Linux/cli_core_win32api
+CND_PACKAGE_DIR_Debug=dist/Debug/GNU_DevCpp-Linux/package
 CND_PACKAGE_NAME_Debug=clicorewin32api.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU_DevCpp6_3-Linux/package/clicorewin32api.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU_DevCpp-Linux/package/clicorewin32api.tar
 # Release configuration
 CND_PLATFORM_Release=GNU_DevCpp-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU_DevCpp-Linux

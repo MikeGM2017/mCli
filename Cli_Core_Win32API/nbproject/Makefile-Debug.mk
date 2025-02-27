@@ -21,7 +21,7 @@ FC=gfortran
 AS=as.exe
 
 # Macros
-CND_PLATFORM=GNU_DevCpp6_3-Linux
+CND_PLATFORM=GNU_DevCpp-Linux
 CND_DLIB_EXT=so
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lgdi32 -lpthread
+LDLIBSOPTIONS=-lgdi32
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

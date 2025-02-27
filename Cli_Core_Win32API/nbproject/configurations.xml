@@ -30,7 +30,7 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>GNU_DevCpp6_3|GNU</compilerSet>
+        <compilerSet>GNU_DevCpp|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -38,7 +38,6 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibLibItem>gdi32</linkerLibLibItem>
-            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
