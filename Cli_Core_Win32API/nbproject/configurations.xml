@@ -33,6 +33,7 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Debug.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Help.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_History.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
@@ -187,6 +188,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Modules.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -366,6 +372,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_History.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Modules.h"
             ex="false"
             tool="3"
             flavor2="0">

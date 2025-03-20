@@ -31,6 +31,7 @@ using namespace std;
 
 #include "Cli_Module_Base_Quit.h"
 #include "Cli_Module_Base_Help.h"
+#include "Cli_Module_Base_Modules.h"
 #include "Cli_Module_Base_History.h"
 
 #include "Cli_Module_Base_Debug.h"
@@ -103,6 +104,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     char C_Multy = '*';
     Str_Filter str_filter(C_Single, C_Multy);
     Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
+    Modules.Add(new Cli_Module_Base_Modules(Version, Modules, str_filter, Cli_Input, Cli_Output));
 
     Cli_History History;
     Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
