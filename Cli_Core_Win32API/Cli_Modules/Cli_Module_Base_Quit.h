@@ -21,11 +21,46 @@
 class Cli_Module_Base_Quit : public Cli_Module {
 protected:
 
+    class Do_Exit : public Do_Abstract {
+    protected:
+
+        bool &Cmd_Exit;
+
+    public:
+
+        Do_Exit(bool &cmd_exit) : Cmd_Exit(cmd_exit) {
+        }
+
+        void Do() {
+            Cmd_Exit = true;
+        }
+
+    };
+
+    class Do_Quit : public Do_Abstract {
+    protected:
+
+        bool &Cmd_Quit;
+
+    public:
+
+        Do_Quit(bool &cmd_quit) : Cmd_Quit(cmd_quit) {
+        }
+
+        void Do() {
+            Cmd_Quit = true;
+        }
+
+    };
+
     Cli_Input_Abstract &Cli_Input;
     Cli_Output_Abstract &Cli_Output;
 
     bool &Cmd_Exit;
     bool &Cmd_Quit;
+
+    Do_Exit *Do_Exit_Object;
+    Do_Quit *Do_Quit_Object;
 
 public:
 
@@ -49,7 +84,11 @@ public:
     Cli_Module_Base_Quit(Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             bool &cmd_exit, bool &cmd_quit) : Cli_Module("Base Quit"),
     Cli_Input(cli_input), Cli_Output(cli_output), Cmd_Exit(cmd_exit), Cmd_Quit(cmd_quit) {
-        Version = "0.03";
+        Version = "0.04";
+
+        Do_Exit_Object = new Do_Exit(cmd_exit);
+        Do_Quit_Object = new Do_Quit(cmd_quit);
+
         {
             // E - exit
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_exit_E, CMD_PRIVILEGE_USER_DEF);
@@ -109,30 +148,28 @@ public:
     }
 
     void Cli_Exit_Ask() {
+        string s_question = "Exit(with Logout)?(y/n):";
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Exit(with Logout)?(y/n):");
-        Cli_Input_Item input_item = Cli_Input.Input_Item_Get();
-        string s = input_item.Text_Get();
-        char c = 0;
-        if (s.size()) c = s[0];
-        if (c == 'y' || c == 'Y') {
-            Cmd_Exit = true;
-        }
+        Cli_Output.Output_Str(s_question);
+
+        Cli_Input.Input_Mode_Set(INPUT_MODE_PROMPT);
+        Cli_Input.Input_Str_Set_Empty();
+        Cli_Input.Do_Object_Set(Do_Exit_Object);
     }
 
     void Cli_Quit_Ask() {
+        string s_question = "Quit(without Logout)?(y/n):";
         Cli_Output.Output_NewLine();
-        Cli_Output.Output_Str("Quit?(y/n):");
-        Cli_Input_Item input_item = Cli_Input.Input_Item_Get();
-        string s = input_item.Text_Get();
-        char c = 0;
-        if (s.size()) c = s[0];
-        if (c == 'y' || c == 'Y') {
-            Cmd_Quit = true;
-        }
+        Cli_Output.Output_Str(s_question);
+
+        Cli_Input.Input_Mode_Set(INPUT_MODE_PROMPT);
+        Cli_Input.Input_Str_Set_Empty();
+        Cli_Input.Do_Object_Set(Do_Quit_Object);
     }
 
     virtual ~Cli_Module_Base_Quit() {
+        delete Do_Exit_Object;
+        delete Do_Quit_Object;
     }
 
     virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {

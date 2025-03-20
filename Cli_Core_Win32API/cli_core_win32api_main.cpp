@@ -182,7 +182,9 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                             bool debug_res = false;
                             CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                             Cli_Input.Input_Str_Set_Empty();
-                            Cli_Output.Output_NewLine();
+                            if (Cli_Input.Input_Mode_Get() != INPUT_MODE_PROMPT) {
+                                Cli_Output.Output_NewLine();
+                            }
                         }
                             break;
 
@@ -232,12 +234,14 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                     } // switch (input_item.Type_Get())
 
-                    if (input_item.Type_Get() != CLI_INPUT_ITEM_TYPE_NO) {
-                        if (is_invitation_print) {
-                            Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
-                            Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                    if (Cli_Input.Input_Mode_Get() != INPUT_MODE_PROMPT) {
+                        if (input_item.Type_Get() != CLI_INPUT_ITEM_TYPE_NO) {
+                            if (is_invitation_print) {
+                                Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+                                Cli_Output.Output_Str(Cli_Input.Input_Str_Get());
+                            }
+                            is_invitation_print = true;
                         }
-                        is_invitation_print = true;
                     }
 
                 }
@@ -255,6 +259,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                                     || input_item.Text_Get() == ("YES") || input_item.Text_Get() == ("Yes")
                                     || input_item.Text_Get() == ("yes")) {
                                 Cli_Output.Output_Str("Answer: Yes");
+                                Cli_Input.Do_Object_Yes();
                             } else {
                                 Cli_Output.Output_Str("Answer: No");
                             }

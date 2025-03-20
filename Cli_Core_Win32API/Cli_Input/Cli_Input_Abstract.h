@@ -26,8 +26,9 @@ using namespace std;
 
 #include "Input_Mode_Type.h"
 
-class Cli_Input_Abstract {
+#include "Do_Abstract.h"
 
+class Cli_Input_Abstract {
 protected:
 
     string Title;
@@ -51,11 +52,13 @@ protected:
 
     bool Is_Ctrl_C_Pressed;
 
+    Do_Abstract *Do_Object;
+
 public:
 
     Cli_Input_Abstract(Cli_Output_Abstract &cli_output) : Invitation("> "), Divider_L("["), Divider_R("]"),
     Cli_Output(cli_output), Is_Echo(true), Input_Str_Pos(0), Input_Mode(INPUT_MODE_NORMAL), Wait_Count(-1),
-    Is_Ctrl_C_Pressed(false) {
+    Is_Ctrl_C_Pressed(false), Do_Object(0) {
     }
 
     virtual ~Cli_Input_Abstract() {
@@ -332,6 +335,17 @@ public:
 
     virtual void Is_Ctrl_C_Pressed_Clear() {
         Is_Ctrl_C_Pressed = false;
+    }
+
+    virtual void Do_Object_Set(Do_Abstract *obj) {
+        Do_Object = obj;
+    }
+
+    virtual void Do_Object_Yes() {
+        if (Do_Object != 0) {
+            Do_Object->Do();
+            Do_Object = 0;
+        }
     }
 
 };

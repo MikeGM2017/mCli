@@ -22,6 +22,7 @@
         <itemPath>Cli_Input/Cli_Input_Item_Type.h</itemPath>
         <itemPath>Cli_Input/Cli_Input_Thread_Args.h</itemPath>
         <itemPath>Cli_Input/Cli_Input_win32api.h</itemPath>
+        <itemPath>Cli_Input/Do_Abstract.h</itemPath>
         <itemPath>Cli_Input/Input_Mode_Type.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="Cli_Modules" projectFiles="true">
@@ -162,6 +163,8 @@
       <item path="Cli_Input/Cli_Input_Thread_Args.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Do_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -333,6 +336,8 @@
       <item path="Cli_Input/Cli_Input_Thread_Args.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/Cli_Input_win32api.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Input/Do_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Input/Input_Mode_Type.h" ex="false" tool="3" flavor2="0">
       </item>
