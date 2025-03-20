@@ -61,7 +61,7 @@ public:
     Cli_Input(cli_input), Cli_Output(cli_output),
     Str_Rem(str_rem), Log_Is_Active(log_is_active) {
         Type = "Cli_TAB_Processor";
-        Version = "0.02";
+        Version = "0.03";
     }
 
     virtual Level_Description Level_Get() {
@@ -639,11 +639,13 @@ public:
                             if (is_changed && s_pos_prev == s_prev.size() && !is_prev_newline) {
                                 Cli_Input.Input_Str_Pos_Set(Cli_Input.Input_Str_Get().size());
                                 Cli_Output.Output_Str(" ");
+                                is_invitation_print = false;
+                                is_prev_newline = false;
                             } else {
                                 Cli_Input.Input_End();
+                                is_invitation_print = true;
+                                is_prev_newline = true;
                             }
-                            is_invitation_print = false;
-                            is_prev_newline = false;
                         }
                             break;
                     }
