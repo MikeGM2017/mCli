@@ -31,10 +31,13 @@
         <itemPath>Cli_Modules/Cli_Cmd_Privilege_ID.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Debug.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Help.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_History.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
+        <itemPath>Cli_Modules/Str_Filter.h</itemPath>
+        <itemPath>Cli_Modules/Str_Filter_Abstract.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Cli_Output" projectFiles="true">
         <itemPath>Cli_Output/Cli_Output_Abstract.h</itemPath>
@@ -181,6 +184,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Module_Base_History.h"
             ex="false"
             tool="3"
@@ -191,6 +196,10 @@
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -354,6 +363,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Base_Help.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Module_Base_History.h"
             ex="false"
             tool="3"
@@ -364,6 +375,10 @@
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>

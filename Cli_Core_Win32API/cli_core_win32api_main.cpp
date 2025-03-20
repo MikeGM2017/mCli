@@ -30,9 +30,12 @@ using namespace std;
 #include "Cli_Modules.h"
 
 #include "Cli_Module_Base_Quit.h"
+#include "Cli_Module_Base_Help.h"
 #include "Cli_Module_Base_History.h"
 
 #include "Cli_Module_Base_Debug.h"
+
+#include "Str_Filter.h"
 
 #include "Cli_CMD_Processor.h"
 
@@ -95,6 +98,11 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     bool Cmd_Exit = false;
     bool Cmd_Quit = false;
     Modules.Add(new Cli_Module_Base_Quit(Cli_Input, Cli_Output, Cmd_Exit, Cmd_Quit));
+
+    char C_Single = '?';
+    char C_Multy = '*';
+    Str_Filter str_filter(C_Single, C_Multy);
+    Modules.Add(new Cli_Module_Base_Help(User_Privilege, Modules, str_filter, Cli_Output));
 
     Cli_History History;
     Modules.Add(new Cli_Module_Base_History(History, Cli_Output));
