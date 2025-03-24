@@ -76,11 +76,6 @@ public:
         }
     }
 
-    // DEBUG
-    int History_Pos_Get() {
-        return History_Pos;
-    }
-
 };
 
 #endif /* CLI_HISTORY_H */

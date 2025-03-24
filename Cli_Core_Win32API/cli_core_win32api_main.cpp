@@ -58,22 +58,12 @@ const string Version = "0.01";
 #define IDM_EDIT_SELECT_ALL 20003
 #define IDM_EDIT_CLEAR_ALL 20004
 
-// DEBUG
-#define IDT_TIMER1 100001
-
 static HWND hwndEdit;
 
 static HANDLE Cli_Input_Thread_Handle = 0;
 static DWORD Cli_Input_Thread_ID = 0;
 
 static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
-
-// DEBUG
-static Cli_Input_win32api *Cli_Input_Ptr = 0;
-static bool *Cmd_Wait_Stop_Ptr = 0;
-static bool *Cmd_Script_Stop_Ptr = 0;
-static Cli_Module_Base_Script *Module_Script_Ptr = 0;
-static Cli_History *History_Ptr = 0;
 
 void On_Ctrl_C_Z_BACKSLASH(Cli_Input_win32api &Cli_Input, Cli_Output_win32api &Cli_Output, Cli_Input_Item &input_item) {
     Cli_Input.Input_Default_State_Set();
@@ -143,13 +133,6 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     Modules.Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
-
-    // DEBUG
-    Cli_Input_Ptr = &Cli_Input;
-    Cmd_Wait_Stop_Ptr = &Cmd_Wait_Stop;
-    Cmd_Script_Stop_Ptr = &Cmd_Script_Stop;
-    Module_Script_Ptr = &Module_Script;
-    History_Ptr = &History;
 
     // Modules Add - End
 
@@ -458,14 +441,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                         &Cli_Input_Thread_ID);
             }
 
-            // DEBUG
-            {
-                SetTimer(hwnd, // handle to main window
-                        IDT_TIMER1, // timer identifier
-                        100, //1000, // 0.1-second interval
-                        (TIMERPROC) NULL); // no timer callback
-            }
-
         }
             break;
 
@@ -517,72 +492,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     LOWORD(lParam), // width of client area
                     HIWORD(lParam), // height of client area
                     TRUE); // repaint window
-        }
-            break;
-
-            // DEBUG
-        case WM_TIMER:
-        {
-            // DEBUG
-            {
-                static int debug_count = 0;
-                stringstream s_str;
-                debug_count++;
-                s_str << "DEBUG[" << debug_count << "]:";
-
-                if (0) {
-                    if (Cli_Input_Ptr) {
-                        s_str << " CTRL: " << (Cli_Input_Ptr->Is_Ctrl_C_Pressed_Get() ? " TRUE" : "-");
-                        s_str << " set: " << Cli_Input_Ptr->Is_Ctrl_C_Pressed_Set_Count;
-                        s_str << " clr: " << Cli_Input_Ptr->Is_Ctrl_C_Pressed_Clear_Count;
-                        s_str << " MODE: ";
-                        switch (Cli_Input_Ptr->Input_Mode_Get()) {
-                            case INPUT_MODE_NORMAL:
-                                s_str << "NORMAL";
-                                break;
-                            case INPUT_MODE_PROMPT:
-                                s_str << "PROMPT";
-                                break;
-                            case INPUT_MODE_PASSWD:
-                                s_str << "PASSWD";
-                                break;
-                            case INPUT_MODE_WAIT:
-                                s_str << "WAIT";
-                                break;
-                        }
-                        s_str << " WAIT: " << Cli_Input_Ptr->Wait_Count_Get();
-
-                    } else {
-                        s_str << "Cli_Input_Ptr=0";
-                    }
-
-                    if (Cmd_Wait_Stop_Ptr) {
-                        s_str << " WAIT_STOP: " << (*Cmd_Wait_Stop_Ptr ? " TRUE" : "-");
-                    } else {
-                        s_str << "Cmd_Wait_Stop_Ptr=0";
-                    }
-
-                    if (Cmd_Script_Stop_Ptr) {
-                        s_str << " SCRIPT_STOP: " << (*Cmd_Script_Stop_Ptr ? " TRUE" : "-");
-                    } else {
-                        s_str << "Cmd_Scrip_Stop_Ptr=0";
-                    }
-
-                    if (Module_Script_Ptr) {
-                        s_str << Module_Script_Ptr->Debug_S_Str.str();
-                    } else {
-                        s_str << "Module_Script_Ptr=0";
-                    }
-                }
-
-                {
-                    s_str << " Cli_Input: \"" << Cli_Input_Ptr->Input_Str_Get() << "\" pos=" << Cli_Input_Ptr->Input_Str_Pos_Get();
-                    s_str << " History: size=" << History_Ptr->History_Size_Get() << " pos=" << History_Ptr->History_Pos_Get();
-                }
-
-                string s = s_str.str();
-                SetWindowText(Cli_Input_Thread_Args.Main_HWND_Get(), s.c_str());
-            }
         }
             break;
 

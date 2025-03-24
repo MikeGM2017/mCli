@@ -56,15 +56,9 @@ protected:
 
 public:
 
-    // DEBUG
-    int Is_Ctrl_C_Pressed_Set_Count;
-    int Is_Ctrl_C_Pressed_Clear_Count;
-
     Cli_Input_Abstract(Cli_Output_Abstract &cli_output) : Invitation("> "), Divider_L("["), Divider_R("]"),
     Cli_Output(cli_output), Is_Echo(true), Input_Str_Pos(0), Input_Mode(INPUT_MODE_NORMAL), Wait_Count(-1),
-    Is_Ctrl_C_Pressed(false), Do_Object(0),
-    // DEBUG
-    Is_Ctrl_C_Pressed_Set_Count(0), Is_Ctrl_C_Pressed_Clear_Count(0) {
+    Is_Ctrl_C_Pressed(false), Do_Object(0) {
     }
 
     virtual ~Cli_Input_Abstract() {
@@ -337,14 +331,10 @@ public:
 
     virtual void Is_Ctrl_C_Pressed_Set() {
         Is_Ctrl_C_Pressed = true;
-        // DEBUG
-        Is_Ctrl_C_Pressed_Set_Count++;
     }
 
     virtual void Is_Ctrl_C_Pressed_Clear() {
         Is_Ctrl_C_Pressed = false;
-        // DEBUG
-        Is_Ctrl_C_Pressed_Clear_Count++;
     }
 
     virtual void Do_Object_Set(Do_Abstract *obj) {

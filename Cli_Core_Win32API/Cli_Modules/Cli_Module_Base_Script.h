@@ -52,10 +52,6 @@ protected:
 
 public:
 
-    // DEBUG
-    stringstream Debug_S_Str;
-    int Debug_Count;
-
     virtual int Cmd_ID_Count_Get() {
         return CMD_ID_LAST - CMD_ID_NO - 1;
     }
@@ -72,12 +68,6 @@ public:
 
                     main_obj->Script_Thread_FileName = "";
                     main_obj->Script_Thread_Is_No_History = false;
-
-                    // DEBUG
-                    main_obj->Debug_S_Str.clear();
-                    main_obj->Debug_S_Str.str("");
-                    main_obj->Debug_S_Str << " Script_Start:";
-                    main_obj->Debug_Count = 0;
 
                     Execute_Script(main_obj, filename, is_no_history);
                 } else {
@@ -113,26 +103,15 @@ public:
             bool debug_res = false;
             string s;
             do {
-                // DEBUG
-                main_obj->Debug_Count++;
-                main_obj->Debug_S_Str << " " << main_obj->Debug_Count;
                 if (!main_obj->Cli_Input.Is_Ctrl_C_Pressed_Get()) {
 
                     inputFile.getline(main_obj->Script_Buf, main_obj->Script_Buf_Size);
                     s = main_obj->Script_Buf;
-                    // DEBUG
-                    main_obj->Debug_S_Str << "a";
                     if (!s.empty()) {
-                        // DEBUG
-                        main_obj->Debug_S_Str << "b";
                         string s_trim = Str_Trim(s);
                         if (!is_no_history && !is_debug && !s_trim.empty()) {
-                            // DEBUG
-                            main_obj->Debug_S_Str << "c";
                             main_obj->History.History_Put(s_trim);
                         }
-                        // DEBUG
-                        main_obj->Debug_S_Str << "d";
                         Cli_Input_Item input_item(CLI_INPUT_ITEM_TYPE_STR, s_trim);
                         main_obj->Cli_Output.Output_Str(s_trim);
 
@@ -143,28 +122,20 @@ public:
 
                         main_obj->Cli_Command_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                         while (main_obj->Cli_Input.Input_Mode_Get() == INPUT_MODE_WAIT) {
-                            // DEBUG
-                            main_obj->Debug_S_Str << "e";
                             main_obj->Cli_Input.Input_sleep(1);
                         }
 
                         if (main_obj->Script_Command_Str.length() > 0) {
-                            // DEBUG
-                            main_obj->Debug_S_Str << "f";
                             main_obj->Execute_Script_Command(is_debug, debug_res);
                             main_obj->Script_Command_Str = "";
                         }
 
                         //@Warning: Command "check goto <label>" - special case: is moves file position
                         if (main_obj->Script_Label_Str.length() > 0) {
-                            // DEBUG
-                            main_obj->Debug_S_Str << "g";
                             string label = main_obj->Script_Label_Str;
                             main_obj->Script_Label_Str = "";
                             bool label_found = main_obj->Execute_Command_check_goto_label(inputFile, label);
                             if (!label_found) {
-                                // DEBUG
-                                main_obj->Debug_S_Str << "h";
                                 main_obj->Cli_Output.Output_NewLine();
                                 main_obj->Cli_Output.Output_Str("ERROR: label \"" + label + "\" - not found, script stopped");
                                 main_obj->Cli_Output.Output_NewLine();
@@ -173,8 +144,6 @@ public:
                         }
 
                         if (main_obj->Script_Thread_FileName.length() > 0) {
-                            // DEBUG
-                            main_obj->Debug_S_Str << "j";
                             string nested_script_filename = main_obj->Script_Thread_FileName;
                             bool nested_script_is_no_history = main_obj->Script_Thread_Is_No_History;
 
@@ -186,8 +155,6 @@ public:
 
                     }
                 } else {
-                    // DEBUG
-                    main_obj->Debug_S_Str << "A";
                     main_obj->Cmd_Script_Stop = true; // Stop By Ctrl+C
                 }
             } while (!inputFile.eof()
