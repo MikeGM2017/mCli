@@ -46,6 +46,8 @@ protected:
         CMD_ID_do_script_no_history,
         CMD_ID_do_script_stop,
         CMD_ID_save_history_as_script,
+        CMD_ID_scripts_list,
+        CMD_ID_scripts_list_by_filter,
 
         CMD_ID_LAST
     };
@@ -208,7 +210,7 @@ public:
     Str_Filter(str_filter),
     Script_Thread(0), Script_Thread_ID(0) {
 
-        Version = "0.04";
+        Version = "0.07";
 
         Script_Buf = new char[Script_Buf_Size];
 
@@ -266,6 +268,28 @@ public:
             cmd->Item_Add(new Cmd_Item_Word("as", "save history as"));
             cmd->Item_Add(new Cmd_Item_Word("script", "save history as script to file"));
             cmd->Item_Add(new Cmd_Item_Str("\"<file>\"", "script filename"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // scripts list
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_scripts_list);
+            cmd->Text_Set("scripts list");
+            cmd->Help_Set("scripts list (all)");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("scripts", "scripts"));
+            cmd->Item_Add(new Cmd_Item_Word("list", "scripts list (all)"));
+            Cmd_Add(cmd);
+        }
+        {
+            // scripts list <filename>
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_scripts_list_by_filter);
+            cmd->Text_Set("scripts list <filename>");
+            cmd->Help_Set("scripts list (by filter)");
+            cmd->Is_Global_Set(true);
+            cmd->Item_Add(new Cmd_Item_Word("scripts", "scripts"));
+            cmd->Item_Add(new Cmd_Item_Word("list", "scripts list"));
+            cmd->Item_Add(new Cmd_Item_Str("<filename>", "scripts list (by filter)"));
             Cmd_Add(cmd);
         }
 
@@ -422,6 +446,73 @@ public:
         return true;
     }
 
+#ifdef _WIN32
+
+    bool scripts_list_by_filter(Str_Filter_Abstract &str_filter, string filter) {
+        WIN32_FIND_DATA findFileData;
+        string s = "./" + Script_Dir_Str + "/*.*";
+        HANDLE hFind = FindFirstFile((LPCSTR) s.c_str(), &findFileData);
+
+        if (hFind != INVALID_HANDLE_VALUE) {
+            do {
+                string filename = findFileData.cFileName;
+                if (filename != "." && filename != ".." && str_filter.Is_Match(filter, filename)) {
+                    stringstream s_str;
+                    if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+                        s_str << "[D] ";
+                    } else if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_NORMAL) {
+                        s_str << "[f] ";
+                    } else if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) {
+                        s_str << "[f] ";
+                    } else {
+                        s_str << "[?] ";
+                    }
+                    s_str << filename;
+                    Cli_Output.Output_Str(s_str.str());
+                    Cli_Output.Output_NewLine();
+                }
+            } while (FindNextFile(hFind, &findFileData) != 0);
+        } else {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("ERROR: can not read dir \"" + Script_Dir_Str + "\"");
+            Cli_Output.Output_NewLine();
+        }
+        return true;
+    }
+
+#else // #ifdef _WIN32
+
+    bool scripts_list_by_filter(Str_Filter_Abstract &str_filter, string filter) {
+        DIR *dir;
+        struct dirent *ent;
+        if ((dir = opendir(Script_Dir_Str.c_str())) != NULL) {
+            while ((ent = readdir(dir)) != NULL) {
+                string filename = ent->d_name;
+                if (filename != "." && filename != ".." && str_filter.Is_Match(filter, filename)) {
+                    stringstream s_str;
+                    if (ent->d_type == DT_DIR) {
+                        s_str << "[D] ";
+                    } else if (ent->d_type == DT_REG) {
+                        s_str << "[f] ";
+                    } else {
+                        s_str << "[?] ";
+                    }
+                    s_str << filename;
+                    Cli_Output.Output_Str(s_str.str());
+                    Cli_Output.Output_NewLine();
+                }
+            }
+            closedir(dir);
+        } else {
+            Cli_Output.Output_NewLine();
+            Cli_Output.Output_Str("ERROR: can not read dir \"" + Script_Dir_Str + "\"");
+            Cli_Output.Output_NewLine();
+        }
+        return true;
+    }
+
+#endif // #ifdef _WIN32
+
     virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
         enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         Level_Description level;
@@ -457,6 +548,21 @@ public:
                 Cmd_Script_Stop = true;
                 return true;
             }
+
+            case CMD_ID_scripts_list:
+                if (is_debug) return true;
+            {
+                string filter = "*";
+                return scripts_list_by_filter(Str_Filter, filter);
+            }
+                break;
+            case CMD_ID_scripts_list_by_filter:
+                if (is_debug) return true;
+            {
+                string filter = cmd->Items[2]->Value_Str;
+                return scripts_list_by_filter(Str_Filter, filter);
+            }
+                break;
         }
         return false; // Not Implemented
     }
