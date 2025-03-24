@@ -36,7 +36,11 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Log.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Script.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Wait.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
+        <itemPath>Cli_Modules/Do_Abstract.h</itemPath>
+        <itemPath>Cli_Modules/Do_Command.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter_Abstract.h</itemPath>
@@ -134,6 +138,9 @@
             <pElem>TAB_Cmd</pElem>
             <pElem>Cli_History</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>_WIN32</Elem>
+          </preprocessorList>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
@@ -202,7 +209,18 @@
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Base_Script.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Do_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Do_Command.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -388,7 +406,18 @@
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Base_Script.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Do_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Do_Command.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Level_Description.h" ex="false" tool="3" flavor2="0">
       </item>
