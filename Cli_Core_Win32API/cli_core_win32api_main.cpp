@@ -29,6 +29,7 @@ using namespace std;
 #include "Cli_Cmd_Privilege_ID.h"
 #include "Cli_Modules.h"
 
+#include "Cli_Module_Base_Rem.h"
 #include "Cli_Module_Base_Quit.h"
 #include "Cli_Module_Base_Help.h"
 #include "Cli_Module_Base_Modules.h"
@@ -100,6 +101,8 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     // Modules Add - Begin
 
     string level_root = "top level";
+
+    Modules.Add(new Cli_Module_Base_Rem(Str_Rem_DEF, Cli_Output));
 
     bool Cmd_Exit = false;
     bool Cmd_Quit = false;

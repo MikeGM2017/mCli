@@ -36,6 +36,7 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Log.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Modules.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Quit.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Base_Rem.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Script.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Wait.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
@@ -208,6 +209,8 @@
             flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Script.h"
             ex="false"
@@ -405,6 +408,8 @@
             flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Quit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Base_Rem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Base_Script.h"
             ex="false"
