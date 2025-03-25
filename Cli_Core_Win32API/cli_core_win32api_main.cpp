@@ -46,6 +46,7 @@ using namespace std;
 #include "Cli_Module_Vars.h"
 #include "Cli_Module_Vars_Expr.h"
 #include "Cli_Module_Check.h"
+#include "Cli_Module_Base_Level.h"
 
 #include "Str_Filter.h"
 
@@ -161,6 +162,8 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     Modules.Add((new Cli_Module_Check(Modules, Values_Map, str_filter, str_without_commas, str_int,
             Cli_Output, Cmd_Script_Stop, Script_Command_Str, Script_Label_Str,
             Do_Command_Object)));
+
+    Modules.Add(new Cli_Module_Base_Level(Cli_Input, Cli_Output, level_root));
 
     // Modules Add - End
 
