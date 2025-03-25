@@ -41,12 +41,16 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Wait.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Tab_Min_Max.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Terminal.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Vars.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Vars_Expr.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Do_Abstract.h</itemPath>
         <itemPath>Cli_Modules/Do_Command.h</itemPath>
         <itemPath>Cli_Modules/Level_Description.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter.h</itemPath>
         <itemPath>Cli_Modules/Str_Filter_Abstract.h</itemPath>
+        <itemPath>Cli_Modules/Str_Get_Int.h</itemPath>
+        <itemPath>Cli_Modules/Str_Get_Without_Commas.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Cli_Output" projectFiles="true">
         <itemPath>Cli_Output/Cli_Output_Abstract.h</itemPath>
@@ -231,6 +235,10 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Vars.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Vars_Expr.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Do_Abstract.h" ex="false" tool="3" flavor2="0">
@@ -242,6 +250,13 @@
       <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Get_Int.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Get_Without_Commas.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -440,6 +455,10 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="Cli_Modules/Cli_Module_Vars.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Vars_Expr.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cli_Modules/Cli_Modules.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Do_Abstract.h" ex="false" tool="3" flavor2="0">
@@ -451,6 +470,13 @@
       <item path="Cli_Modules/Str_Filter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Str_Filter_Abstract.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Get_Int.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Cli_Modules/Str_Get_Without_Commas.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Cli_Output/Cli_Output_Abstract.h" ex="false" tool="3" flavor2="0">
       </item>

@@ -43,6 +43,9 @@ using namespace std;
 #include "Cli_Module_Test_Tab_Min_Max.h"
 #include "Cli_Module_Test_Terminal.h"
 
+#include "Cli_Module_Vars.h"
+#include "Cli_Module_Vars_Expr.h"
+
 #include "Str_Filter.h"
 
 #include "Cli_CMD_Processor.h"
@@ -77,6 +80,8 @@ void On_Ctrl_C_Z_BACKSLASH(Cli_Input_win32api &Cli_Input, Cli_Output_win32api &C
 DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
     Cli_Input_Thread_Args_t *thread_args = (Cli_Input_Thread_Args_t *) arg;
+
+    map<string, string> Values_Map;
 
     Cli_Output_win32api Cli_Output;
     Cli_Output.Output_HWND_Set(thread_args->Output_HWND_Get());
@@ -142,6 +147,15 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
 
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
+
+    Str_Get_Without_Commas str_without_commas;
+    Str_Get_Int str_int;
+
+    Modules.Add((new Cli_Module_Vars(Modules, Values_Map, str_filter, str_without_commas, str_int,
+            Cli_Output, C_Single, C_Multy)));
+
+    Modules.Add((new Cli_Module_Vars_Expr(Values_Map, str_without_commas, str_int,
+            Cli_Output, C_Single, C_Multy)));
 
     // Modules Add - End
 
