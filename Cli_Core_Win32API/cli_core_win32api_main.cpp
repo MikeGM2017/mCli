@@ -56,7 +56,7 @@ using namespace std;
 
 #include "Do_Command.h"
 
-const string Version = "0.01";
+const string Version = "0.09";
 
 #define ID_EDITCHILD 101
 
