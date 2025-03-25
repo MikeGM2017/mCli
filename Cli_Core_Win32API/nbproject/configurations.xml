@@ -40,6 +40,7 @@
         <itemPath>Cli_Modules/Cli_Module_Base_Script.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Base_Wait.h</itemPath>
         <itemPath>Cli_Modules/Cli_Module_Test_Tab_Min_Max.h</itemPath>
+        <itemPath>Cli_Modules/Cli_Module_Test_Terminal.h</itemPath>
         <itemPath>Cli_Modules/Cli_Modules.h</itemPath>
         <itemPath>Cli_Modules/Do_Abstract.h</itemPath>
         <itemPath>Cli_Modules/Do_Command.h</itemPath>
@@ -221,6 +222,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Terminal.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -425,6 +431,11 @@
       <item path="Cli_Modules/Cli_Module_Base_Wait.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Cli_Modules/Cli_Module_Test_Tab_Min_Max.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Cli_Modules/Cli_Module_Test_Terminal.h"
             ex="false"
             tool="3"
             flavor2="0">

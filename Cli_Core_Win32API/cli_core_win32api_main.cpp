@@ -41,6 +41,7 @@ using namespace std;
 #include "Cli_Module_Base_Debug.h"
 
 #include "Cli_Module_Test_Tab_Min_Max.h"
+#include "Cli_Module_Test_Terminal.h"
 
 #include "Str_Filter.h"
 
@@ -138,6 +139,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     Modules.Add(new Cli_Module_Base_Wait(Log_Wait_Enable, Cmd_Wait_Stop, Cli_Input, Cli_Output));
 
     Modules.Add(new Cli_Module_Test_Tab_Min_Max());
+    Modules.Add(new Cli_Module_Test_Terminal(Cli_Input, Cli_Output));
 
     Modules.Add(new Cli_Module_Base_Debug(User_Privilege, Modules, Levels, CMD_Processor, Cli_Output));
 
