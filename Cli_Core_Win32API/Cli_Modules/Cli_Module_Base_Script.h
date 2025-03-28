@@ -13,8 +13,8 @@ protected:
 
     Cli_History &History;
 
-    Cli_Input_win32api &Cli_Input;
-    Cli_Output_win32api &Cli_Output;
+    Cli_Input_Abstract &Cli_Input;
+    Cli_Output_Abstract &Cli_Output;
 
     bool &Cmd_Script_Stop;
     bool &Cmd_Quit;
@@ -53,6 +53,10 @@ protected:
     };
 
 public:
+
+    string Script_Execute_File_Name;
+    bool Script_Execute_Exit_Force;
+    int Script_Execute_Level;
 
     virtual int Cmd_ID_Count_Get() {
         return CMD_ID_LAST - CMD_ID_NO - 1;
@@ -97,6 +101,9 @@ public:
         inputFile.open(filename.c_str());
 
         if (inputFile.is_open()) {
+
+            main_obj->Script_Execute_Level++;
+
             main_obj->Cli_Output.Output_NewLine();
             main_obj->Cli_Output.Output_Str(main_obj->Str_Rem + " Do script " + filename + " - Begin");
             main_obj->Cli_Output.Output_NewLine();
@@ -165,6 +172,8 @@ public:
 
             inputFile.close();
 
+            main_obj->Script_Execute_Level--;
+
             if (main_obj->Cli_Input.Is_Ctrl_C_Pressed_Get()) {
                 main_obj->Cli_Output.Output_Str(main_obj->Str_Rem + " Do script " + filename + " - Stopped by Ctrl+C");
                 main_obj->Cli_Input.Is_Ctrl_C_Pressed_Clear();
@@ -178,6 +187,7 @@ public:
             main_obj->Cli_Output.Output_NewLine();
             main_obj->Cli_Output.Output_Str(main_obj->Cli_Input.Invitation_Full_Get());
             main_obj->Cli_Input.Input_Str_Set_Empty();
+
         } else {
             main_obj->Cli_Output.Output_NewLine();
             main_obj->Cli_Output.Output_NewLine();
@@ -190,6 +200,12 @@ public:
             main_obj->Cli_Input.Input_sleep(1);
         }
 
+        if (!main_obj->Script_Execute_File_Name.empty()
+                && main_obj->Script_Execute_Exit_Force
+                && main_obj->Script_Execute_Level == 0) {
+            exit(0);
+        }
+
     }
 
     BOOL DirectoryExists(LPCTSTR szPath) {
@@ -198,7 +214,7 @@ public:
                 (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     }
 
-    Cli_Module_Base_Script(Cli_History &history, Cli_Input_win32api &cli_input, Cli_Output_win32api &cli_output,
+    Cli_Module_Base_Script(Cli_History &history, Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             string str_rem, bool &cmd_script_stop, bool &cmd_quit, int script_buf_size,
             Cli_CMD_Processor &cli_command_processor,
             string &script_command_str, string &script_label_str, string &script_dir_str,
@@ -208,9 +224,10 @@ public:
     Cli_Command_Processor(cli_command_processor),
     Script_Command_Str(script_command_str), Script_Label_Str(script_label_str), Script_Dir_Str(script_dir_str),
     Str_Filter(str_filter),
-    Script_Thread(0), Script_Thread_ID(0) {
+    Script_Thread(0), Script_Thread_ID(0),
+    Script_Execute_Exit_Force(false), Script_Execute_Level(0) {
 
-        Version = "0.07";
+        Version = "0.08";
 
         Script_Buf = new char[Script_Buf_Size];
 

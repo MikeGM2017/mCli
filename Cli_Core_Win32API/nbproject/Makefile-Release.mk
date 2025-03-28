@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/CmdLine_Parse.o \
 	${OBJECTDIR}/cli_core_win32api_main.o
 
 
@@ -61,6 +62,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_win32api: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_win32api ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/CmdLine_Parse.o: CmdLine_Parse.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CmdLine_Parse.o CmdLine_Parse.cpp
 
 ${OBJECTDIR}/cli_core_win32api_main.o: cli_core_win32api_main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

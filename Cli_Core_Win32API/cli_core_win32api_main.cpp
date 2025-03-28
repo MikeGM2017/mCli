@@ -18,11 +18,15 @@ using namespace std;
 
 #include <windows.h>
 #include <winuser.h>
+#include <shlwapi.h>
+
+#include "CmdLine_Parse.h"
 
 #include "Cli_Input_Thread_Args.h"
 
 #include "Cli_Input_win32api.h"
 #include "Cli_Output_win32api.h"
+#include "Cli_Output_ofstream.h"
 
 #include "Cli_Core.h"
 
@@ -72,9 +76,31 @@ static HWND hwndEdit;
 static HANDLE Cli_Input_Thread_Handle = 0;
 static DWORD Cli_Input_Thread_ID = 0;
 
-static Cli_Input_Thread_Args_t Cli_Input_Thread_Args;
+static Cli_Input_Thread_Args_t Args;
 
-void On_Ctrl_C_Z_BACKSLASH(Cli_Input_win32api &Cli_Input, Cli_Output_win32api &Cli_Output, Cli_Input_Item &input_item) {
+void StdOut_Write(wstring s) {
+    DWORD written = 0;
+    WriteConsole(Args.stdOut, s.c_str(), s.length() * sizeof (wchar_t), &written, NULL);
+}
+
+void Version_Print() {
+    StdOut_Write(L"V" + wstring(Version.begin(), Version.end()) + L"\r\n");
+}
+
+void Help_Print() {
+    StdOut_Write(L"Program Cli Core Test V" + wstring(Version.begin(), Version.end()) + L"\r\n");
+    StdOut_Write(L"Use: cli_core_test [switches]\r\n");
+    StdOut_Write(L"-h                  - print this help;\r\n");
+    StdOut_Write(L"-v                  - print version;\r\n");
+    StdOut_Write(L"-a                  - print arguments;\r\n");
+    StdOut_Write(L"-fscript <file>     - set input script file;\r\n");
+    StdOut_Write(L"-fscript_exit_force - set exit force after script executed;\r\n");
+    StdOut_Write(L"-flog <file>        - set output log file;\r\n");
+    StdOut_Write(L"-ftablog <file>     - set output tab log file;\r\n");
+    StdOut_Write(L"-fhistory <file>    - set output history log file;\r\n");
+}
+
+void On_Ctrl_C_Z_BACKSLASH(Cli_Input_win32api &Cli_Input, Cli_Output_Abstract &Cli_Output, Cli_Input_Item &input_item) {
     Cli_Input.Input_Default_State_Set();
     Cli_Input.Input_Invitation_Print();
 }
@@ -85,8 +111,11 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
     map<string, string> Values_Map;
 
-    Cli_Output_win32api Cli_Output;
-    Cli_Output.Output_HWND_Set(thread_args->Output_HWND_Get());
+    Cli_Output_win32api Cli_Output_Win32API;
+    Cli_Output_Win32API.Output_HWND_Set(thread_args->Output_HWND_Get());
+
+    Cli_Output_ofstream Cli_Output_File(string(Args.Arg_Log_Output_File_Name.begin(), Args.Arg_Log_Output_File_Name.end()));
+    Cli_Output_Abstract &Cli_Output = (Args.Arg_Log_Output_File_Name.empty() ? (Cli_Output_Abstract &) Cli_Output_Win32API : (Cli_Output_Abstract &) Cli_Output_File);
 
     Cli_Input_win32api Cli_Input(Cli_Output, thread_args);
 
@@ -183,6 +212,22 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
     Cli_Output.Output_NewLine();
 
     Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
+
+    if (!Args.Arg_Script_File_Name.empty()) {
+        Module_Script.Script_Execute_Level = 0;
+        Module_Script.Script_Execute_File_Name = string(Args.Arg_Script_File_Name.begin(), Args.Arg_Script_File_Name.end());
+        Module_Script.Script_Execute_Exit_Force = Args.Arg_Script_Exit_Force;
+        stringstream s_str;
+        s_str << "Executing script \"" << Module_Script.Script_Execute_File_Name << "\""
+                << (Module_Script.Script_Execute_Exit_Force ? " (exit force)" : " (no exit force)") << "...";
+        Cli_Output_Win32API.Output_Str(s_str.str());
+        bool is_no_history;
+        bool res_script = Module_Script.do_script(Module_Script.Script_Execute_File_Name, is_no_history = true);
+        if (!res_script) {
+            Cli_Output.Output_Str("ERROR: execute script \"" + string(Args.Arg_Script_File_Name.begin(), Args.Arg_Script_File_Name.end()) + "\" - Failed");
+            Cli_Output.Output_NewLine();
+        }
+    }
 
     bool stop = false;
     bool is_invitation_print = true;
@@ -458,8 +503,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                 }
             }
 
-            Cli_Input_Thread_Args.Main_HWND_Set(hwnd);
-            Cli_Input_Thread_Args.Output_HWND_Set(hwndEdit);
+            Args.Main_HWND_Set(hwnd);
+            Args.Output_HWND_Set(hwndEdit);
 
             // Create Cli_Thread
             {
@@ -467,7 +512,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                         NULL, // default security attributes
                         0, // use default stack size
                         Cli_Input_Thread_Func, // thread function name
-                        &Cli_Input_Thread_Args, // argument to thread function
+                        &Args, // argument to thread function
                         0, // use default creation flags
                         &Cli_Input_Thread_ID);
             }
@@ -497,9 +542,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
                     break;
 
                 case IDM_FILE_EXIT:
-                    Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
+                    Args.Cli_Input_Thread_CMD_Stop_Set(true);
                     WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
-                    CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
+                    CloseHandle(Args.Cli_Input_Queue_Mutex_Get());
                     PostQuitMessage(0);
                     break;
 
@@ -528,9 +573,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
         case WM_DESTROY:
         {
-            Cli_Input_Thread_Args.Cli_Input_Thread_CMD_Stop_Set(true);
+            Args.Cli_Input_Thread_CMD_Stop_Set(true);
             WaitForSingleObject((HANDLE) Cli_Input_Thread_Handle, INFINITE);
-            CloseHandle(Cli_Input_Thread_Args.Cli_Input_Queue_Mutex_Get());
+            CloseHandle(Args.Cli_Input_Queue_Mutex_Get());
             PostQuitMessage(0);
         }
             break;
@@ -544,6 +589,96 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
+
+    int error_code = 0; // Ok
+
+    {
+        Args.stdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        if (Args.stdOut != NULL && Args.stdOut != INVALID_HANDLE_VALUE) {
+
+            vector<wstring> argv = CmdLine_Parse(GetCommandLine());
+
+            for (int i = 1; i < argv.size(); i++) {
+                wstring s = argv[i];
+                if (s == L"-h" || s == L"-help" || s == L"-?"
+                        || s == L"--h" || s == L"--help" || s == L"--?"
+                        || s == L"/h" || s == L"/help" || s == L"/?") {
+                    Args.Arg_Help_Print = true;
+                } else if (s == L"-v" || s == L"--v"
+                        || s == L"-version" || s == L"--version") {
+                    Args.Arg_Version_Print = true;
+                } else if (s == L"-a") {
+                    Args.Arg_Arguments_Print = true;
+                } else if (s == L"-fscript") {
+                    i++;
+                    if (i < argv.size() && argv[i][0] != '-') {
+                        Args.Arg_Script_File_Name = argv[i];
+                    } else {
+                        StdOut_Write(L"ERROR: switch \"" + s + L"\" without argument\r\n");
+                        exit(1); // Error
+                    }
+                } else if (s == L"-fscript_exit_force") {
+                    Args.Arg_Script_Exit_Force = true;
+                } else if (s == L"-flog") {
+                    i++;
+                    if (i < argv.size() && argv[i][0] != '-') {
+                        Args.Arg_Log_Output_File_Name = argv[i];
+                    } else {
+                        StdOut_Write(L"ERROR: switch \"" + s + L"\" without argument\r\n");
+                        exit(1); // Error
+                    }
+                } else if (s == L"-ftablog") {
+                    i++;
+                    if (i < argv.size() && argv[i][0] != '-') {
+                        Args.Arg_TAB_Log_Output_File_Name = argv[i];
+                    } else {
+                        StdOut_Write(L"ERROR: switch \"" + s + L"\" without argument\r\n");
+                        exit(1); // Error
+                    }
+                } else if (s == L"-fhistory") {
+                    i++;
+                    if (i < argv.size() && argv[i][0] != '-') {
+                        Args.Arg_HISTORY_Log_Output_File_Name = argv[i];
+                    } else {
+                        StdOut_Write(L"ERROR: switch \"" + s + L"\" without argument\r\n");
+                        exit(1); // Error
+                    }
+                }
+            }
+
+            //if (argc == 1) {
+            //    Arg_Help_Print = true;
+            //}
+
+            bool is_action = false;
+
+            if (Args.Arg_Version_Print) {
+                Version_Print();
+                is_action = true;
+            }
+
+            if (Args.Arg_Help_Print) {
+                Help_Print();
+                is_action = true;
+            }
+
+            if (Args.Arg_Arguments_Print) {
+                StdOut_Write(L"Arguments:\r\n");
+                StdOut_Write(L"             Arg_Script_File_Name:" + Args.Arg_Script_File_Name + L"\r\n");
+                StdOut_Write(L"            Arg_Script_Exit_Force:" + wstring(Args.Arg_Script_Exit_Force ? L"on" : L"off") + L"\r\n");
+                StdOut_Write(L"         Arg_Log_Output_File_Name:" + Args.Arg_Log_Output_File_Name + L"\r\n");
+                StdOut_Write(L"     Arg_TAB_Log_Output_File_Name:" + Args.Arg_TAB_Log_Output_File_Name + L"\r\n");
+                StdOut_Write(L" Arg_HISTORY_Log_Output_File_Name:" + Args.Arg_HISTORY_Log_Output_File_Name + L"\r\n");
+                is_action = true;
+            }
+
+            if (is_action) {
+                exit(error_code); // Ok
+            }
+
+        }
+    }
+
     HWND hwnd;
     MSG msg;
     WNDCLASS wndclass;

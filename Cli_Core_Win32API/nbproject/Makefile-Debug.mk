@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/CmdLine_Parse.o \
 	${OBJECTDIR}/cli_core_win32api_main.o
 
 
@@ -52,7 +53,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lgdi32
+LDLIBSOPTIONS=-lgdi32 -lshlwapi
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -61,6 +62,11 @@ LDLIBSOPTIONS=-lgdi32
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_win32api: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_core_win32api ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/CmdLine_Parse.o: CmdLine_Parse.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -D_WIN32 -ICli_Input -ICli_Output -ICli_Core -ICli_CMD_Processor -ICli_Modules -ICli_TAB_Processor -ICmd_Item -ICmd_Token_Parser -ITAB_Cmd -ICli_History -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CmdLine_Parse.o CmdLine_Parse.cpp
 
 ${OBJECTDIR}/cli_core_win32api_main.o: cli_core_win32api_main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

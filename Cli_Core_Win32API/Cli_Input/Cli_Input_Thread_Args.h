@@ -43,9 +43,25 @@ protected:
 
 public:
 
+    HANDLE stdOut;
+
+    bool Arg_Help_Print;
+    bool Arg_Version_Print;
+    bool Arg_Arguments_Print;
+    wstring Arg_Script_File_Name;
+    bool Arg_Script_Exit_Force;
+    wstring Arg_Log_Output_File_Name;
+    wstring Arg_TAB_Log_Output_File_Name;
+    wstring Arg_HISTORY_Log_Output_File_Name;
+
     Cli_Input_Thread_Args_t() : Output_HWND(0), Cli_Input_Thread_CMD_Stop(false),
     Cli_Input_Queue_Mutex(0), Cli_Input_Queue_Mutex_Wait_Time(100), hwndEdit_WndProc_Org(0),
-    Is_kbhit(false) {
+    Is_kbhit(false),
+    stdOut(0),
+    Arg_Help_Print(false),
+    Arg_Version_Print(false),
+    Arg_Arguments_Print(false),
+    Arg_Script_Exit_Force(false) {
         Cli_Input_Queue_Mutex = CreateMutex(
                 NULL, // default security attributes
                 FALSE, // initially not owned
