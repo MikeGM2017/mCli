@@ -14,9 +14,22 @@
 #ifndef DO_ABSTRACT_H
 #define DO_ABSTRACT_H
 
+#include <string>
+
+using namespace std;
+
 class Do_Abstract {
 public:
     virtual void Do() = 0;
+
+    bool Is_Yes(string s) {
+        if (s == ("Y") || s == ("y")
+                || s == ("YES") || s == ("Yes")
+                || s == ("yes")) {
+            return true;
+        }
+        return false;
+    }
 };
 
 #endif /* DO_ABSTRACT_H */

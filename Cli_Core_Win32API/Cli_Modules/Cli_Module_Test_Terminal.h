@@ -40,6 +40,37 @@ using namespace std;
 class Cli_Module_Test_Terminal : public Cli_Module {
 protected:
 
+    class Do_Answer : public Do_Abstract {
+    protected:
+        Cli_Input_Abstract &Cli_Input;
+        bool &Value_Answer;
+    public:
+
+        Do_Answer(Cli_Input_Abstract &cli_input, bool &value_answer) :
+        Cli_Input(cli_input), Value_Answer(value_answer) {
+        }
+
+        void Do() {
+            string s = Cli_Input.Input_Str_Get();
+            Value_Answer = Is_Yes(s);
+        }
+    };
+
+    class Do_Password : public Do_Abstract {
+    protected:
+        Cli_Input_Abstract &Cli_Input;
+        string &Value_Password;
+    public:
+
+        Do_Password(Cli_Input_Abstract &cli_input, string &value_password) :
+        Cli_Input(cli_input), Value_Password(value_password) {
+        }
+
+        void Do() {
+            Value_Password = Cli_Input.Input_Str_Get();
+        }
+    };
+
     Cli_Input_Abstract &Cli_Input;
     Cli_Output_Abstract &Cli_Output;
 
@@ -60,6 +91,11 @@ protected:
     string Value_Enable;
     string Value_Loopback;
     string Value_Loopback_Repeating;
+    bool Value_Answer;
+    string Value_Password;
+
+    Do_Answer *Do_Answer_Object;
+    Do_Password *Do_Password_Object;
 
 public:
 
@@ -90,6 +126,8 @@ public:
         CMD_ID_test_set_loopback_disable,
         CMD_ID_test_set_loopback_repeating,
         CMD_ID_test_set_loopback_repeating_disable,
+        CMD_ID_test_set_answer,
+        CMD_ID_test_set_password,
 
         CMD_ID_phy_phynum_set_speed_speedvalue_duplex_duplexvalue,
 
@@ -114,8 +152,14 @@ public:
     }
 
     Cli_Module_Test_Terminal(Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output)
-    : Cli_Module("Test Terminal"), Cli_Input(cli_input), Cli_Output(cli_output), New_Level("test terminal") {
-        Version = "0.02";
+    : Cli_Module("Test Terminal"), Cli_Input(cli_input), Cli_Output(cli_output), New_Level("test terminal"),
+    Value_Int(0), Value_Int_Range(0), Value_Answer(false) {
+
+        Version = "0.03";
+
+        Do_Answer_Object = new Do_Answer(Cli_Input, Value_Answer);
+        Do_Password_Object = new Do_Password(Cli_Input, Value_Password);
+
         {
             // test terminal
             Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_terminal);
@@ -481,6 +525,30 @@ public:
             Cmd_Add(cmd);
         }
 
+        {
+            // test set answer
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_answer);
+            cmd->Text_Set("set answer (Yes/No)");
+            cmd->Help_Set("test: set answer (Yes/No)");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("answer", "test: set answer"));
+            Cmd_Add(cmd);
+        }
+
+        {
+            // test set password
+            Cli_Cmd *cmd = new Cli_Cmd((Cli_Cmd_ID) CMD_ID_test_set_password);
+            cmd->Text_Set("set password <password>");
+            cmd->Help_Set("test: set password <password>");
+            cmd->Is_Global_Set(false);
+            cmd->Level_Set("test terminal");
+            cmd->Item_Add(new Cmd_Item_Word("set", "test: set"));
+            cmd->Item_Add(new Cmd_Item_Word("password", "test: set password"));
+            Cmd_Add(cmd);
+        }
+
     }
 
     ~Cli_Module_Test_Terminal() {
@@ -570,6 +638,8 @@ public:
         s_str << setw(w) << "Enable: " << setw(0) << Value_Enable << endl;
         s_str << setw(w) << "Loopback: " << setw(0) << Value_Loopback << endl;
         s_str << setw(w) << "Loopback Repeating: " << setw(0) << Value_Loopback_Repeating << endl;
+        s_str << setw(w) << "Answer: " << setw(0) << (Value_Answer ? "Yes" : "No") << endl;
+        s_str << setw(w) << "Password: " << setw(0) << Value_Password << endl;
 
         Cli_Output.Output_NewLine();
         Cli_Output.Output_Str(s_str.str());
@@ -783,6 +853,29 @@ public:
         return true;
     }
 
+    bool test_set_answer() {
+        string s_question = "Answer?(y/n):";
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str(s_question);
+
+        Cli_Input.Input_Mode_Set(INPUT_MODE_PROMPT);
+        Cli_Input.Input_Str_Set_Empty();
+        Cli_Input.Do_Object_Set(Do_Answer_Object);
+        return true;
+    }
+
+    bool test_set_password() {
+        string s_question = "Password:";
+        Cli_Output.Output_NewLine();
+        Cli_Output.Output_Str(s_question);
+
+        Cli_Input.Input_Mode_Set(INPUT_MODE_PASSWD);
+        Cli_Input.Input_Str_Set_Empty();
+        Cli_Input.Is_Echo_Off();
+        Cli_Input.Do_Object_Set(Do_Password_Object);
+        return true;
+    }
+
     virtual bool Execute(Cli_Cmd *cmd, vector<Level_Description> &Levels, bool is_debug) {
         enum Local_Cmd_ID cmd_id = (enum Local_Cmd_ID)cmd->ID_Get();
         switch (cmd_id) {
@@ -902,6 +995,14 @@ public:
                 if (is_debug) return true;
                 return test_set_loopback_repeating_disable();
 
+            case CMD_ID_test_set_answer:
+                if (is_debug) return true;
+                return test_set_answer();
+
+            case CMD_ID_test_set_password:
+                if (is_debug) return true;
+                return test_set_password();
+
             default:
                 return false; // Not Implemented
 
@@ -935,6 +1036,8 @@ public:
         values_map[Prefix + ".Value_Enable"] = Value_Enable;
         values_map[Prefix + ".Value_Loopback"] = Value_Loopback;
         values_map[Prefix + ".Value_Loopback_Repeating"] = Value_Loopback_Repeating;
+        values_map[Prefix + ".Value_Answer"] = (Value_Answer ? "Yes" : "No");
+        values_map[Prefix + ".Value_Password"] = Value_Password;
 
     }
 

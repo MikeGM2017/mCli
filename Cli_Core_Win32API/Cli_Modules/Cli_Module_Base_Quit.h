@@ -24,15 +24,18 @@ protected:
     class Do_Exit : public Do_Abstract {
     protected:
 
+        Cli_Input_Abstract &Cli_Input;
         bool &Cmd_Exit;
 
     public:
 
-        Do_Exit(bool &cmd_exit) : Cmd_Exit(cmd_exit) {
+        Do_Exit(Cli_Input_Abstract &cli_input, bool &cmd_exit) :
+        Cli_Input(cli_input), Cmd_Exit(cmd_exit) {
         }
 
         void Do() {
-            Cmd_Exit = true;
+            string s = Cli_Input.Input_Str_Get();
+            Cmd_Exit = Is_Yes(s);
         }
 
     };
@@ -40,15 +43,18 @@ protected:
     class Do_Quit : public Do_Abstract {
     protected:
 
+        Cli_Input_Abstract &Cli_Input;
         bool &Cmd_Quit;
 
     public:
 
-        Do_Quit(bool &cmd_quit) : Cmd_Quit(cmd_quit) {
+        Do_Quit(Cli_Input_Abstract &cli_input, bool &cmd_quit) :
+        Cli_Input(cli_input), Cmd_Quit(cmd_quit) {
         }
 
         void Do() {
-            Cmd_Quit = true;
+            string s = Cli_Input.Input_Str_Get();
+            Cmd_Quit = Is_Yes(s);
         }
 
     };
@@ -84,10 +90,11 @@ public:
     Cli_Module_Base_Quit(Cli_Input_Abstract &cli_input, Cli_Output_Abstract &cli_output,
             bool &cmd_exit, bool &cmd_quit) : Cli_Module("Base Quit"),
     Cli_Input(cli_input), Cli_Output(cli_output), Cmd_Exit(cmd_exit), Cmd_Quit(cmd_quit) {
-        Version = "0.04";
 
-        Do_Exit_Object = new Do_Exit(cmd_exit);
-        Do_Quit_Object = new Do_Quit(cmd_quit);
+        Version = "0.05";
+
+        Do_Exit_Object = new Do_Exit(Cli_Input, cmd_exit);
+        Do_Quit_Object = new Do_Quit(Cli_Input, cmd_quit);
 
         {
             // E - exit

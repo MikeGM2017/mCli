@@ -291,7 +291,8 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
                             bool debug_res = false;
                             CMD_Processor.Process_Input_Item(input_item, is_debug, debug_res);
                             Cli_Input.Input_Str_Set_Empty();
-                            if (Cli_Input.Input_Mode_Get() != INPUT_MODE_PROMPT) {
+                            if (Cli_Input.Input_Mode_Get() != INPUT_MODE_PROMPT
+                                    && Cli_Input.Input_Mode_Get() != INPUT_MODE_PASSWD) {
                                 Cli_Output.Output_NewLine();
                             }
                         }
@@ -343,7 +344,8 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                     } // switch (input_item.Type_Get())
 
-                    if (Cli_Input.Input_Mode_Get() != INPUT_MODE_PROMPT) {
+                    if (Cli_Input.Input_Mode_Get() != INPUT_MODE_PROMPT
+                            && Cli_Input.Input_Mode_Get() != INPUT_MODE_PASSWD) {
                         if (input_item.Type_Get() != CLI_INPUT_ITEM_TYPE_NO) {
                             if (is_invitation_print) {
                                 Cli_Output.Output_Str(Cli_Input.Invitation_Full_Get());
@@ -363,15 +365,8 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                         case CLI_INPUT_ITEM_TYPE_STR:
                         {
+                            Cli_Input.Do_Object_Yes();
                             Cli_Output.Output_NewLine();
-                            if (input_item.Text_Get() == ("Y") || input_item.Text_Get() == ("y")
-                                    || input_item.Text_Get() == ("YES") || input_item.Text_Get() == ("Yes")
-                                    || input_item.Text_Get() == ("yes")) {
-                                Cli_Output.Output_Str("Answer: Yes");
-                                Cli_Input.Do_Object_Yes();
-                            } else {
-                                Cli_Output.Output_Str("Answer: No");
-                            }
                             Cli_Input.Input_Default_State_Set();
                             Cli_Input.Input_Invitation_Print();
                         }
@@ -395,8 +390,8 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                         case CLI_INPUT_ITEM_TYPE_STR:
                         {
+                            Cli_Input.Do_Object_Yes();
                             Cli_Output.Output_NewLine();
-                            Cli_Output.Output_Str("Password:" + input_item.Text_Get());
                             Cli_Input.Input_Default_State_Set();
                             Cli_Input.Input_Invitation_Print();
                         }
