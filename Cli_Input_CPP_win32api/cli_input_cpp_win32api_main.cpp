@@ -359,7 +359,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, // window handle
 
             // Set new Font
             {
-                HFONT hwndEdit_hFont_new = CreateFont(0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, TEXT("Courier New"));
+                HFONT hwndEdit_hFont_new = (HFONT) GetStockObject(ANSI_FIXED_FONT);
                 SendMessage(hwndEdit, WM_SETFONT, (WPARAM) hwndEdit_hFont_new, 0);
             }
 
