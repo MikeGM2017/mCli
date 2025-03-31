@@ -341,9 +341,9 @@ public:
         Do_Object = obj;
     }
 
-    virtual void Do_Object_Yes() {
+    virtual void Do_Object_Action(string s) {
         if (Do_Object != 0) {
-            Do_Object->Do();
+            Do_Object->Do(s);
             Do_Object = 0;
         }
     }

@@ -20,7 +20,7 @@ using namespace std;
 
 class Do_Abstract {
 public:
-    virtual void Do() = 0;
+    virtual void Do(string s = "") = 0;
 
     bool Is_Yes(string s) {
         if (s == ("Y") || s == ("y")

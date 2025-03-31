@@ -42,32 +42,27 @@ protected:
 
     class Do_Answer : public Do_Abstract {
     protected:
-        Cli_Input_Abstract &Cli_Input;
         bool &Value_Answer;
     public:
 
-        Do_Answer(Cli_Input_Abstract &cli_input, bool &value_answer) :
-        Cli_Input(cli_input), Value_Answer(value_answer) {
+        Do_Answer(bool &value_answer) : Value_Answer(value_answer) {
         }
 
-        void Do() {
-            string s = Cli_Input.Input_Str_Get();
+        virtual void Do(string s = "") {
             Value_Answer = Is_Yes(s);
         }
     };
 
     class Do_Password : public Do_Abstract {
     protected:
-        Cli_Input_Abstract &Cli_Input;
         string &Value_Password;
     public:
 
-        Do_Password(Cli_Input_Abstract &cli_input, string &value_password) :
-        Cli_Input(cli_input), Value_Password(value_password) {
+        Do_Password(string &value_password) : Value_Password(value_password) {
         }
 
-        void Do() {
-            Value_Password = Cli_Input.Input_Str_Get();
+        virtual void Do(string s = "") {
+            Value_Password = s;
         }
     };
 
@@ -157,8 +152,8 @@ public:
 
         Version = "0.03";
 
-        Do_Answer_Object = new Do_Answer(Cli_Input, Value_Answer);
-        Do_Password_Object = new Do_Password(Cli_Input, Value_Password);
+        Do_Answer_Object = new Do_Answer(Value_Answer);
+        Do_Password_Object = new Do_Password(Value_Password);
 
         {
             // test terminal

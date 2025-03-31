@@ -365,7 +365,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                         case CLI_INPUT_ITEM_TYPE_STR:
                         {
-                            Cli_Input.Do_Object_Yes();
+                            Cli_Input.Do_Object_Action(Cli_Input.Input_Str_Get());
                             Cli_Output.Output_NewLine();
                             Cli_Input.Input_Default_State_Set();
                             Cli_Input.Input_Invitation_Print();
@@ -390,7 +390,7 @@ DWORD WINAPI Cli_Input_Thread_Func(LPVOID arg) {
 
                         case CLI_INPUT_ITEM_TYPE_STR:
                         {
-                            Cli_Input.Do_Object_Yes();
+                            Cli_Input.Do_Object_Action(Cli_Input.Input_Str_Get());
                             Cli_Output.Output_NewLine();
                             Cli_Input.Input_Default_State_Set();
                             Cli_Input.Input_Invitation_Print();

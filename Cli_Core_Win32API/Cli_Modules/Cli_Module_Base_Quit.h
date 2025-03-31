@@ -24,17 +24,14 @@ protected:
     class Do_Exit : public Do_Abstract {
     protected:
 
-        Cli_Input_Abstract &Cli_Input;
         bool &Cmd_Exit;
 
     public:
 
-        Do_Exit(Cli_Input_Abstract &cli_input, bool &cmd_exit) :
-        Cli_Input(cli_input), Cmd_Exit(cmd_exit) {
+        Do_Exit(bool &cmd_exit) : Cmd_Exit(cmd_exit) {
         }
 
-        void Do() {
-            string s = Cli_Input.Input_Str_Get();
+        virtual void Do(string s = "") {
             Cmd_Exit = Is_Yes(s);
         }
 
@@ -43,17 +40,14 @@ protected:
     class Do_Quit : public Do_Abstract {
     protected:
 
-        Cli_Input_Abstract &Cli_Input;
         bool &Cmd_Quit;
 
     public:
 
-        Do_Quit(Cli_Input_Abstract &cli_input, bool &cmd_quit) :
-        Cli_Input(cli_input), Cmd_Quit(cmd_quit) {
+        Do_Quit(bool &cmd_quit) : Cmd_Quit(cmd_quit) {
         }
 
-        void Do() {
-            string s = Cli_Input.Input_Str_Get();
+        virtual void Do(string s = "") {
             Cmd_Quit = Is_Yes(s);
         }
 
@@ -93,8 +87,8 @@ public:
 
         Version = "0.05";
 
-        Do_Exit_Object = new Do_Exit(Cli_Input, cmd_exit);
-        Do_Quit_Object = new Do_Quit(Cli_Input, cmd_quit);
+        Do_Exit_Object = new Do_Exit(cmd_exit);
+        Do_Quit_Object = new Do_Quit(cmd_quit);
 
         {
             // E - exit

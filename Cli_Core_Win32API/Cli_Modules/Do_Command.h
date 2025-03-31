@@ -28,7 +28,7 @@ public:
     Do_Command(Cli_Module_Base_Script &module_script) : Module_Script(module_script) {
     }
 
-    virtual void Do() {
+    virtual void Do(string s = "") {
         bool is_debug;
         bool debug_res;
         Module_Script.Execute_Script_Command(is_debug = false, debug_res);
