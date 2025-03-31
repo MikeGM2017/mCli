@@ -15,6 +15,7 @@
 #define DO_ABSTRACT_H
 
 #include <string>
+#include <cctype>
 
 using namespace std;
 
@@ -23,9 +24,10 @@ public:
     virtual void Do(string s = "") = 0;
 
     bool Is_Yes(string s) {
-        if (s == ("Y") || s == ("y")
-                || s == ("YES") || s == ("Yes")
-                || s == ("yes")) {
+        for (int i = 0; i < s.length(); i++) {
+            s[i] = tolower(s[i]);
+        }
+        if (s == ("y") || s == ("yes")) {
             return true;
         }
         return false;
