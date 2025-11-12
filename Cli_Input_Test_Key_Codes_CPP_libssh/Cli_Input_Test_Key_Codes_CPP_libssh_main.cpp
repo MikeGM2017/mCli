@@ -263,78 +263,140 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
     if (len > 0) {
         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\n");
     }
-    if (len == 1 && d[0] == 0x1B) { // Esc
-        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X - Esc", d[0]);
-        processed = 1;
-    } else if (len == 3) {
-        if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x5A) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - SHIFT+TAB", d[0], d[1], d[2]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x41) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - UP", d[0], d[1], d[2]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x42) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - DOWN", d[0], d[1], d[2]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x43) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - RIGHT", d[0], d[1], d[2]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x44) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - LEFT", d[0], d[1], d[2]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x48) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - HOME", d[0], d[1], d[2]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x46) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - END", d[0], d[1], d[2]);
-            processed = 1;
-        }
-    } else if (len == 4) {
-        if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x33 && d[3] == 0x7E) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - DELETE", d[0], d[1], d[2], d[3]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x32 && d[3] == 0x7E) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - INSERT", d[0], d[1], d[2], d[3]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x34 && d[3] == 0x7E) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - END", d[0], d[1], d[2], d[3]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x31 && d[3] == 0x7E) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - HOME", d[0], d[1], d[2], d[3]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x35 && d[3] == 0x7E) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEUP", d[0], d[1], d[2], d[3]);
-            processed = 1;
-        } else if (d[0] == 0x1B && d[1] == 0x5B && d[2] == 0x36 && d[3] == 0x7E) {
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEDOWN", d[0], d[1], d[2], d[3]);
-            processed = 1;
-        }
+    switch (len) {
+        case 1: // Esc
+            if (d[0] == 0x1B) { // Esc
+                wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X - Esc", d[0]);
+                processed = 1;
+            }
+            break;
+        case 3: // SHIFT+TAB UP DOWN RIGHT LEFT HOME END
+            if (d[0] == 0x1B && d[1] == 0x5B) {
+                switch (d[2]) {
+                    case 0x5A: // SHIFT+TAB
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - SHIFT+TAB", d[0], d[1], d[2]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x41: // UP
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - UP", d[0], d[1], d[2]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x42: // DOWN
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - DOWN", d[0], d[1], d[2]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x43: // RIGHT
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - RIGHT", d[0], d[1], d[2]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x44: // LEFT
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - LEFT", d[0], d[1], d[2]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x48: // HOME
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - HOME", d[0], d[1], d[2]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x46: // END
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - END", d[0], d[1], d[2]);
+                        processed = 1;
+                    }
+                        break;
+                }
+            }
+            break;
+        case 4: // DELETE INSERT END HOME PAGEUP PAGEDOWN
+            if (d[0] == 0x1B && d[1] == 0x5B && d[3] == 0x7E) {
+                switch (d[2]) {
+                    case 0x33: // DELETE
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - DELETE", d[0], d[1], d[2], d[3]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x32: // INSERT
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - INSERT", d[0], d[1], d[2], d[3]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x34: // END
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - END", d[0], d[1], d[2], d[3]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x31: // HOME
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - HOME", d[0], d[1], d[2], d[3]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x35: // PAGEUP
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEUP", d[0], d[1], d[2], d[3]);
+                        processed = 1;
+                    }
+                        break;
+                    case 0x36: // PAGEDOWN
+                    {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEDOWN", d[0], d[1], d[2], d[3]);
+                        processed = 1;
+                    }
+                        break;
+                }
+            }
+            break;
     }
     if (!processed) {
         for (i = 0; i < len; i++) {
             c = d[i];
             wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X", c & 0xFF);
-            if (c == 0x09) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - TAB");
-            } else if (c == 0x0D) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Enter");
-            } else if (c == 0x03) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+C");
-            } else if (c == 0x1A) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+Z");
-            } else if (c == 0x1C) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+Backslash");
-            } else if (c == 0x7F) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Back");
-            } else if (c == 0x08) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Shift+Back");
-            } else if (c == 0x1B) {
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Esc");
-            } else {
-                if (isprint(c))
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - \'%c\'", c);
-                else
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - .");
+            switch (c) {
+                case 0x09:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - TAB");
+                    break;
+                case 0x0D:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Enter");
+                    break;
+                case 0x03:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+C");
+                    break;
+                case 0x1A:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+Z");
+                    break;
+                case 0x1C:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+Backslash");
+                    break;
+                case 0x7F:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Back");
+                    break;
+                case 0x08:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Shift+Back");
+                    break;
+                case 0x1B:
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Esc");
+                    break;
+                default:
+                {
+                    if (isprint(c))
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " - \'%c\'", c);
+                    else
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " - .");
+                }
             }
         }
     }
