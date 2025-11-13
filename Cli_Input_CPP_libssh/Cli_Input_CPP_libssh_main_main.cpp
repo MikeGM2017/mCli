@@ -468,24 +468,28 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     case 0x43: // RIGHT
                     {
                         Input_Str_Right();
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
                         processed = 1;
                     }
                         break;
                     case 0x44: // LEFT
                     {
                         Input_Str_Left();
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
                         processed = 1;
                     }
                         break;
                     case 0x48: // HOME
                     {
                         Input_Str_Home();
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
                         processed = 1;
                     }
                         break;
                     case 0x46: // END
                     {
                         Input_Str_End();
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
                         processed = 1;
                     }
                         break;
@@ -498,6 +502,11 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     case 0x33: // DELETE
                     {
                         Input_Str_Delete();
+                        int len = Input_Str.length();
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s ", Invitation_Str.c_str(), len, Input_Str.c_str());
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), len, Input_Str.c_str());
+                        if (Input_Str_Pos < Input_Str.length())
+                            wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
                         processed = 1;
                     }
                         break;
@@ -520,15 +529,19 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                         break;
                     case 0x35: // PAGEUP
                     {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\n");
                         string s = History_Print();
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "%s", s.c_str());
+                        print_input = true;
                         processed = 1;
                     }
                         break;
                     case 0x36: // PAGEDOWN
                     {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\n");
                         string s = History_Print();
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "%s", s.c_str());
+                        print_input = true;
                         processed = 1;
                     }
                         break;
@@ -552,8 +565,9 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     break;
                 case 0x0D: // Enter
                     if (Input_Str.length()) {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nEnter Process: \"%s\"", Input_Str.c_str());
-                        History_Add(Input_Str);
+                        string s = Str_Trim(Input_Str);
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nEnter Process: \"%s\"", s.c_str());
+                        History_Add(s);
                         Input_Str_Clear();
                     }
                     print_input = true;
@@ -570,31 +584,29 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     Input_Str_Clear();
                     print_input = true;
                     break;
+
                 case 0x7F: // Back
-                    if (Input_Str_Pos > 0) {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\b");
-                    }
-                    Input_Str_Back();
-                    break;
                 case 0x08: // Shift+Back
-                    if (Input_Str_Pos > 0) {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\b");
-                    }
+                {
                     Input_Str_Back();
+                    int len = Input_Str.length();
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s ", Invitation_Str.c_str(), len, Input_Str.c_str());
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), len, Input_Str.c_str());
+                    if (Input_Str_Pos < Input_Str.length())
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
+                }
                     break;
+
                 case 0x1B: // Esc
                     Input_Str_Clear();
                     print_input = true;
                     break;
                 default: // Others
                 {
-                    if (isprint(c)) {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "%c", c);
-                        Input_Str_Add(c);
-                    } else {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, ".");
-                        Input_Str_Add('.');
-                    }
+                    Input_Str_Add(c);
+                    wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s", Input_Get().c_str());
+                    if (Input_Str_Pos < Input_Str.length())
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
                 }
             } // TAB Enter Ctrl+C Ctrl+Z Ctrl+Backslash Back Shift+Back Esc Others
         }
@@ -908,7 +920,7 @@ static void handle_session(ssh_event event, ssh_session session) {
 
     ssh_set_channel_callbacks(sdata.channel, &channel_cb);
 
-    ssh_channel_write(sdata.channel, Invitation_Str.c_str(), Invitation_Str.length());
+    //ssh_channel_write(sdata.channel, Invitation_Str.c_str(), Invitation_Str.length()); //@Warning: Ouput: <Invitation_Str> + $
 
     do {
         /* Poll the main event which takes care of the session, the channel and
