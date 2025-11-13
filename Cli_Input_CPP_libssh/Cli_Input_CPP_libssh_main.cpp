@@ -444,11 +444,17 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     case 0x41: // UP
                     {
                         int history_pos_prev = History_Pos;
-                        string s = History_Up();
-                        Input_Str = s;
-                        Input_Str_Pos = s.length();
+                        string s_prev = Input_Str;
+                        string s_new = History_Up();
                         if (history_pos_prev != History_Pos) {
-                            print_input = true;
+                            Input_Str = s_new;
+                            Input_Str_Pos = s_new.length();
+                            if (s_new.length() < s_prev.length()) {
+                                char format[32];
+                                sprintf(format, "\r%%s%%%ds", (int) s_prev.length());
+                                wr_buf_len += sprintf(wr_buf + wr_buf_len, format, Invitation_Str.c_str(), " ");
+                            }
+                            wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%s", Invitation_Str.c_str(), Input_Str.c_str());
                         }
                         processed = 1;
                     }
@@ -456,11 +462,17 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     case 0x42: // DOWN
                     {
                         int history_pos_prev = History_Pos;
-                        string s = History_Down();
-                        Input_Str = s;
-                        Input_Str_Pos = s.length();
+                        string s_prev = Input_Str;
+                        string s_new = History_Down();
                         if (history_pos_prev != History_Pos) {
-                            print_input = true;
+                            Input_Str = s_new;
+                            Input_Str_Pos = s_new.length();
+                            if (s_new.length() < s_prev.length()) {
+                                char format[32];
+                                sprintf(format, "\r%%s%%%ds", (int) s_prev.length());
+                                wr_buf_len += sprintf(wr_buf + wr_buf_len, format, Invitation_Str.c_str(), " ");
+                            }
+                            wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%s", Invitation_Str.c_str(), Input_Str.c_str());
                         }
                         processed = 1;
                     }
@@ -570,6 +582,7 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                         History_Add(s);
                         Input_Str_Clear();
                     }
+                    History_Pos = History.size();
                     print_input = true;
                     break;
                 case 0x03: // Ctrl+C
