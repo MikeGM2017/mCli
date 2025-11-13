@@ -617,12 +617,21 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                 default: // Others
                 {
                     Input_Str_Add(c);
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s", Input_Get().c_str());
-                    if (Input_Str_Pos < Input_Str.length())
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
+                    if (len == 1) {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s", Input_Get().c_str());
+                        if (Input_Str_Pos < Input_Str.length())
+                            wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
+                    }
                 }
             } // TAB Enter Ctrl+C Ctrl+Z Ctrl+Backslash Back Shift+Back Esc Others
         }
+
+        if (len > 1) {
+            wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s", Input_Get().c_str());
+            if (Input_Str_Pos < Input_Str.length())
+                wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r%s%.*s", Invitation_Str.c_str(), Input_Str_Pos, Input_Str.c_str());
+        }
+
     } // TAB Enter Ctrl+C Ctrl+Z Ctrl+Backslash Back Shift+Back Esc Others
 
     if (print_input) {
