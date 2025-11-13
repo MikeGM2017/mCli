@@ -40,6 +40,8 @@
 #include <stdio.h>
 
 #include <string>
+#include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -303,6 +305,92 @@ void Input_Str_Delete() {
     }
 }
 
+vector<string> History;
+int History_Pos = 0;
+
+bool Is_Space(char c) {
+    switch (c) {
+        case ' ':
+        case '\t':
+            return true;
+    }
+    return false;
+}
+
+string Str_Trim(string s_in) {
+    if (s_in.empty()) {
+        return "";
+    }
+    string s;
+    int pos_beg = 0;
+    for (int i = 0; i < s_in.length(); i++) {
+        char c = s_in[i];
+        if (Is_Space(c)) {
+            pos_beg++;
+        } else {
+            break;
+        }
+    }
+    int pos_end = s_in.length();
+    for (int i = s_in.length() - 1; i >= 0; i--) {
+        char c = s_in[i];
+        if (Is_Space(c)) {
+            pos_end--;
+        } else {
+            break;
+        }
+    }
+    if (pos_beg < pos_end) {
+        s = s_in.substr(pos_beg, pos_end - pos_beg);
+    }
+    return s;
+}
+
+void History_Add(string s_in) {
+    string s = Str_Trim(s_in);
+    if (!s.empty()) {
+        if (History.empty() || History.back() != s) {
+            History.push_back(s);
+        }
+    }
+    History_Pos = History.size();
+}
+
+string History_Print() {
+    stringstream s_str;
+    if (History.empty()) {
+        s_str << "\r\nHistory[" << History_Pos << "/" << History.size() << "]: empty\r\n";
+    } else {
+        s_str << "\r\nHistory[" << History_Pos << "/" << History.size() << "]:\r\n";
+        for (int i = 0; i < History.size(); i++) {
+            s_str << "[" << i << "] \"" << History[i] << "\"\r\n";
+        }
+    }
+    return s_str.str();
+}
+
+string History_Up() {
+    if (History_Pos > -1) {
+        History_Pos--;
+    }
+    if (History_Pos < History.size()) {
+        return History[History_Pos];
+    } else {
+        return "";
+    }
+}
+
+string History_Down() {
+    if (History_Pos == -1 || History_Pos < History.size()) {
+        History_Pos++;
+    }
+    if (History_Pos < History.size()) {
+        return History[History_Pos];
+    } else {
+        return "";
+    }
+}
+
 static int data_function(ssh_session session, ssh_channel channel, void *data,
         uint32_t len, int is_stderr, void *userdata) {
     struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
@@ -352,12 +440,18 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     case 0x41: // UP
                     {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - UP", d[0], d[1], d[2]);
+                        string s = History_Up();
+                        Input_Str = s;
+                        Input_Str_Pos = s.length();
                         processed = 1;
                     }
                         break;
                     case 0x42: // DOWN
                     {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - DOWN", d[0], d[1], d[2]);
+                        string s = History_Down();
+                        Input_Str = s;
+                        Input_Str_Pos = s.length();
                         processed = 1;
                     }
                         break;
@@ -425,12 +519,16 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     case 0x35: // PAGEUP
                     {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEUP", d[0], d[1], d[2], d[3]);
+                        string s = History_Print();
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "%s", s.c_str());
                         processed = 1;
                     }
                         break;
                     case 0x36: // PAGEDOWN
                     {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEDOWN", d[0], d[1], d[2], d[3]);
+                        string s = History_Print();
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "%s", s.c_str());
                         processed = 1;
                     }
                         break;
@@ -457,6 +555,7 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                     wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Enter");
                     if (Input_Str.length()) {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nEnter Process: \"%s\"", Input_Str.c_str());
+                        History_Add(Input_Str);
                         Input_Str_Clear();
                     }
                     break;
