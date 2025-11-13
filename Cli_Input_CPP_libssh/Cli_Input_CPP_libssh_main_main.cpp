@@ -391,6 +391,12 @@ string History_Down() {
     }
 }
 
+string Invitation_Str = "[cli]> ";
+
+string Input_Get() {
+    return Invitation_Str + Input_Str;
+}
+
 static int data_function(ssh_session session, ssh_channel channel, void *data,
         uint32_t len, int is_stderr, void *userdata) {
     struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
@@ -410,15 +416,13 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
     char c;
     int processed = 0;
 
-    if (len > 0) {
-        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\n");
-    } // Add "\r\n"
+    bool print_input = false;
 
     switch (len) {
         case 1: // Esc
             if (d[0] == 0x1B) { // Esc
-                wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X - Esc", d[0]);
                 Input_Str_Clear();
+                print_input = true;
                 processed = 1;
             }
             break;
@@ -427,58 +431,60 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                 switch (d[2]) {
                     case 0x5A: // SHIFT+TAB
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - SHIFT+TAB", d[0], d[1], d[2]);
                         if (Input_Str.length()) {
                             wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nSHIFT+TAB Process: \"%s\"", Input_Str.c_str());
                             Input_Str_End();
                         } else {
                             wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nSHIFT+TAB Process: \"default help\"");
                         }
+                        print_input = true;
                         processed = 1;
                     }
                         break;
                     case 0x41: // UP
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - UP", d[0], d[1], d[2]);
+                        int history_pos_prev = History_Pos;
                         string s = History_Up();
                         Input_Str = s;
                         Input_Str_Pos = s.length();
+                        if (history_pos_prev != History_Pos) {
+                            print_input = true;
+                        }
                         processed = 1;
                     }
                         break;
                     case 0x42: // DOWN
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - DOWN", d[0], d[1], d[2]);
+                        int history_pos_prev = History_Pos;
                         string s = History_Down();
                         Input_Str = s;
                         Input_Str_Pos = s.length();
+                        if (history_pos_prev != History_Pos) {
+                            print_input = true;
+                        }
                         processed = 1;
                     }
                         break;
                     case 0x43: // RIGHT
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - RIGHT", d[0], d[1], d[2]);
                         Input_Str_Right();
                         processed = 1;
                     }
                         break;
                     case 0x44: // LEFT
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - LEFT", d[0], d[1], d[2]);
                         Input_Str_Left();
                         processed = 1;
                     }
                         break;
                     case 0x48: // HOME
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - HOME", d[0], d[1], d[2]);
                         Input_Str_Home();
                         processed = 1;
                     }
                         break;
                     case 0x46: // END
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X - END", d[0], d[1], d[2]);
                         Input_Str_End();
                         processed = 1;
                     }
@@ -491,34 +497,29 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                 switch (d[2]) {
                     case 0x33: // DELETE
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - DELETE", d[0], d[1], d[2], d[3]);
                         Input_Str_Delete();
                         processed = 1;
                     }
                         break;
                     case 0x32: // INSERT
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - INSERT", d[0], d[1], d[2], d[3]);
                         processed = 1;
                     }
                         break;
                     case 0x34: // END
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - END", d[0], d[1], d[2], d[3]);
                         Input_Str_End();
                         processed = 1;
                     }
                         break;
                     case 0x31: // HOME
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - HOME", d[0], d[1], d[2], d[3]);
                         Input_Str_Home();
                         processed = 1;
                     }
                         break;
                     case 0x35: // PAGEUP
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEUP", d[0], d[1], d[2], d[3]);
                         string s = History_Print();
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "%s", s.c_str());
                         processed = 1;
@@ -526,7 +527,6 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                         break;
                     case 0x36: // PAGEDOWN
                     {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X 0x%02X 0x%02X 0x%02X - PAGEDOWN", d[0], d[1], d[2], d[3]);
                         string s = History_Print();
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "%s", s.c_str());
                         processed = 1;
@@ -540,55 +540,59 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
     if (!processed) {
         for (i = 0; i < len; i++) {
             c = d[i];
-            wr_buf_len += sprintf(wr_buf + wr_buf_len, " 0x%02X", c & 0xFF);
             switch (c) {
-                case 0x09:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - TAB");
+                case 0x09: // TAB
                     if (Input_Str.length()) {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nTAB Process: \"%s\"", Input_Str.c_str());
                         Input_Str_End();
                     } else {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nTAB Process: \"default help\"");
                     }
+                    print_input = true;
                     break;
-                case 0x0D:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Enter");
+                case 0x0D: // Enter
                     if (Input_Str.length()) {
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nEnter Process: \"%s\"", Input_Str.c_str());
                         History_Add(Input_Str);
                         Input_Str_Clear();
                     }
+                    print_input = true;
                     break;
-                case 0x03:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+C");
+                case 0x03: // Ctrl+C
                     Input_Str_Clear();
+                    print_input = true;
                     break;
-                case 0x1A:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+Z");
+                case 0x1A: // Ctrl+Z
                     Input_Str_Clear();
+                    print_input = true;
                     break;
-                case 0x1C:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Ctrl+Backslash");
+                case 0x1C: // Ctrl+Backslash
                     Input_Str_Clear();
+                    print_input = true;
                     break;
-                case 0x7F:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Back");
+                case 0x7F: // Back
+                    if (Input_Str_Pos > 0) {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\b");
+                    }
                     Input_Str_Back();
                     break;
-                case 0x08:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Shift+Back");
+                case 0x08: // Shift+Back
+                    if (Input_Str_Pos > 0) {
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\b");
+                    }
+                    Input_Str_Back();
                     break;
-                case 0x1B:
-                    wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Esc");
+                case 0x1B: // Esc
                     Input_Str_Clear();
+                    print_input = true;
                     break;
                 default: // Others
                 {
                     if (isprint(c)) {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " - \'%c\'", c);
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "%c", c);
                         Input_Str_Add(c);
                     } else {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, " - .");
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, ".");
                         Input_Str_Add('.');
                     }
                 }
@@ -596,7 +600,9 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
         }
     } // TAB Enter Ctrl+C Ctrl+Z Ctrl+Backslash Back Shift+Back Esc Others
 
-    wr_buf_len += sprintf(wr_buf + wr_buf_len, " Input_Str:\"%s\"/%d", Input_Str.c_str(), Input_Str_Pos);
+    if (print_input) {
+        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\n%s", Input_Get().c_str());
+    }
 
     if (wr_buf_len > 0) {
         ssh_channel_write(channel, wr_buf, wr_buf_len);
@@ -901,6 +907,8 @@ static void handle_session(ssh_event event, ssh_session session) {
     }
 
     ssh_set_channel_callbacks(sdata.channel, &channel_cb);
+
+    ssh_channel_write(sdata.channel, Invitation_Str.c_str(), Invitation_Str.length());
 
     do {
         /* Poll the main event which takes care of the session, the channel and
