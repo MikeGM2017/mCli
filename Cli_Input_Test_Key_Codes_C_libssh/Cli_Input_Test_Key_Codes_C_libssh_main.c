@@ -251,7 +251,7 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
 
     if (len == 0 || cdata->pid < 1 || kill(cdata->pid, 0) < 0) {
         return 0;
-    }
+    } // return 0; - Failed
 
     char *d = (char *) data;
     char wr_buf[1024];
@@ -262,7 +262,8 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
 
     if (len > 0) {
         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\n");
-    }
+    } // Add "\r\n"
+
     switch (len) {
         case 1: // Esc
             if (d[0] == 0x1B) { // Esc
@@ -360,7 +361,8 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                 }
             }
             break;
-    }
+    } // Esc SHIFT+TAB UP DOWN RIGHT LEFT HOME END DELETE INSERT END HOME PAGEUP PAGEDOWN
+
     if (!processed) {
         for (i = 0; i < len; i++) {
             c = d[i];
@@ -390,22 +392,22 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                 case 0x1B:
                     wr_buf_len += sprintf(wr_buf + wr_buf_len, " - Esc");
                     break;
-                default:
+                default: // Others
                 {
                     if (isprint(c))
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, " - \'%c\'", c);
                     else
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, " - .");
                 }
-            }
+            } // TAB Enter Ctrl+C Ctrl+Z Ctrl+Backslash Back Shift+Back Esc Others
         }
-    }
+    } // TAB Enter Ctrl+C Ctrl+Z Ctrl+Backslash Back Shift+Back Esc Others
 
     if (wr_buf_len > 0) {
         ssh_channel_write(channel, wr_buf, wr_buf_len);
-    }
+    } // ssh_channel_write(...)
 
-    return len;
+    return len; // Ok
 }
 
 static int pty_request(ssh_session session, ssh_channel channel,
