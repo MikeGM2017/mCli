@@ -12,7 +12,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>Cli_Input_CPP_libssh_main_main.cpp</itemPath>
+      <itemPath>Cli_Input_CPP_libssh_main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -59,7 +59,7 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="Cli_Input_CPP_libssh_main_main.cpp" ex="false" tool="1" flavor2="0">
+      <item path="Cli_Input_CPP_libssh_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -82,7 +82,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="Cli_Input_CPP_libssh_main_main.cpp" ex="false" tool="1" flavor2="0">
+      <item path="Cli_Input_CPP_libssh_main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>

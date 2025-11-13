@@ -35,7 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/Cli_Input_CPP_libssh_main_main.o
+	${OBJECTDIR}/Cli_Input_CPP_libssh_main.o
 
 
 # C Compiler Flags
@@ -62,10 +62,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_input_cpp_libssh: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cli_input_cpp_libssh ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/Cli_Input_CPP_libssh_main_main.o: Cli_Input_CPP_libssh_main_main.cpp 
+${OBJECTDIR}/Cli_Input_CPP_libssh_main.o: Cli_Input_CPP_libssh_main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input_CPP_libssh_main_main.o Cli_Input_CPP_libssh_main_main.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cli_Input_CPP_libssh_main.o Cli_Input_CPP_libssh_main.cpp
 
 # Subprojects
 .build-subprojects:
