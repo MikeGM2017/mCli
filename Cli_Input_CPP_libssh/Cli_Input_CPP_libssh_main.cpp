@@ -397,6 +397,10 @@ string Input_Get() {
     return Invitation_Str + Input_Str;
 }
 
+string Welcome_Str = "\r\nCli Input CPP libssh - Test\r\n\r\n";
+
+string Help_Default = "quit Q exit E";
+
 static int data_function(ssh_session session, ssh_channel channel, void *data,
         uint32_t len, int is_stderr, void *userdata) {
     struct channel_data_struct *cdata = (struct channel_data_struct *) userdata;
@@ -435,7 +439,7 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                             wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nSHIFT+TAB Process: \"%s\"", Input_Str.c_str());
                             Input_Str_End();
                         } else {
-                            wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nSHIFT+TAB Process: \"default help\"");
+                            wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nSHIFT+TAB Process: \"default help: %s \"", Help_Default.c_str());
                         }
                         print_input = true;
                         processed = 1;
@@ -571,7 +575,7 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nTAB Process: \"%s\"", Input_Str.c_str());
                         Input_Str_End();
                     } else {
-                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nTAB Process: \"default help\"");
+                        wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nTAB Process: \"default help: %s\"", Help_Default.c_str());
                     }
                     print_input = true;
                     break;
@@ -949,7 +953,9 @@ static void handle_session(ssh_event event, ssh_session session) {
 
     ssh_set_channel_callbacks(sdata.channel, &channel_cb);
 
-    //ssh_channel_write(sdata.channel, Invitation_Str.c_str(), Invitation_Str.length()); //@Warning: Ouput: <Invitation_Str> + $
+    //ssh_channel_write(sdata.channel, Invitation_Str.c_str(), Invitation_Str.length()); //@Warning: Output: <Invitation_Str> + $
+
+    ssh_channel_write(sdata.channel, Welcome_Str.c_str(), Welcome_Str.length());
 
     do {
         /* Poll the main event which takes care of the session, the channel and
