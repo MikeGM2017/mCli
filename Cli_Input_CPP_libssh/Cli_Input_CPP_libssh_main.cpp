@@ -581,6 +581,13 @@ static int data_function(ssh_session session, ssh_channel channel, void *data,
                         wr_buf_len += sprintf(wr_buf + wr_buf_len, "\r\nEnter Process: \"%s\"", s.c_str());
                         History_Add(s);
                         Input_Str_Clear();
+
+                        if (s == "quit" || s == "Q" || s == "exit" || s == "E") {
+                            string msg = "\r\n\r\n\"" + s + "\" - Connection Closed\r\n\r\n";
+                            ssh_channel_write(channel, msg.c_str(), msg.length());
+                            ssh_channel_close(channel);
+                        }
+
                     }
                     History_Pos = History.size();
                     print_input = true;
